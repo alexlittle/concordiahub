@@ -6,6 +6,7 @@
 XAICompare Documentation
 ========================
 
+Documentation for the XAICompare dashboard I'm building as my MSc Project
 
 Proposed Structure:
 
