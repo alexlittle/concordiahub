@@ -21,11 +21,6 @@ Proposed Structure:
 * API docs
 
 
-
-
-
-
-
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
