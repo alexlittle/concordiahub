@@ -1,0 +1,2 @@
+# Additional requirements for running the examples
+ollama==0.6.1

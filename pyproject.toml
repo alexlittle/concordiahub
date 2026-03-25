@@ -1,0 +1,61 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "xaicompare"
+dynamic = ["version"]
+description = "xaicompare dashboard and utilities"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    { name = "Alex Little", email = "alex@alexlittle.net" }
+]
+
+dependencies = [
+    "pandas==2.3.3",
+    "scikit-learn==1.8.0",
+    "numpy==2.4.2",
+    "shap==0.50.0",
+    "joblib==1.5.3",
+    "pyarrow==23.0.1",
+    "streamlit==1.54.0",
+    "PyYAML==6.0.3",
+]
+
+
+[project.scripts]
+xaicompare-dash = "xaicompare.cli:main"
+
+# Tell setuptools where to find code and how to determine the version
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["xaicompare*"]
+
+
+# Read version from xaicompare/_version.py
+[tool.setuptools.dynamic]
+version = { attr = "xaicompare._version.__version__" }
+
+
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.0.2",
+    "twine==6.2.0",
+    "build==1.4.0",
+    "wheel==0.46.3"
+]
+docs = [
+    "Sphinx==9.1.0",
+    "sphinx_rtd_theme==3.1.0",
+]
+examples = [
+    "seaborn==0.13.2",
+    "matplotlib==3.10.8",
+]
+
