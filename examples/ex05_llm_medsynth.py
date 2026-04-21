@@ -77,8 +77,7 @@ def parse_output(text: str) -> dict:
 outputs = []
 
 for idx, row in df.head(10).iterrows():
-    print(f"Running LLM on conversation {idx + 1}/{len(df)} "
-          f"(ID={row['conversation_id']})")
+    print(f"Running LLM on conversation {idx + 1}/{len(df)} ")
 
     prompt = prompt_template.render(conversation=row.conversation_text)
 
@@ -86,7 +85,7 @@ for idx, row in df.head(10).iterrows():
     parsed = parse_output(llm_text)
 
     outputs.append({
-        "conversation_id": row["conversation_id"],
+        "id": idx,
         "true_label": row["true_label"],
         **parsed
     })
@@ -97,7 +96,7 @@ out_df = pd.DataFrame(outputs)
 out_df.to_csv(OUTPUT_DIR / "llm_outputs_full.csv", index=False)
 
 # Convenience: explanation-only corpus
-out_df[["conversation_id", "true_label", "llm_explanation"]].to_csv(
+out_df[["id", "true_label", "llm_explanation"]].to_csv(
     OUTPUT_DIR / "llm_explanations_only.csv",
     index=False
 )
