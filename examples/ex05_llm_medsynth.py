@@ -8,8 +8,8 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 # Configuration
 # -----------------------------
 MODEL_NAME = "llama3.1:8b"
-INPUT_FILE = "./output/llm/llm_input_conversations.csv"
-OUTPUT_DIR = Path("./output/llm")
+INPUT_FILE = "./data/MedSynth_huggingface_final.csv"
+OUTPUT_DIR = Path("./models/ollama_llm")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 TEMPLATE_DIR = Path("./prompt_template")
 
@@ -94,10 +94,7 @@ for idx, row in df.iterrows():
 # Save outputs
 out_df = pd.DataFrame(outputs)
 
-out_df.to_csv(
-    OUTPUT_DIR / "llm_outputs_full.csv",
-    index=False
-)
+out_df.to_csv(OUTPUT_DIR / "llm_outputs_full.csv", index=False)
 
 # Convenience: explanation-only corpus
 out_df[["conversation_id", "true_label", "llm_explanation"]].to_csv(

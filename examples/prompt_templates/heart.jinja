@@ -1,0 +1,37 @@
+You are given some data points on a patient.
+
+Task:
+1. Provide a score (0 to 4) on the likelihood or severity of the patient having heart disease, with 0 being healthy and 4 being severe
+2. Explain your reasoning based only on the information provided in the patient data
+
+Important constraints:
+- Do not use external medical knowledge.
+- Do not invent symptoms or facts not stated.
+- Base your explanation on specific observations from the patient data.
+
+
+Patient Data:
+
+Age: {{ age }}
+Gender: {{ sex }}
+Chest pain type: {{ cp }}
+Resting blood pressure: {{ trestbps }} mm Hg
+Serum cholesterol: {{ chol }} mg/dl
+Fasting blood sugar > 120 mg/dl: {{ fbs }}
+Resting electrocardiographic results: {{ restecg }}
+Maximum heart rate achieved: {{ thalach }}
+Exercise induced angina: {{ exang }}
+ST depression induced by exercise relative to rest: {{ oldpeak }}
+Slope of the peak exercise ST segment: {{ slope }}
+Number of major vessels colored by fluoroscopy: {{ ca }}
+Thallium stress test result: {{ thal }}
+
+Output strictly as valid JSON, score as a single integer (0,1,2,3 or 4) and the explanation in 3 or 4 sentences.
+Do not include any additional text.
+
+The JSON schema must be:
+
+{
+  "score": integer,
+  "explanation": string
+}
