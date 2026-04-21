@@ -9,9 +9,9 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 # -----------------------------
 MODEL_NAME = "llama3.1:8b"
 INPUT_FILE = "./data/MedSynth_huggingface_final.csv"
-OUTPUT_DIR = Path("./models/ollama_llm")
+OUTPUT_DIR = Path("./results/medsynth_ollama")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-TEMPLATE_DIR = Path("./prompt_template")
+TEMPLATE_DIR = Path("./prompt_templates")
 
 # -----------------------------
 # Load input conversations
@@ -76,7 +76,7 @@ def parse_output(text: str) -> dict:
 # Run LLM over conversations
 outputs = []
 
-for idx, row in df.iterrows():
+for idx, row in df.head(10).iterrows():
     print(f"Running LLM on conversation {idx + 1}/{len(df)} "
           f"(ID={row['conversation_id']})")
 
