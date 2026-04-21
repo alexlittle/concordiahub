@@ -59,7 +59,7 @@ def parse_output(text: str) -> dict:
         llm_icd10_chapter = ""
         explanation = ""
 
-    return {"llm_llm_icd10_chapter": llm_icd10_chapter,
+    return {"llm_icd10_chapter": llm_icd10_chapter,
         "llm_explanation": explanation,
         "raw_output": text }
 
