@@ -55,15 +55,15 @@ def parse_output(text: str) -> dict:
     try:
         data = json.loads(text)
 
-        diagnosis = data.get("diagnosis", "")
+        score = data.get("score", "")
         explanation = data.get("explanation", "")
 
     except json.JSONDecodeError:
         # if invalid JSON
-        diagnosis = ""
+        score = ""
         explanation = ""
 
-    return {"llm_diagnosis": diagnosis,
+    return {"llm_score": score,
         "llm_explanation": explanation,
         "raw_output": text }
 
