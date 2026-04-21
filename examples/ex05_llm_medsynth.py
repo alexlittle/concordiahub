@@ -51,7 +51,7 @@ def parse_output(text: str) -> dict:
     try:
         data = json.loads(text)
 
-        llm_icd10_chapter = data.get("llm_icd10_chapter", "")
+        llm_icd10_chapter = data.get("icd10_chapter", "")
         explanation = data.get("explanation", "")
 
     except json.JSONDecodeError:
