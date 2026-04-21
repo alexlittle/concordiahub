@@ -93,7 +93,7 @@ for idx, row in df.head(5).iterrows():
     outputs.append({
         "idx": idx+1,
         "target": row["num"],
-        "predicted_label": parsed_output["llm_diagnosis"],
+        "predicted_score": parsed_output["llm_score"],
         "cor_explanation": parsed_output["llm_explanation"],
     })
 
