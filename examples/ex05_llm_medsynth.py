@@ -79,7 +79,7 @@ outputs = []
 for idx, row in df.head(10).iterrows():
     print(f"Running LLM on conversation {idx + 1}/{len(df)} ")
 
-    prompt = prompt_template.render(conversation=row.conversation_text)
+    prompt = prompt_template.render(conversation=row['Dialogue'])
 
     llm_text = run_llm(prompt)
     parsed = parse_output(llm_text)
