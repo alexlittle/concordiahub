@@ -69,7 +69,7 @@ def parse_output(text: str) -> dict:
 
 outputs = []
 
-for idx, row in df.head(5).iterrows():
+for idx, row in df.iterrows():
     print(f"Running LLM on conversation {idx + 1}/{len(df)} ")
 
     prompt = prompt_template.render(
