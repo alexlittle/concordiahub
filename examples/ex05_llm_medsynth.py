@@ -86,7 +86,7 @@ for idx, row in df.head(10).iterrows():
 
     outputs.append({
         "id": idx,
-        "true_label": row["true_label"],
+        "ICD10": row["ICD10"],
         **parsed
     })
 
@@ -96,7 +96,7 @@ out_df = pd.DataFrame(outputs)
 out_df.to_csv(OUTPUT_DIR / "llm_outputs_full.csv", index=False)
 
 # Convenience: explanation-only corpus
-out_df[["id", "true_label", "llm_explanation"]].to_csv(
+out_df[["id", "ICD10", "llm_explanation"]].to_csv(
     OUTPUT_DIR / "llm_explanations_only.csv",
     index=False
 )
