@@ -3,6 +3,7 @@ import time
 import pandas as pd
 import re
 import numpy as np
+import subprocess
 from pathlib import Path
 from tqdm import tqdm
 from typing import Union
@@ -44,6 +45,12 @@ def map_icd10_to_chapter(code):
     first_letter = code[0].upper()
     return _ICD10_CHAPTERS.get(first_letter, ("", "", "Unknown"))[2]
 
+def check_gpu():
+    try:
+        subprocess.check_output('nvidia-smi')
+        return "cuda"
+    except Exception:
+        return "cpu"
 
 def download_medsynth():
     url = "https://huggingface.co/datasets/Ahmad0067/MedSynth/resolve/main/MedSynth_huggingface_final.csv"
