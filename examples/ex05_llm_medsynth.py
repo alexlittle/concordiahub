@@ -1,6 +1,6 @@
 import pandas as pd
 import ollama
-import re
+import json
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
@@ -46,32 +46,22 @@ def run_llm(prompt: str) -> str:
     )
     return response["message"]["content"].strip()
 
-# Helper: parse output
+
 def parse_output(text: str) -> dict:
-    """
-    Extract Diagnosis and Explanation sections.
-    Falls back gracefully if formatting is imperfect.
-    """
-    diagnosis = ""
-    explanation = ""
+    try:
+        data = json.loads(text)
 
-    diag_match = re.search(r"Diagnosis:\s*(.+)", text, re.IGNORECASE)
-    expl_match = re.search(r"Explanation:\s*(.+)", text, re.IGNORECASE | re.DOTALL)
+        llm_icd10_chapter = data.get("llm_icd10_chapter", "")
+        explanation = data.get("explanation", "")
 
-    if diag_match:
-        diagnosis = diag_match.group(1).strip()
+    except json.JSONDecodeError:
+        # if invalid JSON
+        llm_icd10_chapter = ""
+        explanation = ""
 
-    if expl_match:
-        explanation = expl_match.group(1).strip()
-    else:
-        # fallback: everything after diagnosis
-        explanation = text
-
-    return {
-        "llm_diagnosis": diagnosis,
+    return {"llm_llm_icd10_chapter": llm_icd10_chapter,
         "llm_explanation": explanation,
-        "raw_output": text
-    }
+        "raw_output": text }
 
 # Run LLM over conversations
 outputs = []
@@ -87,19 +77,14 @@ for idx, row in df.head(10).iterrows():
     outputs.append({
         "id": idx,
         "ICD10": row["ICD10"],
-        **parsed
+        "llm_icd10_chapter": parsed["llm_icd10_chapter"],
+        "llm_explanation": parsed["llm_explanation"],
     })
 
 # Save outputs
 out_df = pd.DataFrame(outputs)
 
 out_df.to_csv(OUTPUT_DIR / "llm_outputs_full.csv", index=False)
-
-# Convenience: explanation-only corpus
-out_df[["id", "ICD10", "llm_explanation"]].to_csv(
-    OUTPUT_DIR / "llm_explanations_only.csv",
-    index=False
-)
 
 print("LLM inference complete.")
 print(f"Saved to {OUTPUT_DIR}")
