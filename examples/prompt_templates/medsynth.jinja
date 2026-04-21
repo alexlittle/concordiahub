@@ -1,0 +1,23 @@
+You are given a transcript of a patient–doctor conversation.
+
+Task:
+1. Predict the most likely ICD-10 chapter for this conversation.
+2. Explain your reasoning based only on the information expressed in the conversation.
+
+Important constraints:
+- Do not use external medical knowledge.
+- Do not invent symptoms or facts not stated.
+- Base your explanation on specific phrases or observations in the dialogue.
+
+Conversation:
+{{ conversation}}
+
+Output strictly as valid JSON.
+Do not include any additional text.
+
+The JSON schema must be:
+
+{
+  "icd10_chapter": "<string>",
+  "explanation": "<string>"
+}

@@ -2,6 +2,7 @@ import pandas as pd
 import ollama
 import re
 from pathlib import Path
+from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 # -----------------------------
 # Configuration
@@ -10,35 +11,26 @@ MODEL_NAME = "llama3.1:8b"
 INPUT_FILE = "./output/llm/llm_input_conversations.csv"
 OUTPUT_DIR = Path("./output/llm")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+TEMPLATE_DIR = Path("./prompt_template")
 
 # -----------------------------
 # Load input conversations
 # -----------------------------
 df = pd.read_csv(INPUT_FILE)
-# Expected columns:
-# conversation_id, true_label, conversation_text
 
 # -----------------------------
 # Prompt template
 # -----------------------------
-PROMPT_TEMPLATE = """You are given a transcript of a patient–doctor conversation.
 
-Task:
-1. Predict the most likely ICD-10 chapter for this conversation.
-2. Explain your reasoning based only on the information expressed in the conversation.
+jinja_env = Environment(
+    loader=FileSystemLoader(TEMPLATE_DIR),
+    undefined=StrictUndefined,
+    trim_blocks=True,
+    lstrip_blocks=True
+)
 
-Important constraints:
-- Do not use external medical knowledge.
-- Do not invent symptoms or facts not stated.
-- Base your explanation on specific phrases or observations in the dialogue.
+prompt_template = jinja_env.get_template("medsynth.jinja")
 
-Conversation:
-{conversation}
-
-Output format:
-Diagnosis:
-Explanation:
-"""
 
 # Helper: run Ollama
 def run_llm(prompt: str) -> str:
@@ -88,9 +80,7 @@ for idx, row in df.iterrows():
     print(f"Running LLM on conversation {idx + 1}/{len(df)} "
           f"(ID={row['conversation_id']})")
 
-    prompt = PROMPT_TEMPLATE.format(
-        conversation=row["conversation_text"]
-    )
+    prompt = prompt_template.render(conversation=row.conversation_text)
 
     llm_text = run_llm(prompt)
     parsed = parse_output(llm_text)
