@@ -5,6 +5,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 from xgboost import XGBClassifier
 
+import xai_compare as xai
+
 
 from helpers import check_gpu
 
@@ -28,7 +30,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 
 model = XGBClassifier(
-    n_estimators=500,
+    n_estimators=1000,
     learning_rate=0.1,
     objective='multi:softprob',
     random_state=42,
@@ -44,9 +46,23 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n")
 print(classification_report(y_test, y_pred))
 
+'''
 plt.figure(figsize=(10, 6))
 plt.barh(X.columns, model.feature_importances_)
 plt.xlabel("Feature Importance")
 plt.title("XGBoost Feature Importance")
 plt.tight_layout()
 plt.show()
+'''
+
+ctx = xai.RunContext("xgboost",
+               "shap",
+               "cleveland-heart-data",
+               X_train,
+               X_test,
+               y_train,
+               y_test,
+               y_pred,
+               model=model)
+
+xai.run(ctx)

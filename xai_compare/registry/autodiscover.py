@@ -1,8 +1,8 @@
-# xaicompare/registry/autodiscover.py
+# ./registry/autodiscover.py
 import importlib
 import pkgutil
 import threading
-import xaicompare.adapters as adapters_pkg
+import xai_compare.adapters as adapters_pkg
 
 __DISCOVERED = False
 __LOCK = threading.Lock()

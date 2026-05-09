@@ -213,3 +213,4 @@ __marimo__/
 
 /examples/data/*.csv
 /examples/models/*.joblib
+/xai_compare/runs/

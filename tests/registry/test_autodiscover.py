@@ -7,19 +7,19 @@ from types import ModuleType
 import pytest
 
 # Import registry APIs from their respective modules
-from xaicompare.registry.model_registry import (
+from xai_compare.registry.model_registry import (
     MODEL_REGISTRY,
     register_model,
     get_model_adapter,
 )
 
-from xaicompare.registry.xai_registry import (
+from xai_compare.registry.xai_registry import (
     XAI_REGISTRY,
     register_xai,
     get_xai_adapter,
 )
 
-from xaicompare.registry.viz_registry import (
+from xai_compare.registry.viz_registry import (
     VIZ_REGISTRY,
     register_viz,
     get_viz_adapter,

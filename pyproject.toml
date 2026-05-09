@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "xaicompare"
+name = "xai_compare"
 dynamic = ["version"]
 description = "xaicompare dashboard and utilities"
 readme = "README.md"
@@ -14,19 +14,21 @@ authors = [
 ]
 
 dependencies = [
-    "pandas==2.3.3",
+    "pandas==3.0.2",
     "scikit-learn==1.8.0",
-    "numpy==2.4.2",
-    "shap==0.50.0",
+    "numpy==2.4.4",
+    "seaborn==0.13.2",
+    "shap==0.51.0",
+    "matplotlib==3.10.9",
     "joblib==1.5.3",
-    "pyarrow==23.0.1",
-    "streamlit==1.54.0",
-    "PyYAML==6.0.3",
+    "pyarrow==24.0.0",
+    "streamlit==1.57.0",
+    "setuptools==82.0.1"
 ]
 
 
 [project.scripts]
-xaicompare-dash = "xaicompare.cli:main"
+xaicompare-dash = "xai_compare.cli:main"
 
 # Tell setuptools where to find code and how to determine the version
 [tool.setuptools]
@@ -34,12 +36,12 @@ package-dir = {"" = "."}
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["xaicompare*"]
+include = ["xai_compare*"]
 
 
 # Read version from xaicompare/_version.py
 [tool.setuptools.dynamic]
-version = { attr = "xaicompare._version.__version__" }
+version = { attr = "xai_compare._version.__version__" }
 
 
 
@@ -55,7 +57,8 @@ docs = [
     "sphinx_rtd_theme==3.1.0",
 ]
 examples = [
-    "seaborn==0.13.2",
-    "matplotlib==3.10.8",
+    "ollama==0.6.1",
+    "xgboost==3.2.0",
+    "jinja2==3.1.6"
 ]
 
