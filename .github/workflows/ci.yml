@@ -64,10 +64,3 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2.1.1
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-            -Dsonar.organization=${{ secrets.SONAR_ORG }}
-            -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.scm.provider=git
-            -Dsonar.pullrequest.provider=github
