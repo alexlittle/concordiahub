@@ -56,7 +56,8 @@ jobs:
         with:
           name: coverage
           path: coverage.xml
-
+      - name: Check coverage file exists
+        run: ls -la coverage.xml && head -5 coverage.xml
       # -------------------------
       # SonarCloud scan
       # -------------------------
