@@ -26,7 +26,7 @@ from xai_compare.registry.viz_registry import (
 )
 
 
-MODULE_UNDER_TEST = "xaicompare.registry.autodiscover"
+MODULE_UNDER_TEST = "xai_compare.registry.autodiscover"
 
 
 def _ensure_clean_import():
@@ -136,16 +136,16 @@ def test_autodiscover_imports_all_submodules(monkeypatch, fresh_module):
 
     # Simulate modules under each adapter type (subdirectories):
     discovered = [
-        ("finder", "xaicompare.adapters.models.alpha", False),
-        ("finder", "xaicompare.adapters.xai.bravo", False),
-        ("finder", "xaicompare.adapters.viz.charlie", False),
+        ("finder", "xai_compare.adapters.models.alpha", False),
+        ("finder", "xai_compare.adapters.xai.bravo", False),
+        ("finder", "xai_compare.adapters.viz.charlie", False),
     ]
     import_calls = []
 
     def fake_walk_packages(path, prefix):
         # Accept whatever real __path__ the package exposes (list/tuple of dirs)
         assert isinstance(path, (list, tuple))
-        assert prefix == "xaicompare.adapters."
+        assert prefix == "xai_compare.adapters."
         yield from discovered
 
     def fake_import_module(name):
@@ -165,15 +165,15 @@ def test_autodiscover_continues_on_import_error(monkeypatch, fresh_module, capsy
     autodiscover = fresh_module
 
     discovered = [
-        ("finder", "xaicompare.adapters.good1", False),
-        ("finder", "xaicompare.adapters.bad", False),
-        ("finder", "xaicompare.adapters.good2", False),
+        ("finder", "xai_compare.adapters.good1", False),
+        ("finder", "xai_compare.adapters.bad", False),
+        ("finder", "xai_compare.adapters.good2", False),
     ]
 
     def fake_walk_packages(path, prefix):
         # Relaxed: do not assert path equality; only prefix
         assert isinstance(path, (list, tuple))
-        assert prefix == "xaicompare.adapters."
+        assert prefix == "xai_compare.adapters."
         for item in discovered:
             yield item
 
@@ -191,18 +191,18 @@ def test_autodiscover_continues_on_import_error(monkeypatch, fresh_module, capsy
 
     # Verify warning printed but function did not raise
     out = capsys.readouterr().out
-    assert "[WARN] Failed importing xaicompare.adapters.bad: boom" in out
+    assert "[WARN] Failed importing xai_compare.adapters.bad: boom" in out
 
     # Good modules should still be imported (created in sys.modules)
-    assert "xaicompare.adapters.good1" in sys.modules
-    assert "xaicompare.adapters.good2" in sys.modules
+    assert "xai_compare.adapters.good1" in sys.modules
+    assert "xai_compare.adapters.good2" in sys.modules
 
 
 def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     autodiscover = fresh_module
 
     discovered_once = [
-        ("finder", "xaicompare.adapters.once", False),
+        ("finder", "xai_compare.adapters.once", False),
     ]
 
     import_calls = []
@@ -210,7 +210,7 @@ def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     def fake_walk_packages(path, prefix):
         # Relaxed: path type + correct prefix
         assert isinstance(path, (list, tuple))
-        assert prefix == "xaicompare.adapters."
+        assert prefix == "xai_compare.adapters."
         for item in discovered_once:
             yield item
 
@@ -228,7 +228,7 @@ def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     # Second call should be a no-op (due to __DISCOVERED flag)
     autodiscover.autodiscover_adapters()
 
-    assert import_calls.count("xaicompare.adapters.once") == 1
+    assert import_calls.count("xai_compare.adapters.once") == 1
 
 
 def test_autodiscover_thread_safety(monkeypatch, fresh_module):
@@ -239,7 +239,7 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
     autodiscover = fresh_module
 
     discovered = [
-        ("finder", "xaicompare.adapters.threaded", False),
+        ("finder", "xai_compare.adapters.threaded", False),
     ]
 
     import_calls = []
@@ -247,7 +247,7 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
     def fake_walk_packages(path, prefix):
         # Relaxed: path type + correct prefix
         assert isinstance(path, (list, tuple))
-        assert prefix == "xaicompare.adapters."
+        assert prefix == "xai_compare.adapters."
         # Simulate slow enumeration to increase race window
         for item in discovered:
             yield item
@@ -269,4 +269,4 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
         t.join()
 
     # Even with many concurrent calls, the module should be imported once
-    assert import_calls.count("xaicompare.adapters.threaded") == 1
+    assert import_calls.count("xai_compare.adapters.threaded") == 1

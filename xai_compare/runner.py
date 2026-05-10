@@ -1,4 +1,4 @@
-# xaicompare/runner.py
+# ./runner.py
 
 from .artifacts import ArtifactStore
 from .config import RunContext
@@ -28,7 +28,7 @@ def run(ctx: RunContext):
         xai_adapter = get_xai_adapter(xai_method)
 
         results = xai_adapter.explain(model_adapter.prepare(ctx.X_train), ctx.X_train, ctx.X_test)
-
+        print(results)
 
 
 
