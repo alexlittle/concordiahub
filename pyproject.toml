@@ -43,7 +43,9 @@ include = ["xai_compare*"]
 [tool.setuptools.dynamic]
 version = { attr = "xai_compare._version.__version__" }
 
-
+[tool.coverage.run]
+relative_files = true
+source = ["xai_compare"]
 
 [project.optional-dependencies]
 dev = [
