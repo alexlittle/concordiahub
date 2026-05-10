@@ -8,19 +8,19 @@ EMBEDDING_ENCODER ="all-MiniLM-L6-v2"
 
 @dataclass
 class RunContext:
-    # identity
+    # core model/method/identifiers
     model_type: str
-    xai_method: str
+    xai_methods: list[str]
     dataset_id: str
 
-    # data
+    # optional
     X_train: pd.DataFrame
     X_test: pd.DataFrame
     y_train: pd.Series
     y_test: pd.Series
     y_pred: np.ndarray
 
-    # optional
+
     model: Any = None
     run_id: str = None
     model_id: str = None

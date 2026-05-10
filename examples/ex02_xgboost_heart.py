@@ -56,7 +56,7 @@ plt.show()
 '''
 
 ctx = xai.RunContext("xgboost",
-               "shap",
+               ["shap"],
                "cleveland-heart-data",
                X_train,
                X_test,

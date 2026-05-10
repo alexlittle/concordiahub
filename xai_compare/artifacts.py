@@ -1,6 +1,9 @@
-# xaicompare/artifacts.py
+# ./artifacts.py
 import os
+import joblib
 import json
+import pandas as pd
+import numpy as np
 from datetime import datetime
 
 from xai_compare import RunContext
@@ -24,7 +27,7 @@ class ArtifactStore:
     def write_metadata(self):
         obj = {
             "model_type": self.ctx.model_type,
-            "xai_method": self.ctx.xai_method,
+            "xai_methods": self.ctx.xai_methods,
             "datetime": datetime.now().strftime("%Y%m%d-%H%M%S"),
             "dataset_id": self.ctx.dataset_id,
             "run_id": self.ctx.run_id,
@@ -33,6 +36,17 @@ class ArtifactStore:
         with open(os.path.join(self.dirname, "metadata.json"), "w") as f:
             json.dump(obj, f, indent=4)
 
-    def write_parquet(self, name, df):
+    def write_model(self):
+        if self.ctx.model:
+            joblib.dump(self.ctx.model, os.path.join(self.dirname, "model.joblib"))
+
+    def write_data(self, name, data):
+        if not hasattr(self.ctx, name):
+            return
         out = os.path.join(self.dirname, name)
-        df.to_parquet(out, index=False)
+        if isinstance(data, pd.DataFrame):
+            data.to_parquet(out + ".parquet", index=False)
+        elif isinstance(data, pd.Series):
+            data.to_frame().to_parquet(out + ".parquet")
+        elif isinstance(data, np.ndarray):
+            np.save(out + ".npy", data)
