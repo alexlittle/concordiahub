@@ -10,7 +10,7 @@ def register_model(key):
         return cls
     return wrapper
 
-def get_model_adapter(key):
+def get_model_adapter(key, model=None):
     if key not in MODEL_REGISTRY:
         raise ValueError(f"Model adapter '{key}' not registered.")
-    return MODEL_REGISTRY[key]
+    return MODEL_REGISTRY[key](model)

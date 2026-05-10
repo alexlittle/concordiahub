@@ -4,5 +4,5 @@ from xai_compare.adapters.models.model_base import ModelAdapter
 @register_model("sklearn")
 class SklearnAdapter(ModelAdapter):
 
-    def prepare(self):
+    def prepare(self, X_train=None):
         return self.model
