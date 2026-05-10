@@ -10,3 +10,4 @@ joblib==1.5.3
 pyarrow==24.0.0
 streamlit==1.57.0
 setuptools==82.0.1
+pytest==9.0.3

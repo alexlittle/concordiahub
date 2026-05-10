@@ -71,12 +71,11 @@ def fresh_module(monkeypatch):
 def test_register_and_get_model_adapter(fresh_module):
     @register_model("my-model")
     class MyAdapter:
-        pass
+        def __init__(self, model=None):
+            self.model = model
 
-    cls = get_model_adapter("my-model")
-    assert cls is MyAdapter
-
-    # Decorator returns the class unchanged
+    adapter = get_model_adapter("my-model", model=None)
+    assert isinstance(adapter, MyAdapter)
     assert MyAdapter is MODEL_REGISTRY["my-model"]
 
 
@@ -92,12 +91,11 @@ def test_get_model_adapter_missing_raises(fresh_module):
 def test_register_and_get_xai_adapter(fresh_module):
     @register_xai("my-expl")
     class MyAdapter:
-        pass
+        def __init__(self):
+            pass
 
-    cls = get_xai_adapter("my-expl")
-    assert cls is MyAdapter
-
-    # Decorator returns the class unchanged
+    adapter = get_xai_adapter("my-expl")
+    assert isinstance(adapter, MyAdapter)
     assert MyAdapter is XAI_REGISTRY["my-expl"]
 
 
