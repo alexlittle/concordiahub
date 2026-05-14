@@ -42,17 +42,16 @@ def _ensure_clean_import():
 def fresh_module(monkeypatch):
     """
     Provides a freshly imported module for each test and ensures
-    the xaicompare.adapters package exists with a __path__.
+    the xai_compare.adapters package exists with a __path__.
     """
-    # Ensure a base 'xaicompare' package in sys.modules
-    if "xaicompare" not in sys.modules:
-        xaicompare = ModuleType("xaicompare")
-        sys.modules["xaicompare"] = xaicompare
+    #  'xai_compare' package in sys.modules
+    if "xai_compare" not in sys.modules:
+        xai_compare = ModuleType("xai_compare")
+        sys.modules["xai_compare"] = xai_compare
 
-    # Ensure xaicompare.adapters exists and has a __path__
-    adapters_pkg_name = "xaicompare.adapters"
+    # xai_compare.adapters exists and has a __path__
+    adapters_pkg_name = "xai_compare.adapters"
     adapters_pkg = ModuleType(adapters_pkg_name)
-    # __path__ must be a list-like to satisfy pkgutil.walk_packages
     adapters_pkg.__path__ = ["FAKE_PATH"]
     sys.modules[adapters_pkg_name] = adapters_pkg
 
@@ -64,10 +63,9 @@ def fresh_module(monkeypatch):
         if key in sys.modules:
             del sys.modules[key]
 
-
-# ---------------------
+# ------------------------
 # Model registry tests
-# ---------------------
+# ------------------------
 def test_register_and_get_model_adapter(fresh_module):
     @register_model("my-model")
     class MyAdapter:
@@ -85,9 +83,9 @@ def test_get_model_adapter_missing_raises(fresh_module):
     assert "not registered" in str(exc.value)
 
 
-# -------------------
+# ------------------------
 # XAI registry tests
-# -------------------
+# ------------------------
 def test_register_and_get_xai_adapter(fresh_module):
     @register_xai("my-expl")
     class MyAdapter:
@@ -105,9 +103,9 @@ def test_get_explainer_adapter_missing_raises(fresh_module):
     assert "not registered" in str(exc.value)
 
 
-# -------------------
+# ------------------------
 # Viz registry tests
-# -------------------
+# ------------------------
 def test_register_and_get_viz_adapter(fresh_module):
     @register_viz("my-viz")
     class MyAdapter:
@@ -126,9 +124,9 @@ def test_get_viz_adapter_missing_raises(fresh_module):
     assert "not registered" in str(exc.value)
 
 
-# ---------------------------
-# Autodiscovery behavior tests
-# ---------------------------
+# ------------------------
+# Autodiscovery tests
+# ------------------------
 def test_autodiscover_imports_all_submodules(monkeypatch, fresh_module):
     autodiscover = fresh_module
 
@@ -141,7 +139,6 @@ def test_autodiscover_imports_all_submodules(monkeypatch, fresh_module):
     import_calls = []
 
     def fake_walk_packages(path, prefix):
-        # Accept whatever real __path__ the package exposes (list/tuple of dirs)
         assert isinstance(path, (list, tuple))
         assert prefix == "xai_compare.adapters."
         yield from discovered
@@ -169,7 +166,6 @@ def test_autodiscover_continues_on_import_error(monkeypatch, fresh_module, capsy
     ]
 
     def fake_walk_packages(path, prefix):
-        # Relaxed: do not assert path equality; only prefix
         assert isinstance(path, (list, tuple))
         assert prefix == "xai_compare.adapters."
         for item in discovered:
@@ -191,7 +187,7 @@ def test_autodiscover_continues_on_import_error(monkeypatch, fresh_module, capsy
     out = capsys.readouterr().out
     assert "[WARN] Failed importing xai_compare.adapters.bad: boom" in out
 
-    # Good modules should still be imported (created in sys.modules)
+    # Good modules should still be imported
     assert "xai_compare.adapters.good1" in sys.modules
     assert "xai_compare.adapters.good2" in sys.modules
 
@@ -243,10 +239,8 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
     import_calls = []
 
     def fake_walk_packages(path, prefix):
-        # Relaxed: path type + correct prefix
         assert isinstance(path, (list, tuple))
         assert prefix == "xai_compare.adapters."
-        # Simulate slow enumeration to increase race window
         for item in discovered:
             yield item
 
@@ -259,7 +253,6 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
     monkeypatch.setattr("pkgutil.walk_packages", lambda path, prefix: fake_walk_packages(path, prefix))
     monkeypatch.setattr("importlib.import_module", fake_import_module)
 
-    # Call autodiscover from several threads
     threads = [threading.Thread(target=autodiscover.autodiscover_adapters) for _ in range(10)]
     for t in threads:
         t.start()

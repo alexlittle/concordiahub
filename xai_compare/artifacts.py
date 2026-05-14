@@ -7,20 +7,21 @@ import numpy as np
 from datetime import datetime
 
 from xai_compare import RunContext
-
+from xai_compare import config
 
 class ArtifactStore:
     """
     ArtifactStore - handles all the data storage, file set up and retrieval
     """
     def __init__(self, ctx: RunContext):
+        
         self.ctx = ctx
 
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         if ctx.run_id:
             self.dirname = ctx.run_id
         else:
-            self.dirname = os.path.join(BASE_DIR, 'runs', datetime.now().strftime("%Y%m%d-%H%M%S"))
+            self.dirname = os.path.join(BASE_DIR, config.RUNS_DIR_NAME, datetime.now().strftime("%Y%m%d-%H%M%S"))
 
         os.makedirs(self.dirname, exist_ok=True)
 
@@ -33,12 +34,12 @@ class ArtifactStore:
             "run_id": self.ctx.run_id,
             "model_id": self.ctx.model_id
         }
-        with open(os.path.join(self.dirname, "metadata.json"), "w") as f:
+        with open(os.path.join(self.dirname, config.META_INFO_FILENAME), "w") as f:
             json.dump(obj, f, indent=4)
 
     def write_model(self):
         if self.ctx.model:
-            joblib.dump(self.ctx.model, os.path.join(self.dirname, "model.joblib"))
+            joblib.dump(self.ctx.model, os.path.join(self.dirname, config.MODEL_FILENAME))
 
     def write_data(self, name, data):
         if not hasattr(self.ctx, name):

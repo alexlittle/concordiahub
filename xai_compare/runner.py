@@ -6,6 +6,9 @@ from .registry.model_registry import get_model_adapter
 from .registry.xai_registry import get_xai_adapter
 
 def run(ctx: RunContext):
+    # check ctx provided
+    if ctx is None:
+        raise ValueError("Context (ctx) is required")
 
     # store all the raw data
     artifact_store = ArtifactStore(ctx)
