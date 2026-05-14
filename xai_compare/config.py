@@ -5,7 +5,7 @@ Configuration file for XAI-Compare
 import pandas as pd
 import numpy as np
 from dataclasses import dataclass
-from typing import Any, Final
+from typing import Any, Final, Optional
 
 # Constants for artifact filename/structure
 RUNS_DIR_NAME: Final[str] = "runs"
@@ -35,6 +35,6 @@ class RunContext:
     y_pred: np.ndarray = None
 
     model: Any = None
-    run_id: str = None
-    model_id: str = None
+    run_id: Optional[str] = None
+    model_id: Optional[str] = None
     y_proba: np.ndarray = None

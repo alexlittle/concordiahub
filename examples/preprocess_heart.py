@@ -19,8 +19,9 @@ import pandas as pd
 '''
 
 columns = [
-    "age", "sex", "cp", "trestbps", "chol", "fbs", "restecg",
-    "thalach", "exang", "oldpeak", "slope", "ca", "thal", "num"
+    "age", "sex", "chest pain type", "resting blood pressure", "serum cholesterol", "fasting blood sugar", "resting ECG",
+    "maximum heart rate", "exercise induced angina", "ST depression", "slope of the peak exercise",
+    "number of major vessels", "thalassemia", "target"
 ]
 
 df = pd.read_csv("./data/processed.cleveland.data.csv", header=None, names=columns, na_values="?")

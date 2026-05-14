@@ -18,8 +18,8 @@ df = pd.read_csv("./data/cleveland-heart-data.csv")
 # Simple imputation using median
 df.fillna(df.median(), inplace=True)
 
-X = df.drop(columns=["num"])
-y = df["num"]
+X = df.drop(columns=["target"])
+y = df["target"]
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,

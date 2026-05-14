@@ -13,12 +13,12 @@ TEMPLATE_DIR = Path("./prompt_templates")
 
 COLUMN_MAPPINGS = {
     'sex': { 0: 'Female', 1: 'Male'},
-    'cp': { 1: 'typical angina', 2: 'atypical angina', 3: 'non-anginal pain', 4: 'asymptomatic'},
-    'fbs': { 0: 'false', 1: 'true'},
-    'restecg': { 0: 'normal', 1: 'ST-T wave abnormality', 2: 'left ventricular hypertrophy'},
-    'exang': { 0: 'no', 1: 'yes'},
-    'slope': { 1: 'upsloping', 2: 'flat', 3: 'downsloping'},
-    'thal': { 3: 'normal', 6: 'fixed defect', 7: 'reversible defect'}
+    'chest pain type': { 1: 'typical angina', 2: 'atypical angina', 3: 'non-anginal pain', 4: 'asymptomatic'},
+    'fasting blood sugar': { 0: 'false', 1: 'true'},
+    'resting ECG': { 0: 'normal', 1: 'ST-T wave abnormality', 2: 'left ventricular hypertrophy'},
+    'exercise induced angina': { 0: 'no', 1: 'yes'},
+    'slope of the peak exercise': { 1: 'upsloping', 2: 'flat', 3: 'downsloping'},
+    'thalassemia': { 3: 'normal', 6: 'fixed defect', 7: 'reversible defect'}
 }
 
 df = pd.read_csv(INPUT_FILE)

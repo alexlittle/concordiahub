@@ -10,8 +10,8 @@ df = pd.read_csv("./data/cleveland-heart-data.csv")
 
 print(df.head())
 
-X = df.drop(columns="num")
-y = df["num"]
+X = df.drop(columns="target")
+y = df["target"]
 
 
 imputer = SimpleImputer(strategy="median")
