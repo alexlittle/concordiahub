@@ -4,17 +4,25 @@ import joblib
 import json
 import pandas as pd
 import numpy as np
+
 from datetime import datetime
+from pathlib import Path
 
 from xai_compare import RunContext
 from xai_compare import config
+
+# Helper functions
+def extract_dataset(path):
+    with open(path, "r") as f:
+        data = json.load(f)
+    return data.get("dataset_id")
 
 class ArtifactStore:
     """
     ArtifactStore - handles all the data storage, file set up and retrieval
     """
     def __init__(self, ctx: RunContext):
-        
+
         self.ctx = ctx
 
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -51,3 +59,16 @@ class ArtifactStore:
             data.to_frame().to_parquet(out + ".parquet")
         elif isinstance(data, np.ndarray):
             np.save(out + ".npy", data)
+
+
+
+    def get_datasets(self):
+        '''
+        Returns a list of all datasets stored in the runs directory
+        '''
+        datasets = set()
+        root = Path(self.dirname)
+        for meta_file in root.glob(f"*/{config.META_INFO_FILENAME}"):
+            datasets.add(extract_dataset(meta_file))
+        return datasets
+
