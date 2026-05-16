@@ -1,11 +1,10 @@
 from unittest.mock import patch
 
-import pytest
+# import pytest
 
-from xai_compare.artifacts import extract_dataset
+from xai_compare.run_explorer import extract_dataset
 
-MODULE_UNDER_TEST = "xai_compare.artifacts"
-
+MODULE_UNDER_TEST = "xai_compare.run_explorer"
 
 
 def test_extract_dataset():

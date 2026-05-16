@@ -1,37 +1,32 @@
 # ./artifacts.py
 import os
-import joblib
-import json
 import pandas as pd
 import numpy as np
 
 from datetime import datetime
-from pathlib import Path
 
 from xai_compare import RunContext
 from xai_compare import config
+from xai_compare.storage.store_base import DataStore
+from xai_compare.storage.filesystem_store import FilesystemStore
 
-# Helper functions
-def extract_dataset(path):
-    with open(path, "r") as f:
-        data = json.load(f)
-    return data.get("dataset_id")
 
 class ArtifactStore:
     """
     ArtifactStore - handles all the data storage, file set up and retrieval
     """
-    def __init__(self, ctx: RunContext):
-
+    def __init__(self, ctx: RunContext, store: DataStore = None):
         self.ctx = ctx
+        dirname = self._resolve_dirname(ctx)
+        self.store = store or FilesystemStore(dirname)
 
+    def _resolve_dirname(self, ctx):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         if ctx.run_id:
-            self.dirname = ctx.run_id
-        else:
-            self.dirname = os.path.join(BASE_DIR, config.RUNS_DIR_NAME, datetime.now().strftime("%Y%m%d-%H%M%S"))
+            return ctx.run_id
+        return os.path.join(BASE_DIR, config.RUNS_DIR_NAME,
+                            datetime.now().strftime("%Y%m%d-%H%M%S"))
 
-        os.makedirs(self.dirname, exist_ok=True)
 
     def write_metadata(self):
         obj = {
@@ -42,33 +37,19 @@ class ArtifactStore:
             "run_id": self.ctx.run_id,
             "model_id": self.ctx.model_id
         }
-        with open(os.path.join(self.dirname, config.META_INFO_FILENAME), "w") as f:
-            json.dump(obj, f, indent=4)
+        self.store.save_json(config.META_INFO_FILENAME, obj)
 
     def write_model(self):
         if self.ctx.model:
-            joblib.dump(self.ctx.model, os.path.join(self.dirname, config.MODEL_FILENAME))
+            self.store.save_model(config.MODEL_FILENAME ,self.ctx.model)
 
     def write_data(self, name, data):
         if not hasattr(self.ctx, name):
             return
-        out = os.path.join(self.dirname, name)
         if isinstance(data, pd.DataFrame):
-            data.to_parquet(out + ".parquet", index=False)
+            self.store.save_dataframe(f"{name}.parquet", data)
         elif isinstance(data, pd.Series):
-            data.to_frame().to_parquet(out + ".parquet")
+            self.store.save_pdseries(f"{name}.parquet", data)
         elif isinstance(data, np.ndarray):
-            np.save(out + ".npy", data)
-
-
-
-    def get_datasets(self):
-        '''
-        Returns a list of all datasets stored in the runs directory
-        '''
-        datasets = set()
-        root = Path(self.dirname)
-        for meta_file in root.glob(f"*/{config.META_INFO_FILENAME}"):
-            datasets.add(extract_dataset(meta_file))
-        return datasets
+            self.store.save_ndarray(f"{name}.npy", data)
 
