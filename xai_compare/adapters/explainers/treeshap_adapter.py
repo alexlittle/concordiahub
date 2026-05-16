@@ -1,5 +1,3 @@
-# ./adapters/explainers/treeshap_adapter.py
-
 import shap
 
 from xai_compare.registry.xai_registry import register_xai

@@ -1,4 +1,3 @@
-# ./adapters/explainers/xaimethod_base.py
 from abc import ABC, abstractmethod
 
 

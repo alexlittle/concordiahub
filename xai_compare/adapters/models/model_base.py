@@ -1,4 +1,3 @@
-# ./adapters/models/model_base.py
 from abc import ABC, abstractmethod
 
 

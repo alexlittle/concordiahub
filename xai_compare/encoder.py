@@ -1,4 +1,3 @@
-# xaicompare/encoder.py
 
 
 class XAITextEncoder():

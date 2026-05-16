@@ -1,5 +1,3 @@
-# xai_compare/cli.py
-
 import os
 import subprocess
 

@@ -1,8 +1,4 @@
-# tests/test_run_explorer.py
-
 from unittest.mock import patch
-
-# import pytest
 
 from xai_compare.run_explorer import extract_dataset
 

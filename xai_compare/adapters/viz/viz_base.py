@@ -1,4 +1,3 @@
-# xaicompare/adapters/viz/viz_base.py
 
 
 class VizAdapter:

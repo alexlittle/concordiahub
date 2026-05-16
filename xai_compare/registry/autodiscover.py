@@ -1,4 +1,3 @@
-# ./registry/autodiscover.py
 import importlib
 import pkgutil
 import threading

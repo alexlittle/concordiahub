@@ -1,4 +1,3 @@
-# ./runner.py
 
 from .artifacts import ArtifactStore
 from .config import RunContext

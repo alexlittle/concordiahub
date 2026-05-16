@@ -60,6 +60,11 @@ jobs:
       # -------------------------
       # SonarCloud scan
       # -------------------------
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2.1.1
         env:
