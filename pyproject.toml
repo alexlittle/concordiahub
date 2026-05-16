@@ -23,7 +23,8 @@ dependencies = [
     "joblib==1.5.3",
     "pyarrow==24.0.0",
     "streamlit==1.57.0",
-    "setuptools==82.0.1"
+    "setuptools==82.0.1",
+    "streamlit_option_menu==0.4.0"
 ]
 
 
@@ -52,7 +53,9 @@ dev = [
     "pytest==9.0.3",
     "twine==6.2.0",
     "build==1.4.0",
-    "wheel==0.46.3"
+    "wheel==0.46.3",
+    "pytest-cov==7.1.0"
+
 ]
 docs = [
     "Sphinx==9.1.0",

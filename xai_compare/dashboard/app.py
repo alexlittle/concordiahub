@@ -1,10 +1,10 @@
-# xaicompare/dashboard/app.py
+# xai_compare/dashboard/app.py
 
 import streamlit as st
+from xai_compare.dashboard.components.layout import apply_layout
 
-def main():
-    st.title("Hello World")
-    st.write("Welcome to my first Streamlit app!")
+apply_layout("XAI Compare")
+st.write("Welcome to XAI Compare")
 
-if __name__ == "__main__":
-    main()
+
+

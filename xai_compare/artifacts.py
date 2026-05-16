@@ -12,9 +12,13 @@ from xai_compare.storage.filesystem_store import FilesystemStore
 
 
 class ArtifactStore:
+    """ArtifactStore - handles the data storage
+
+     Args:
+        ctx (RunContext): The current run configuration.
+        store (DataStore): Storage backend. Defaults to FilesystemStore.
     """
-    ArtifactStore - handles all the data storage, file set up and retrieval
-    """
+
     def __init__(self, ctx: RunContext, store: DataStore = None):
         self.ctx = ctx
         dirname = self._resolve_dirname(ctx)

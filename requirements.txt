@@ -11,3 +11,5 @@ pyarrow==24.0.0
 streamlit==1.57.0
 setuptools==82.0.1
 pytest==9.0.3
+pytest-cov==7.1.0
+streamlit_option_menu==0.4.0
