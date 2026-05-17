@@ -1,4 +1,4 @@
-# tests/test_autodiscover.py
+
 import importlib
 import sys
 import threading
@@ -31,7 +31,7 @@ MODULE_UNDER_TEST = "xai_compare.registry.autodiscover"
 
 def _ensure_clean_import():
     """
-    Ensure a fresh import of the module under test by clearing it from sys.modules.
+    Ensure a fresh import by clearing it from sys.modules.
     """
     if MODULE_UNDER_TEST in sys.modules:
         del sys.modules[MODULE_UNDER_TEST]
@@ -217,9 +217,9 @@ def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     monkeypatch.setattr("pkgutil.walk_packages", lambda path, prefix: fake_walk_packages(path, prefix))
     monkeypatch.setattr("importlib.import_module", fake_import_module)
 
-    # First call imports
+    # First call
     autodiscover.autodiscover_adapters()
-    # Second call should be a no-op (due to __DISCOVERED flag)
+    # Second call
     autodiscover.autodiscover_adapters()
 
     assert import_calls.count("xai_compare.adapters.once") == 1
