@@ -6,9 +6,8 @@ class ModelAdapter(ABC):
     def __init__(self, model=None):
         self.model = model
 
-    @abstractmethod
     def prepare(self):
-        pass
+        return self.model
 
 
 

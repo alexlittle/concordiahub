@@ -2,15 +2,17 @@
 
 from dataclasses import fields
 
-from .artifacts import ArtifactStore
-from .config import RunContext
-from .registry.model_registry import get_model_adapter
-from .registry.xai_registry import get_xai_adapter
+from xai_compare.exceptions import InvalidConfigurationError
+from xai_compare.artifacts import ArtifactStore
+from xai_compare.config import RunContext
+from xai_compare.registry.model_registry import get_model_adapter
+from xai_compare.registry.xai_registry import get_xai_adapter
 
 def run(ctx: RunContext):
     # check ctx provided
     if ctx is None:
-        raise ValueError("Context (ctx) is required")
+        raise InvalidConfigurationError("Context (ctx) is required")
+
 
     # store all the raw data
     artifact_store = ArtifactStore(ctx)
@@ -29,7 +31,7 @@ def run(ctx: RunContext):
     for xai_method in ctx.xai_methods:
         xai_adapter = get_xai_adapter(xai_method)
 
-        results = xai_adapter.explain(model_adapter.prepare(), ctx.data.x_train, ctx.data.x_test)
+        results = xai_adapter.explain(model_adapter.prepare(), ctx.data )
         print(results)
 
 

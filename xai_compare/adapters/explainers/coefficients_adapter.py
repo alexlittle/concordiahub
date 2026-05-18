@@ -2,6 +2,7 @@
 import pandas as pd
 
 from xai_compare.config import RunData
+from xai_compare.exceptions import MissingDataError
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 
@@ -9,10 +10,23 @@ from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 
 @register_xai("coefficients")
 class CoefficientsAdapter(XAIMethodAdapter):
+    """For models with native interpretability"""
 
 
+    def explain_local(self, model, data: RunData) -> pd.DataFrame:
+        """Computes the local explanation from the coefficients of the model
+        Args:
+            model: Trained model object
+            data: RunData object
 
-    def explain(self, model, data: RunData) -> pd.DataFrame:
+        Returns:
+            pd.DataFrame: dataframe containing local explanations
+
+        Raises:
+            MissingDataError: if data.x is not provided
+        """
+        if data.x is None:
+            raise MissingDataError("CoefficientsAdapter requires x in RunData")
         coef = model.coef_[0]
-        local_explanations = data.x_test * coef
+        local_explanations = data.x * coef
         return local_explanations

@@ -44,11 +44,16 @@ coef_df = pd.DataFrame(
 )
 print(coef_df)
 
+run_data = xai.RunData(
+    x=X,
+    y=y,
+    y_pred=y_pred,
+)
 
 ctx = xai.RunContext("logistic_regression",
                ["coefficients"],
                "cleveland-heart-data",
-               X, y, y_pred,
+               run_data,
                model=model)
 xai.run(ctx)
 

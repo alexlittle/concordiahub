@@ -1,7 +1,9 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
+
 from xai_compare import runner
+from xai_compare.exceptions import InvalidConfigurationError
 from xai_compare.config import RunContext, RunData
 
 MODULE_UNDER_TEST = "xai_compare.runner"
@@ -14,7 +16,7 @@ def test_runner_no_context() -> None:
 
 # Test with empty context
 def test_runner_empty_context() -> None:
-    with pytest.raises(ValueError, match="Context"):
+    with pytest.raises(InvalidConfigurationError, match="Context"):
         runner.run(None)
 
 
