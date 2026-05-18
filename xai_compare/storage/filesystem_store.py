@@ -5,7 +5,7 @@ import os
 
 import joblib
 import json
-import numpy as np
+import pandas as pd
 
 from xai_compare.storage.store_base import DataStore
 
@@ -24,3 +24,6 @@ class FilesystemStore(DataStore):
 
     def save_model(self, filename, model):
         joblib.dump(model, os.path.join(self.dirname, filename))
+
+    def load_dataframe(self, filename:str) -> pd.DataFrame:
+        return pd.read_parquet(os.path.join(self.dirname, filename))

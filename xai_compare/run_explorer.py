@@ -1,12 +1,13 @@
-# ./run_explorer.py
 import os
 import json
 from pathlib import Path
 
-from xai_compare import config
-from .storage.filesystem_store import FilesystemStore
+from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 
-from .storage.store_base import DataStore
+from xai_compare import config
+from xai_compare.storage.filesystem_store import FilesystemStore
+
+from xai_compare.storage.store_base import DataStore
 
 #-----------------------
 # Helper functions
@@ -35,3 +36,27 @@ class RunExplorer():
         for meta_file in root.glob(f"*/{config.META_INFO_FILENAME}"):
             datasets.add(extract_dataset(meta_file))
         return sorted(datasets)
+
+    def get_accuracy_score(self) -> float:
+        try:
+            y_test = self.store.load_dataframe("y_test")
+        except FileNotFoundError:
+            y_test = self.store.load_dataframe("y")
+        y_pred = self.store.load_dataframe("y_pred")
+        return accuracy_score(y_test, y_pred)
+
+    def get_confusion_matrix(self) -> confusion_matrix:
+        try:
+            y_test = self.store.load_dataframe("y_test")
+        except FileNotFoundError:
+            y_test = self.store.load_dataframe("y")
+        y_pred = self.store.load_dataframe("y_pred")
+        return confusion_matrix(y_test, y_pred)
+
+    def get_classification_report(self) -> classification_report:
+        try:
+            y_test = self.store.load_dataframe("y_test")
+        except FileNotFoundError:
+            y_test = self.store.load_dataframe("y")
+        y_pred = self.store.load_dataframe("y_pred")
+        return classification_report(y_test, y_pred)

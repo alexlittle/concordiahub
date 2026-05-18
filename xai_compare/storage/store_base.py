@@ -1,8 +1,8 @@
-# ./storage/store_base.py
 '''
 Abstract class for storing data and model
 '''
 
+import pandas as pd
 from abc import ABC, abstractmethod
 
 
@@ -15,3 +15,6 @@ class DataStore(ABC):
 
     @abstractmethod
     def save_model(self, filename, model): pass
+
+    @abstractmethod
+    def load_dataframe(self, filename) -> pd.DataFrame: pass

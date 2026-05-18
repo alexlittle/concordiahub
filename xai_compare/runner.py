@@ -2,6 +2,7 @@
 
 from dataclasses import fields
 
+from xai_compare.run_explorer import RunExplorer
 from xai_compare.exceptions import InvalidConfigurationError
 from xai_compare.artifacts import ArtifactStore
 from xai_compare.config import RunContext
@@ -36,5 +37,8 @@ def run(ctx: RunContext):
         artifact_store.write_data(f"explanations_{xai_method}", results)
 
 
-
+    run_exp = RunExplorer(artifact_store)
+    print(run_exp.get_confusion_matrix())
+    print(run_exp.get_accuracy_score())
+    print(run_exp.get_classification_report())
 
