@@ -7,7 +7,7 @@ class ModelAdapter(ABC):
         self.model = model
 
     @abstractmethod
-    def prepare(self, X_train=None):
+    def prepare(self):
         pass
 
 

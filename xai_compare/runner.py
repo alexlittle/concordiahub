@@ -29,7 +29,7 @@ def run(ctx: RunContext):
     for xai_method in ctx.xai_methods:
         xai_adapter = get_xai_adapter(xai_method)
 
-        results = xai_adapter.explain(model_adapter.prepare(ctx.data.x_train), ctx.data.x_train, ctx.data.x_test)
+        results = xai_adapter.explain(model_adapter.prepare(), ctx.data.x_train, ctx.data.x_test)
         print(results)
 
 

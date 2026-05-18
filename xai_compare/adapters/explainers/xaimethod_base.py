@@ -1,6 +1,7 @@
 import pandas as pd
 from abc import ABC, abstractmethod
 
+from xai_compare.config import RunData
 
 class XAIMethodAdapter(ABC):
     """
@@ -8,7 +9,7 @@ class XAIMethodAdapter(ABC):
     """
 
     @abstractmethod
-    def explain(self, model, X_train, X_test) -> pd.DataFrame:
+    def explain(self, model, data: RunData) -> pd.DataFrame:
         pass
 
 
