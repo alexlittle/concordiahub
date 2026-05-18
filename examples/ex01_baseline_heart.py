@@ -6,20 +6,23 @@ from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
+import xai_compare as xai
+
 df = pd.read_csv("./data/cleveland-heart-data.csv")
 
-print(df.head())
+X = df.drop(columns=["sample_uuid", "target"])
+X.index = df['sample_uuid']
 
-X = df.drop(columns="target")
 y = df["target"]
+y.index = df['sample_uuid']
 
 
 imputer = SimpleImputer(strategy="median")
 X_imputed = imputer.fit_transform(X)
-
+X_imputed = pd.DataFrame(imputer.fit_transform(X), columns=X.columns, index=X.index)
 
 scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X_imputed)
+X_scaled = pd.DataFrame(scaler.fit_transform(X_imputed), columns=X.columns, index=X.index)
 
 
 model = LogisticRegression(
@@ -37,10 +40,17 @@ print(accuracy_score(y, y_pred))
 coef_df = pd.DataFrame(
     model.coef_,
     columns=X.columns,
-    index=[f"class_{c}" for c in model.classes_]
+    index=[f"class_{c}" for c in model.classes_[1:]]
 )
 print(coef_df)
 
+
+ctx = xai.RunContext("logistic_regression",
+               ["coefficients"],
+               "cleveland-heart-data",
+               X, y, y_pred,
+               model=model)
+xai.run(ctx)
 
 
 

@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from unittest.mock import MagicMock
 from xai_compare.artifacts import ArtifactStore
-from xai_compare import RunContext
+from xai_compare import RunContext, RunData
 
 
 @pytest.fixture
@@ -13,21 +13,22 @@ def mock_store():
 
 @pytest.fixture
 def ctx_with_run_id():
-    ctx = RunContext("xgboost", [], "test_dataset")
+    run_data = RunData(x_train=pd.DataFrame({"a": [1, 2]}),
+                y_train = pd.Series([0, 1]),
+                x_test = pd.DataFrame({"a": [3]}),
+                y_test = pd.Series([0]),
+                y_pred = np.array([0]))
+
+    ctx = RunContext("xgboost", [], "test_dataset", run_data)
     ctx.run_id = "my_run_id"
     ctx.model = MagicMock()
     ctx.model_id = "model_1"
-    ctx.X_train = pd.DataFrame({"a": [1, 2]})
-    ctx.y_train = pd.Series([0, 1])
-    ctx.X_test = pd.DataFrame({"a": [3]})
-    ctx.y_test = pd.Series([0])
-    ctx.y_pred = np.array([0])
     return ctx
 
 
 @pytest.fixture
 def ctx_without_run_id():
-    ctx = RunContext("xgboost", [], "test_dataset")
+    ctx = RunContext("xgboost", [], "test_dataset", RunData())
     ctx.run_id = None
     ctx.model = None
     ctx.model_id = None
@@ -80,14 +81,12 @@ def test_write_model_without_model(ctx_without_run_id, mock_store):
 # write_data
 def test_write_data_dataframe(ctx_with_run_id, mock_store):
     artifact_store = make_artifact_store(ctx_with_run_id, mock_store)
-    artifact_store.write_data("X_train", ctx_with_run_id.X_train)
-    mock_store.save_dataframe.assert_called_once_with("X_train.parquet", ctx_with_run_id.X_train)
+    artifact_store.write_data("x_train", ctx_with_run_id.data.x_train)
+    mock_store.save_dataframe.assert_called_once_with("x_train.parquet", ctx_with_run_id.data.x_train)
 
 
 def test_write_data_missing_attribute(ctx_with_run_id, mock_store):
     """Should return without calling any save method."""
     artifact_store = make_artifact_store(ctx_with_run_id, mock_store)
-    artifact_store.write_data("nonexistent_field", pd.DataFrame())
+    artifact_store.write_data("nonexistent_field", None)
     mock_store.save_dataframe.assert_not_called()
-    mock_store.save_pdseries.assert_not_called()
-    mock_store.save_ndarray.assert_not_called()

@@ -6,7 +6,6 @@ from xgboost import XGBClassifier
 
 import xai_compare as xai
 
-
 from helpers import check_gpu
 
 device = check_gpu()
@@ -49,10 +48,10 @@ print(classification_report(y_test, y_pred))
 ctx = xai.RunContext("xgboost",
                ["shap_tree"],
                "cleveland-heart-data",
-               X_train,
-               X_test,
-               y_train,
-               y_test,
-               y_pred,
+               xai.RunData(x_train=X_train,
+                   x_test=X_test,
+                   y_train=y_train,
+                   y_test=y_test,
+                   y_pred=y_pred),
                model=model)
 xai.run(ctx)

@@ -16,25 +16,28 @@ MODEL_FILENAME: Final[str] = "model.joblib"
 # Configuration & Constants for NLP tasks
 EMBEDDING_ENCODER: Final[str] ="all-MiniLM-L6-v2"
 
+@dataclass
+class RunData:
+    """
+    Dataclass structure for RunData to be passed to runner
+    """
+    x: Optional[pd.DataFrame] = None
+    y: Optional[pd.DataFrame] = None
+    x_train: Optional[pd.DataFrame] = None
+    x_test: Optional[pd.DataFrame] = None
+    y_train: Optional[pd.DataFrame] = None
+    y_test: Optional[pd.DataFrame] = None
+    y_pred: Optional[pd.DataFrame] = None
 
 @dataclass
 class RunContext:
-    '''
-    Context definition for runner parameters
-    '''
-    # core model/method/identifiers
+    """
+    Dataclass structure for RunContext to be passed to runner
+    """
     model_type: str
     xai_methods: list[str]
     dataset_id: str
-
-    # optional
-    X_train: pd.DataFrame = None
-    X_test: pd.DataFrame = None
-    y_train: pd.Series = None
-    y_test: pd.Series = None
-    y_pred: np.ndarray = None
-
+    data: RunData
     model: Any = None
     run_id: Optional[str] = None
     model_id: Optional[str] = None
-    y_proba: np.ndarray = None

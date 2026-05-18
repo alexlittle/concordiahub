@@ -47,7 +47,7 @@ class ArtifactStore:
             self.store.save_model(config.MODEL_FILENAME ,self.ctx.model)
 
     def write_data(self, name, data):
-        if not hasattr(self.ctx, name):
+        if data is None:
             return
         if isinstance(data, pd.Series):
             data = data.to_frame()
