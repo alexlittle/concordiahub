@@ -26,5 +26,5 @@ def test_runner_invalid_model() -> None:
     ctx = RunContext("unknown", [], "test_dataset", run_data)
     with patch("xai_compare.runner.ArtifactStore") as mock_store:
         mock_store.return_value = MagicMock()
-        with pytest.raises(ValueError, match="Model adapter"):
+        with pytest.raises(InvalidConfigurationError, match="Model adapter"):
             runner.run(ctx)

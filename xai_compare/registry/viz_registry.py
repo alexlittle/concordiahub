@@ -1,3 +1,5 @@
+from xai_compare.exceptions import InvalidConfigurationError
+
 VIZ_REGISTRY = {}
 
 def register_viz(key):
@@ -11,5 +13,5 @@ def register_viz(key):
 
 def get_viz_adapter(key):
     if key not in VIZ_REGISTRY:
-        raise ValueError(f"Viz adapter '{key}' not registered.")
+        raise InvalidConfigurationError(f"Viz adapter '{key}' not registered.")
     return VIZ_REGISTRY[key]

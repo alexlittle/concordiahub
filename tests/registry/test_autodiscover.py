@@ -6,6 +6,8 @@ from types import ModuleType
 
 import pytest
 
+from xai_compare.exceptions import InvalidConfigurationError
+
 # Import registry APIs from their respective modules
 from xai_compare.registry.model_registry import (
     MODEL_REGISTRY,
@@ -78,7 +80,7 @@ def test_register_and_get_model_adapter(fresh_module):
 
 
 def test_get_model_adapter_missing_raises(fresh_module):
-    with pytest.raises(ValueError) as exc:
+    with pytest.raises(InvalidConfigurationError) as exc:
         get_model_adapter("missing")
     assert "not registered" in str(exc.value)
 
@@ -98,7 +100,7 @@ def test_register_and_get_xai_adapter(fresh_module):
 
 
 def test_get_explainer_adapter_missing_raises(fresh_module):
-    with pytest.raises(ValueError) as exc:
+    with pytest.raises(InvalidConfigurationError) as exc:
         get_xai_adapter("missing")
     assert "not registered" in str(exc.value)
 
@@ -119,7 +121,7 @@ def test_register_and_get_viz_adapter(fresh_module):
 
 
 def test_get_viz_adapter_missing_raises(fresh_module):
-    with pytest.raises(ValueError) as exc:
+    with pytest.raises(InvalidConfigurationError) as exc:
         get_viz_adapter("missing")
     assert "not registered" in str(exc.value)
 

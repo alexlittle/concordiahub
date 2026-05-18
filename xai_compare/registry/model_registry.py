@@ -1,4 +1,6 @@
 
+from xai_compare.exceptions import InvalidConfigurationError
+
 MODEL_REGISTRY = {}
 
 def register_model(key):
@@ -12,5 +14,5 @@ def register_model(key):
 
 def get_model_adapter(key, model=None):
     if key not in MODEL_REGISTRY:
-        raise ValueError(f"Model adapter '{key}' not registered.")
+        raise InvalidConfigurationError(f"Model adapter '{key}' not registered.")
     return MODEL_REGISTRY[key](model)
