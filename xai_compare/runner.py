@@ -31,8 +31,9 @@ def run(ctx: RunContext):
     for xai_method in ctx.xai_methods:
         xai_adapter = get_xai_adapter(xai_method)
 
-        results = xai_adapter.explain(model_adapter.prepare(), ctx.data )
-        print(results)
+        # Run the local explanations
+        results = xai_adapter.explain_local(model_adapter.prepare(), ctx.data)
+        artifact_store.write_data(f"explanations_{xai_method}", results)
 
 
 

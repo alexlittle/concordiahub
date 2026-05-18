@@ -27,4 +27,5 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         if data.x_test is None:
             raise MissingDataError("CoefficientsAdapter requires x_test in RunData")
         explainer = shap.TreeExplainer(model)
-        return explainer.shap_values(data.x_test)
+        shap_values = explainer.shap_values(data.x_test)
+        return pd.DataFrame(shap_values, index=data.x_test.index, columns=data.x_test.columns)

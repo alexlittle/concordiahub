@@ -32,8 +32,8 @@ model = LogisticRegression(
 
 model.fit(X_scaled, y)
 
+y_pred = pd.DataFrame({'y_pred': model.predict(X_scaled)}, index=X_scaled.index)
 
-y_pred = model.predict(X_scaled)
 print(accuracy_score(y, y_pred))
 
 
