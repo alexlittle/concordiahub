@@ -1,4 +1,3 @@
-# ./storage/filesystem_store.py
 '''
 Implementation of filesystem storage
 '''

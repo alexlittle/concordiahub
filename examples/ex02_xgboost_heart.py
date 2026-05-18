@@ -1,5 +1,4 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
@@ -15,11 +14,11 @@ print(f"System check: {device} detected.")
 
 df = pd.read_csv("./data/cleveland-heart-data.csv")
 
-# Simple imputation using median
-df.fillna(df.median(), inplace=True)
+X = df.drop(columns=["sample_uuid", "target"])
+X.index = df['sample_uuid']
 
-X = df.drop(columns=["target"])
 y = df["target"]
+y.index = df['sample_uuid']
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
@@ -32,7 +31,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 model = XGBClassifier(
     n_estimators=1000,
     learning_rate=0.1,
-    objective='multi:softprob',
+    objective='binary:logistic',
     random_state=42,
     tree_method='hist',  # needed for GPU usage
     device=device # put on GPU if available
@@ -41,19 +40,11 @@ model = XGBClassifier(
 model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
+y_pred = pd.Series(y_pred, index=X_test.index, name='y_pred')
 
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n")
 print(classification_report(y_test, y_pred))
-
-'''
-plt.figure(figsize=(10, 6))
-plt.barh(X.columns, model.feature_importances_)
-plt.xlabel("Feature Importance")
-plt.title("XGBoost Feature Importance")
-plt.tight_layout()
-plt.show()
-'''
 
 ctx = xai.RunContext("xgboost",
                ["shap_tree"],

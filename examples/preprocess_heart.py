@@ -1,6 +1,7 @@
 
-# Processes the  Cleveland heart data to add the column names
+# Processes the  Cleveland heart data to add the column names & uuid
 import pandas as pd
+import uuid
 '''
 1. age        – age in years
 2. sex        – sex (1 = male; 0 = female)
@@ -24,6 +25,17 @@ columns = [
     "number of major vessels", "thalassemia", "target"
 ]
 
-df = pd.read_csv("./data/processed.cleveland.data.csv", header=None, names=columns, na_values="?")
+# Read in file and match to the columns
+df = pd.read_csv("./data/cleveland-data-downloaded.csv", header=None, names=columns, na_values="?")
 
+# Assign a UUID
+df.insert(0, 'sample_uuid', [str(uuid.uuid4()) for _ in range(len(df))])
+
+# Change to a binary target
+df['target'] = (df['target'] > 0).astype(int)
+
+# Simple imputation using median
+df.fillna(df.median(numeric_only=True), inplace=True)
+
+# Save processed file
 df.to_csv("./data/cleveland-heart-data.csv", index=False)
