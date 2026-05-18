@@ -40,7 +40,7 @@ model = XGBClassifier(
 model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
-y_pred = pd.Series(y_pred, index=X_test.index, name='y_pred')
+y_pred = pd.DataFrame({'y_pred': model.predict(X_test)}, index=X_test.index)
 
 print("Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n")

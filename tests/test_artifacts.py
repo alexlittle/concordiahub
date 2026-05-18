@@ -84,18 +84,6 @@ def test_write_data_dataframe(ctx_with_run_id, mock_store):
     mock_store.save_dataframe.assert_called_once_with("X_train.parquet", ctx_with_run_id.X_train)
 
 
-def test_write_data_series(ctx_with_run_id, mock_store):
-    artifact_store = make_artifact_store(ctx_with_run_id, mock_store)
-    artifact_store.write_data("y_train", ctx_with_run_id.y_train)
-    mock_store.save_pdseries.assert_called_once_with("y_train.parquet", ctx_with_run_id.y_train)
-
-
-def test_write_data_ndarray(ctx_with_run_id, mock_store):
-    artifact_store = make_artifact_store(ctx_with_run_id, mock_store)
-    artifact_store.write_data("y_pred", ctx_with_run_id.y_pred)
-    mock_store.save_ndarray.assert_called_once_with("y_pred.npy", ctx_with_run_id.y_pred)
-
-
 def test_write_data_missing_attribute(ctx_with_run_id, mock_store):
     """Should return without calling any save method."""
     artifact_store = make_artifact_store(ctx_with_run_id, mock_store)

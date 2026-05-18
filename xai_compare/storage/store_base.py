@@ -14,10 +14,4 @@ class DataStore(ABC):
     def save_dataframe(self, filename, data): pass
 
     @abstractmethod
-    def save_ndarray(self, filename, data): pass
-
-    @abstractmethod
-    def save_pdseries(self, filename, data): pass
-
-    @abstractmethod
     def save_model(self, filename, model): pass

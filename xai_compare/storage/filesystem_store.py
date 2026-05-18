@@ -22,11 +22,5 @@ class FilesystemStore(DataStore):
     def save_dataframe(self, filename, data):
         data.to_parquet(os.path.join(self.dirname, filename))
 
-    def save_ndarray(self, filename, data):
-        np.save(os.path.join(self.dirname, filename), data)
-
-    def save_pdseries(self, filename, data):
-        data.to_frame().to_parquet(os.path.join(self.dirname, filename))
-
     def save_model(self, filename, model):
         joblib.dump(model, os.path.join(self.dirname, filename))

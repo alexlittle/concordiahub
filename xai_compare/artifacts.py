@@ -49,10 +49,9 @@ class ArtifactStore:
     def write_data(self, name, data):
         if not hasattr(self.ctx, name):
             return
-        if isinstance(data, pd.DataFrame):
-            self.store.save_dataframe(f"{name}.parquet", data)
-        elif isinstance(data, pd.Series):
-            self.store.save_pdseries(f"{name}.parquet", data)
+        if isinstance(data, pd.Series):
+            data = data.to_frame()
         elif isinstance(data, np.ndarray):
-            self.store.save_ndarray(f"{name}.npy", data)
+            data = pd.DataFrame(data)
+        self.store.save_dataframe(f"{name}.parquet", data)
 
