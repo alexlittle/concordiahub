@@ -48,7 +48,8 @@ print(classification_report(y_test, y_pred))
 ctx = xai.RunContext("xgboost",
                ["shap_tree"],
                "cleveland-heart-data",
-               xai.RunData(x_train=X_train,
+               xai.RunData(
+                   x_train=X_train,
                    x_test=X_test,
                    y_train=y_train,
                    y_test=y_test,

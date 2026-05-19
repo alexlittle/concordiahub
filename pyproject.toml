@@ -23,8 +23,9 @@ dependencies = [
     "joblib==1.5.3",
     "pyarrow==24.0.0",
     "streamlit==1.57.0",
-    "setuptools==82.0.1",
-    "streamlit_option_menu==0.4.0"
+    "setuptools==81.0.0",
+    "streamlit_option_menu==0.4.0",
+    "sentence-transformers==5.5.0"
 ]
 
 

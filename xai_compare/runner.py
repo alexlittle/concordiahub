@@ -4,6 +4,7 @@ from dataclasses import fields
 
 from xai_compare.run_explorer import RunExplorer
 from xai_compare.exceptions import InvalidConfigurationError
+from xai_compare.encoder import XAITextEncoder
 from xai_compare.artifacts import ArtifactStore
 from xai_compare.config import RunContext
 from xai_compare.registry.model_registry import get_model_adapter
@@ -30,6 +31,16 @@ def run(ctx: RunContext):
 
     for xai_method in ctx.xai_methods:
         xai_adapter = get_xai_adapter(xai_method)
+
+        # process feature names if necessary
+        if xai_adapter.requires_encoded_features:
+            encoder = XAITextEncoder()
+            if ctx.data.x is not None:
+                df = ctx.data.x
+            elif ctx.data.x_train is not None:
+                df = ctx.data.x_train
+            encoded_features = encoder.encode_feature_names(df)
+            artifact_store.write_data("feature_name_embeddings", encoded_features)
 
         # Run the local explanations
         results = xai_adapter.explain_local(ctx.data, model_adapter.prepare())

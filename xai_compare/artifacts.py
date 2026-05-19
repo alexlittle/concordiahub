@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 
 from datetime import datetime
+from dataclasses import asdict
 
 from xai_compare import RunContext
 from xai_compare import config
@@ -20,26 +21,24 @@ class ArtifactStore:
 
     def __init__(self, ctx: RunContext, store: DataStore = None):
         self.ctx = ctx
+        self.run_datetime = datetime.now().strftime("%Y%m%d-%H%M%S")
         dirname = self._resolve_dirname(ctx)
         self.store = store or FilesystemStore(dirname)
+
 
     def _resolve_dirname(self, ctx):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         if ctx.run_id:
             return ctx.run_id
-        return os.path.join(BASE_DIR, config.RUNS_DIR_NAME,
-                            datetime.now().strftime("%Y%m%d-%H%M%S"))
+        return os.path.join(BASE_DIR, config.RUNS_DIR_NAME, self.run_datetime)
 
 
     def write_metadata(self):
-        obj = {
-            "model_type": self.ctx.model_type,
-            "xai_methods": self.ctx.xai_methods,
-            "datetime": datetime.now().strftime("%Y%m%d-%H%M%S"),
-            "dataset_id": self.ctx.dataset_id,
-            "run_id": self.ctx.run_id,
-            "model_id": self.ctx.model_id
-        }
+        """Writes the artifact metadata directly from the context dataclass
+        """
+        excluded = {'data', 'model'}
+        obj = {k: v for k, v in asdict(self.ctx).items() if k not in excluded}
+        obj['datetime'] = self.run_datetime
         self.store.save_json(config.META_INFO_FILENAME, obj)
 
     def write_model(self):
