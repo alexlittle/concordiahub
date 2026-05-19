@@ -5,19 +5,20 @@ from sklearn.metrics import accuracy_score, classification_report
 from xgboost import XGBClassifier
 
 import xai_compare as xai
+from examples import config
 
 from helpers import check_gpu
 
 device = check_gpu()
 print(f"System check: {device} detected.")
 
-df = pd.read_csv("./data/cleveland-heart-data.csv")
+df = pd.read_csv(config.HEART_INPUT_FILE)
 
-X = df.drop(columns=["sample_uuid", "target"])
-X.index = df['sample_uuid']
+X = df.drop(columns=[config.SAMPLE_UUID_COL, "target"])
+X.index = df[config.SAMPLE_UUID_COL]
 
 y = df["target"]
-y.index = df['sample_uuid']
+y.index = df[config.SAMPLE_UUID_COL]
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,
@@ -38,7 +39,6 @@ model = XGBClassifier(
 
 model.fit(X_train, y_train)
 
-y_pred = model.predict(X_test)
 y_pred = pd.DataFrame({'y_pred': model.predict(X_test)}, index=X_test.index)
 
 print("Accuracy:", accuracy_score(y_test, y_pred))

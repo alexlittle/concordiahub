@@ -28,6 +28,7 @@ class RunData:
     y_train: Optional[pd.DataFrame] = None
     y_test: Optional[pd.DataFrame] = None
     y_pred: Optional[pd.DataFrame] = None
+    y_exp: Optional[pd.DataFrame] = None
 
 @dataclass
 class RunContext:
@@ -38,6 +39,7 @@ class RunContext:
     xai_methods: list[str]
     dataset_id: str
     data: RunData
-    model: Any = None
+    model: Optional[Any] = None
+    model_subtype: Optional[str] = None
     run_id: Optional[str] = None
     model_id: Optional[str] = None

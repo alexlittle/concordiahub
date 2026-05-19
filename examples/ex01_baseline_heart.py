@@ -7,14 +7,15 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
 import xai_compare as xai
+from examples import config
 
-df = pd.read_csv("./data/cleveland-heart-data.csv")
+df = pd.read_csv(config.HEART_INPUT_FILE)
 
-X = df.drop(columns=["sample_uuid", "target"])
-X.index = df['sample_uuid']
+X = df.drop(columns=[config.SAMPLE_UUID_COL, "target"])
+X.index = df[config.SAMPLE_UUID_COL]
 
 y = df["target"]
-y.index = df['sample_uuid']
+y.index = df[config.SAMPLE_UUID_COL]
 
 
 imputer = SimpleImputer(strategy="median")

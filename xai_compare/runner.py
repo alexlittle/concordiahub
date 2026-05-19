@@ -14,7 +14,6 @@ def run(ctx: RunContext):
     if ctx is None:
         raise InvalidConfigurationError("Context (ctx) is required")
 
-
     # store all the raw data
     artifact_store = ArtifactStore(ctx)
     artifact_store.write_metadata()
