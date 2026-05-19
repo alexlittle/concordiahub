@@ -11,7 +11,7 @@ from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 class KernalSHAPAdapter(XAIMethodAdapter):
     """Model-agnostic Kernel Shap Explainer"""
 
-    def explain_local(self, model, data: RunData) -> pd.DataFrame:
+    def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
         """Computes the local explanation using KernelShap method
         Args:
             model: Trained model object

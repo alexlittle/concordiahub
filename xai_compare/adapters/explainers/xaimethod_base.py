@@ -8,12 +8,15 @@ class XAIMethodAdapter(ABC):
     Abstract class for XAI method adapter.
     """
 
+    # default to true for most explanation adapters
+    requires_encoded_features: bool = True
+
     @abstractmethod
-    def explain_local(self, model, data: RunData) -> pd.DataFrame:
+    def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
         """Computes the local explanation for the model
         Args:
-            model: Trained model object
             data: RunData object
+            model: Trained model object
 
         Returns:
             pd.DataFrame: dataframe containing local explanations

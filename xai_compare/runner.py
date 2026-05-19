@@ -32,7 +32,7 @@ def run(ctx: RunContext):
         xai_adapter = get_xai_adapter(xai_method)
 
         # Run the local explanations
-        results = xai_adapter.explain_local(model_adapter.prepare(), ctx.data)
+        results = xai_adapter.explain_local(ctx.data, model_adapter.prepare())
         artifact_store.write_data(f"explanations_{xai_method}", results)
 
 

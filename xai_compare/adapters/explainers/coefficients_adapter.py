@@ -13,7 +13,7 @@ class CoefficientsAdapter(XAIMethodAdapter):
     """For models with native interpretability"""
 
 
-    def explain_local(self, model, data: RunData) -> pd.DataFrame:
+    def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
         Args:
             model: Trained model object

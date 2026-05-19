@@ -24,6 +24,7 @@ ctx = xai.RunContext("llm",
                ["cor"],
                "cleveland-heart-data",
                xai.RunData(x=X,
+                   y=y,
                    y_pred=y_preds,
                    y_exp=y_exp,),
                 model_subtype=config.HEART_OLLAMA_MODEL)
