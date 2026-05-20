@@ -29,6 +29,7 @@ class RunData:
     y_test: Optional[pd.DataFrame] = None
     y_pred: Optional[pd.DataFrame] = None
     y_exp: Optional[pd.DataFrame] = None
+    class_names: Optional[list] = None
 
 @dataclass
 class RunContext:

@@ -1,6 +1,7 @@
 from unittest.mock import patch
 from xai_compare.cli import main
 
+MODULE_UNDER_TEST = "xai_compare.cli"
 
 def test_main_runs_streamlit(tmp_path):
     with patch("subprocess.run") as mock_run:

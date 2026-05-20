@@ -5,6 +5,7 @@ from unittest.mock import MagicMock
 from xai_compare.artifacts import ArtifactStore
 from xai_compare import RunContext, RunData
 
+MODULE_UNDER_TEST = "xai_compare.artifacts"
 
 @pytest.fixture
 def mock_store():

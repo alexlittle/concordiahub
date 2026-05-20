@@ -29,7 +29,7 @@ class ArtifactStore:
     def _resolve_dirname(self, ctx):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         if ctx.run_id:
-            return ctx.run_id
+            return os.path.join(BASE_DIR, config.RUNS_DIR_NAME, ctx.run_id)
         return os.path.join(BASE_DIR, config.RUNS_DIR_NAME, self.run_datetime)
 
 
@@ -51,6 +51,8 @@ class ArtifactStore:
         if isinstance(data, pd.Series):
             data = data.to_frame()
         elif isinstance(data, np.ndarray):
+            data = pd.DataFrame(data)
+        elif isinstance(data, list):
             data = pd.DataFrame(data)
         self.store.save_dataframe(f"{name}.parquet", data)
 

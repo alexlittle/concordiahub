@@ -47,8 +47,9 @@ def run(ctx: RunContext):
         artifact_store.write_data(f"explanations_{xai_method}", results)
 
 
+    '''
     run_exp = RunExplorer(artifact_store)
     print(run_exp.get_confusion_matrix())
     print(run_exp.get_accuracy_score())
     print(run_exp.get_classification_report())
-
+    '''
