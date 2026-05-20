@@ -75,6 +75,10 @@ report = classification_report(y_test, y_pred, target_names=le.classes_, zero_di
 print("Classification Report:\n", report)
 
 
+
+
+
+'''
 with open("./models/medsynth_xgboost/classification_report.txt", "w") as f:
     f.write("XGBoost ICD-10 Chapter Classification Report\n")
     f.write("=" * 50 + "\n")
@@ -108,6 +112,7 @@ plt.tight_layout()
 plt.savefig('./models/medsynth_xgboost/confusion_matrix.svg')
 plt.show()
 
+
 # save model
 model.save_model("./models/medsynth_xgboost/icd10_xgboost_model.ubj")
 
@@ -124,3 +129,4 @@ joblib.dump(y_train, "./models/medsynth_xgboost/y_train.joblib")
 joblib.dump(X_test, "./models/medsynth_xgboost/X_test.joblib")
 joblib.dump(y_test, "./models/medsynth_xgboost/y_test.joblib")
 joblib.dump(y_pred, "./models/medsynth_xgboost/y_pred.joblib")
+'''

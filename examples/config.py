@@ -15,3 +15,5 @@ HEART_OUTPUT_PATH = Path("./results/heart")
 
 
 # Config for Medsynth
+MEDSYNTH_FULL_FILE = "./data/medsynth_data_full.csv"
+MEDSYNTH_UTTERANCES_FILE = "./data/medsynth_utterances.csv"

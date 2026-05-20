@@ -63,6 +63,7 @@ def process_medsynth():
     df = df.dropna(subset=["Dialogue"]).copy()
     df["ICD_chapter"] = df["ICD10"].apply(map_icd10_to_chapter)
     df = df.rename(columns={" Note": "Note"})
+
     return df
 
 
