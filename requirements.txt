@@ -14,3 +14,4 @@ pytest==9.0.3
 pytest-cov==7.1.0
 streamlit_option_menu==0.4.0
 sentence-transformers==5.5.0
+torchvision==0.27.0

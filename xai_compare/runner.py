@@ -1,8 +1,6 @@
 
-
 from dataclasses import fields
 
-from xai_compare.run_explorer import RunExplorer
 from xai_compare.exceptions import InvalidConfigurationError
 from xai_compare.encoder import XAITextEncoder
 from xai_compare.artifacts import ArtifactStore
@@ -45,7 +43,6 @@ def run(ctx: RunContext):
         # Run the local explanations
         results = xai_adapter.explain_local(ctx.data, model_adapter.prepare())
         artifact_store.write_data(f"explanations_{xai_method}", results)
-
 
     '''
     run_exp = RunExplorer(artifact_store)
