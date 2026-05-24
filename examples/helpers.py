@@ -43,7 +43,9 @@ def map_icd10_to_chapter(code):
         return None
     code = str(code).strip()
     first_letter = code[0].upper()
-    return _ICD10_CHAPTERS.get(first_letter, ("", "", "Unknown"))[2]
+    if first_letter not in _ICD10_CHAPTERS:
+        return "Unknown"
+    return first_letter
 
 def check_gpu():
     try:

@@ -15,3 +15,4 @@ class XAITextEncoder():
         feature_names = df.columns.tolist()
         embeddings = model.encode(feature_names)
         return pd.DataFrame(embeddings, index=feature_names)
+
