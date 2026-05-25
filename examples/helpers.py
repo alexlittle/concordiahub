@@ -8,8 +8,7 @@ from pathlib import Path
 from tqdm import tqdm
 from typing import Union
 
-
-_ICD10_CHAPTERS = {
+ICD10_CODES = {
     "A": ("A00", "B99", "Certain infectious and parasitic diseases"),
     "B": ("A00", "B99", "Certain infectious and parasitic diseases"),
     "C": ("C00", "D49", "Neoplasms"),
@@ -38,14 +37,40 @@ _ICD10_CHAPTERS = {
     "U": ("U00", "U85", "Special purposes")
 }
 
+
+ICD10_CHAPTERS = {
+    "A": "Certain infectious and parasitic diseases",
+    "B": "Certain infectious and parasitic diseases",
+    "C": "Neoplasms",
+    "D": "Neoplasms",
+    "E": "Endocrine, nutritional and metabolic diseases",
+    "F": "Mental, behavioral and neurodevelopmental disorders",
+    "G": "Diseases of the nervous system",
+    "H": "Diseases of eye/ear/adnexa/mastoid",
+    "I": "Diseases of the circulatory system",
+    "J": "Diseases of the respiratory system",
+    "K": "Diseases of the digestive system",
+    "L": "Diseases of the skin and subcutaneous tissue",
+    "M": "Diseases of musculoskeletal system",
+    "N": "Diseases of the genitourinary system",
+    "O": "Pregnancy, childbirth and puerperium",
+    "P": "Perinatal conditions",
+    "Q": "Congenital malformations",
+    "R": "Symptoms, signs, abnormal findings",
+    "S": "Injury and poisoning",
+    "T": "Injury and poisoning",
+    "V": "External causes of morbidity",
+    "W": "External causes of morbidity",
+    "X": "External causes of morbidity",
+    "Y": "External causes of morbidity",
+    "Z": "Factors influencing health status",
+    "U": "Special purposes"
+}
+
 def map_icd10_to_chapter(code):
     if pd.isna(code):
         return None
-    code = str(code).strip()
-    first_letter = code[0].upper()
-    if first_letter not in _ICD10_CHAPTERS:
-        return "Unknown"
-    return first_letter
+    return ICD10_CHAPTERS.get(str(code).strip()[0].upper(), "Unknown")
 
 def check_gpu():
     try:

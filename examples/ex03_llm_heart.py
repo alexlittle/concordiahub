@@ -5,8 +5,6 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from examples import config
 
-config.HEART_OUTPUT_PATH.mkdir(parents=True, exist_ok=True)
-
 COLUMN_MAPPINGS = {
     'sex': { 0: 'Female', 1: 'Male'},
     'chest pain type': { 1: 'typical angina', 2: 'atypical angina', 3: 'non-anginal pain', 4: 'asymptomatic'},
@@ -94,6 +92,13 @@ for idx, row in df[:3].iterrows():
     })
 
 out_df = pd.DataFrame(outputs)
-out_df.index = out_df[config.SAMPLE_UUID_COL]
 
-out_df.to_csv(config.HEART_OUTPUT_PATH / "llm_heart_preds.csv")
+X = df.drop(columns=["target"])
+y = df[config.SAMPLE_UUID_COL, "target"]
+y_preds = out_df[config.SAMPLE_UUID_COL, "prediction"]
+y_exp = out_df[config.SAMPLE_UUID_COL, "cor_explanation"]
+
+X.to_parquet('./cache/heart/llm/X.parquet')
+y.to_parquet('./cache/heart/llm/y.parquet')
+y_preds.to_frame().to_parquet('./cache/heart/llm/y_preds.parquet')
+y_exp.to_frame().to_parquet('./cache/heart/llm/y_exp.parquet')

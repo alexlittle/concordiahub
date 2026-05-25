@@ -1,10 +1,10 @@
 import pandas as pd
+import joblib
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 from xgboost import XGBClassifier
 
-import xai_compare as xai
 from examples import config
 
 from helpers import check_gpu
@@ -45,14 +45,10 @@ print("Accuracy:", accuracy_score(y_test, y_pred))
 print("\nClassification Report:\n")
 print(classification_report(y_test, y_pred))
 
-ctx = xai.RunContext("xgboost",
-               ["shap_tree"],
-               "cleveland-heart-data",
-               xai.RunData(
-                   x_train=X_train,
-                   x_test=X_test,
-                   y_train=y_train,
-                   y_test=y_test,
-                   y_pred=y_pred),
-               model=model)
-xai.run(ctx)
+# save to files for loading to XAI later
+X_train.to_parquet('./cache/heart/xgboost/X_train.parquet')
+X_test.to_parquet('./cache/heart/xgboost/X_test.parquet')
+y_train.to_frame().to_parquet('./cache/heart/xgboost/y_train.parquet')
+y_test.to_frame().to_parquet('./cache/heart/xgboost/y_test.parquet')
+y_pred.to_parquet('./cache/heart/xgboost/y_pred.parquet')
+joblib.dump(model, './cache/heart/xgboost/model.joblib')

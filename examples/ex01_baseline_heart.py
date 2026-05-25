@@ -1,5 +1,5 @@
 # UCI Cleveland Heart Disease dataset
-
+import joblib
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
@@ -45,18 +45,11 @@ coef_df = pd.DataFrame(
 )
 print(coef_df)
 
-run_data = xai.RunData(
-    x=X,
-    y=y,
-    y_pred=y_pred,
-)
-
-ctx = xai.RunContext("logistic_regression",
-               ["coefficients"],
-               "cleveland-heart-data",
-               run_data,
-               model=model)
-xai.run(ctx)
+# save to files for loading to XAI later
+X.to_parquet('./cache/heart/baseline/X.parquet')
+y.to_frame().to_parquet('./cache/heart/baseline/y.parquet')
+y_pred.to_parquet('./cache/heart/baseline/y_pred.parquet')
+joblib.dump(model, './cache/heart/baseline/model.joblib')
 
 
 
