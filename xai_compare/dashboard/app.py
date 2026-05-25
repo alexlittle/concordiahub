@@ -3,20 +3,13 @@ import os
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 
 import streamlit as st
-
-from xai_compare.run_explorer import RunExplorer
-from xai_compare.dashboard.components.layout import apply_layout
-from xai_compare.dashboard.components.run_display import display_comparable_runs
-
-@st.cache_resource
-def get_explorer():
-    return RunExplorer()
+from xai_compare.dashboard.services import get_explorer
 
 explorer = get_explorer()
-recent_runs = explorer.get_comparable_runs()
 
-apply_layout("XAI Compare")
 
-st.markdown("**Recent Datasets/Models:**")
-display_comparable_runs(recent_runs)
+overview = st.Page("pages/overview.py", title="Overview")
+home = st.Page("pages/home.py", title="Home")
 
+pg = st.navigation([home, overview], position="hidden")
+pg.run()

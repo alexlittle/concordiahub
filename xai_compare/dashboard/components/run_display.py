@@ -7,8 +7,6 @@ def format_datetime(dt_str: str) -> str:
     dt = datetime.strptime(dt_str, "%Y%m%d-%H%M%S")
     return dt.strftime("%H:%M %d %b %Y")
 
-
-
 def render_run_html(run) -> str:
     subtype = run.get("model_subtype")
     model = run["model_type"] + (f" ({subtype})" if subtype else "")
@@ -57,7 +55,11 @@ def display_comparable_runs(groups: list[list[dict]]):
         display_run_cell(cols[1], run_a)
         cols[2].markdown("<div style='text-align:center;padding-top:1rem'>vs</div>", unsafe_allow_html=True)
         display_run_cell(cols[3], run_b)
-        if cols[4].button("Compare", key=f"compare_{i}"):
-            st.session_state["compare_group"] = [run_a, run_b]
-            st.rerun()
-        st.divider()
+        runs_value = f"{run_a['run_uuid']},{run_b['run_uuid']}"
+
+        cols[4].markdown(
+            f'<a href="/overview?runs={runs_value}" target="_self">Compare</a>',
+            unsafe_allow_html=True)
+
+
+    st.divider()

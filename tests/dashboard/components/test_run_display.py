@@ -90,7 +90,8 @@ def test_display_comparable_runs_renders(mock_st):
         "model_subtype": None,
         "xai_methods": ["SHAP"],
         "run_name": "run1",
-        "datetime": "20240525-143000"
+        "datetime": "20240525-143000",
+        "run_uuid": "run1-uuid"
     }
 
     run_b = {
@@ -99,7 +100,8 @@ def test_display_comparable_runs_renders(mock_st):
         "model_subtype": None,
         "xai_methods": ["LIME"],
         "run_name": "run2",
-        "datetime": "20240525-150000"
+        "datetime": "20240525-150000",
+        "run_uuid": "run2-uuid"
     }
 
     display_comparable_runs([[run_a, run_b]])

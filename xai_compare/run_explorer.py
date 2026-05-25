@@ -4,7 +4,7 @@ from collections import defaultdict
 from pathlib import Path
 
 from xai_compare import config
-
+from xai_compare.run import Run
 
 #-----------------------
 # Helper functions
@@ -21,6 +21,9 @@ class RunExplorer():
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         self.runs_dir = os.path.join(BASE_DIR, config.RUNS_DIR_NAME)
         self._metadata_cache = self._load_all_metadata()
+        self._uuid_index = {
+            run.get("uuid"): run for run in self._metadata_cache
+        }
 
     def get_datasets(self):
         """Gets names of all datasets stored in the runs directory
@@ -57,6 +60,17 @@ class RunExplorer():
 
         return sorted(comparable, key=lambda g: max(r["datetime"] for r in g), reverse=True)[:n]
 
+    def get_run_by_uuid(self, uuid: str) -> Run | None:
+        meta = self._uuid_index.get(uuid)
+        return Run(path=meta["_path"]) if meta else None
+
+    def get_runs_by_uuids(self, uuids: list[str]) -> list[Run]:
+        runs = []
+        for u in uuids:
+            meta = self._uuid_index.get(u)
+            if meta:
+                runs.append(Run(path=meta["_path"]))
+        return runs
 
     #---------------------------
     # Private helper functions
