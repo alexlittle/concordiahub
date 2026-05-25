@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
+import uuid
 
 from datetime import datetime
 from dataclasses import asdict
@@ -28,8 +29,8 @@ class ArtifactStore:
 
     def _resolve_dirname(self, ctx):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        if ctx.run_id:
-            return os.path.join(BASE_DIR, config.RUNS_DIR_NAME, ctx.run_id)
+        if ctx.run_name:
+            return os.path.join(BASE_DIR, config.RUNS_DIR_NAME, ctx.run_name)
         return os.path.join(BASE_DIR, config.RUNS_DIR_NAME, self.run_datetime)
 
 
@@ -39,6 +40,7 @@ class ArtifactStore:
         excluded = {'data', 'model'}
         obj = {k: v for k, v in asdict(self.ctx).items() if k not in excluded}
         obj['datetime'] = self.run_datetime
+        obj['run_uuid'] = str(uuid.uuid4())
         self.store.save_json(config.META_INFO_FILENAME, obj)
 
     def write_model(self):

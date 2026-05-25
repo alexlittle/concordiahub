@@ -25,7 +25,7 @@ def sidebar():
 
         run_exp = RunExplorer()
         datasets = run_exp.get_datasets()
-        st.header("Filters:")
+        st.header("Select:")
         dataset = st.selectbox("Dataset", datasets)
 
         st.markdown(

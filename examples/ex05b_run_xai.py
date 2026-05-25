@@ -9,12 +9,15 @@ y = pd.read_parquet('./cache/medsynth/llm/y.parquet')
 y_preds = pd.read_parquet('./cache/medsynth/llm/y_preds.parquet')
 y_exp = pd.read_parquet('./cache/medsynth/llm/y_exp.parquet')
 
+run_data = xai.RunData(x=X,
+                    y=y,
+                    y_pred=y_preds,
+                    y_exp=y_exp)
+
 ctx = xai.RunContext("llm",
-               ["cor"],
-               "medsynth",
-               xai.RunData(x=X,
-                   y=y,
-                   y_pred=y_preds,
-                   y_exp=y_exp,),
-                model_subtype=config.MEDSYNTH_OLLAMA_MODEL)
+                    ["cor"],
+                    "medsynth",
+                    run_data,
+                    model_subtype=config.MEDSYNTH_OLLAMA_MODEL,
+                    run_name="llm_medsynth")
 xai.run(ctx)

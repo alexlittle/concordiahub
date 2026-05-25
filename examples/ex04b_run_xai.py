@@ -22,5 +22,5 @@ ctx = xai.RunContext("xgboost",
                    y_test=y_test,
                    y_pred=y_pred),
                 model=model,
-                run_id="xgboost_medsynth",)
+                run_name="xgboost_medsynth",)
 xai.run(ctx)

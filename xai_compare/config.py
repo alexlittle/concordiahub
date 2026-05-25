@@ -42,5 +42,5 @@ class RunContext:
     data: RunData
     model: Optional[Any] = None
     model_subtype: Optional[str] = None
-    run_id: Optional[str] = None
+    run_name: Optional[str] = None
     model_id: Optional[str] = None

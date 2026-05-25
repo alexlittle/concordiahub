@@ -19,5 +19,6 @@ ctx = xai.RunContext("logistic_regression",
                ["coefficients"],
                "cleveland-heart-data",
                run_data,
-               model=model)
+               model=model,
+               run_name="lr_heart")
 xai.run(ctx)

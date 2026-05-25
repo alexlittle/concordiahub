@@ -10,6 +10,15 @@ header[data-testid="stHeader"] {
     padding-top: 1rem;
 }
 
+.element-container {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+hr {
+    margin: 0.5rem 0 !important;
+}
+
 /*
     Sidebar elements
  */
@@ -50,3 +59,12 @@ section[data-testid="stSidebar"] {
     display: flex;
     justify-content: center;
 }
+
+
+.run-cell table, .run-cell td, .run-cell tr {
+        border: none !important;
+        border-top: none !important;
+    }
+.run-cell table { font-size: 0.85rem; border-collapse: collapse; border: none; width: 100%; }
+.run-cell td, .run-cell tr { border: none !important; border-top: none !important; }
+.run-cell td.label { color: grey; padding: 2px 8px 2px 0; white-space: nowrap; }
