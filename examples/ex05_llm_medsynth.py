@@ -46,7 +46,6 @@ def run_llm(prompt: str) -> str:
 def parse_output(text: str) -> dict:
     try:
         data = json.loads(text)
-
         prediction = data.get("prediction", "")
         explanation = data.get("explanation", "")
 
@@ -58,13 +57,13 @@ def parse_output(text: str) -> dict:
     return {"prediction": prediction,
         "explanation": explanation,}
 
-# Run LLM over conversations
+# Run LLM over scenarios
 outputs = []
 
 for idx, row in df.head(300).iterrows():
-    print(f"Running LLM on conversation {idx + 1}/{len(df)} ")
+    print(f"Running LLM on scenario {idx + 1}/{len(df)} ")
 
-    prompt = prompt_template.render(conversation=row['Dialogue'])
+    prompt = prompt_template.render(scenario=row['scenario'])
 
     llm_text = run_llm(prompt)
     parsed = parse_output(llm_text)
