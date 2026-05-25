@@ -8,11 +8,14 @@ def format_datetime(dt_str: str) -> str:
     return dt.strftime("%H:%M %d %b %Y")
 
 
-def display_run_cell(col, run):
+
+def render_run_html(run) -> str:
     subtype = run.get("model_subtype")
     model = run["model_type"] + (f" ({subtype})" if subtype else "")
     xai = ", ".join(run.get("xai_methods") or [])
-    col.markdown(f"""<div class="run-cell">
+
+    return f"""
+    <div class="run-cell">
         <table>
             <tr>
                 <td class="label">Model</td>
@@ -23,15 +26,19 @@ def display_run_cell(col, run):
                 <td><code>{xai}</code></td>
             </tr>
             <tr>
-                 <td class="label">Run ID</td>
-                <td><code>{run['run_id']}</code></td>
+                 <td class="label">Run name</td>
+                <td><code>{run['run_name']}</code></td>
             </tr>
             <tr>
                  <td class="label">Date/time</td>
                 <td><code>{format_datetime(run['datetime'])}</code></td>
             </tr>
-        </table></div>  
-        """, unsafe_allow_html=True)
+        </table></div>
+    """
+
+
+def display_run_cell(col, run):
+    col.markdown(render_run_html(run), unsafe_allow_html=True)
 
 def display_comparable_runs(groups: list[list[dict]]):
     if not groups:

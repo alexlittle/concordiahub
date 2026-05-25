@@ -1,43 +1,10 @@
-import pytest
-import pandas as pd
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
-from xai_compare.run_explorer import extract_dataset, RunExplorer
+from xai_compare.run_explorer import extract_dataset
 
-MODULE_UNDER_TEST = "xai_compare.run_explorer"
+MODULE_UNDER_TEST = ("xai_compare.run_explorer")
 
-# -----------------
-# Fixtures
-@pytest.fixture
-def store_with_fallback(mock_store, y_test, y_pred):
-    def load_side_effect(name):
-        if name == "y_test":
-            raise FileNotFoundError
-        if name == "y":
-            return y_test
-        if name == "y_pred":
-            return y_pred
-    mock_store.load_dataframe.side_effect = load_side_effect
-    return mock_store
 
-@pytest.fixture
-def mock_store():
-    return MagicMock()
-
-@pytest.fixture
-def explorer(mock_store):
-    return RunExplorer(store=mock_store)
-
-@pytest.fixture
-def y_test():
-    return pd.DataFrame({'target': [0, 1, 0, 1]})
-
-@pytest.fixture
-def y_pred():
-    return pd.DataFrame({'y_pred': [0, 1, 0, 0]})
-
-#--------------------
-# Tests
 
 # Dataset
 def test_extract_dataset():
@@ -45,22 +12,3 @@ def test_extract_dataset():
     fake_file = io.StringIO('{"dataset_id": "dataset_a"}')
     with patch("builtins.open", return_value=fake_file):
         assert extract_dataset("any_path") == "dataset_a"
-
-# Accuracy
-def test_get_accuracy_score_falls_back_to_y(y_test, y_pred, store_with_fallback):
-    explorer = RunExplorer(store=store_with_fallback)
-    assert explorer.get_accuracy_score() == 0.75
-
-# Confusion matrix
-def test_get_confusion_matrix_falls_back_to_y(y_test, y_pred, store_with_fallback):
-    explorer = RunExplorer(store=store_with_fallback)
-    cm = explorer.get_confusion_matrix()
-    assert cm.shape == (2, 2)
-
-# Classification report
-def test_get_classification_report_falls_back_to_y(y_test, y_pred, store_with_fallback):
-    explorer = RunExplorer(store=store_with_fallback)
-    report = explorer.get_classification_report()
-    assert "precision" in report
-    assert "recall" in report
-

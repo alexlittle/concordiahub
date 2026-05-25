@@ -87,7 +87,7 @@ def test_write_model_without_model(ctx_without_run_name, mock_store):
 def test_write_data_dataframe(ctx_with_run_name, mock_store):
     artifact_store = make_artifact_store(ctx_with_run_name, mock_store)
     artifact_store.write_data("x_train", ctx_with_run_name.data.x_train)
-    mock_store.save_dataframe.assert_called_once_with("x_train.parquet", ctx_with_run_name.data.x_train)
+    mock_store.save_dataframe.assert_called_once_with("x_train", ctx_with_run_name.data.x_train)
 
 
 def test_write_data_missing_attribute(ctx_with_run_name, mock_store):

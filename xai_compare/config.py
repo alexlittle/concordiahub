@@ -9,8 +9,8 @@ from typing import Any, Final, Optional
 
 # Constants for artifact filename/structure
 RUNS_DIR_NAME: Final[str] = "runs"
-META_INFO_FILENAME: Final[str] = "meta.json"
-MODEL_FILENAME: Final[str] = "model.joblib"
+META_INFO_FILENAME: Final[str] = "meta"
+MODEL_FILENAME: Final[str] = "model"
 
 
 # Configuration & Constants for NLP tasks

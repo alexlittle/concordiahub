@@ -56,8 +56,8 @@ class ArtifactStore:
             data = pd.DataFrame(data)
         elif isinstance(data, list):
             data = pd.DataFrame(data)
-        self.store.save_dataframe(f"{name}.parquet", data)
+        self.store.save_dataframe(name, data)
 
     def load_dataframe(self, name:str) -> pd.DataFrame:
-        return self.store.load_dataframe(f"{name}.parquet")
+        return self.store.load_dataframe(name)
 

@@ -15,15 +15,17 @@ class FilesystemStore(DataStore):
         self.dirname = dirname
         os.makedirs(dirname, exist_ok=True)
 
-    def save_json(self, filename, data):
-        with open(os.path.join(self.dirname, filename), "w") as f:
+    def save_json(self, name, data):
+        with open(os.path.join(self.dirname, f"{name}.json"), "w") as f:
             json.dump(data, f, indent=4)
 
-    def save_dataframe(self, filename, data):
-        data.to_parquet(os.path.join(self.dirname, filename))
+    def save_dataframe(self, name, df):
+        path = os.path.join(self.dirname, f"{name}.parquet")
+        df.to_parquet(path)
 
-    def save_model(self, filename, model):
-        joblib.dump(model, os.path.join(self.dirname, filename))
 
-    def load_dataframe(self, filename:str) -> pd.DataFrame:
-        return pd.read_parquet(os.path.join(self.dirname, filename))
+    def save_model(self, name, model):
+        joblib.dump(model, os.path.join(self.dirname, f"{name}.joblib"))
+
+    def load_dataframe(self, name:str) -> pd.DataFrame:
+        return pd.read_parquet(os.path.join(self.dirname, f"{name}.parquet"))
