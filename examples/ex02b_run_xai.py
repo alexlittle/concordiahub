@@ -24,5 +24,6 @@ ctx = xai.RunContext("xgboost",
                "cleveland-heart-data",
                run_data,
                model=model,
-               run_name="xgboost_heart")
+               run_name="xgboost_heart",
+               model_id="XGBoost v1")
 xai.run(ctx)

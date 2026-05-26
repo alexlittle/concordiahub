@@ -18,5 +18,6 @@ ctx = xai.RunContext("llm",
                    y_pred=y_preds,
                    y_exp=y_exp,),
                 model_subtype=config.HEART_OLLAMA_MODEL,
-                run_name="llm_heart")
+                run_name="llm_heart",
+                model_id="LLM v1")
 xai.run(ctx)

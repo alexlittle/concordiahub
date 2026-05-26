@@ -20,5 +20,6 @@ ctx = xai.RunContext("logistic_regression",
                "cleveland-heart-data",
                run_data,
                model=model,
-               run_name="lr_heart")
+               run_name="lr_heart",
+               model_id="LR v1")
 xai.run(ctx)

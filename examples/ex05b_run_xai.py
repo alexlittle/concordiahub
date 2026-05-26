@@ -19,5 +19,6 @@ ctx = xai.RunContext("llm",
                     "medsynth",
                     run_data,
                     model_subtype=config.MEDSYNTH_OLLAMA_MODEL,
-                    run_name="llm_medsynth")
+                    run_name="llm_medsynth",
+                    model_id="LLM v1")
 xai.run(ctx)
