@@ -6,14 +6,6 @@ from pathlib import Path
 from xai_compare import config
 from xai_compare.run import Run
 
-#-----------------------
-# Helper functions
-#------------------------
-def extract_dataset(path):
-    with open(path, "r") as f:
-        data = json.load(f)
-    return data.get("dataset_id")
-
 
 class RunExplorer():
 
@@ -32,9 +24,8 @@ class RunExplorer():
             set: set of distinct dataset names
         """
         datasets = set()
-        root = Path(self.runs_dir)
-        for meta_file in root.glob(f"*/{config.META_INFO_FILENAME}"):
-            datasets.add(extract_dataset(meta_file))
+        for run in self._metadata_cache:
+            datasets.add(run["dataset_id"])
         return sorted(datasets)
 
     def get_comparable_runs(self, n: int = 3) -> list[list[dict]]:

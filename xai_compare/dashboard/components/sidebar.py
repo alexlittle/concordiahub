@@ -5,7 +5,7 @@ import base64
 from pathlib import Path
 
 from xai_compare._version import __version__
-from xai_compare.run_explorer import RunExplorer
+from xai_compare.dashboard.services import get_explorer
 
 def sidebar():
     with st.sidebar:
@@ -16,15 +16,17 @@ def sidebar():
 
         st.markdown(
             f"""
-            <div class="logo-container">
-                <img src="data:image/svg+xml;base64,{svg_base64}">
-            </div>
+            <a href="/" style="text-decoration: none;" target="_self">
+                <div class="logo-container">
+                    <img src="data:image/svg+xml;base64,{svg_base64}">
+                </div>
+            </a>
             """,
             unsafe_allow_html=True
         )
 
-        run_exp = RunExplorer()
-        datasets = run_exp.get_datasets()
+        explorer = get_explorer()
+        datasets = explorer.get_datasets()
         st.header("Select:")
         dataset = st.selectbox("Dataset", datasets)
 
