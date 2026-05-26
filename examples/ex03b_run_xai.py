@@ -10,14 +10,25 @@ y = pd.read_parquet('./cache/heart/llm/y.parquet')
 y_preds = pd.read_parquet('./cache/heart/llm/y_preds.parquet')
 y_exp = pd.read_parquet('./cache/heart/llm/y_exp.parquet')
 
-ctx = xai.RunContext("llm",
-               ["cor"],
-               "cleveland-heart-data",
-               xai.RunData(x=X,
-                   y=y,
-                   y_pred=y_preds,
-                   y_exp=y_exp,),
-                model_subtype=config.HEART_OLLAMA_MODEL,
-                run_name="llm_heart",
-                model_id="LLM v1")
+
+data_schema = xai.DataSchema(
+    sample_id_column=config.SAMPLE_UUID_COL,
+    target_column="target")
+
+run_data = xai.RunData(
+    data_schema=data_schema,
+    x=X,
+    y=y,
+    y_pred=y_preds,
+    y_exp=y_exp)
+
+ctx = xai.RunContext(
+    "llm",
+    ["cor"],
+    "cleveland-heart-data",
+    run_data,
+    model_subtype=config.HEART_OLLAMA_MODEL,
+    run_name="llm_heart",
+    model_id="LLM v1")
+
 xai.run(ctx)

@@ -2,21 +2,21 @@
 
 
 def ensure_sample_index(df, key="sample_uuid"):
-    # Case 1: already a column → set as index
+    # already a column so set as index
     if key in df.columns:
         return df.set_index(key)
 
-    # Case 2: already index with correct name → good
+    # already index with correct name
     if df.index.name == key:
         return df
 
-    # Case 3: index exists but unnamed → assume it's sample_uuid
+    # index exists but unnamed so assume it's sample_uuid
     if df.index.name is None:
         df = df.copy()
         df.index.name = key
         return df
 
-    # Case 4: totally missing → fail loudly (important!)
+    # totally missing so fail
     raise ValueError(
         f"{key} not found in columns or index. "
         f"Columns: {df.columns}, Index: {df.index.name}"

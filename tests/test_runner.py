@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 
 from xai_compare import runner
 from xai_compare.exceptions import InvalidConfigurationError
-from xai_compare.config import RunContext, RunData
+from xai_compare.config import RunContext, RunData, DataSchema
 
 MODULE_UNDER_TEST = "xai_compare.runner"
 
@@ -22,7 +22,8 @@ def test_runner_empty_context() -> None:
 
 # Test invalid model type
 def test_runner_invalid_model() -> None:
-    run_data = RunData()
+    data_schema = DataSchema("a","b")
+    run_data = RunData(data_schema)
     ctx = RunContext("unknown", [], "test_dataset", run_data)
     with patch("xai_compare.runner.ArtifactStore") as mock_store:
         mock_store.return_value = MagicMock()

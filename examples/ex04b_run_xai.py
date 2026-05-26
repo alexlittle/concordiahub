@@ -2,7 +2,7 @@ import joblib
 import pandas as pd
 
 import xai_compare as xai
-
+from examples import config
 
 X_train = pd.read_parquet('./cache/medsynth/xgboost/X_train.parquet')
 X_test = pd.read_parquet('./cache/medsynth/xgboost/X_test.parquet')
@@ -12,16 +12,27 @@ y_pred = pd.read_parquet('./cache/medsynth/xgboost/y_pred.parquet')
 model = joblib.load('./cache/medsynth/xgboost/model.joblib')
 
 
-ctx = xai.RunContext("xgboost",
-                ["shap_tree"],
-                "medsynth",
-                xai.RunData(
-                   x_train=X_train,
-                   x_test=X_test,
-                   y_train=y_train,
-                   y_test=y_test,
-                   y_pred=y_pred),
-                model=model,
-                run_name="xgboost_medsynth",
-                model_id="XGBoost v1")
+
+
+data_schema = xai.DataSchema(
+    sample_id_column=config.SAMPLE_UUID_COL,
+    target_column="target")
+
+run_data = xai.RunData(
+    data_schema=data_schema,
+    x_train=X_train,
+    x_test=X_test,
+    y_train=y_train,
+    y_test=y_test,
+    y_pred=y_pred)
+
+ctx = xai.RunContext(
+    "xgboost",
+    ["shap_tree"],
+    "medsynth",
+    run_data,
+    model=model,
+    run_name="xgboost_medsynth",
+    model_id="XGBoost v1")
+
 xai.run(ctx)

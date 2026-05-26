@@ -5,7 +5,7 @@ import uuid
 
 from unittest.mock import MagicMock
 from xai_compare.artifacts import ArtifactStore
-from xai_compare import RunContext, RunData
+from xai_compare import RunContext, RunData, DataSchema
 
 MODULE_UNDER_TEST = "xai_compare.artifacts"
 
@@ -16,7 +16,10 @@ def mock_store():
 
 @pytest.fixture
 def ctx_with_run_name():
-    run_data = RunData(x_train=pd.DataFrame({"a": [1, 2]}),
+    data_schema = DataSchema("sample_uuid", "target")
+    run_data = RunData(
+                data_schema,
+                x_train=pd.DataFrame({"a": [1, 2]}),
                 y_train = pd.Series([0, 1]),
                 x_test = pd.DataFrame({"a": [3]}),
                 y_test = pd.Series([0]),
@@ -31,7 +34,9 @@ def ctx_with_run_name():
 
 @pytest.fixture
 def ctx_without_run_name():
-    ctx = RunContext("xgboost", [], "test_dataset", RunData())
+    data_schema = DataSchema("sample_uuid", "target")
+    run_data = RunData(data_schema)
+    ctx = RunContext("xgboost", [], "test_dataset", run_data)
     ctx.run_name = None
     ctx.model = None
     ctx.model_id = None
