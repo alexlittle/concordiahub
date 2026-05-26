@@ -1,7 +1,6 @@
 from unittest.mock import patch, MagicMock
 
 from xai_compare.dashboard.components.run_display import render_run_html, display_run_cell
-from xai_compare.dashboard.components.formatting import format_model_name
 from xai_compare.run import Run
 
 MODULE_UNDER_TEST = "xai_compare.dashboard.components.run_display"

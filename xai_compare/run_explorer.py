@@ -10,6 +10,7 @@ from xai_compare.run import Run
 class RunExplorer():
 
     def __init__(self):
+        """Initializes RunExplorer"""
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         self.runs_dir = os.path.join(BASE_DIR, config.RUNS_DIR_NAME)
         self._metadata_cache = self._load_all_metadata()
@@ -53,10 +54,23 @@ class RunExplorer():
         return sorted(comparable, key=lambda g: max(r.datetime for r in g), reverse=True)[:n]
 
     def get_run_by_uuid(self, uuid: str) -> Run | None:
+        """Gets a Run by its UUID
+        Args:
+            uuid: Run's UUID
+
+        Returns:
+            Run or None"""
         meta = self._uuid_index.get(uuid)
         return Run(path=meta["_path"], metadata=meta) if meta else None
 
     def get_runs_by_uuids(self, uuids: list[str]) -> list[Run]:
+        """Gets a list of Runs by their UUIDs
+        Args:
+            List[uuid]: Run UUIDs
+
+        Returns:
+            List[Run] or None"""
+
         runs = []
         for u in uuids:
             meta = self._uuid_index.get(u)

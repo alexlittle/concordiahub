@@ -4,7 +4,7 @@ import streamlit as st
 from xai_compare.dashboard.components.layout import apply_layout
 from xai_compare.dashboard.services import get_explorer
 from xai_compare.dashboard.components.formatting import format_model_name, format_datetime
-
+from xai_compare.services.comparison import build_comparison_df
 
 # Get/load the necessary data for this page
 explorer = get_explorer()
@@ -45,6 +45,7 @@ with col2:
     st.dataframe(run_b.classification_report())
 
 
+st.dataframe(build_comparison_df(run_a=run_a, run_b=run_b))
 
 
 

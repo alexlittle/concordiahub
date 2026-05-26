@@ -25,8 +25,8 @@ def format_model_name(run: Run) -> str:
     """
     parts = []
 
-    if run.get("model_type"):
-        parts.append(run.get("model_type"))
+    if run.get("model_id"):
+        parts.append(run.get("model_id"))
 
     if run.get("model_type"):
         parts.append(run.get("model_type"))
