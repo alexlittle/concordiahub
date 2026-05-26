@@ -1,11 +1,28 @@
+import pandas as pd
+
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 from xai_compare.storage.filesystem_store import FilesystemStore
 
-class Run:
 
-    def __init__(self, path: str = None, store=None):
+class Run():
+
+    def __init__(self, path: str = None, store=None, metadata: dict = None):
         self.path = path
-        self.store = store or FilesystemStore(path)
+        if store:
+            self.store = store
+        elif path:
+            self.store = FilesystemStore(path)
+        else:
+            self.store = None
+        self.metadata = metadata or {}
+
+    @property
+    def datetime(self):
+        return self.metadata.get("datetime")
+
+    def get(self, key, default=None):
+        return self.metadata.get(key, default)
+
 
     def _load_targets(self):
         try:
@@ -26,4 +43,6 @@ class Run:
 
     def classification_report(self):
         y_true, y_pred = self._load_targets()
-        return classification_report(y_true, y_pred)
+        report = classification_report(y_true, y_pred, output_dict=True)
+        return pd.DataFrame(report).transpose()
+

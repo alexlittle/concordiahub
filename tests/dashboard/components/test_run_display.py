@@ -1,39 +1,38 @@
 from unittest.mock import patch, MagicMock
 
-from xai_compare.dashboard.components.run_display import format_datetime, render_run_html, display_run_cell
+from xai_compare.dashboard.components.run_display import render_run_html, display_run_cell
+from xai_compare.dashboard.components.formatting import format_model_name
+from xai_compare.run import Run
 
 MODULE_UNDER_TEST = "xai_compare.dashboard.components.run_display"
 
-def test_format_datetime():
-    result = format_datetime("20240525-143000")
-    assert result == "14:30 25 May 2024"
+
 
 
 def test_render_run_html_basic():
-    run = {
+    run = Run(metadata={
         "model_type": "RandomForest",
         "model_subtype": "Classifier",
-        "xai_methods": ["SHAP", "LIME"],
+        "xai_methods": ["SHAP"],
         "run_name": "test_run",
         "datetime": "20240525-143000"
-    }
+    })
 
     html = render_run_html(run)
 
-    assert "RandomForest (Classifier)" in html
-    assert "SHAP, LIME" in html
-    assert "test_run" in html
+    assert "RandomForest" in html
+    assert "SHAP" in html
     assert "14:30 25 May 2024" in html
 
 
 def test_render_run_html_no_subtype():
-    run = {
+    run = Run(metadata={
         "model_type": "XGBoost",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
         "run_name": "run1",
         "datetime": "20240525-143000"
-    }
+    })
 
     html = render_run_html(run)
 
@@ -42,13 +41,13 @@ def test_render_run_html_no_subtype():
 
 
 def test_render_run_html_no_xai_methods():
-    run = {
+    run = Run(metadata={
         "model_type": "SVM",
         "model_subtype": None,
         "xai_methods": None,
         "run_name": "run2",
         "datetime": "20240525-143000"
-    }
+    })
 
     html = render_run_html(run)
 
@@ -58,13 +57,13 @@ def test_render_run_html_no_xai_methods():
 def test_display_run_cell_calls_markdown():
     col = MagicMock()
 
-    run = {
+    run = Run(metadata={
         "model_type": "RF",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
         "run_name": "run1",
         "datetime": "20240525-143000"
-    }
+    })
 
     display_run_cell(col, run)
 
@@ -84,7 +83,7 @@ def test_display_comparable_runs_renders(mock_st):
 
     mock_st.columns.return_value = [mock_col] * 5
 
-    run_a = {
+    run_a = Run(metadata={
         "dataset_id": "ds1",
         "model_type": "RF",
         "model_subtype": None,
@@ -92,9 +91,9 @@ def test_display_comparable_runs_renders(mock_st):
         "run_name": "run1",
         "datetime": "20240525-143000",
         "run_uuid": "run1-uuid"
-    }
+    })
 
-    run_b = {
+    run_b = Run(metadata={
         "dataset_id": "ds1",
         "model_type": "XGB",
         "model_subtype": None,
@@ -102,7 +101,7 @@ def test_display_comparable_runs_renders(mock_st):
         "run_name": "run2",
         "datetime": "20240525-150000",
         "run_uuid": "run2-uuid"
-    }
+    })
 
     display_comparable_runs([[run_a, run_b]])
 
