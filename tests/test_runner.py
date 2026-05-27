@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 
 from xai_compare import runner
 from xai_compare.exceptions import InvalidConfigurationError
-from xai_compare.config import RunContext, RunData, DataSchema
+from xai_compare.context import RunContext, RunData, DataSchema
 
 MODULE_UNDER_TEST = "xai_compare.runner"
 

@@ -41,6 +41,10 @@ class ArtifactStore:
         obj = {k: v for k, v in asdict(self.ctx).items() if k not in excluded}
         obj['datetime'] = self.run_datetime
         obj['run_uuid'] = str(uuid.uuid4())
+
+        # Add the dataschema info
+        obj['data_schema'] = asdict(self.ctx.data.data_schema)
+
         self.store.save_json(config.META_INFO_FILENAME, obj)
 
     def write_model(self):

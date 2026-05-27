@@ -21,7 +21,15 @@ class Run():
         return self.metadata.get("datetime")
 
     def get(self, key, default=None):
-        return self.metadata.get(key, default)
+        parts = key.split(".")
+        value = self.metadata
+
+        for part in parts:
+            if isinstance(value, dict) and part in value:
+                value = value[part]
+            else:
+                return default
+        return value
 
 
     def load_targets(self):

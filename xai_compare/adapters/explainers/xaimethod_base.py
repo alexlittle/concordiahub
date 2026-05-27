@@ -1,7 +1,7 @@
 import pandas as pd
 from abc import ABC, abstractmethod
 
-from xai_compare.config import RunData
+from xai_compare.context import RunData
 
 class XAIMethodAdapter(ABC):
     """

@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from unittest.mock import MagicMock, patch
 from xai_compare.adapters.explainers.treeshap_adapter import TreeSHAPAdapter
-from xai_compare.config import RunData, DataSchema
+from xai_compare.context import RunData, DataSchema
 from xai_compare.exceptions import MissingDataError
 
 MODULE_UNDER_TEST = "xai_compare.adapters.explainers.treeshap_adapter"
@@ -74,7 +74,8 @@ def test_multiclass_uses_class_names(adapter, mock_model, x_test, data_schema):
     class_names = ['cat_a', 'cat_b', 'cat_c']
     with patch(f"{MODULE_UNDER_TEST}.shap.TreeExplainer") as mock_explainer:
         mock_explainer.return_value.shap_values.return_value = shap_values
-        data = RunData(data_schema, x_test=x_test, class_names=class_names)
+        data_schema.class_names = class_names
+        data = RunData(data_schema, x_test=x_test)
         result = adapter.explain_local(data, mock_model)
         assert result.index.get_level_values('class').unique().tolist() == class_names
 
@@ -82,7 +83,8 @@ def test_multiclass_falls_back_to_integer_class_index(adapter, mock_model, x_tes
     shap_values = np.random.rand(3, 5, 3)
     with patch(f"{MODULE_UNDER_TEST}.shap.TreeExplainer") as mock_explainer:
         mock_explainer.return_value.shap_values.return_value = shap_values
-        data = RunData(data_schema, x_test=x_test, class_names=None)
+        data_schema.class_names = None
+        data = RunData(data_schema, x_test=x_test)
         result = adapter.explain_local(data, mock_model)
         assert result.index.get_level_values('class').unique().tolist() == [0, 1, 2]
 

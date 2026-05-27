@@ -2,7 +2,7 @@ import shap
 import pandas as pd
 
 from xai_compare.exceptions import MissingDataError
-from xai_compare.config import RunData
+from xai_compare.context import RunData
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 
@@ -50,5 +50,5 @@ class TreeSHAPAdapter(XAIMethodAdapter):
                 )
                 dfs.append(df)
 
-            keys = data.class_names if data.class_names is not None else range(n_classes)
+            keys = data.data_schema.class_names if data.data_schema.class_names is not None else range(n_classes)
             return pd.concat(dfs, keys=keys, names=['class', data.x_test.index.name])

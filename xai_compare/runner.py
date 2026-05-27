@@ -4,7 +4,7 @@ from dataclasses import fields
 from xai_compare.exceptions import InvalidConfigurationError
 from xai_compare.encoder import XAITextEncoder
 from xai_compare.artifacts import ArtifactStore
-from xai_compare.config import RunContext
+from xai_compare.context import RunContext
 from xai_compare.registry.model_registry import get_model_adapter
 from xai_compare.registry.xai_registry import get_xai_adapter
 
@@ -22,7 +22,8 @@ def run(ctx: RunContext):
 
     # save RunData as files
     for field in fields(ctx.data):
-        artifact_store.write_data(field.name, getattr(ctx.data, field.name))
+        if field.name != "data_schema":
+            artifact_store.write_data(field.name, getattr(ctx.data, field.name))
 
     # run the XAI methods
     model_adapter = get_model_adapter(ctx.model_type, ctx.model)
