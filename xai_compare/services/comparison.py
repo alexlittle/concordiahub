@@ -54,6 +54,14 @@ def build_comparison_df(run_a, run_b, ensure_sample_index_fn=ensure_sample_index
     p2_correct = df[pred_b] == df[constants.TRUE_VALUE_COLUMN_LABEL]
     same_pred = df[pred_a] == df[pred_b]
 
+    COMPARISON_ORDER = {
+        constants.COMPARISON_BOTH_INCORRECT_DIFF: 1,
+        constants.COMPARISON_BOTH_INCORRECT_SAME: 2,
+        f"{name_a} {constants.COMPARISON_CORRECT}": 3,
+        f"{name_b} {constants.COMPARISON_CORRECT}": 4,
+        constants.COMPARISON_BOTH_CORRECT: 5,
+    }
+
     df["Comparison"] = np.select(
         [
             p1_correct & p2_correct,
@@ -64,17 +72,20 @@ def build_comparison_df(run_a, run_b, ensure_sample_index_fn=ensure_sample_index
 
         ],
         [
-            "Both correct",
-            f"{name_a} correct",
-            f"{name_b} correct",
-            "Both incorrect - same prediction",
-            "Both incorrect - different predictions"
+            constants.COMPARISON_BOTH_CORRECT,
+            f"{name_a} {constants.COMPARISON_CORRECT}",
+            f"{name_b} {constants.COMPARISON_CORRECT}",
+            constants.COMPARISON_BOTH_INCORRECT_SAME,
+            constants.COMPARISON_BOTH_INCORRECT_DIFF
         ],
         default="Unknown"
     )
 
     col = df.pop("Comparison")
     df.insert(0, "Comparison", col)
+
+    df["comparison_order"] = df["Comparison"].map(COMPARISON_ORDER)
+    df = df.sort_values("comparison_order").drop(columns=["comparison_order"])
 
     return df.reset_index()
 

@@ -1,0 +1,49 @@
+import streamlit as st
+from xai_compare import constants
+from xai_compare.dashboard.components.formatting import format_model_name, format_datetime
+
+
+
+def render_run_summary(run):
+    st.subheader(f"Model: {format_model_name(run)}")
+    st.write(f"Date: {format_datetime(run.get('datetime'))}")
+    st.write(f"XAI Methods: {run.get('xai_methods')}")
+    st.write("Classification Report:")
+    st.dataframe(run.classification_report())
+
+
+def generate_comparison_rows_html(df, run_a, run_b, runs_param):
+    rows_html = ""
+    for _, row in df.iterrows():
+        sample_uuid = row[run_a.get(constants.DATA_SCHEMA_ID_COLUMN)]
+        rows_html += f"""
+        <tr>
+            <td><a href='/detail?runs={runs_param}&sample_id={sample_uuid}' target='_self'>{sample_uuid}</a></td>
+            <td>{row['Comparison']}</td>
+            <td class="report-table-align">{row['True Value']}</td>
+            <td class="report-table-align">{row[f"{format_model_name(run_a)} prediction"]}</td>
+            <td class="report-table-align">{row[f"{format_model_name(run_b)} prediction"]}</td>
+        </tr>
+        """
+    return rows_html
+
+
+def generate_comparison_table_html(df, run_a, run_b, runs_param):
+    rows_html = generate_comparison_rows_html(df, run_a, run_b, runs_param)
+
+    return f"""
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>sample_uuid</th>
+                <th>Comparison</th>
+                <th>True Value</th>
+                <th>{format_model_name(run_a)}</th>
+                <th>{format_model_name(run_b)}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {rows_html}
+        </tbody>
+    </table>
+    """
