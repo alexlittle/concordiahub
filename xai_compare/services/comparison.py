@@ -1,12 +1,7 @@
 import numpy as np
 from xai_compare.dashboard.components.formatting import format_model_name
 
-
-DATA_SCHEMA_ID_COLUMN = 'data_schema.sample_id_column'
-DATA_SCHEMA_TARGET_COLUMN = 'data_schema.target_column'
-
-PREDICTION_COLUMN_LABEL = "prediction"
-TRUE_VALUE_COLUMN_LABEL = "True Value"
+from xai_compare import constants
 
 def ensure_sample_index(df, key="sample_uuid"):
     # already a column so set as index
@@ -41,22 +36,22 @@ def build_comparison_df(run_a, run_b, ensure_sample_index_fn=ensure_sample_index
     y_true_a, y_pred_a = run_a.load_targets()
     _, y_pred_b = run_b.load_targets()
 
-    y_true_a = ensure_sample_index_fn(y_true_a, run_a.get(DATA_SCHEMA_ID_COLUMN))
-    y_pred_a = ensure_sample_index_fn(y_pred_a, run_a.get(DATA_SCHEMA_ID_COLUMN))
-    y_pred_b = ensure_sample_index_fn(y_pred_b, run_b.get(DATA_SCHEMA_ID_COLUMN))
+    y_true_a = ensure_sample_index_fn(y_true_a, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_pred_a = ensure_sample_index_fn(y_pred_a, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_pred_b = ensure_sample_index_fn(y_pred_b, run_b.get(constants.DATA_SCHEMA_ID_COLUMN))
 
-    y_true_a = y_true_a.rename(columns={run_a.get(DATA_SCHEMA_TARGET_COLUMN): TRUE_VALUE_COLUMN_LABEL})
-    y_pred_a.columns = [f"{name_a} {PREDICTION_COLUMN_LABEL}"]
-    y_pred_b.columns = [f"{name_b} {PREDICTION_COLUMN_LABEL}"]
+    y_true_a = y_true_a.rename(columns={run_a.get(constants.DATA_SCHEMA_TARGET_COLUMN): constants.TRUE_VALUE_COLUMN_LABEL})
+    y_pred_a.columns = [f"{name_a} {constants.PREDICTION_COLUMN_LABEL}"]
+    y_pred_b.columns = [f"{name_b} {constants.PREDICTION_COLUMN_LABEL}"]
 
     df = y_true_a.join(y_pred_a).join(y_pred_b)
 
     # relabel columns and show which are correct/wrong
-    pred_a = f"{name_a} {PREDICTION_COLUMN_LABEL}"
-    pred_b = f"{name_b} {PREDICTION_COLUMN_LABEL}"
+    pred_a = f"{name_a} {constants.PREDICTION_COLUMN_LABEL}"
+    pred_b = f"{name_b} {constants.PREDICTION_COLUMN_LABEL}"
 
-    p1_correct = df[pred_a] == df[TRUE_VALUE_COLUMN_LABEL]
-    p2_correct = df[pred_b] == df[TRUE_VALUE_COLUMN_LABEL]
+    p1_correct = df[pred_a] == df[constants.TRUE_VALUE_COLUMN_LABEL]
+    p2_correct = df[pred_b] == df[constants.TRUE_VALUE_COLUMN_LABEL]
     same_pred = df[pred_a] == df[pred_b]
 
     df["Comparison"] = np.select(

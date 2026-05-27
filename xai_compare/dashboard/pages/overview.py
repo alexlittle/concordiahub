@@ -5,6 +5,7 @@ from xai_compare.dashboard.components.layout import apply_layout
 from xai_compare.dashboard.services import get_explorer
 from xai_compare.dashboard.components.formatting import format_model_name, format_datetime
 from xai_compare.services.comparison import build_comparison_df
+from xai_compare import constants
 
 # Get/load the necessary data for this page
 explorer = get_explorer()
@@ -44,8 +45,48 @@ with col2:
     st.write("**Classification Report:**")
     st.dataframe(run_b.classification_report())
 
+df = build_comparison_df(run_a=run_a, run_b=run_b)
 
-st.dataframe(build_comparison_df(run_a=run_a, run_b=run_b))
+
+
+rows_html = ""
+for _, row in df.iterrows():
+    sample_uuid = row[run_a.get(constants.DATA_SCHEMA_ID_COLUMN)]
+    rows_html += f"""
+        <tr>
+            <td><a href='/detail?runs={runs_param}&sample_id={sample_uuid}' target='_self'>{sample_uuid}</a></td>
+            <td>{row['Comparison']}</td>
+            <td class="report-table-align">{row['True Value']}</td>
+            <td class="report-table-align">{row[f"{format_model_name(run_a)} prediction"]}</td>
+            <td class="report-table-align">{row[f"{format_model_name(run_b)} prediction"]}</td>
+        </tr>
+    """
+
+table_html = f"""
+    <table class="report-table">
+        <thead>
+            <tr>
+                <th>sample_uuid</th>
+                <th>Comparison</th>
+                <th>True Value</th>
+                <th>{format_model_name(run_a)}</th>
+                <th>{format_model_name(run_b)}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {rows_html}
+        </tbody>
+    </table>
+"""
+
+st.html(table_html)
+
+
+
+
+
+
+
 
 
 

@@ -68,3 +68,40 @@ section[data-testid="stSidebar"] {
 .run-cell table { font-size: 0.85rem; border-collapse: collapse; border: none; width: 100%; }
 .run-cell td, .run-cell tr { border: none !important; border-top: none !important; }
 .run-cell td.label { color: grey; padding: 2px 8px 2px 0; white-space: nowrap; }
+
+
+.report-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9rem;
+}
+
+.report-table th,
+.report-table td {
+    padding: 10px 16px;
+    border: 1px solid #e0e0e0;
+    color: #333;
+}
+
+.report-table th {
+    font-weight: 600;
+    color: #555;
+    text-align: center;
+}
+
+.report-table-align {
+    text-align: center;
+}
+
+.report-table tr:hover td {
+    background-color: #f9f9f9;
+}
+
+.report-table a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.report-table a:hover {
+    text-decoration: underline;
+}
