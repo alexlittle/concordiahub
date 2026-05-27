@@ -64,15 +64,16 @@ def test_build_comparison_basic():
 
     assert list(result.columns) == [
         "id",
+        "Comparison",
         "True Value",
-        "ModelA Prediction",
-        "ModelB Prediction",
+        "ModelA prediction",
+        "ModelB prediction",
     ]
 
-    assert result.shape == (2, 4)
+    assert result.shape == (2, 5)
     assert result["True Value"].tolist() == [10, 20]
-    assert result["ModelA Prediction"].tolist() == [11, 19]
-    assert result["ModelB Prediction"].tolist() == [9, 21]
+    assert result["ModelA prediction"].tolist() == [11, 19]
+    assert result["ModelB prediction"].tolist() == [9, 21]
 
 # test join
 def test_build_comparison_aligns_on_index():
@@ -92,19 +93,19 @@ def test_build_comparison_aligns_on_index():
     })
 
     run_a = MockRun(df_true, df_pred_a, {
-        "model_type": "A",
+        "model_type": "ModelA",
         "data_schema": {"sample_id_column": "id", "target_column": "target"}
     })
 
     run_b = MockRun(df_true, df_pred_b, {
-        "model_type": "B",
+        "model_type": "ModelB",
         "data_schema": {"sample_id_column": "id", "target_column": "target"}
     })
 
     result = build_comparison_df(run_a, run_b, mock_ensure_index).sort_values("id")
 
-    assert result["A Prediction"].tolist() == [11, 19]
-    assert result["B Prediction"].tolist() == [9, 21]
+    assert result["ModelA prediction"].tolist() == [11, 19]
+    assert result["ModelB prediction"].tolist() == [9, 21]
 
 # test when missing IDs
 def test_build_comparison_missing_ids():
@@ -137,8 +138,8 @@ def test_build_comparison_missing_ids():
 
     # Expect NaNs due to outer-like effect of chained joins
     assert result.shape[0] == 2
-    assert result["A Prediction"].isna().sum() == 1
-    assert result["B Prediction"].isna().sum() == 1
+    assert result["A prediction"].isna().sum() == 1
+    assert result["B prediction"].isna().sum() == 1
 
 
 # test if same model format name
