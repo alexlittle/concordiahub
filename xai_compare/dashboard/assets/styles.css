@@ -19,6 +19,17 @@ hr {
     margin: 0.5rem 0 !important;
 }
 
+a, a:visited {
+    text-decoration: none;
+    color: #7F4707;
+}
+
+a:hover, a:active {
+    text-decoration: underline;
+    color: #7F4707;
+}
+
+
 /*
     Sidebar elements
  */

@@ -5,6 +5,7 @@ from xai_compare.dashboard.components.layout import apply_layout
 from xai_compare.dashboard.services import get_explorer
 from xai_compare.services.comparison import build_comparison_df
 from xai_compare.dashboard.logic.comparison import generate_comparison_table_html, render_run_summary
+from xai_compare.dashboard.components.breadcrumb import display_breadcrumbs
 
 # Get/load the necessary data for this page
 explorer = get_explorer()
@@ -25,6 +26,9 @@ run_a, run_b = runs
 
 # Page layout/display
 apply_layout("XAI Compare")
+
+st.html(display_breadcrumbs(run_a, run_b))
+
 
 st.subheader(f"**Dataset:** {run_a.get('dataset_id')}")
 col1, col2 = st.columns(2)
