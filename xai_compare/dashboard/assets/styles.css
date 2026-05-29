@@ -31,12 +31,11 @@ a:hover, a:active {
 .button {
     display: inline-block;
     padding:0.4rem 0.8rem;
-    background-color:#E8D5B0 !important;
+    background-color:#E8D5B055 !important;
     border: 1px solid #7F4707 !important;
     color: #7F4707 !important;
     border-radius: 0.4rem;
     text-decoration:none;
-    font-weight:600;
 }
 
 /*

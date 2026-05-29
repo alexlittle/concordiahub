@@ -55,7 +55,7 @@ def display_comparable_runs(groups: list[list[Run]]):
         runs_value = f"{run_a.get('run_uuid')},{run_b.get('run_uuid')}"
 
         cols[4].markdown(
-            f'<a href="/overview?runs={runs_value}" target="_self">Compare</a>',
+            f'<a href="/overview?runs={runs_value}" target="_self" class="button">Go to Comparison</a>',
             unsafe_allow_html=True)
 
 

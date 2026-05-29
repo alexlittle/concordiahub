@@ -21,4 +21,4 @@ def display_breadcrumbs(run_a: Run=None, run_b: Run=None, sample_id:str = None) 
     if sample_id:
         parts.append(f"{sample_id}")
 
-    return " | ".join(parts)
+    return " &nbsp;&gt;&nbsp; ".join(parts)
