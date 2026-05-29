@@ -51,7 +51,7 @@ def build_comparison_df(run_a,
     y_pred_a.columns = [f"{name_a} {constants.PREDICTION_COLUMN_LABEL}"]
     y_pred_b.columns = [f"{name_b} {constants.PREDICTION_COLUMN_LABEL}"]
 
-    df = y_true_a.join(y_pred_a).join(y_pred_b)
+    df = y_true_a.join(y_pred_a, how="inner").join(y_pred_b, how="inner")
 
     # relabel columns and show which are correct/wrong
     pred_a = f"{name_a} {constants.PREDICTION_COLUMN_LABEL}"
