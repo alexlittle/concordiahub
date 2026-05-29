@@ -1,9 +1,13 @@
 # xaicompare
 
+Under development as part of my MSc project, XAI Compare allows model developers to compare Explainable AI methods and 
+explanations between models.
 
+Models may be of different types, eg different scikit-learn models, but they may also be LLMs.
 
-
-
+As this is a proof of concept framework, not all model, XAI method or visualisation type has been developed. However,
+the architecture (adapter pattern) allows new model types, XAI methods and visualisations to be added without large 
+changes to the codebase.
 
 
 

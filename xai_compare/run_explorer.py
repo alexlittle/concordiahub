@@ -1,11 +1,13 @@
 import os
 import json
+import streamlit as st
+
 from collections import defaultdict
 from pathlib import Path
 
 from xai_compare import config
 from xai_compare.run import Run
-
+from xai_compare.dashboard.components.formatting import format_model_name
 
 class RunExplorer():
 
@@ -28,6 +30,21 @@ class RunExplorer():
         for run in self._metadata_cache:
             datasets.add(run["dataset_id"])
         return sorted(datasets)
+
+    def get_models_for_dataset(self, dataset: str) -> dict:
+        """ Gets all the models for the given dataset name
+        Args:
+            dataset str: dataset name
+        Returns:
+            dict of model names and runs"""
+    
+        models = {}
+        for run in self._metadata_cache:
+            if run["dataset_id"] == dataset:
+                run_obj = self.get_run_by_uuid(run["run_uuid"])
+                if run_obj:
+                    models[format_model_name(run_obj)] = run["run_uuid"]
+        return dict(sorted(models.items()))
 
     def get_comparable_runs(self, n: int = 3) -> list[list[dict]]:
         """Returns groups of runs that share a dataset but have different model types

@@ -1,4 +1,5 @@
 import numpy as np
+import streamlit as st
 from xai_compare.dashboard.components.formatting import format_model_name
 
 from xai_compare import constants
@@ -26,7 +27,9 @@ def ensure_sample_index(df, key="sample_uuid"):
 
 
 
-def build_comparison_df(run_a, run_b, ensure_sample_index_fn=ensure_sample_index):
+def build_comparison_df(run_a,
+                        run_b,
+                        ensure_sample_index_fn=ensure_sample_index):
     name_a = format_model_name(run_a)
     name_b = format_model_name(run_b)
 
@@ -36,11 +39,15 @@ def build_comparison_df(run_a, run_b, ensure_sample_index_fn=ensure_sample_index
     y_true_a, y_pred_a = run_a.load_targets()
     _, y_pred_b = run_b.load_targets()
 
-    y_true_a = ensure_sample_index_fn(y_true_a, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-    y_pred_a = ensure_sample_index_fn(y_pred_a, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-    y_pred_b = ensure_sample_index_fn(y_pred_b, run_b.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_true_a = ensure_sample_index_fn(
+        y_true_a,run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_pred_a = ensure_sample_index_fn(
+        y_pred_a, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_pred_b = ensure_sample_index_fn(
+        y_pred_b, run_b.get(constants.DATA_SCHEMA_ID_COLUMN))
 
-    y_true_a = y_true_a.rename(columns={run_a.get(constants.DATA_SCHEMA_TARGET_COLUMN): constants.TRUE_VALUE_COLUMN_LABEL})
+    y_true_a = y_true_a.rename(columns=
+        {run_a.get(constants.DATA_SCHEMA_TARGET_COLUMN): constants.TRUE_VALUE_COLUMN_LABEL})
     y_pred_a.columns = [f"{name_a} {constants.PREDICTION_COLUMN_LABEL}"]
     y_pred_b.columns = [f"{name_b} {constants.PREDICTION_COLUMN_LABEL}"]
 
@@ -85,7 +92,8 @@ def build_comparison_df(run_a, run_b, ensure_sample_index_fn=ensure_sample_index
     df.insert(0, "Comparison", col)
 
     df["comparison_order"] = df["Comparison"].map(COMPARISON_ORDER)
-    df = df.sort_values("comparison_order").drop(columns=["comparison_order"])
+    df = df.sort_values(by=["comparison_order",
+        constants.TRUE_VALUE_COLUMN_LABEL]).drop(columns=["comparison_order"])
 
     return df.reset_index()
 

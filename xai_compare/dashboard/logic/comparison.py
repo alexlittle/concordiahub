@@ -6,9 +6,9 @@ from xai_compare.dashboard.components.formatting import format_model_name, forma
 
 def render_run_summary(run):
     st.subheader(f"Model: {format_model_name(run)}")
-    st.write(f"Date: {format_datetime(run.get('datetime'))}")
-    st.write(f"XAI Methods: {run.get('xai_methods')}")
-    st.write("Classification Report:")
+    st.markdown(f"**Date**: {format_datetime(run.get('datetime'))}")
+    st.markdown(f"**XAI Methods**: {run.get('xai_methods')}")
+    st.markdown("**Classification Report:**")
     st.dataframe(run.classification_report())
 
 
@@ -35,7 +35,7 @@ def generate_comparison_table_html(df, run_a, run_b, runs_param):
     <table class="report-table">
         <thead>
             <tr>
-                <th>sample_uuid</th>
+                <th>Sample Identifier</th>
                 <th>Comparison</th>
                 <th>True Value</th>
                 <th>{format_model_name(run_a)}</th>

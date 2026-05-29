@@ -1,11 +1,6 @@
 
 
 
-header[data-testid="stHeader"] {
-    // height: 0;
-    // display: none;
-}
-
 .block-container {
     padding-top: 1rem;
 }
@@ -20,15 +15,29 @@ hr {
 }
 
 a, a:visited {
-    text-decoration: none;
-    color: #7F4707;
+    text-decoration: none !important;
+    color: #7F4707 !important;
 }
 
 a:hover, a:active {
-    text-decoration: underline;
-    color: #7F4707;
+    text-decoration: underline !important;
+    color: #7F4707 !important;
 }
 
+/*
+    General re-used elements
+ */
+
+.button {
+    display: inline-block;
+    padding:0.4rem 0.8rem;
+    background-color:#E8D5B0 !important;
+    border: 1px solid #7F4707 !important;
+    color: #7F4707 !important;
+    border-radius: 0.4rem;
+    text-decoration:none;
+    font-weight:600;
+}
 
 /*
     Sidebar elements
@@ -72,6 +81,9 @@ section[data-testid="stSidebar"] {
 }
 
 
+/*
+    Overview table elements
+ */
 .run-cell table, .run-cell td, .run-cell tr {
         border: none !important;
         border-top: none !important;
@@ -108,10 +120,6 @@ section[data-testid="stSidebar"] {
     background-color: #f9f9f9;
 }
 
-.report-table a {
-    color: #1a73e8;
-    text-decoration: none;
-}
 
 .report-table a:hover {
     text-decoration: underline;
