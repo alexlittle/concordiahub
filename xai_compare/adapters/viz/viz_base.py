@@ -1,6 +1,8 @@
 
+from abc import ABC, abstractmethod
 
-class VizAdapter:
+class VizAdapter(ABC):
 
-    def __init__(self, X):
-        self.X = X
+    @abstractmethod
+    def render(self, explanation):
+        pass

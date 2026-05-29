@@ -7,6 +7,8 @@ class XAIMethodAdapter(ABC):
     """
     Abstract class for XAI method adapter.
     """
+    default_visualisation: str | None = None
+    compatible_visualisations: list[str] = []
 
     # default to true for most explanation adapters
     requires_encoded_features: bool = True

@@ -7,10 +7,12 @@ from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 
 
-
 @register_xai("shap_tree")
 class TreeSHAPAdapter(XAIMethodAdapter):
     """Tree Shap Explainer"""
+
+    default_visualisation = "waterfall"
+    compatible_visualisations = ["waterfall", "forceplot", "beeswarm"]
 
     def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model

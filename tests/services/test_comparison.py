@@ -158,7 +158,7 @@ def test_build_comparison_raises_if_same_formatted_name():
     }
 
     run_a = MockRun(df_true, df_pred, metadata)
-    run_b = MockRun(df_true, df_pred, metadata)  # identical
+    run_b = MockRun(df_true, df_pred, metadata)
 
     with pytest.raises(ValueError, match="identical model names"):
         build_comparison_df(run_a, run_b, mock_ensure_index)

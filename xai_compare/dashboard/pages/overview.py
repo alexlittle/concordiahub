@@ -24,6 +24,8 @@ if len(runs) != 2:
 
 run_a, run_b = runs
 
+df = build_comparison_df(run_a=run_a, run_b=run_b)
+
 # Page layout/display
 apply_layout("XAI Compare")
 
@@ -39,8 +41,7 @@ with col1:
 with col2:
     render_run_summary(run_b)
 
-df = build_comparison_df(run_a=run_a, run_b=run_b)
-
+st.markdown("**Test samples available for comparison:**")
 table_html = generate_comparison_table_html(df, run_a, run_b, runs_param)
 st.html(table_html)
 
