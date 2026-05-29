@@ -110,18 +110,18 @@ def test_build_comparison_aligns_on_index():
 # test when missing IDs
 def test_build_comparison_missing_ids():
     df_true = pd.DataFrame({
-        "id": [1, 2],
-        "target": [10, 20]
+        "id": [1, 2, 3],
+        "target": [10, 20, 30]
     })
 
     df_pred_a = pd.DataFrame({
-        "id": [1],
-        "pred": [11]
+        "id": [1, 2],
+        "pred": [11, 12]
     })
 
     df_pred_b = pd.DataFrame({
-        "id": [2],
-        "pred": [21]
+        "id": [1, 3],
+        "pred": [21, 23]
     })
 
     run_a = MockRun(df_true, df_pred_a, {
@@ -136,10 +136,10 @@ def test_build_comparison_missing_ids():
 
     result = build_comparison_df(run_a, run_b, mock_ensure_index)
 
-    # Expect NaNs due to outer-like effect of chained joins
-    assert result.shape[0] == 2
-    assert result["A prediction"].isna().sum() == 1
-    assert result["B prediction"].isna().sum() == 1
+    # Expect no NaNs because inner join
+    assert result.shape[0] == 1
+    assert result["A prediction"].isna().sum() == 0
+    assert result["B prediction"].isna().sum() == 0
 
 
 # test if same model format name
