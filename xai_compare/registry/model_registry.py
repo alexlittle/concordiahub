@@ -8,6 +8,7 @@ def register_model(key):
     Decorator to register a model adapter by key.
     """
     def wrapper(cls):
+        cls.key = key
         MODEL_REGISTRY[key] = cls
         return cls
     return wrapper

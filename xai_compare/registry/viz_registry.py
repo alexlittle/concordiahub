@@ -7,6 +7,7 @@ def register_viz(key):
     Decorator to register a viz adapter by key.
     """
     def wrapper(cls):
+        cls.key = key
         VIZ_REGISTRY[key] = cls
         return cls
     return wrapper

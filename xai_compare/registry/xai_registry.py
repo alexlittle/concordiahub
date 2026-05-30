@@ -7,6 +7,7 @@ def register_xai(key):
     Decorator to register an XAI explainer adapter by key.
     """
     def wrapper(cls):
+        cls.key = key
         XAI_REGISTRY[key] = cls
         return cls
     return wrapper
