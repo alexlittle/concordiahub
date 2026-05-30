@@ -31,7 +31,7 @@ class ForcePlotVizAdapter(VizAdapter):
         fig.update_layout(
             title="Feature Contributions (normalised)",
             xaxis_title="Normalised contribution",
-            xaxis=dict(zeroline=True, zerolinewidth=2, zerolinecolor="black"),
+            xaxis={"zeroline": True, "zerolinewidth": 2, "zerolinecolor": "black"},
             showlegend=False,
         )
         return fig
