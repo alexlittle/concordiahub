@@ -177,7 +177,7 @@ def download_file_if_needed(
     dest_path.parent.mkdir(parents=True, exist_ok=True)
 
     if dest_path.exists() and dest_path.stat().st_size > 0:
-        print(f"✔ File already exists: {dest_path}")
+        print(f"File already exists: {dest_path}")
         return dest_path
 
     headers = {}
@@ -229,7 +229,7 @@ def download_file_if_needed(
                     temp_path.replace(dest_path)
                     if pbar:
                         pbar.close()
-                    print(f"✔ Downloaded to: {dest_path}")
+                    print(f"Downloaded to: {dest_path}")
                     return dest_path
 
                 else:

@@ -7,11 +7,12 @@ from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 
 
-
 @register_xai("coefficients")
 class CoefficientsAdapter(XAIMethodAdapter):
     """For models with native interpretability"""
 
+    default_visualisation = "waterfall"
+    compatible_visualisations = ["waterfall", "forceplot"]
 
     def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model

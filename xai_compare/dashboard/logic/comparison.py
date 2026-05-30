@@ -15,10 +15,10 @@ def render_run_summary(run):
 def generate_comparison_rows_html(df, run_a, run_b, runs_param):
     rows_html = ""
     for _, row in df.iterrows():
-        sample_uuid = row[run_a.get(constants.DATA_SCHEMA_ID_COLUMN)]
+        sample_id = row[run_a.get(constants.DATA_SCHEMA_ID_COLUMN)]
         rows_html += f"""
         <tr>
-            <td><a href='/detail?runs={runs_param}&sample_id={sample_uuid}' target='_self'>{sample_uuid}</a></td>
+            <td><a href='/detail?runs={runs_param}&sample_id={sample_id}' target='_self'>{sample_id}</a></td>
             <td>{row['Comparison']}</td>
             <td class="report-table-align">{row['True Value']}</td>
             <td class="report-table-align">{row[f"{format_model_name(run_a)} prediction"]}</td>

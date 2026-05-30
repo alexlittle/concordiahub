@@ -6,7 +6,7 @@ from xai_compare.registry.viz_registry import register_viz
 class ForcePlotVizAdapter(VizAdapter):
 
     display_name = "Force Plot"
-    compatible_explanations = ["shap_tree"]
+    compatible_explanations = ["shap_tree", "coefficients"]
 
     def render(self, explanation):
         pass

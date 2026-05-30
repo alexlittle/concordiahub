@@ -2,7 +2,7 @@ import pandas as pd
 
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 from xai_compare.storage.filesystem_store import FilesystemStore
-
+from xai_compare import constants
 
 class Run():
 
@@ -53,4 +53,20 @@ class Run():
         y_true, y_pred = self.load_targets()
         report = classification_report(y_true, y_pred, output_dict=True)
         return pd.DataFrame(report).transpose()
+
+    def load_local_explanation(self, xai_method: str, sample_id: str) -> pd.Series:
+        """Retrieves the local explanation for a given sample_uuid
+        Args:
+            xai_method: xai method (str)
+            sample_id: sample id (str - UUID)
+        returns:
+            explanation: pd.Series
+        """
+        df = self.store.load_dataframe(f"explanations_{xai_method}")
+        print(self.get(constants.DATA_SCHEMA_ID_COLUMN))
+        print(f"df columns: {df.columns.tolist()}")
+        row = df[df[self.get(constants.DATA_SCHEMA_ID_COLUMN)] == sample_id]
+        if row.empty:
+            raise ValueError(f"Sample '{sample_id}' not found in explanations for {xai_method}")
+        return row.iloc[0]
 
