@@ -63,8 +63,6 @@ class Run():
             explanation: pd.Series
         """
         df = self.store.load_dataframe(f"explanations_{xai_method}")
-        print(self.get(constants.DATA_SCHEMA_ID_COLUMN))
-        print(f"df columns: {df.columns.tolist()}")
         row = df[df[self.get(constants.DATA_SCHEMA_ID_COLUMN)] == sample_id]
         if row.empty:
             raise ValueError(f"Sample '{sample_id}' not found in explanations for {xai_method}")

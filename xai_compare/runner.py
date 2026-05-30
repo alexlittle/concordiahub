@@ -43,7 +43,7 @@ def run(ctx: RunContext):
 
         # Run the local explanations
         results = xai_adapter.explain_local(ctx.data, model_adapter.prepare())
-        artifact_store.write_data(f"explanations_{xai_method}", results)
+        artifact_store.write_explanation(f"explanations_{xai_method}", results)
 
     '''
     run_exp = RunExplorer(artifact_store)

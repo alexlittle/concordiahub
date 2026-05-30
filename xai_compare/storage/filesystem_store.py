@@ -21,6 +21,10 @@ class FilesystemStore(DataStore):
 
     def save_dataframe(self, name, df):
         path = os.path.join(self.dirname, f"{name}.parquet")
+        df.to_parquet(path)
+
+    def save_explanation(self, name, df):
+        path = os.path.join(self.dirname, f"{name}.parquet")
         df.columns = df.columns.astype(str)
         df.reset_index().to_parquet(path)
 
