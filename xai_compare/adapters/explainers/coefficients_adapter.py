@@ -11,7 +11,7 @@ from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 class CoefficientsAdapter(XAIMethodAdapter):
     """For models with native interpretability"""
 
-    default_visualisation = "waterfall"
+    default_visualisation = "forceplot"
     compatible_visualisations = ["waterfall", "forceplot"]
 
     def explain_local(self, data: RunData, model=None) -> pd.DataFrame:

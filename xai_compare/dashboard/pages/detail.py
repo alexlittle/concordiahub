@@ -46,4 +46,5 @@ for col, run in [(col1, run_a), (col2, run_b)]:
         viz_class = get_viz_adapter(xai_class.default_visualisation)
 
         explanation = run.load_local_explanation(xai_method, sample_id)
-        viz_class().render(explanation)
+        fig = viz_class().render_local(explanation)
+        st.plotly_chart(fig)

@@ -11,7 +11,7 @@ from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 class TreeSHAPAdapter(XAIMethodAdapter):
     """Tree Shap Explainer"""
 
-    default_visualisation = "waterfall"
+    default_visualisation = "forceplot"
     compatible_visualisations = ["waterfall", "forceplot", "beeswarm"]
 
     def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
