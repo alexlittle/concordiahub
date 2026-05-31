@@ -1,11 +1,12 @@
 import plotly.graph_objects as go
 from xai_compare.adapters.viz.viz_base import VizAdapter
 from xai_compare.registry.viz_registry import register_viz
+from xai_compare import strings
 
 @register_viz("waterfall")
 class WaterfallVizAdapter(VizAdapter):
 
-    display_name = "Waterfall"
+    display_name = strings.WATERFALL_DISPLAY_NAME
     compatible_explanations = ["shap_tree","coefficients"]
 
     def render_local(self, explanation, sample_id_col)  -> go.Figure:
@@ -25,8 +26,8 @@ class WaterfallVizAdapter(VizAdapter):
             connector={"line": {"color": "rgb(63, 63, 63)"}},
         ))
         fig.update_layout(
-            title="Feature Contributions (normalised)",
-            xaxis_title="Normalised contribution",
+            title=strings.WATERFALL_TITLE,
+            xaxis_title=strings.WATERFALL_X_AXIS,
         )
         return fig
 

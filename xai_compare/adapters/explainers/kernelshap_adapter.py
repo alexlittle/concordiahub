@@ -5,11 +5,15 @@ from xai_compare.exceptions import MissingDataError
 from xai_compare.context import RunData
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
-
+from xai_compare import constants, strings
 
 @register_xai("shap_kernel")
 class KernalSHAPAdapter(XAIMethodAdapter):
     """Model-agnostic Kernel Shap Explainer"""
+
+    display_name = strings.KERNEL_SHAP_DISPLAY_NAME
+    default_visualisation = None
+    compatible_visualisations = []
 
     def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
         """Computes the local explanation using KernelShap method
@@ -24,6 +28,6 @@ class KernalSHAPAdapter(XAIMethodAdapter):
             MissingDataError: if x_train or x_test is not provided
         """
         if data.x_train is None or data.x_test is None:
-            raise MissingDataError("CoefficientsAdapter requires x_train and x_test in RunData")
+            raise MissingDataError("KernalSHAPAdapter requires x_train and x_test in RunData")
         explainer = shap.KernelExplainer(model.predict_proba, data.x_train)
         return explainer.shap_values(data.x_test)

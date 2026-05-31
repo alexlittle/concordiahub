@@ -1,8 +1,9 @@
 import numpy as np
-import streamlit as st
-from xai_compare.dashboard.components.formatting import format_model_name
 
+
+from xai_compare.dashboard.components.formatting import format_model_name
 from xai_compare import constants
+from xai_compare.exceptions import InvalidSelectionError
 
 def ensure_sample_index(df, key="sample_uuid"):
     # already a column so set as index
@@ -34,7 +35,7 @@ def build_comparison_df(run_a,
     name_b = format_model_name(run_b)
 
     if name_a == name_b:
-        raise ValueError(f"Cannot compare runs with identical model names: '{name_a}'")
+        raise InvalidSelectionError(f"Cannot compare runs with identical model names: '{name_a}'")
 
     y_true_a, y_pred_a = run_a.load_targets()
     _, y_pred_b = run_b.load_targets()
@@ -61,7 +62,7 @@ def build_comparison_df(run_a,
     p2_correct = df[pred_b] == df[constants.TRUE_VALUE_COLUMN_LABEL]
     same_pred = df[pred_a] == df[pred_b]
 
-    COMPARISON_ORDER = {
+    comparison_order = {
         constants.COMPARISON_BOTH_INCORRECT_DIFF: 1,
         constants.COMPARISON_BOTH_INCORRECT_SAME: 2,
         f"{name_a} {constants.COMPARISON_CORRECT}": 3,
@@ -91,7 +92,7 @@ def build_comparison_df(run_a,
     col = df.pop("Comparison")
     df.insert(0, "Comparison", col)
 
-    df["comparison_order"] = df["Comparison"].map(COMPARISON_ORDER)
+    df["comparison_order"] = df["Comparison"].map(comparison_order)
     df = df.sort_values(by=["comparison_order",
         constants.TRUE_VALUE_COLUMN_LABEL]).drop(columns=["comparison_order"])
 

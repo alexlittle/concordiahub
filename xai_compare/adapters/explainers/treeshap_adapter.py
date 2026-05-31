@@ -6,12 +6,13 @@ from xai_compare.context import RunData
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xai_compare.run import Run
-from xai_compare import constants
+from xai_compare import constants, strings
 
 @register_xai("shap_tree")
 class TreeSHAPAdapter(XAIMethodAdapter):
     """Tree Shap Explainer"""
 
+    display_name = strings.TREE_SHAP_DISPLAY_NAME
     default_visualisation = "forceplot"
     compatible_visualisations = ["waterfall", "forceplot", "beeswarm"]
 

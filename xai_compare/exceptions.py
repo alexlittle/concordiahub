@@ -4,3 +4,6 @@ class InvalidConfigurationError(Exception):
 
 class MissingDataError(Exception):
     pass
+
+class InvalidSelectionError(Exception):
+    pass

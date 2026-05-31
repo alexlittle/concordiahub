@@ -6,12 +6,14 @@ from xai_compare.exceptions import MissingDataError
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xai_compare.run import Run
-from xai_compare import constants
+from xai_compare import constants, strings
+
 
 @register_xai("coefficients")
 class CoefficientsAdapter(XAIMethodAdapter):
     """For models with native interpretability"""
 
+    display_name = strings.COEFFICIENTS_DISPLAY_NAME
     default_visualisation = "forceplot"
     compatible_visualisations = ["waterfall", "forceplot"]
 
@@ -20,7 +22,7 @@ class CoefficientsAdapter(XAIMethodAdapter):
         df = run.store.load_dataframe(f"explanations_{cls.key}")
         row = df[df[run.get(constants.DATA_SCHEMA_ID_COLUMN)] == sample_id]
         if row.empty:
-            raise ValueError(f"Sample '{sample_id}' not found in explanations for {cls.key}")
+            raise MissingDataError(f"Sample '{sample_id}' not found in explanations for {cls.key}")
         return row.iloc[0]
 
     def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
