@@ -8,8 +8,8 @@ class WaterfallVizAdapter(VizAdapter):
     display_name = "Waterfall"
     compatible_explanations = ["shap_tree","coefficients"]
 
-    def render_local(self, explanation)  -> go.Figure:
-        features = explanation.drop(["sample_uuid", "class"], errors="ignore")
+    def render_local(self, explanation, sample_id_col)  -> go.Figure:
+        features = explanation.drop([sample_id_col, "class"], errors="ignore")
 
         # Sort by absolute value descending
         features = features.reindex(features.abs().sort_values(ascending=True).index)

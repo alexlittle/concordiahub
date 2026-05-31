@@ -2,16 +2,16 @@ import plotly.graph_objects as go
 
 from xai_compare.adapters.viz.viz_base import VizAdapter
 from xai_compare.registry.viz_registry import register_viz
-
+from xai_compare import strings
 
 @register_viz("forceplot")
 class ForcePlotVizAdapter(VizAdapter):
 
-    display_name = "Force Plot"
+    display_name = strings.FORCE_PLOT_DISPLAY_NAME
     compatible_explanations = ["shap_tree", "coefficients"]
 
-    def render_local(self, explanation):
-        features = explanation.drop(["sample_uuid", "class"], errors="ignore")
+    def render_local(self, explanation, sample_id_col):
+        features = explanation.drop([sample_id_col, "class"], errors="ignore")
 
         # Normalise by sum of absolute values
         features = features / features.abs().sum()
@@ -29,8 +29,8 @@ class ForcePlotVizAdapter(VizAdapter):
         ))
 
         fig.update_layout(
-            title="Feature Contributions (normalised)",
-            xaxis_title="Normalised contribution",
+            title=strings.FORCE_PLOT_TITLE,
+            xaxis_title=strings.FORCE_PLOT_X_AXIS,
             xaxis={"zeroline": True, "zerolinewidth": 2, "zerolinecolor": "black"},
             showlegend=False,
         )

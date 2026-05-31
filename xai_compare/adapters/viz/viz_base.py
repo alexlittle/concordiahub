@@ -4,9 +4,9 @@ from abc import ABC, abstractmethod
 class VizAdapter(ABC):
 
     @abstractmethod
-    def render_local(self, explanation) -> Any:
+    def render_local(self, explanation, sample_id_col) -> Any:
         raise NotImplementedError
 
     @abstractmethod
-    def render_global(self, explanations) -> Any:
+    def render_global(self, explanations, sample_id_col) -> Any:
         raise NotImplementedError
