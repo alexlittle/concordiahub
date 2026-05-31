@@ -13,7 +13,7 @@ def register_model(key):
         return cls
     return wrapper
 
-def get_model_adapter(key, model=None):
+def get_model_adapter(key):
     if key not in MODEL_REGISTRY:
         raise InvalidConfigurationError(f"Model adapter '{key}' not registered.")
-    return MODEL_REGISTRY[key](model)
+    return MODEL_REGISTRY[key]

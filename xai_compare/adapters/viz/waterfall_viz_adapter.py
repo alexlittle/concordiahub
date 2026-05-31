@@ -9,7 +9,7 @@ class WaterfallVizAdapter(VizAdapter):
     display_name = strings.WATERFALL_DISPLAY_NAME
     compatible_explanations = config.WATERFALL_COMPATIBLE_XAI
 
-    def render_local(self, explanation, sample_id_col)  -> go.Figure:
+    def render_local(self, explanation, sample_id_col, axis_range=None)  -> go.Figure:
         features = explanation.drop([sample_id_col, "class"], errors="ignore")
 
         # Sort by absolute value descending
@@ -29,6 +29,8 @@ class WaterfallVizAdapter(VizAdapter):
             title=strings.WATERFALL_TITLE,
             xaxis_title=strings.WATERFALL_X_AXIS,
         )
+        if axis_range:
+            fig.update_layout(xaxis=dict(range=axis_range))
         return fig
 
     def render_global(self, explanations):

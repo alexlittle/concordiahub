@@ -7,7 +7,7 @@ class VizAdapter(ABC):
     compatible_explanations: list[str] = []
 
     @abstractmethod
-    def render_local(self, explanation, sample_id_col) -> Any:
+    def render_local(self, explanation, sample_id_col, axis_range=None) -> Any:
         raise NotImplementedError
 
     @abstractmethod

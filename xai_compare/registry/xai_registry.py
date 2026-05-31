@@ -15,4 +15,4 @@ def register_xai(key):
 def get_xai_adapter(key):
     if key not in XAI_REGISTRY:
         raise InvalidConfigurationError(f"XAI method '{key}' not registered.")
-    return XAI_REGISTRY[key]()
+    return XAI_REGISTRY[key]

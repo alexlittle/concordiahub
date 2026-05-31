@@ -80,8 +80,9 @@ def test_register_and_get_model_adapter(fresh_module):
         def __init__(self, model=None):
             self.model = model
 
-    adapter = get_model_adapter("my-model", model=None)
-    assert isinstance(adapter, MyAdapter)
+    model_class = get_model_adapter("my-model")
+    model_adapter = model_class(None)
+    assert isinstance(model_adapter, MyAdapter)
     assert MyAdapter is MODEL_REGISTRY["my-model"]
 
 
@@ -100,8 +101,9 @@ def test_register_and_get_xai_adapter(fresh_module):
         def __init__(self):
             pass
 
-    adapter = get_xai_adapter("my-expl")
-    assert isinstance(adapter, MyAdapter)
+    xai_class = get_xai_adapter("my-expl")
+    xai_adapter = xai_class()
+    assert isinstance(xai_adapter, MyAdapter)
     assert MyAdapter is XAI_REGISTRY["my-expl"]
 
 
@@ -139,12 +141,14 @@ def test_register_and_get_comparison_adapter(fresh_module):
     class MyAdapter:
         pass
 
-    adapter = get_comparison_adapter("method-a", "method-b")
-    assert isinstance(adapter, MyAdapter)
+    comp_class = get_comparison_adapter("method-a", "method-b")
+    comp_adapter = comp_class()
+    assert isinstance(comp_adapter, MyAdapter)
 
     # Check that the symmetry works
-    adapter_reversed = get_comparison_adapter("method-b", "method-a")
-    assert isinstance(adapter_reversed, MyAdapter)
+    comp_class_reversed = get_comparison_adapter("method-b", "method-a")
+    comp_adapter_reversed = comp_class_reversed()
+    assert isinstance(comp_adapter_reversed, MyAdapter)
 
     assert MyAdapter is COMPARISON_REGISTRY[frozenset({"method-a", "method-b"})]
 

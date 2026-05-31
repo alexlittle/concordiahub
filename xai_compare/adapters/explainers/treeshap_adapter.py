@@ -13,8 +13,8 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     """Tree Shap Explainer"""
 
     display_name = strings.TREE_SHAP_DISPLAY_NAME
-    default_visualisation = config.TREE_SHAPE_DEFAULT_VIZ
-    compatible_visualisations = config.TREE_SHAPE_COMPATIBLE_VIZ
+    default_visualisation = config.TREE_SHAP_DEFAULT_VIZ
+    compatible_visualisations = config.TREE_SHAP_COMPATIBLE_VIZ
 
     @classmethod
     def load_explanation(cls, run: Run, sample_id: str):

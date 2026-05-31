@@ -19,4 +19,4 @@ def get_comparison_adapter(method_a: str, method_b: str):
         raise InvalidConfigurationError(
             f"No comparison adapter registered for '{method_a}' vs '{method_b}'."
         )
-    return COMPARISON_REGISTRY[key]()
+    return COMPARISON_REGISTRY[key]

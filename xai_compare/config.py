@@ -24,9 +24,14 @@ COR_COMPATIBLE_VIZ = []
 KERNEL_SHAP_DEFAULT_VIZ = None
 KERNEL_SHAP_COMPATIBLE_VIZ = []
 
-TREE_SHAPE_DEFAULT_VIZ = "forceplot"
-TREE_SHAPE_COMPATIBLE_VIZ = ["waterfall", "forceplot", "beeswarm"]
+TREE_SHAP_DEFAULT_VIZ = "forceplot"
+TREE_SHAP_COMPATIBLE_VIZ = ["waterfall", "forceplot", "beeswarm"]
 
 
 FORCE_PLOT_COMPATIBLE_XAI = ["shap_tree", "coefficients"]
 WATERFALL_COMPATIBLE_XAI = ["shap_tree","coefficients"]
+
+
+# Graph/Plot colour scheme
+PLOT_FAVOURS_B_COLOR = "brown"
+PLOT_FAVOURS_A_COLOR = "teal"

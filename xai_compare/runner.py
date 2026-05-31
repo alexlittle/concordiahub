@@ -26,10 +26,12 @@ def run(ctx: RunContext):
             artifact_store.write_data(field.name, getattr(ctx.data, field.name))
 
     # run the XAI methods
-    model_adapter = get_model_adapter(ctx.model_type, ctx.model)
+    model_class = get_model_adapter(ctx.model_type)
+    model_adapter = model_class(ctx.model)
 
     for xai_method in ctx.xai_methods:
-        xai_adapter = get_xai_adapter(xai_method)
+        xai_class = get_xai_adapter(xai_method)
+        xai_adapter = xai_class()
 
         # process feature names if necessary
         if xai_adapter.requires_encoded_features:
