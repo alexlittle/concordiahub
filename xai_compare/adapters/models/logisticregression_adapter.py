@@ -6,4 +6,3 @@ from xai_compare import strings
 class LogisticRegressionAdapter(ModelAdapter):
 
     display_name = strings.LOGISTIC_REGRESSION_DISPLAY_NAME
-    pass

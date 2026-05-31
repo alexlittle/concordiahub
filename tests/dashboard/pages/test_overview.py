@@ -29,3 +29,18 @@ def test_explorer_called_with_correct_ids(mock_get_explorer):
     mock_explorer.get_runs_by_uuids.assert_called_once_with(["uuid1", "uuid2"])
 
 
+@patch("xai_compare.dashboard.services.get_explorer")
+@patch("xai_compare.services.comparison.build_comparison_df")
+def test_build_comparison_df_called_with_runs(mock_build_comparison_df, mock_get_explorer):
+    mock_run_a = MagicMock()
+    mock_run_b = MagicMock()
+    mock_explorer = MagicMock()
+    mock_explorer.get_runs_by_uuids.return_value = [mock_run_a, mock_run_b]
+    mock_get_explorer.return_value = mock_explorer
+    mock_build_comparison_df.return_value = MagicMock()
+
+    at = AppTest.from_file(str(PAGE_PATH))
+    at.query_params["runs"] = "uuid1,uuid2"
+    at.run()
+
+    mock_build_comparison_df.assert_called_once_with(run_a=mock_run_a, run_b=mock_run_b)
