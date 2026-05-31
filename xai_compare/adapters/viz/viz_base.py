@@ -11,5 +11,5 @@ class VizAdapter(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def render_global(self, explanations, sample_id_col) -> Any:
+    def render_global(self, explanations) -> Any:
         raise NotImplementedError

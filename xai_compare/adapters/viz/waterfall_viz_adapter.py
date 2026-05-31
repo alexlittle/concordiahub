@@ -1,13 +1,13 @@
 import plotly.graph_objects as go
 from xai_compare.adapters.viz.viz_base import VizAdapter
 from xai_compare.registry.viz_registry import register_viz
-from xai_compare import strings
+from xai_compare import strings, config
 
 @register_viz("waterfall")
 class WaterfallVizAdapter(VizAdapter):
 
     display_name = strings.WATERFALL_DISPLAY_NAME
-    compatible_explanations = ["shap_tree","coefficients"]
+    compatible_explanations = config.WATERFALL_COMPATIBLE_XAI
 
     def render_local(self, explanation, sample_id_col)  -> go.Figure:
         features = explanation.drop([sample_id_col, "class"], errors="ignore")

@@ -5,15 +5,15 @@ from xai_compare.exceptions import MissingDataError
 from xai_compare.context import RunData
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
-from xai_compare import constants, strings
+from xai_compare import config, strings
 
 @register_xai("shap_kernel")
 class KernalSHAPAdapter(XAIMethodAdapter):
     """Model-agnostic Kernel Shap Explainer"""
 
     display_name = strings.KERNEL_SHAP_DISPLAY_NAME
-    default_visualisation = None
-    compatible_visualisations = []
+    default_visualisation = config.KERNEL_SHAP_DEFAULT_VIZ
+    compatible_visualisations = config.KERNEL_SHAP_COMPATIBLE_VIZ
 
     def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
         """Computes the local explanation using KernelShap method

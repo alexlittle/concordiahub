@@ -2,13 +2,13 @@ import plotly.graph_objects as go
 
 from xai_compare.adapters.viz.viz_base import VizAdapter
 from xai_compare.registry.viz_registry import register_viz
-from xai_compare import strings
+from xai_compare import strings, config
 
 @register_viz("forceplot")
 class ForcePlotVizAdapter(VizAdapter):
 
     display_name = strings.FORCE_PLOT_DISPLAY_NAME
-    compatible_explanations = ["shap_tree", "coefficients"]
+    compatible_explanations = config.FORCE_PLOT_COMPATIBLE_XAI
 
     def render_local(self, explanation, sample_id_col):
         features = explanation.drop([sample_id_col, "class"], errors="ignore")
