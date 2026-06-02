@@ -1,6 +1,6 @@
 import plotly.graph_objects as go
 
-from context import ComparisonContext
+from xai_compare.context import ComparisonContext
 from xai_compare.registry.comparison_registry import register_comparison
 from xai_compare.adapters.comparison.comparison_base import ComparisonAdapter
 from xai_compare.dashboard.components.formatting import format_model_name
@@ -10,7 +10,6 @@ from xai_compare import config, context
 @register_comparison("coefficients", "shap_tree")
 class CoefficientTreeShapComparison(ComparisonAdapter):
     """For comparing coefficients with shap tree"""
-
 
 
     def _viz_diff_bar(self, features_a, features_b, run_a, run_b, axis_range=None):
@@ -32,8 +31,8 @@ class CoefficientTreeShapComparison(ComparisonAdapter):
             marker_color=colors,
         ))
 
-        label_a = format_model_name(run_a)
-        label_b = format_model_name(run_b)
+        label_a = format_model_name(ctx.run_a)
+        label_b = format_model_name(ctx.run_b)
 
         fig.update_layout(
             title=f"Explanation Difference: {label_a} − {label_b}",
@@ -54,4 +53,4 @@ class CoefficientTreeShapComparison(ComparisonAdapter):
 
     def render_comparison(self, ctx: context.ComparisonContext , viz_type):
 
-        return self.VISUALISATIONS[viz_type](self, ctx)
+        return self.visualisations_available[viz_type](self, ctx)
