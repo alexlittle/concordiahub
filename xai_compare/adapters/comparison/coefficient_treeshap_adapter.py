@@ -51,6 +51,6 @@ class CoefficientTreeShapComparison(ComparisonAdapter):
         "Alignment Scale": _viz_alignment_scale
     }
 
-    def render_comparison(self, ctx: context.ComparisonContext , viz_type):
+    def render_comparison(self, ctx: context.ComparisonContext, viz_type):
 
         return self.visualisations_available[viz_type](self, ctx)

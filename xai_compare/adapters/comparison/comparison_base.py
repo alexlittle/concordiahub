@@ -24,5 +24,5 @@ class ComparisonAdapter(ABC):
         return diff.abs().max()
 
     @abstractmethod
-    def render_comparison(self, ctx: ComparisonContext) -> Any:
+    def render_comparison(self, ctx: ComparisonContext, viz_type) -> Any:
         raise NotImplementedError
