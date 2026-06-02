@@ -1,6 +1,6 @@
 import pandas as pd
 
-from xai_compare.dashboard.logic.comparison import generate_comparison_table_html
+from xai_compare.dashboard.utils.comparison import generate_comparison_table_html
 from xai_compare import constants
 
 class MockRun:
@@ -36,7 +36,7 @@ def test_generate_comparison_table_html():
     run_a = MockRun("Model A")
     run_b = MockRun("Model B")
 
-    html = generate_comparison_table_html(df, run_a, run_b, "runA,runB")
+    html = generate_comparison_table_html(df, run_a, run_b)
 
     assert "<table" in html
     assert "123" in html

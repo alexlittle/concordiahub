@@ -30,7 +30,7 @@ class WaterfallVizAdapter(VizAdapter):
             xaxis_title=strings.WATERFALL_X_AXIS,
         )
         if axis_range:
-            fig.update_layout(xaxis=dict(range=axis_range))
+            fig.update_layout(xaxis={"range": axis_range})
         return fig
 
     def render_global(self, explanations):

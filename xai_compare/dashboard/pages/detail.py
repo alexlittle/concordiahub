@@ -1,32 +1,23 @@
 import streamlit as st
 
-from xai_compare.exceptions import InvalidConfigurationError
+from xai_compare.context import ComparisonContext
+from xai_compare.exceptions import InvalidConfigurationError, InvalidUrlParamsError
 from xai_compare.dashboard.components.formatting import format_model_name
 from xai_compare.dashboard.components.layout import apply_layout
-from xai_compare.dashboard.services import get_explorer
 from xai_compare.dashboard.components.breadcrumb import display_breadcrumbs
-
+from xai_compare.dashboard.utils.params import get_runs_from_url_param
 from xai_compare.registry.xai_registry import get_xai_adapter
 from xai_compare.registry.viz_registry import get_viz_adapter
 from xai_compare.registry.comparison_registry import get_comparison_adapter
 from xai_compare import constants, strings
 
-explorer = get_explorer()
 
 # get the runs from the parameters
-runs_param = st.query_params.get("runs")
-if not runs_param:
-    st.warning(strings.ERR_NO_RUNS)
+try:
+    run_a, run_b = get_runs_from_url_param(st.query_params)
+except InvalidUrlParamsError as e:
+    st.error(e)
     st.stop()
-run_ids = runs_param.split(",")
-
-runs = explorer.get_runs_by_uuids(run_ids)
-
-if len(runs) != 2:
-    st.error(strings.ERR_NOT_2_RUNS)
-    st.stop()
-
-run_a, run_b = runs
 
 # get the sample id from the parameters
 sample_id = st.query_params.get("sample_id")
@@ -67,7 +58,13 @@ st.subheader("**Comparison Explanation:**")
 
 
 try:
-    fig = comparison_class().render_comparison(exp_a, exp_b, run_a, run_b, axis_range=axis_range)
+    ctx = ComparisonContext(
+        explanation_a=explanation_a,
+        explanation_b=explanation_b,
+        run_a=run_a,
+        run_b=run_b,
+        axis_range=axis_range)
+    fig = comparison_class().render_comparison(ctx)
     st.plotly_chart(fig, key="comparison")
 except InvalidConfigurationError:
     st.warning(f"No comparison available for {method_a} vs {method_b}")

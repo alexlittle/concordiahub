@@ -7,9 +7,11 @@ MODULE_UNDER_TEST = "xai_compare.dashboard.pages.overview"
 PAGE_PATH = Path(__file__).parents[3] / "xai_compare/dashboard/pages/overview.py"
 
 def test_overview_no_runs():
-    at = AppTest.from_file(str(PAGE_PATH))
-    at.run()
-    assert any("No runs selected" in w.value for w in at.warning)
+    with patch("xai_compare.dashboard.services.get_explorer") as mock_explorer:
+        mock_explorer.return_value.get_runs_by_uuids.return_value = []
+        at = AppTest.from_file(str(PAGE_PATH))
+        at.run()
+        assert any("No runs selected" in e.value for e in at.error)
 
 
 def test_overview_reads_query_params():
@@ -19,7 +21,7 @@ def test_overview_reads_query_params():
     assert len(at.warning) == 0
 
 
-@patch("xai_compare.dashboard.services.get_explorer")
+@patch("xai_compare.dashboard.utils.params.get_explorer")
 def test_explorer_called_with_correct_ids(mock_get_explorer):
     mock_explorer = MagicMock()
     mock_get_explorer.return_value = mock_explorer
@@ -29,7 +31,7 @@ def test_explorer_called_with_correct_ids(mock_get_explorer):
     mock_explorer.get_runs_by_uuids.assert_called_once_with(["uuid1", "uuid2"])
 
 
-@patch("xai_compare.dashboard.services.get_explorer")
+@patch("xai_compare.dashboard.utils.params.get_explorer")
 @patch("xai_compare.services.comparison.build_comparison_df")
 def test_build_comparison_df_called_with_runs(mock_build_comparison_df, mock_get_explorer):
     mock_run_a = MagicMock()

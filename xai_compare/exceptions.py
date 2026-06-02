@@ -7,3 +7,6 @@ class MissingDataError(Exception):
 
 class InvalidSelectionError(Exception):
     pass
+
+class InvalidUrlParamsError(Exception):
+    pass

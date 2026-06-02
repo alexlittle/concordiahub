@@ -15,7 +15,7 @@ class ForcePlotVizAdapter(VizAdapter):
     def render_local(self, explanation, sample_id_col, axis_range=None):
         features = normalise_values(explanation, sample_id_col)
 
-        colors = ["red" if v < 0 else "teal" for v in features.values]
+        colors = [config.PLOT_LEFT_COLOR if v < 0 else config.PLOT_RIGHT_COLOR for v in features.values]
 
         fig = go.Figure(go.Bar(
             orientation="h",
@@ -27,11 +27,11 @@ class ForcePlotVizAdapter(VizAdapter):
         fig.update_layout(
             title=strings.FORCE_PLOT_TITLE,
             xaxis_title=strings.FORCE_PLOT_X_AXIS,
-            xaxis={"zeroline": True, "zerolinewidth": 2, "zerolinecolor": "black"},
+            xaxis=config.PLOT_ZERO_LINE,
             showlegend=False,
         )
         if axis_range:
-            fig.update_layout(xaxis=dict(range=axis_range))
+            fig.update_layout(xaxis={"range":axis_range})
             
         return fig
 

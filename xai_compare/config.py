@@ -33,5 +33,7 @@ WATERFALL_COMPATIBLE_XAI = ["shap_tree","coefficients"]
 
 
 # Graph/Plot colour scheme
-PLOT_FAVOURS_B_COLOR = "brown"
-PLOT_FAVOURS_A_COLOR = "teal"
+PLOT_LEFT_COLOR = "brown"
+PLOT_RIGHT_COLOR = "teal"
+
+PLOT_ZERO_LINE= {"zeroline": True, "zerolinewidth": 2, "zerolinecolor": "black"}

@@ -10,6 +10,7 @@ class ComparisonAdapter(ABC):
     """Handles comparison between two XAI explanations."""
 
     compatible_pairs: set[frozenset[str]]
+    visualisations_available = []
 
     @classmethod
     def get_abs_max(cls, explanation_a: pd.Series, explanation_b: pd.Series, sample_id_column) -> float:

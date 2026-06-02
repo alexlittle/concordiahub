@@ -12,13 +12,13 @@ def render_run_summary(run):
     st.dataframe(run.classification_report())
 
 
-def generate_comparison_rows_html(df, run_a, run_b, runs_param):
+def generate_comparison_rows_html(df, run_a, run_b):
     rows_html = ""
     for _, row in df.iterrows():
         sample_id = row[run_a.get(constants.DATA_SCHEMA_ID_COLUMN)]
         rows_html += f"""
         <tr>
-            <td><a href='/detail?runs={runs_param}&sample_id={sample_id}' target='_self'>{sample_id}</a></td>
+            <td><a href='/detail?runs={run_a.get("run_id")},{run_b.get("run_id")}&sample_id={sample_id}' target='_self'>{sample_id}</a></td>
             <td>{row['Comparison']}</td>
             <td class="report-table-align">{row['True Value']}</td>
             <td class="report-table-align">{row[f"{format_model_name(run_a)} prediction"]}</td>
@@ -28,8 +28,8 @@ def generate_comparison_rows_html(df, run_a, run_b, runs_param):
     return rows_html
 
 
-def generate_comparison_table_html(df, run_a, run_b, runs_param):
-    rows_html = generate_comparison_rows_html(df, run_a, run_b, runs_param)
+def generate_comparison_table_html(df, run_a, run_b):
+    rows_html = generate_comparison_rows_html(df, run_a, run_b)
 
     return f"""
     <table class="report-table">

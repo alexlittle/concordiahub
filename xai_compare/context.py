@@ -2,11 +2,13 @@
 Context dataclasses for XAI-Compare
 '''
 
-
-
 import pandas as pd
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Optional
+
+from xai_compare import constants
+from xai_compare.services.preprocess import normalise_values
+from xai_compare.run import Run
 
 @dataclass
 class DataSchema:
@@ -45,3 +47,22 @@ class RunContext:
     model_subtype: Optional[str] = None
     run_name: Optional[str] = None
     model_id: Optional[str] = None
+
+
+@dataclass
+class ComparisonContext:
+    """
+    Dataclass structure for passing data to comparison visualisations
+    """
+    run_a: Run
+    run_b: Run
+    explanation_a: pd.Series
+    explanation_b: pd.Series
+    axis_range: tuple | None = None
+
+    features_a: pd.Series = field(init=False)
+    features_b: pd.Series = field(init=False)
+
+    def __post_init__(self):
+        self.features_a = normalise_values(self.explanation_a, self.run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
+        self.features_b = normalise_values(self.explanation_b, self.run_b.get(constants.DATA_SCHEMA_ID_COLUMN))
