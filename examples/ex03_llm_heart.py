@@ -1,6 +1,7 @@
 import pandas as pd
 import ollama
 import json
+import os
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from examples import config
@@ -115,6 +116,7 @@ exp_outputs_df = pd.DataFrame(exp_outputs)
 y = df[[config.SAMPLE_UUID_COL, "target"]]
 X = df.drop(columns=["target"])
 
+os.makedirs("./cache/heart/llm/", exist_ok=True)
 X.to_parquet('./cache/heart/llm/X.parquet')
 y.to_parquet('./cache/heart/llm/y.parquet')
 pred_outputs_df.to_parquet('./cache/heart/llm/y_preds.parquet')
