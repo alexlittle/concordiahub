@@ -97,7 +97,7 @@ for idx, row in df.iterrows():
         }
         exp_output = {
             "sample_uuid": row["sample_uuid"],
-            "explanation": response
+            "explanation": json.dumps(response, default=str)
         }
         pred_outputs.append(pred_output)
         exp_outputs.append(exp_output)
