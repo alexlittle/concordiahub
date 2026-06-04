@@ -5,6 +5,10 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from examples import config
 
+
+#----------------------------
+# Set up
+#----------------------------
 COLUMN_MAPPINGS = {
     'sex': { 0: 'Female', 1: 'Male'},
     'chest pain type': { 1: 'typical angina', 2: 'atypical angina', 3: 'non-anginal pain', 4: 'asymptomatic'},
@@ -22,83 +26,96 @@ for col, mapping in COLUMN_MAPPINGS.items():
 
 print(df.head())
 
-jinja_env = Environment(
+JINJA_ENV = Environment(
     loader=FileSystemLoader(config.LLM_TEMPLATE_DIR),
     undefined=StrictUndefined,
     trim_blocks=True,
     lstrip_blocks=True
 )
 
-prompt_template = jinja_env.get_template("heart.jinja")
+#----------------------------
+# Functions
+#----------------------------
+def build_prompt(patient_data:dict):
+    user_prompt_template = JINJA_ENV.get_template("heart.jinja")
 
-def run_llm(prompt):
+    feature_block = "\n".join(
+        f"  - {key}: {value}"
+        for key, value in patient_data.items()
+    )
+    return user_prompt_template.render(patient_data=feature_block)
+
+def run_llm_request(patient_data: dict, model: str):
+    system_prompt_template = JINJA_ENV.get_template("heart_system.jinja")
+    system_prompt = system_prompt_template.render()
+
     response = ollama.chat(
         model=config.HEART_OLLAMA_MODEL,
+        stream=False,
         messages=[
-            {"role": "user", "content": prompt}
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": build_prompt(patient_data)}
         ],
+        logprobs=True,
         options={
             "temperature": 0.2,
-            "top_p": 0.9
-        }
-    )
-    return response["message"]["content"].strip()
+            "top_p": 0.9,
+            "seed": 42,
+        })
+    return response
 
-def parse_output(text: str) -> dict:
+
+def parse_response(response: str) -> dict:
+    content = response["message"]["content"].strip()
 
     try:
-        data = json.loads(text)
+        return json.loads(content), True
+    except json.JSONDecodeError as e:
+        print("Model returned invalid JSON")
+        return content, False
 
-        heart_disease = data.get("heart_disease", 0)
-        explanation = data.get("explanation", "")
 
-    except json.JSONDecodeError:
-        # if invalid JSON
-        heart_disease = 0
-        explanation = ""
+#----------------------------
+# Run and save responses
+#----------------------------
+pred_outputs = []
+exp_outputs = []
 
-    return {"llm_heart_disease": heart_disease,
-        "llm_explanation": explanation,
-        "raw_output": text }
-
-outputs = []
-
-for idx, row in df[:3].iterrows():
+for idx, row in df.iterrows():
     print(f"Running LLM on conversation {idx + 1}/{len(df)} ")
+    row_dict = row.to_dict()
+    row_dict.pop("sample_uuid")
+    row_dict.pop("target")
 
-    prompt = prompt_template.render(
-        age=row['age'],
-        sex=row['sex'],
-        chest_pain_type=row['chest pain type'],
-        resting_blood_pressure=row['resting blood pressure'],
-        serum_cholesterol=row['serum cholesterol'],
-        fasting_blood_sugar=row['fasting blood sugar'],
-        resting_ECG=row['resting ECG'],
-        maximum_heart_rate=row['maximum heart rate'],
-        exercise_induced_angina=row['exercise induced angina'],
-        ST_depression=row['ST depression'],
-        slope_of_the_peak_exercise=row['slope of the peak exercise'],
-        number_of_major_vessels=row['number of major vessels'],
-        thalassemia=row['thalassemia'])
+    llm_response = run_llm_request(row_dict, config.HEART_OLLAMA_MODEL)
+    response, valid_json = parse_response(llm_response)
+    if valid_json:
+        pred_output = {
+            "sample_uuid": row["sample_uuid"],
+            "prediction": response["prediction"]
+        }
+        exp_output = {
+            "sample_uuid": row["sample_uuid"],
+            "explanation": response
+        }
+        pred_outputs.append(pred_output)
+        exp_outputs.append(exp_output)
+    else:
+        exp_output = {
+            "sample_uuid": row["sample_uuid"],
+            "explanation": response
+        }
+        exp_outputs.append(exp_output)
 
-    llm_text = run_llm(prompt)
-    parsed_output = parse_output(llm_text)
 
-    outputs.append({
-        "sample_uuid": row[config.SAMPLE_UUID_COL],
-        "target": row["target"],
-        "prediction": parsed_output["llm_heart_disease"],
-        "cor_explanation": parsed_output["llm_explanation"],
-    })
 
-out_df = pd.DataFrame(outputs)
+pred_outputs_df = pd.DataFrame(pred_outputs)
+exp_outputs_df = pd.DataFrame(exp_outputs)
 
+y = df[[config.SAMPLE_UUID_COL, "target"]]
 X = df.drop(columns=["target"])
-y = df[config.SAMPLE_UUID_COL, "target"]
-y_preds = out_df[config.SAMPLE_UUID_COL, "prediction"]
-y_exp = out_df[config.SAMPLE_UUID_COL, "cor_explanation"]
 
 X.to_parquet('./cache/heart/llm/X.parquet')
 y.to_parquet('./cache/heart/llm/y.parquet')
-y_preds.to_frame().to_parquet('./cache/heart/llm/y_preds.parquet')
-y_exp.to_frame().to_parquet('./cache/heart/llm/y_exp.parquet')
+pred_outputs_df.to_parquet('./cache/heart/llm/y_preds.parquet')
+exp_outputs_df.to_parquet('./cache/heart/llm/y_exp.parquet')

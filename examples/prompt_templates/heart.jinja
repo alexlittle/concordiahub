@@ -1,37 +1,48 @@
-You are given some data points on a patient.
+Review the following patient's clinical data and assess their risk of heart disease.
 
-Task:
-1. Provide a boolean (0 or 1) response as to whether the patient has heart disease
-2. Explain your reasoning based only on the information provided in the patient data
+Patient data:
+{{ patient_data }}
 
-Important constraints:
-- Do not use external medical knowledge.
-- Do not invent symptoms or facts not stated.
-- Base your explanation only on specific observations from the patient data.
+Your task has three parts:
 
+PART 1 — Clinical reasoning
+Write 2–4 sentences of clinical reasoning explaining what this patient's data suggests about \
+their heart disease risk. Reason through the evidence as you would in a clinical review. \
+Do this before scoring any features — let your reasoning drive the scores, not the other way around.
 
-Patient Data:
+PART 2 — Prediction
+State your prediction (positive = heart disease present, negative = heart disease absent) and \
+your confidence as a probability between 0.0 and 1.0.
 
-Age: {{ age }}
-Gender: {{ sex }}
-Chest pain type: {{ chest_pain_type }}
-Resting blood pressure: {{ resting_blood_pressure }} mm Hg
-Serum cholesterol: {{ serum_cholesterol }} mg/dl
-Fasting blood sugar > 120 mg/dl: {{ fasting_blood_sugar }}
-Resting electrocardiographic results: {{ resting_ECG }}
-Maximum heart rate achieved: {{ maximum_heart_rate }}
-Exercise induced angina: {{ exercise_induced_angina }}
-ST depression induced by exercise relative to rest: {{ ST_depression }}
-Slope of the peak exercise ST segment: {{ slope_of_the_peak_exercise }}
-Number of major vessels colored by fluoroscopy: {{ number_of_major_vessels }}
-Thallium stress test result: {{ thalassemia }}
+PART 3 — Feature contributions
+For each feature listed above, provide:
+  - A contribution score from -2 to +2:
+      +2 = strongly pushed me toward a positive (heart disease) prediction
+      +1 = moderately pushed toward positive
+       0 = did not meaningfully influence my reasoning
+      -1 = moderately pushed toward negative (no heart disease)
+      -2 = strongly pushed toward negative
+  - A brief one-sentence explanation of why this feature influenced your reasoning as it did.
+    If score is 0, explain why the feature was not informative for this patient.
 
-Output strictly as valid JSON, with the heart_disease boolean 0 or 1 and the explanation in 3 or 4 sentences.
-Do not include any additional text.
-
-The JSON schema must be:
-
+Return your response as a single valid JSON object with exactly this structure:
 {
-  "heart_disease": 0 or 1,
-  "explanation": string
+  "reasoning": "<your 2-4 sentence clinical reasoning>",
+  "prediction": "positive" or "negative",
+  "confidence": <float 0.0–1.0>,
+  "feature_contributions": {
+    "age":                      {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "sex":                      {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "chest_pain_type":          {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "resting_blood_pressure":   {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "serum_cholesterol":        {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "fasting_blood_sugar":      {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "resting_ECG":              {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "maximum_heart_rate":       {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "exercise_induced_angina":  {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "ST_depression":            {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "slope_of_peak_exercise":   {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "number_of_major_vessels":  {"score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    "thalassemia":              {"score": <int -2 to 2>, "reasoning": "<one sentence>"}
+  }
 }
