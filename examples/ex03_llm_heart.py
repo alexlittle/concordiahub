@@ -53,6 +53,7 @@ def run_llm_request(patient_data: dict, model: str):
     response = ollama.chat(
         model=config.HEART_OLLAMA_MODEL,
         stream=False,
+        format="json",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": build_prompt(patient_data)}
@@ -90,15 +91,15 @@ for idx, row in df.iterrows():
     row_dict.pop("target")
 
     llm_response = run_llm_request(row_dict, config.HEART_OLLAMA_MODEL)
-    response, valid_json = parse_response(llm_response)
+    resp, valid_json = parse_response(llm_response)
     if valid_json:
         pred_output = {
             "sample_uuid": row["sample_uuid"],
-            "prediction": response["prediction"]
+            "prediction": resp["prediction"]
         }
         exp_output = {
             "sample_uuid": row["sample_uuid"],
-            "explanation": json.dumps(response, default=str)
+            "explanation": json.dumps(resp, default=str)
         }
         pred_outputs.append(pred_output)
         exp_outputs.append(exp_output)
@@ -107,7 +108,7 @@ for idx, row in df.iterrows():
     else:
         exp_output = {
             "sample_uuid": row["sample_uuid"],
-            "explanation": response
+            "explanation": resp
         }
         exp_outputs.append(exp_output)
 
