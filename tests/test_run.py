@@ -3,7 +3,6 @@ import pandas as pd
 from unittest.mock import MagicMock
 
 from xai_compare.run import Run
-from xai_compare.context import DataSchema
 
 MODULE_UNDER_TEST = "xai_compare.run"
 
