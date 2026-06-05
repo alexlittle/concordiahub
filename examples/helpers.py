@@ -70,7 +70,7 @@ ICD10_CHAPTERS = {
 def map_icd10_to_chapter(code):
     if pd.isna(code):
         return None
-    return ICD10_CHAPTERS.get(str(code).strip()[0].upper(), "Unknown")
+    return str(code).strip()[0].upper()
 
 def check_gpu():
     try:
@@ -91,79 +91,9 @@ def download_medsynth():
 def process_medsynth():
     df = download_medsynth()
     df = df.dropna(subset=["Dialogue"]).copy()
-    df["ICD_chapter"] = df["ICD10"].apply(map_icd10_to_chapter)
+    df["ICD10_chapter"] = df["ICD10"].apply(map_icd10_to_chapter)
     df = df.rename(columns={" Note": "Note"})
 
-    return df
-
-
-def extract_vitalsigns_tocols(df):
-    bp = df["Note"].str.extract(
-        r'(?i)Blood\s*Pressure\s*[:\-]?\s*(?P<bp_sys>\d{2,3})\s*[/\-]\s*(?P<bp_dia>\d{2,3})\s*(?:mm\s*Hg|mmHg)?'
-    )
-
-    hr = df["Note"].str.extract(
-        r'(?i)(?:Heart\s*Rate|HR)\s*[:\-]?\s*(?P<hr>\d{1,3})\s*(?:bpm|/min)?'
-    )
-
-    rr = df["Note"].str.extract(
-        r'(?i)(?:Respiratory\s*Rate|RR)\s*[:\-]?\s*(?P<rr>\d{1,3})\s*(?:breaths?/min|rpm|/min)?'
-    )
-
-    temp = df["Note"].str.extract(
-        r'(?i)Temperature\s*[:\-]?\s*(?P<temp>\d{2,3}(?:\.\d+)?)\s*°?\s*(?P<temp_unit>[FC]|Fahrenheit|Celsius)'
-    )
-
-    spo2 = df["Note"].str.extract(
-        r'(?i)(?:Oxygen\s*Saturation|SpO2)\s*[:\-]?\s*(?P<spo2>\d{2,3})\s*%(?:\s*(?:on|via)\s*(?P<o2_device>[^;\n]+))?'
-    )
-
-    vitals = pd.concat([bp, hr, rr, temp, spo2], axis=1)
-
-    for col in ["bp_sys", "bp_dia", "hr", "rr", "temp", "spo2"]:
-        if col in vitals:
-            vitals[col] = pd.to_numeric(vitals[col], errors="coerce")
-
-    def _norm_unit(u):
-        if u is None or (isinstance(u, float) and np.isnan(u)):
-            return np.nan
-        u = str(u).lower()
-        return "f" if u.startswith("f") else ("c" if u.startswith("c") else np.nan)
-
-    vitals["temp_unit"] = vitals["temp_unit"].map(_norm_unit)
-
-    vitals["temp_c"] = np.where(
-        vitals["temp_unit"] == "f",
-        (vitals["temp"] - 32) * 5 / 9,
-        vitals["temp"]
-    )
-    vitals["temp_f"] = np.where(
-        vitals["temp_unit"] == "c",
-        vitals["temp"] * 9 / 5 + 32,
-        vitals["temp"]
-    )
-
-    if "o2_device" in vitals:
-        vitals["o2_device"] = vitals["o2_device"].str.strip().str.rstrip(".")
-
-    df = df.join(vitals)
-
-    df = df.rename(columns={
-        "bp_sys": "BP_systolic",
-        "bp_dia": "BP_diastolic",
-        "hr": "Heart_Rate",
-        "rr": "Respiratory_Rate",
-        "spo2": "Oxygen_Saturation",
-        "o2_device": "Oxygen_Device"
-    })
-
-    return df
-
-
-def remove_doctors_dialogue(df: pd.DataFrame):
-    df['patient_only'] = df['Dialogue'].apply(
-        lambda x: " ".join(re.findall(r'\[patient\](.*?)(?=\[doctor\]|\Z)', x, flags=re.S))
-    )
     return df
 
 

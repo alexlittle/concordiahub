@@ -1,23 +1,62 @@
-You are given a transcript of a patient–doctor conversation.
-
-Task:
-1. Predict the most likely ICD-10 chapter for this conversation.
-2. Explain your reasoning based only on the information expressed in the conversation.
-
-Important constraints:
-- Do not use external medical knowledge.
-- Do not invent symptoms or facts not stated.
-- Base your explanation on specific phrases or observations in the dialogue.
+Review the following patient-doctor conversation and classify it into the most likely ICD-10 chapter.
 
 Conversation:
 {{ scenario }}
 
-Output strictly as valid JSON.
-Do not include any additional text.
+The valid ICD-10 chapters are:
+- A: Certain infectious and parasitic diseases
+- C: Neoplasms
+- E:   Endocrine, nutritional and metabolic diseases
+- F:   Mental, behavioral and neurodevelopmental disorders
+- G:   Diseases of the nervous system
+- H:   Diseases of the eye, ear and adnexa
+- I:   Diseases of the circulatory system
+- J:   Diseases of the respiratory system
+- K:   Diseases of the digestive system
+- L:   Diseases of the skin and subcutaneous tissue
+- M:   Diseases of the musculoskeletal system
+- N:   Diseases of the genitourinary system
+- O:   Pregnancy, childbirth and puerperium
+- P:   Perinatal conditions
+- Q:   Congenital malformations
+- R:   Symptoms, signs and abnormal clinical findings
+- S: Injury and poisoning
+- V: External causes of morbidity
+- Z:   Factors influencing health status
+- U:   Special purposes
 
-The JSON schema must be:
+Your prediction must be one of the chapter codes listed above (e.g. "A/B", "C/D", "I", "J" etc).
 
+Your task has three parts:
+
+PART 1 - Clinical reasoning
+Write 2-4 sentences of reasoning explaining which ICD-10 chapter this conversation points toward.
+Base your reasoning only on what is explicitly stated in the conversation.
+Do not invent symptoms or facts not mentioned.
+First identify the strongest evidence pointing toward a specific chapter, then consider whether
+any other chapter could fit, then reach a conclusion.
+
+PART 2 - Prediction
+State your predicted ICD-10 chapter code and your confidence as a probability between 0.0 and 1.0.
+
+PART 3 - Key factors
+For each key phrase or term from the conversation that influenced your classification, provide:
+  - A contribution score from -2 to +2:
+      +2 = strongly pushed toward the predicted chapter
+      +1 = moderately pushed toward the predicted chapter
+       0 = mentioned but did not influence classification
+      -1 = moderately pushed away from the predicted chapter
+      -2 = strongly pushed away from the predicted chapter
+  - The exact phrase or term from the conversation
+  - A one-sentence explanation of why it influenced your reasoning
+
+Return your response as a single valid JSON object with exactly this structure:
 {
-  "prediction": "<string>",
-  "explanation": "<string>"
+  "reasoning": "<your 2-4 sentence clinical reasoning>",
+  "prediction": "<chapter code e.g. I>",
+  "confidence": <float 0.0-1.0>,
+  "key_factors": [
+    {"phrase": "<exact phrase from conversation>", "score": <int -2 to 2>, "reasoning": "<one sentence>"},
+    {"phrase": "<exact phrase from conversation>", "score": <int -2 to 2>, "reasoning": "<one sentence>"}
+  ]
 }

@@ -1,13 +1,12 @@
 import pandas as pd
 import ollama
 import json
+import os
 
-from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from examples import config
-
-TEMPLATE_DIR = Path("./prompt_templates")
+from examples.helpers import safe_dirname
 
 # -----------------------------
 # Load input conversations
@@ -18,72 +17,93 @@ df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 # Prompt template
 # -----------------------------
 
-jinja_env = Environment(
-    loader=FileSystemLoader(TEMPLATE_DIR),
+JINJA_ENV = Environment(
+    loader=FileSystemLoader(config.LLM_TEMPLATE_DIR),
     undefined=StrictUndefined,
     trim_blocks=True,
     lstrip_blocks=True
 )
 
-prompt_template = jinja_env.get_template("medsynth.jinja")
 
+def build_prompt(patient_data:str):
+    user_prompt_template = JINJA_ENV.get_template("medsynth.jinja")
+    return user_prompt_template.render(patient_data=patient_data)
 
-# Helper: run Ollama
-def run_llm(prompt: str) -> str:
+# run Ollama
+def run_llm_request(patient_data: dict, model: str):
+    system_prompt_template = JINJA_ENV.get_template("mdesynth_system.jinja")
+    system_prompt = system_prompt_template.render()
+
     response = ollama.chat(
-        model=config.MEDSYNTH_OLLAMA_MODEL,
+        model=config.HEART_OLLAMA_MODEL,
+        stream=False,
         messages=[
-            {"role": "user", "content": prompt}
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": build_prompt(patient_data)}
         ],
+        logprobs=True,
         options={
             "temperature": 0.2,
-            "top_p": 0.9
-        }
-    )
-    return response["message"]["content"].strip()
+            "top_p": 0.9,
+            "seed": 42,
+        })
+    return response
 
 
-def parse_output(text: str) -> dict:
+def parse_response(response: str) -> dict:
+    content = response["message"]["content"].strip()
+
     try:
-        data = json.loads(text)
-        prediction = data.get("prediction", "")
-        explanation = data.get("explanation", "")
-
-    except json.JSONDecodeError:
-        # if invalid JSON
-        prediction = ""
-        explanation = ""
-
-    return {"prediction": prediction,
-        "explanation": explanation,}
+        return json.loads(content), True
+    except json.JSONDecodeError as e:
+        print("Model returned invalid JSON")
+        return content, False
 
 # Run LLM over scenarios
-outputs = []
+pred_outputs = []
+exp_outputs = []
 
-for idx, row in df.head(300).iterrows():
-    print(f"Running LLM on scenario {idx + 1}/{len(df)} ")
+for idx, row in df.head(1).iterrows():
+    print(f"Running LLM on conversation {idx + 1}/{len(df)} ")
+    row_dict = row.to_dict()
+    row_dict.pop("sample_uuid")
+    row_dict.pop("target")
 
-    prompt = prompt_template.render(scenario=row['scenario'])
-
-    llm_text = run_llm(prompt)
-    parsed = parse_output(llm_text)
-
-    outputs.append({
-        config.SAMPLE_UUID_COL: row[config.SAMPLE_UUID_COL],
-        "ICD_chapter": row["ICD_chapter"],
-        "prediction": parsed["prediction"],
-        "explanation": parsed["explanation"],
-    })
+    llm_response = run_llm_request(row_dict, config.HEART_OLLAMA_MODEL)
+    response, valid_json = parse_response(llm_response)
+    if valid_json:
+        pred_output = {
+            "sample_uuid": row["sample_uuid"],
+            "prediction": response["prediction"]
+        }
+        exp_output = {
+            "sample_uuid": row["sample_uuid"],
+            "explanation": json.dumps(response, default=str)
+        }
+        pred_outputs.append(pred_output)
+        exp_outputs.append(exp_output)
+        print(
+            f"Target: {row["target"]}, Prediction: {pred_output['prediction']}")
+        print(f"Explanation: {exp_output['explanation']}")
+    else:
+        exp_output = {
+            "sample_uuid": row["sample_uuid"],
+            "explanation": response
+        }
+        exp_outputs.append(exp_output)
 
 # Save outputs
-out_df = pd.DataFrame(outputs)
+pred_outputs_df = pd.DataFrame(pred_outputs)
+exp_outputs_df = pd.DataFrame(exp_outputs)
 
-X = df.drop(columns=["ICD_chapter"])
-y = df[config.SAMPLE_UUID_COL, "ICD_chapter"]
-y_preds = out_df[config.SAMPLE_UUID_COL, "prediction"]
-y_exp = out_df[config.SAMPLE_UUID_COL, "explanation"]
+y = df[[config.SAMPLE_UUID_COL, "target"]]
+X = df.drop(columns=["target"])
 
-X.to_parquet('./cache/medsynth/llm/X.parquet')
-y.to_parquet('./cache/medsynth/llm/y.parquet')
-y_preds.to_frame().to_parquet('./cache/medsynth/llm/y_preds.parquet')
-y_exp.to_frame().to_parquet('./cache/medsynth/llm/y_exp.parquet')
+
+dir_name = f"llm_{safe_dirname(config.HEART_OLLAMA_MODEL)}"
+os.makedirs(f"./cache/medsynth/{dir_name}/", exist_ok=True)
+
+X.to_parquet(f"./cache/medsynth/{dir_name}/X.parquet")
+y.to_parquet(f"./cache/medsynth/{dir_name}/y.parquet")
+pred_outputs_df.to_parquet(f"./cache/medsynth/{dir_name}/y_preds.parquet")
+exp_outputs_df.to_parquet(f"./cache/medsynth/{dir_name}/y_exp.parquet")

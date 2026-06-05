@@ -1,6 +1,5 @@
 import pandas as pd
 import joblib
-import xai_compare as xai
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
@@ -9,13 +8,15 @@ from xgboost import XGBClassifier
 
 from helpers import check_gpu
 from examples import config
+
+
 device = check_gpu()
 print(f"System check: {device} detected.")
 
 # data to extract from the input file
 df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 
-y = df.set_index(config.SAMPLE_UUID_COL)['ICD_chapter'].astype('category').cat.codes
+y = df.set_index(config.SAMPLE_UUID_COL)['target'].astype('category').cat.codes
 
 # vectorize texts
 scenario_tfidf = TfidfVectorizer(
@@ -53,7 +54,7 @@ model.fit(X_train, y_train)
 # keep raw array for sklearn metrics, wrap as DataFrame for framework
 y_pred_array = model.predict(X_test)
 
-category_map = dict(enumerate(df['ICD_chapter'].astype('category').cat.categories))
+category_map = dict(enumerate(df['target'].astype('category').cat.categories))
 y_pred = pd.DataFrame({'y_pred': y_pred_array}, index=X_test.index).replace(category_map)
 y_train = y_train.to_frame(name='y_train').replace(category_map)
 y_test = y_test.to_frame(name='y_test').replace(category_map)
