@@ -60,7 +60,7 @@ def run_llm_request(patient_data: dict, model: str):
         ],
         logprobs=True,
         options={
-            "num_ctx": 4096,
+            "num_ctx": 8192,
             "temperature": 0.2,
             "top_p": 0.9,
             "seed": 42,
