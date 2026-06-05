@@ -1,17 +1,34 @@
-Review the following patient's clinical data and assess their risk of heart disease.
+Review the following patient's clinical data and determine whether heart disease
+is present or absent.
+Approximately half of patients in this dataset have heart disease and half do
+not.
+Do not assume a positive finding without clear evidence.
 
 Patient data:
 {{ patient_data }}
 
+Reference ranges for context:
+- Resting blood pressure: normal <120/80, elevated 120-139, high ≥140
+- Serum cholesterol: desirable <200, borderline 200-239, high ≥240
+- Maximum heart rate: expected max ≈ 220 - age (low achieved HR is concerning)
+- ST depression: 0 is normal, >1mm is significant
+- Fasting blood sugar >120 mg/dl = 1 (positive), otherwise 0
+
 Your task has three parts:
 
 PART 1 — Clinical reasoning
-Write 2–4 sentences of clinical reasoning explaining what this patient's data suggests about \
-their heart disease risk. Reason through the evidence as you would in a clinical review. \
-Do this before scoring any features — let your reasoning drive the scores, not the other way around.
+Write 2–4 sentences of clinical reasoning explaining what this patient's data
+suggests about their heart disease risk. Reason through the evidence as you
+would in a clinical review.
+Do this before scoring any features, let your reasoning drive the scores, not
+the other way around.
+
+Before stating your prediction, explicitly consider: what is the strongest
+evidence AGAINST heart disease in this patient? If protective factors outweigh
+risk factors, predict 0.
 
 PART 2 — Prediction
-State your prediction (positive = heart disease present, negative = heart disease absent) and \
+State your prediction (1 = heart disease present, 0 = heart disease absent) and
 your confidence as a probability between 0.0 and 1.0.
 
 PART 3 — Feature contributions
@@ -22,13 +39,14 @@ For each feature listed above, provide:
        0 = did not meaningfully influence my reasoning
       -1 = moderately pushed toward negative (no heart disease)
       -2 = strongly pushed toward negative
-  - A brief one-sentence explanation of why this feature influenced your reasoning as it did.
-    If score is 0, explain why the feature was not informative for this patient.
+  - A brief one-sentence explanation of why this feature influenced your
+    reasoning as it did.
+  - If score is 0, explain why the feature was not informative for this patient.
 
 Return your response as a single valid JSON object with exactly this structure:
 {
   "reasoning": "<your 2-4 sentence clinical reasoning>",
-  "prediction": "positive" or "negative",
+  "prediction": 0 or 1,
   "confidence": <float 0.0–1.0>,
   "feature_contributions": {
     "age":                      {"score": <int -2 to 2>, "reasoning": "<one sentence>"},

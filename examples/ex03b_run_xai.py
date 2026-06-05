@@ -5,10 +5,10 @@ import xai_compare as xai
 from examples import config
 
 
-X = pd.read_parquet('./cache/heart/llm/X.parquet')
-y = pd.read_parquet('./cache/heart/llm/y.parquet')
-y_preds = pd.read_parquet('./cache/heart/llm/y_preds.parquet')
-y_exp = pd.read_parquet('./cache/heart/llm/y_exp.parquet')
+X = pd.read_parquet('cache/heart/llm_llama3.1_8b/X.parquet')
+y = pd.read_parquet('cache/heart/llm_llama3.1_8b/y.parquet')
+y_preds = pd.read_parquet('cache/heart/llm_llama3.1_8b/y_preds.parquet')
+y_exp = pd.read_parquet('cache/heart/llm_llama3.1_8b/y_exp.parquet')
 
 
 data_schema = xai.DataSchema(

@@ -11,6 +11,9 @@ HEART_INPUT_FILE = "./data/cleveland-heart-data.csv"
 #HEART_OLLAMA_MODEL = "tinyllama:latest"
 HEART_OLLAMA_MODEL = "llama3.1:8b"
 
+# qwen2.5:32b-instruct-q4_K_M
+# gemma3:27b
+
 
 # Config for Medsynth
 MEDSYNTH_FULL_FILE = "./data/medsynth_data_full.csv"

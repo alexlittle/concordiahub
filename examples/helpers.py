@@ -79,6 +79,9 @@ def check_gpu():
     except Exception:
         return "cpu"
 
+def safe_dirname(name: str) -> str:
+    return re.sub(r'[<>:"/\\|?*]', '_', name)
+
 def download_medsynth():
     url = "https://huggingface.co/datasets/Ahmad0067/MedSynth/resolve/main/MedSynth_huggingface_final.csv"
     download_file_if_needed(url, './data/MedSynth_huggingface_final.csv')

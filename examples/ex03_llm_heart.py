@@ -5,7 +5,7 @@ import os
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from examples import config
-
+from examples.helpers import safe_dirname
 
 #----------------------------
 # Set up
@@ -101,6 +101,8 @@ for idx, row in df.iterrows():
         }
         pred_outputs.append(pred_output)
         exp_outputs.append(exp_output)
+        print(f"Target: {row["target"]}, Prediction: {pred_output['prediction']}")
+        print(f"Explanation: {exp_output['explanation']}")
     else:
         exp_output = {
             "sample_uuid": row["sample_uuid"],
@@ -116,8 +118,11 @@ exp_outputs_df = pd.DataFrame(exp_outputs)
 y = df[[config.SAMPLE_UUID_COL, "target"]]
 X = df.drop(columns=["target"])
 
-os.makedirs("./cache/heart/llm/", exist_ok=True)
-X.to_parquet('./cache/heart/llm/X.parquet')
-y.to_parquet('./cache/heart/llm/y.parquet')
-pred_outputs_df.to_parquet('./cache/heart/llm/y_preds.parquet')
-exp_outputs_df.to_parquet('./cache/heart/llm/y_exp.parquet')
+
+dir_name = f"llm_{safe_dirname(config.HEART_OLLAMA_MODEL)}"
+os.makedirs(f"./cache/heart/{dir_name}/", exist_ok=True)
+
+X.to_parquet(f"./cache/heart/{dir_name}/X.parquet")
+y.to_parquet(f"./cache/heart/{dir_name}/y.parquet")
+pred_outputs_df.to_parquet(f"./cache/heart/{dir_name}/y_preds.parquet")
+exp_outputs_df.to_parquet(f"./cache/heart/{dir_name}/y_exp.parquet")
