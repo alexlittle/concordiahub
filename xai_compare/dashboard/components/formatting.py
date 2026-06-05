@@ -23,17 +23,17 @@ def format_model_name(run: Run) -> str:
     Returns:
         String: formatted model name
     """
-    parts = []
-
-    if run.get("model_id" ):
+    if run.get("model_id"):
+        parts = []
         parts.append(run.get("model_id"))
+        if run.get("model_subtype"):
+            parts.append(f"({run.get('model_subtype')})")
+        return " ".join(parts)
+    else:
+        return run.get("model_type")
 
-    if run.get("model_type"):
-        parts.append(run.get("model_type"))
 
-    if run.get("model_subtype"):
-        parts.append(f"({run.get('model_subtype')})")
 
-    return " - ".join(parts)
+
 
 

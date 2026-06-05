@@ -47,8 +47,8 @@ print(coef_df)
 
 # save to files for loading to XAI later
 X.to_parquet('./cache/heart/baseline/X.parquet')
-y.to_frame().to_parquet('./cache/heart/baseline/y.parquet')
-y_pred.to_parquet('./cache/heart/baseline/y_pred.parquet')
+y.to_frame().reset_index().to_parquet('./cache/heart/baseline/y.parquet')
+y_pred.reset_index().to_parquet('./cache/heart/baseline/y_pred.parquet')
 joblib.dump(model, './cache/heart/baseline/model.joblib')
 
 
