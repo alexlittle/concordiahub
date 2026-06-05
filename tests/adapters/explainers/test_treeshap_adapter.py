@@ -18,7 +18,7 @@ def sample_uuids():
 
 @pytest.fixture
 def data_schema():
-    return DataSchema("sample_uuid", "target")
+    return DataSchema("sample_uuid", "target", "prediction")
 
 @pytest.fixture
 def x_test(sample_uuids):

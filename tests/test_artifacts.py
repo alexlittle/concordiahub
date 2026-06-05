@@ -16,7 +16,7 @@ def mock_store():
 
 @pytest.fixture
 def ctx_with_run_name():
-    data_schema = DataSchema("sample_uuid", "target")
+    data_schema = DataSchema("sample_uuid", "target", "prediction")
     run_data = RunData(
                 data_schema,
                 x_train=pd.DataFrame({"a": [1, 2]}),
@@ -34,7 +34,7 @@ def ctx_with_run_name():
 
 @pytest.fixture
 def ctx_without_run_name():
-    data_schema = DataSchema("sample_uuid", "target")
+    data_schema = DataSchema("sample_uuid", "target", "prediction")
     run_data = RunData(data_schema)
     ctx = RunContext("xgboost", [], "test_dataset", run_data)
     ctx.run_name = None

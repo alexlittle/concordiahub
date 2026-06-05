@@ -64,7 +64,7 @@ try:
         run_a=run_a,
         run_b=run_b,
         axis_range=axis_range)
-    fig = comparison_class().render_comparison(ctx)
+    fig = comparison_class().render_comparison(ctx, "Alignment Scale")
     st.plotly_chart(fig, key="comparison")
 except InvalidConfigurationError:
     st.warning(f"No comparison available for {method_a} vs {method_b}")

@@ -22,7 +22,7 @@ def test_runner_empty_context() -> None:
 
 # Test invalid model type
 def test_runner_invalid_model() -> None:
-    data_schema = DataSchema("a","b")
+    data_schema = DataSchema("a","b","c")
     run_data = RunData(data_schema)
     ctx = RunContext("unknown", [], "test_dataset", run_data)
     with patch("xai_compare.runner.ArtifactStore") as mock_store:
