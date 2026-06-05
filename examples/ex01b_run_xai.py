@@ -12,7 +12,8 @@ model = joblib.load('./cache/heart/baseline/model.joblib')
 
 data_schema = xai.DataSchema(
     sample_id_column=config.SAMPLE_UUID_COL,
-    target_column="target")
+    target_column="target",
+    prediction_column="y_pred")
 
 run_data = xai.RunData(
     data_schema=data_schema,

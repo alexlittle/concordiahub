@@ -37,9 +37,12 @@ class Run():
             y_true = self.store.load_dataframe("y_test")
         except FileNotFoundError:
             y_true = self.store.load_dataframe("y")
-
         y_pred = self.store.load_dataframe("y_pred")
-        return y_true, y_pred
+
+        merged = y_true.merge(y_pred, on=self.get(constants.DATA_SCHEMA_ID_COLUMN), how='inner')
+
+        return (merged[self.get(constants.DATA_SCHEMA_TARGET_COLUMN)],
+                merged[self.get(constants.DATA_SCHEMA_PREDICTION_COLUMN)])
 
     def accuracy(self):
         y_true, y_pred = self.load_targets()
