@@ -18,7 +18,7 @@ def generate_comparison_rows_html(df, run_a, run_b):
         sample_id = row[run_a.get(constants.DATA_SCHEMA_ID_COLUMN)]
         rows_html += f"""
         <tr>
-            <td><a href='/detail?runs={run_a.get("run_id")},{run_b.get("run_id")}&sample_id={sample_id}' target='_self'>{sample_id}</a></td>
+            <td><a href='/detail?runs={run_a.get("run_uuid")},{run_b.get("run_uuid")}&sample_id={sample_id}' target='_self'>{sample_id}</a></td>
             <td>{row['Comparison']}</td>
             <td class="report-table-align">{row['True Value']}</td>
             <td class="report-table-align">{row[f"{format_model_name(run_a)} prediction"]}</td>
