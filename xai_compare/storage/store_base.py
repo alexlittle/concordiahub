@@ -17,4 +17,7 @@ class DataStore(ABC):
     def save_model(self, filename, model): pass
 
     @abstractmethod
+    def save_explanation(self, filename, data, type): pass
+
+    @abstractmethod
     def load_dataframe(self, filename) -> pd.DataFrame: pass

@@ -1,5 +1,6 @@
 
 import pandas as pd
+from typing import Any
 
 from xai_compare.context import RunData
 from xai_compare.exceptions import MissingDataError
@@ -25,7 +26,7 @@ class CoefficientsAdapter(XAIMethodAdapter):
             raise MissingDataError(f"Sample '{sample_id}' not found in explanations for {cls.key}")
         return row.iloc[0]
 
-    def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
+    def explain_local_df(self, data: RunData, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
         Args:
             model: Trained model object
@@ -42,3 +43,6 @@ class CoefficientsAdapter(XAIMethodAdapter):
         coef = model.coef_[0]
         local_explanations = data.x * coef
         return local_explanations
+
+    def explain_local_json(self, data: RunData) -> dict[str, Any]:
+        raise NotImplementedError

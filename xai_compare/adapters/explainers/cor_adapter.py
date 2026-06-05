@@ -26,10 +26,9 @@ class CoRAdapter(XAIMethodAdapter):
     def explain_local_df(self, data: RunData, model=None) -> pd.DataFrame:
         raise NotImplementedError
 
-    def explain_local_json(self, data: RunData, model=None) -> dict[str, Any]:
+    def explain_local_json(self, data: RunData) -> dict[str, Any]:
         """Processes the CoR local explanations
         Args:
-            model:  Trained model object
             data: RunData object
 
         Returns:

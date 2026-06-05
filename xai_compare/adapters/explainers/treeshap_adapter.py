@@ -1,5 +1,6 @@
 import shap
 import pandas as pd
+from typing import Any
 
 from xai_compare.exceptions import MissingDataError
 from xai_compare.context import RunData
@@ -25,7 +26,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         return row.iloc[0]
 
 
-    def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
+    def explain_local_df(self, data: RunData, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
         Args:
             model: Trained model object
@@ -65,3 +66,6 @@ class TreeSHAPAdapter(XAIMethodAdapter):
 
             keys = data.data_schema.class_names if data.data_schema.class_names is not None else range(n_classes)
             return pd.concat(dfs, keys=keys, names=['class', data.x_test.index.name])
+
+    def explain_local_json(self, data: RunData) -> dict[str, Any]:
+        raise NotImplementedError

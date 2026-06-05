@@ -23,10 +23,15 @@ class FilesystemStore(DataStore):
         path = os.path.join(self.dirname, f"{name}.parquet")
         df.to_parquet(path)
 
-    def save_explanation(self, name, df):
-        path = os.path.join(self.dirname, f"{name}.parquet")
-        df.columns = df.columns.astype(str)
-        df.reset_index().to_parquet(path)
+    def save_explanation(self, name, data, type="df"):
+        if type == "df":
+            path = os.path.join(self.dirname, f"{name}.parquet")
+            data.columns = data.columns.astype(str)
+            data.reset_index().to_parquet(path)
+        else:
+            with open(os.path.join(self.dirname, f"{name}.json"), "w") as f:
+                json.dump(data, f, indent=4)
+
 
     def save_model(self, name, model):
         joblib.dump(model, os.path.join(self.dirname, f"{name}.joblib"))

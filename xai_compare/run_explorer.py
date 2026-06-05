@@ -1,9 +1,9 @@
 import os
 import json
-import streamlit as st
 
 from collections import defaultdict
 from pathlib import Path
+from itertools import combinations
 
 from xai_compare import config
 from xai_compare.run import Run
@@ -47,11 +47,11 @@ class RunExplorer():
         return dict(sorted(models.items()))
 
     def get_comparable_runs(self, n: int = 3) -> list[list[dict]]:
-        """Returns groups of runs that share a dataset but have different model types
+        """Returns pairs of runs that share a dataset but have different model types
         Args:
             n: number of comparison groups to return
         Returns:
-            list of groups, each group is a list of metadata dicts with same dataset, different models
+            list of groups, each group is a pair of metadata dicts with same dataset, different models
         """
         datasets = defaultdict(dict)
         for run_md in self._load_all_metadata():
@@ -61,14 +61,13 @@ class RunExplorer():
             if model not in datasets[dataset]:
                 datasets[dataset][model] = run
 
-        # only return datasets that have more than one model type
-        comparable = [
-            list(models.values())
-            for models in datasets.values()
-            if len(models) > 1
-        ]
+        pairs = []
+        for models in datasets.values():
+            if len(models) > 1:
+                for pair in combinations(models.values(), 2):
+                    pairs.append(list(pair))
 
-        return sorted(comparable, key=lambda g: max(r.datetime for r in g), reverse=True)[:n]
+        return sorted(pairs, key=lambda g: max(r.datetime for r in g), reverse=True)[:n]
 
     def get_run_by_uuid(self, uuid: str) -> Run | None:
         """Gets a Run by its UUID

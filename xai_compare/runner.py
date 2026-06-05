@@ -44,8 +44,12 @@ def run(ctx: RunContext):
             artifact_store.write_data("feature_name_embeddings", encoded_features)
 
         # Run the local explanations
-        results = xai_adapter.explain_local(ctx.data, model_adapter.prepare())
-        artifact_store.write_explanation(f"explanations_{xai_method}", results)
+        if xai_adapter.explanation_file_type == "json":
+            results = xai_adapter.explain_local_json(ctx.data)
+            artifact_store.write_explanation(f"explanations_{xai_method}", results, type="json")
+        else:
+            results = xai_adapter.explain_local_df(ctx.data, model_adapter.prepare())
+            artifact_store.write_explanation(f"explanations_{xai_method}", results, type="df")
 
     '''
     run_exp = RunExplorer(artifact_store)

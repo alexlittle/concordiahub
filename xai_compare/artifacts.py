@@ -62,8 +62,8 @@ class ArtifactStore:
             data = pd.DataFrame(data)
         self.store.save_dataframe(name, data)
 
-    def write_explanation(self, name, data):
-        self.store.save_explanation(name, data)
+    def write_explanation(self, name, data, type="df"):
+        self.store.save_explanation(name, data, type)
 
     def load_dataframe(self, name:str) -> pd.DataFrame:
         return self.store.load_dataframe(name)
