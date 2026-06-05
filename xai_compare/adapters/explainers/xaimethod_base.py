@@ -1,8 +1,10 @@
 import pandas as pd
 from abc import ABC, abstractmethod
+from typing import Any
 
 from xai_compare.context import RunData
 from xai_compare.services.preprocess import normalise_values
+
 
 class XAIMethodAdapter(ABC):
     """
@@ -14,6 +16,9 @@ class XAIMethodAdapter(ABC):
 
     # default to true for most explanation adapters
     requires_encoded_features: bool = True
+
+    # type of explanation storage - df or json
+    explanation_file_type: str = "df"
 
     @classmethod
     def load_explanation(cls, store, sample_id: str):
@@ -27,7 +32,7 @@ class XAIMethodAdapter(ABC):
         return pd.to_numeric(features, errors='coerce').abs().max()
 
     @abstractmethod
-    def explain_local(self, data: RunData, model=None) -> pd.DataFrame:
+    def explain_local(self, data: RunData, type="df", model=None) -> pd.DataFrame | dict[str, Any]:
         """Computes the local explanation for the model
         Args:
             data: RunData object
