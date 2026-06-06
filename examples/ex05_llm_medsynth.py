@@ -69,7 +69,7 @@ def parse_response(response: str) -> dict:
 pred_outputs = []
 exp_outputs = []
 
-for idx, row in df.head(1).iterrows():
+for idx, row in df.iterrows():
     print(f"Running LLM on conversation {idx + 1}/{len(df)} ")
 
     llm_response = run_llm_request(row["scenario"])
