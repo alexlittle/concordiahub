@@ -29,22 +29,22 @@ JINJA_ENV = Environment(
     lstrip_blocks=True
 )
 
-def build_prompt(patient_data:str):
+def build_prompt(scenario):
     user_prompt_template = JINJA_ENV.get_template("medsynth.jinja")
-    return user_prompt_template.render(patient_data=patient_data)
+    return user_prompt_template.render(scenario=scenario)
 
 # run Ollama
-def run_llm_request(patient_data: dict, model: str):
+def run_llm_request(scenario):
     system_prompt_template = JINJA_ENV.get_template("medsynth_system.jinja")
     system_prompt = system_prompt_template.render()
 
     response = ollama.chat(
-        model=config.HEART_OLLAMA_MODEL,
+        model=config.MEDSYNTH_OLLAMA_MODEL,
         stream=False,
         format="json",
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": build_prompt(patient_data)}
+            {"role": "user", "content": build_prompt(scenario)}
         ],
         logprobs=True,
         options={
@@ -71,11 +71,8 @@ exp_outputs = []
 
 for idx, row in df.head(1).iterrows():
     print(f"Running LLM on conversation {idx + 1}/{len(df)} ")
-    row_dict = row.to_dict()
-    row_dict.pop("sample_uuid")
-    row_dict.pop("target")
 
-    llm_response = run_llm_request(row_dict, config.HEART_OLLAMA_MODEL)
+    llm_response = run_llm_request(row["scenario"])
     response, valid_json = parse_response(llm_response)
     if valid_json:
         pred_output = {
@@ -106,7 +103,7 @@ y = df[[config.SAMPLE_UUID_COL, "target"]]
 X = df.drop(columns=["target"])
 
 
-dir_name = f"llm_{safe_dirname(config.HEART_OLLAMA_MODEL)}"
+dir_name = f"llm_{safe_dirname(config.MEDSYNTH_OLLAMA_MODEL)}"
 os.makedirs(f"./cache/medsynth/{dir_name}/", exist_ok=True)
 
 X.to_parquet(f"./cache/medsynth/{dir_name}/X.parquet")
