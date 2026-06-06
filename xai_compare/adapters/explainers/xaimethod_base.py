@@ -2,7 +2,7 @@ import pandas as pd
 from abc import ABC, abstractmethod
 from typing import Any
 
-from xai_compare.context import RunData
+from xai_compare.context import RunContext, RunData
 from xai_compare.services.preprocess import normalise_values
 
 
@@ -47,14 +47,13 @@ class XAIMethodAdapter(ABC):
         pass
 
     @abstractmethod
-    def explain_local_json(self, data: RunData) -> dict[str, Any]:
+    def explain_local_json(self, ctx: RunContext) -> list[dict[str, Any]]:
         """Computes the local explanation for the model
         Args:
-            data: RunData object
-            model: Trained model object
+            ctx: RunContext object
 
         Returns:
-            pd.DataFrame: dataframe containing local explanations
+            list of dicts - json containing local explanations
 
         Raises:
             MissingDataError: if data.x_test is not provided

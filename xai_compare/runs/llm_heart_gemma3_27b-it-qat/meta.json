@@ -1,0 +1,19 @@
+{
+    "model_type": "llm",
+    "xai_methods": [
+        "cor"
+    ],
+    "dataset_id": "cleveland-heart-data",
+    "model_subtype": "gemma3:27b-it-qat",
+    "run_name": "llm_heart_gemma3_27b-it-qat",
+    "model_id": "LLM",
+    "datetime": "20260606-103643",
+    "run_uuid": "7c76c276-006a-438c-99ef-aedfc066de66",
+    "data_schema": {
+        "sample_id_column": "sample_uuid",
+        "target_column": "target",
+        "prediction_column": "prediction",
+        "feature_columns": null,
+        "class_names": null
+    }
+}

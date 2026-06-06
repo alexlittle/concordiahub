@@ -45,7 +45,7 @@ def run(ctx: RunContext):
 
         # Run the local explanations
         if xai_adapter.explanation_file_type == "json":
-            results = xai_adapter.explain_local_json(ctx.data)
+            results = xai_adapter.explain_local_json(ctx)
             artifact_store.write_explanation(f"explanations_{xai_method}", results, type="json")
         else:
             results = xai_adapter.explain_local_df(ctx.data, model_adapter.prepare())

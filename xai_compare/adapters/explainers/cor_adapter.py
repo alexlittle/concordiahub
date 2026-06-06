@@ -1,3 +1,4 @@
+import json
 
 import pandas as pd
 from typing import Any
@@ -7,7 +8,6 @@ from xai_compare.exceptions import MissingDataError
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xai_compare import strings, config
-
 
 @register_xai("cor")
 class CoRAdapter(XAIMethodAdapter):
@@ -26,18 +26,28 @@ class CoRAdapter(XAIMethodAdapter):
     def explain_local_df(self, data: RunData, model=None) -> pd.DataFrame:
         raise NotImplementedError
 
-    def explain_local_json(self, data: RunData) -> dict[str, Any]:
+    def explain_local_json(self, ctx) -> list[dict[str, Any]]:
         """Processes the CoR local explanations
         Args:
             data: RunData object
 
         Returns:
-            pd.DataFrame: dataframe containing local explanations
+            list[dict[str, Any]]: list of dicts containing local explanations
 
         Raises:
             MissingDataError: if data.x is not provided
         """
-        if data.y_exp is None:
+        if ctx.data.y_exp is None:
             raise MissingDataError("CoRAdapter requires y_exp in RunData")
 
+        output = []
         # process the explanation
+        for idx, row in ctx.data.y_exp.iterrows():
+            obj = {
+                ctx.data.data_schema.sample_id_column: row[ctx.data.data_schema.sample_id_column],
+                "explanation": json.loads(row["explanation"]),
+            }
+            output.append(obj)
+
+        return output
+

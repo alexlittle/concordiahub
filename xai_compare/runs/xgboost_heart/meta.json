@@ -1,0 +1,19 @@
+{
+    "model_type": "xgboost",
+    "xai_methods": [
+        "shap_tree"
+    ],
+    "dataset_id": "cleveland-heart-data",
+    "model_subtype": null,
+    "run_name": "xgboost_heart",
+    "model_id": "XGBoost v1",
+    "datetime": "20260605-163843",
+    "run_uuid": "cba794f7-93c0-4eab-b45e-89331b7d500c",
+    "data_schema": {
+        "sample_id_column": "sample_uuid",
+        "target_column": "target",
+        "prediction_column": "y_pred",
+        "feature_columns": null,
+        "class_names": null
+    }
+}

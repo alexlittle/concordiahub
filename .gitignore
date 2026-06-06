@@ -209,10 +209,8 @@ __marimo__/
 .idea/
 *.sqlite3
 /expai_lens_logs/
-/runs/*
 
 /examples/data/*.csv
 /examples/models/*.joblib
-/xai_compare/runs/
 /scratch.py
 /scratch/

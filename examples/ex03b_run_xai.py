@@ -5,8 +5,8 @@ import xai_compare as xai
 from examples import config
 from examples.helpers import safe_dirname
 
-
-dir_name = f"llm_{safe_dirname(config.HEART_OLLAMA_MODEL)}"
+current_model = "gemma3:27b-it-qat"
+dir_name = f"llm_{safe_dirname(current_model)}"
 X = pd.read_parquet(f"./cache/heart/{dir_name}/X.parquet")
 y = pd.read_parquet(f"./cache/heart/{dir_name}/y.parquet")
 y_preds = pd.read_parquet(f"./cache/heart/{dir_name}/y_preds.parquet")
@@ -30,8 +30,8 @@ ctx = xai.RunContext(
     ["cor"],
     "cleveland-heart-data",
     run_data,
-    model_subtype=config.HEART_OLLAMA_MODEL,
-    run_name=f"llm_heart_{safe_dirname(config.HEART_OLLAMA_MODEL)}",
+    model_subtype=current_model,
+    run_name=f"llm_heart_{safe_dirname(current_model)}",
     model_id="LLM")
 
 xai.run(ctx)
