@@ -35,7 +35,7 @@ def build_prompt(patient_data:str):
 
 # run Ollama
 def run_llm_request(patient_data: dict, model: str):
-    system_prompt_template = JINJA_ENV.get_template("mdesynth_system.jinja")
+    system_prompt_template = JINJA_ENV.get_template("medsynth_system.jinja")
     system_prompt = system_prompt_template.render()
 
     response = ollama.chat(
