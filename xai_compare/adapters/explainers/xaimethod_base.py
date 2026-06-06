@@ -32,17 +32,17 @@ class XAIMethodAdapter(ABC):
         return pd.to_numeric(features, errors='coerce').abs().max()
 
     @abstractmethod
-    def explain_local_df(self, data: RunData, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
         """Computes the local explanation for the model
         Args:
-            data: RunData object
+            ctx: RunContext object
             model: Trained model object
 
         Returns:
             pd.DataFrame: dataframe containing local explanations
 
         Raises:
-            MissingDataError: if data.x_test is not provided
+            MissingDataError: if required data is not provided
         """
         pass
 
@@ -56,7 +56,7 @@ class XAIMethodAdapter(ABC):
             list of dicts - json containing local explanations
 
         Raises:
-            MissingDataError: if data.x_test is not provided
+            MissingDataError: if required data is not provided
         """
         pass
 

@@ -3,7 +3,7 @@ import pandas as pd
 from typing import Any
 
 from xai_compare.exceptions import MissingDataError
-from xai_compare.context import RunData
+from xai_compare.context import RunContext
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xai_compare import config, strings
@@ -16,11 +16,11 @@ class KernalSHAPAdapter(XAIMethodAdapter):
     default_visualisation = config.KERNEL_SHAP_DEFAULT_VIZ
     compatible_visualisations = config.KERNEL_SHAP_COMPATIBLE_VIZ
 
-    def explain_local_df(self, data: RunData, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
         """Computes the local explanation using KernelShap method
         Args:
+            ctx: RunContext object
             model: Trained model object
-            data: RunData object
 
         Returns:
             pd.DataFrame: dataframe containing local explanations
@@ -28,10 +28,10 @@ class KernalSHAPAdapter(XAIMethodAdapter):
         Raises:
             MissingDataError: if x_train or x_test is not provided
         """
-        if data.x_train is None or data.x_test is None:
+        if ctx.data.x_train is None or ctx.data.x_test is None:
             raise MissingDataError("KernalSHAPAdapter requires x_train and x_test in RunData")
-        explainer = shap.KernelExplainer(model.predict_proba, data.x_train)
-        return explainer.shap_values(data.x_test)
+        explainer = shap.KernelExplainer(model.predict_proba, ctx.data.x_train)
+        return explainer.shap_values(ctx.data.x_test)
 
-    def explain_local_json(self, data: RunData) -> dict[str, Any]:
+    def explain_local_json(self, data: RunContext) -> dict[str, Any]:
         raise NotImplementedError

@@ -8,6 +8,7 @@ from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xai_compare.run import Run
 from xai_compare import constants, strings, config
+from xai_compare.context import RunContext
 
 
 @register_xai("coefficients")
@@ -26,11 +27,11 @@ class CoefficientsAdapter(XAIMethodAdapter):
             raise MissingDataError(f"Sample '{sample_id}' not found in explanations for {cls.key}")
         return row.iloc[0]
 
-    def explain_local_df(self, data: RunData, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
         Args:
+            ctx: RunContext object
             model: Trained model object
-            data: RunData object
 
         Returns:
             pd.DataFrame: dataframe containing local explanations
@@ -38,11 +39,11 @@ class CoefficientsAdapter(XAIMethodAdapter):
         Raises:
             MissingDataError: if data.x is not provided
         """
-        if data.x is None:
+        if ctx.data.x is None:
             raise MissingDataError("CoefficientsAdapter requires x in RunData")
         coef = model.coef_[0]
-        local_explanations = data.x * coef
+        local_explanations = ctx.data.x * coef
         return local_explanations
 
-    def explain_local_json(self, data: RunData) -> dict[str, Any]:
+    def explain_local_json(self, ctx: RunContext) -> dict[str, Any]:
         raise NotImplementedError

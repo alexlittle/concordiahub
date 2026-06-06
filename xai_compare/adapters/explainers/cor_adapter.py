@@ -3,7 +3,7 @@ import json
 import pandas as pd
 from typing import Any
 
-from xai_compare.context import RunData
+from xai_compare.context import RunContext
 from xai_compare.exceptions import MissingDataError
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
@@ -23,13 +23,13 @@ class CoRAdapter(XAIMethodAdapter):
     # uses a json file for explanation storage
     explanation_file_type: str = "json"
 
-    def explain_local_df(self, data: RunData, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
         raise NotImplementedError
 
-    def explain_local_json(self, ctx) -> list[dict[str, Any]]:
+    def explain_local_json(self, ctx: RunContext) -> list[dict[str, Any]]:
         """Processes the CoR local explanations
         Args:
-            data: RunData object
+            ctx: RunContext object
 
         Returns:
             list[dict[str, Any]]: list of dicts containing local explanations

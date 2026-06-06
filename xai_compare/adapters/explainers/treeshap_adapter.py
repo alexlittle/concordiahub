@@ -3,7 +3,7 @@ import pandas as pd
 from typing import Any
 
 from xai_compare.exceptions import MissingDataError
-from xai_compare.context import RunData
+from xai_compare.context import RunContext
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xai_compare.run import Run
@@ -26,11 +26,11 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         return row.iloc[0]
 
 
-    def explain_local_df(self, data: RunData, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
         Args:
+            ctx: RunContext object
             model: Trained model object
-            data: RunData object
 
         Returns:
             pd.DataFrame: dataframe containing local explanations
@@ -38,14 +38,14 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         Raises:
             MissingDataError: if data.x_test is not provided
         """
-        if not hasattr(data, "x_test") or data.x_test is None:
+        if not hasattr(ctx.data, "x_test") or ctx.data.x_test is None:
             raise MissingDataError("CoefficientsAdapter requires x_test in RunData")
         explainer = shap.TreeExplainer(model)
-        shap_values = explainer.shap_values(data.x_test)
+        shap_values = explainer.shap_values(ctx.data.x_test)
 
         # (n_samples, 1, n_features)
         if shap_values.ndim == 2:
-            dfs = [pd.DataFrame(shap_values, index=data.x_test.index, columns=data.x_test.columns)]
+            dfs = [pd.DataFrame(shap_values, index=ctx.data.x_test.index, columns=ctx.data.x_test.columns)]
             dfs[0]['class'] = 0
             return dfs[0].set_index('class', append=True)
 
@@ -59,13 +59,13 @@ class TreeSHAPAdapter(XAIMethodAdapter):
                 # Slice the last axis [:, :, i] to get (n_samples, n_features)
                 df = pd.DataFrame(
                     shap_values[:, :, i],
-                    index=data.x_test.index,
-                    columns=data.x_test.columns
+                    index=ctx.data.x_test.index,
+                    columns=ctx.data.x_test.columns
                 )
                 dfs.append(df)
 
-            keys = data.data_schema.class_names if data.data_schema.class_names is not None else range(n_classes)
-            return pd.concat(dfs, keys=keys, names=['class', data.x_test.index.name])
+            keys = ctx.data.data_schema.class_names if ctx.data.data_schema.class_names is not None else range(n_classes)
+            return pd.concat(dfs, keys=keys, names=['class', ctx.data.x_test.index.name])
 
-    def explain_local_json(self, data: RunData) -> dict[str, Any]:
+    def explain_local_json(self, ctx: RunContext) -> dict[str, Any]:
         raise NotImplementedError
