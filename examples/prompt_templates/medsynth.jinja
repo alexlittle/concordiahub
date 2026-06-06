@@ -4,8 +4,8 @@ Conversation:
 {{ scenario }}
 
 The valid ICD-10 chapters are:
-- A: Certain infectious and parasitic diseases
-- C: Neoplasms
+- A:   Certain infectious and parasitic diseases
+- C:   Neoplasms
 - E:   Endocrine, nutritional and metabolic diseases
 - F:   Mental, behavioral and neurodevelopmental disorders
 - G:   Diseases of the nervous system
@@ -20,12 +20,12 @@ The valid ICD-10 chapters are:
 - P:   Perinatal conditions
 - Q:   Congenital malformations
 - R:   Symptoms, signs and abnormal clinical findings
-- S: Injury and poisoning
-- V: External causes of morbidity
+- S:   Injury and poisoning
+- V:   External causes of morbidity
 - Z:   Factors influencing health status
 - U:   Special purposes
 
-Your prediction must be one of the chapter codes listed above (e.g. "A/B", "C/D", "I", "J" etc).
+Your prediction must be one of the chapter codes listed above (e.g. "A", "C", "I", "J" etc).
 
 Your task has three parts:
 
@@ -40,15 +40,26 @@ PART 2 - Prediction
 State your predicted ICD-10 chapter code and your confidence as a probability between 0.0 and 1.0.
 
 PART 3 - Key factors
-For each key phrase or term from the conversation that influenced your classification, provide:
+For each key phrase or term from the conversation that influenced your classification.
+
+Ground every phrase in the original text. If you cannot find the exact wording
+in the conversation, do not include it as a key factor. Provide:
+
   - A contribution score from -2 to +2:
       +2 = strongly pushed toward the predicted chapter
       +1 = moderately pushed toward the predicted chapter
        0 = mentioned but did not influence classification
       -1 = moderately pushed away from the predicted chapter
       -2 = strongly pushed away from the predicted chapter
-  - The exact phrase or term from the conversation
+  - The exact phrase or term copied verbatim from the conversation text,
+    as a noun phrase of 1-4 words (e.g. "left knee pain", "osteoarthritis",
+    "shortness of breath"). Do not paraphrase, summarise, or invent phrasing
+    not present in the source text. Do not include verbs, full sentences,
+    or clause fragments.
   - A one-sentence explanation of why it influenced your reasoning
+
+Extract between 5 and 10 key factors. Prioritise specificity — prefer
+"left knee pain" over "pain", "type 2 diabetes" over "diabetes".
 
 Return your response as a single valid JSON object with exactly this structure:
 {
@@ -56,7 +67,15 @@ Return your response as a single valid JSON object with exactly this structure:
   "prediction": "<chapter code e.g. I>",
   "confidence": <float 0.0-1.0>,
   "key_factors": [
-    {"phrase": "<exact phrase from conversation>", "score": <int -2 to 2>, "reasoning": "<one sentence>"},
-    {"phrase": "<exact phrase from conversation>", "score": <int -2 to 2>, "reasoning": "<one sentence>"}
+    {
+      "phrase": "<exact noun phrase copied verbatim from the conversation, 1-4 words>",
+      "score": <int -2 to 2>,
+      "reasoning": "<one sentence>"
+    },
+    {
+      "phrase": "<exact noun phrase copied verbatim from the conversation, 1-4 words>",
+      "score": <int -2 to 2>,
+      "reasoning": "<one sentence>"
+    }
   ]
 }

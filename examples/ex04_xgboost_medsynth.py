@@ -1,11 +1,9 @@
 import pandas as pd
 import joblib
-
+import spacy
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
-
-
 from helpers import check_gpu
 from examples import config
 
@@ -13,20 +11,46 @@ from examples import config
 device = check_gpu()
 print(f"System check: {device} detected.")
 
+# load the spaCy model
+nlp = spacy.load("en_core_web_sm")
+
+def extract_spans(text: str) -> str:
+    """Extracts noun chunks from a sentence."""
+    doc = nlp(text)
+    spans = (
+        [chunk.text.lower() for chunk in doc.noun_chunks] +
+        [ent.text.lower() for ent in doc.ents]
+    )
+    # remove duplicates
+    seen = set()
+    unique_spans = []
+    for s in spans:
+        s = s.strip()
+        if s and s not in seen:
+            seen.add(s)
+            unique_spans.append(s)
+    return " | ".join(unique_spans)
+
+
 # data to extract from the input file
 df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 
 y = df.set_index(config.SAMPLE_UUID_COL)['target'].astype('category').cat.codes
 
-# vectorize texts
+df['scenario_spans'] = df['scenario'].apply(extract_spans)
+
+
+# vectorize texts based on the "noun chunks"
+# don't drop stop words as could break the phrase chunking and spaCy already
+# handles stop words so they won't be individual tokens
 scenario_tfidf = TfidfVectorizer(
+    token_pattern=r"[^|]+",
     max_features=3000,
     sublinear_tf=True,
     max_df=0.8,
-    stop_words='english'
 )
 
-X = scenario_tfidf.fit_transform(df['scenario'])
+X = scenario_tfidf.fit_transform(df['scenario_spans'])
 
 feature_names = scenario_tfidf.get_feature_names_out()
 
