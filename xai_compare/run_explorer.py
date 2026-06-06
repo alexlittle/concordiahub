@@ -46,7 +46,7 @@ class RunExplorer():
                     models[format_model_name(run_obj)] = run["run_uuid"]
         return dict(sorted(models.items()))
 
-    def get_comparable_runs(self, n: int = 3) -> list[list[dict]]:
+    def get_comparable_runs(self, n: int = 10) -> list[list[dict]]:
         """Returns pairs of runs that share a dataset but have different model types
         Args:
             n: number of comparison groups to return
@@ -57,6 +57,8 @@ class RunExplorer():
         for run_md in self._load_all_metadata():
             dataset = run_md["dataset_id"]
             model = run_md["model_type"]
+            if run_md["model_subtype"]:
+                model = f"{model}_{run_md['model_subtype']}"
             run = self.get_run_by_uuid(run_md["run_uuid"])
             if model not in datasets[dataset]:
                 datasets[dataset][model] = run

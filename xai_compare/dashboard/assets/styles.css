@@ -127,3 +127,11 @@ section[data-testid="stSidebar"] {
 .report-table a:hover {
     text-decoration: underline;
 }
+
+.tick {
+    color: #22c55e;
+}
+
+.cross {
+    color: #ef4444;
+}

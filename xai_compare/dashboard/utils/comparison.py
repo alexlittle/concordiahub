@@ -16,13 +16,30 @@ def generate_comparison_rows_html(df, run_a, run_b):
     rows_html = ""
     for _, row in df.iterrows():
         sample_id = row[run_a.get(constants.DATA_SCHEMA_ID_COLUMN)]
+
+        if row['True Value'] == row[f"{format_model_name(run_a)} prediction"]:
+            run_a_icon = "<span class='tick'>&#10004;</span>"
+        else:
+            run_a_icon = "<span class='cross'>&#10008;</span>"
+
+        if row['True Value'] == row[f"{format_model_name(run_b)} prediction"]:
+            run_b_icon = "<span class='tick'>&#10004;</span>"
+        else:
+            run_b_icon = "<span class='cross'>&#10008;</span>"
+
         rows_html += f"""
         <tr>
             <td><a href='/detail?runs={run_a.get("run_uuid")},{run_b.get("run_uuid")}&sample_id={sample_id}' target='_self'>{sample_id}</a></td>
             <td>{row['Comparison']}</td>
             <td class="report-table-align">{row['True Value']}</td>
-            <td class="report-table-align">{row[f"{format_model_name(run_a)} prediction"]}</td>
-            <td class="report-table-align">{row[f"{format_model_name(run_b)} prediction"]}</td>
+            <td class="report-table-align">
+                {row[f"{format_model_name(run_a)} prediction"]}
+                {run_a_icon} 
+            </td>
+            <td class="report-table-align">
+                {row[f"{format_model_name(run_b)} prediction"]}
+                {run_b_icon} 
+            </td>
         </tr>
         """
     return rows_html

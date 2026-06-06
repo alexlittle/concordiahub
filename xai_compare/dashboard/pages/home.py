@@ -8,7 +8,7 @@ from xai_compare import strings
 
 explorer = get_explorer()
 
-recent_runs = explorer.get_comparable_runs()
+recent_runs = explorer.get_comparable_runs(10)
 
 apply_layout(strings.APP_NAME)
 
