@@ -13,6 +13,11 @@ from examples.helpers import safe_dirname
 # -----------------------------
 df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 
+# only run on those that match the test samples from XGboost model
+xgboost_df = pd.read_parquet('./cache/medsynth/xgboost/y_test.parquet')
+
+df = df[df['sample_uuid'].isin(xgboost_df['sample_uuid'])]
+
 # -----------------------------
 # Prompt template
 # -----------------------------
@@ -23,7 +28,6 @@ JINJA_ENV = Environment(
     trim_blocks=True,
     lstrip_blocks=True
 )
-
 
 def build_prompt(patient_data:str):
     user_prompt_template = JINJA_ENV.get_template("medsynth.jinja")
