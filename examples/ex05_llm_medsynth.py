@@ -16,7 +16,7 @@ df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 # only run on those that match the test samples from XGboost model
 xgboost_df = pd.read_parquet('./cache/medsynth/xgboost/y_test.parquet')
 
-df = df[df['sample_uuid'].isin(xgboost_df['sample_uuid'])]
+df = df[df['sample_uuid'].isin(xgboost_df['sample_uuid'])].reset_index(drop=True)
 
 # -----------------------------
 # Prompt template
