@@ -60,10 +60,10 @@ y_train = y_train.to_frame(name='y_train').replace(category_map)
 y_test = y_test.to_frame(name='y_test').replace(category_map)
 
 # save to files for loading to XAI later
-X_train.to_parquet('./cache/medsynth/xgboost/X_train.parquet')
-X_test.to_parquet('./cache/medsynth/xgboost/X_test.parquet')
-y_train.to_parquet('./cache/medsynth/xgboost/y_train.parquet')
-y_test.to_parquet('./cache/medsynth/xgboost/y_test.parquet')
-y_pred.to_parquet('./cache/medsynth/xgboost/y_pred.parquet')
+X_train.reset_index().to_parquet('./cache/medsynth/xgboost/X_train.parquet')
+X_test.reset_index().to_parquet('./cache/medsynth/xgboost/X_test.parquet')
+y_train.reset_index().to_parquet('./cache/medsynth/xgboost/y_train.parquet')
+y_test.reset_index().to_parquet('./cache/medsynth/xgboost/y_test.parquet')
+y_pred.reset_index().to_parquet('./cache/medsynth/xgboost/y_pred.parquet')
 joblib.dump(model, './cache/medsynth/xgboost/model.joblib')
 

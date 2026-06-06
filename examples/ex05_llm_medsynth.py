@@ -41,12 +41,14 @@ def run_llm_request(patient_data: dict, model: str):
     response = ollama.chat(
         model=config.HEART_OLLAMA_MODEL,
         stream=False,
+        format="json",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": build_prompt(patient_data)}
         ],
         logprobs=True,
         options={
+            "num_ctx": 8192,
             "temperature": 0.2,
             "top_p": 0.9,
             "seed": 42,
