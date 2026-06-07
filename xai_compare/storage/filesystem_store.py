@@ -38,3 +38,7 @@ class FilesystemStore(DataStore):
 
     def load_dataframe(self, name:str) -> pd.DataFrame:
         return pd.read_parquet(os.path.join(self.dirname, f"{name}.parquet"))
+
+    def load_json(self, name:str) -> list:
+        with open(os.path.join(self.dirname, f"{name}.json"), 'r') as f:
+            return json.load(f)

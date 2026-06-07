@@ -1,9 +1,9 @@
 import plotly.graph_objects as go
+import pandas as pd
 
 from xai_compare.adapters.viz.viz_base import VizAdapter
 from xai_compare.registry.viz_registry import register_viz
 from xai_compare import strings, config
-from xai_compare.services.preprocess import normalise_values
 
 
 @register_viz("forceplot")
@@ -13,7 +13,8 @@ class ForcePlotVizAdapter(VizAdapter):
     compatible_explanations = config.FORCE_PLOT_COMPATIBLE_XAI
 
     def render_local(self, explanation, sample_id_col, axis_range=None):
-        features = normalise_values(explanation, sample_id_col)
+        features = explanation.drop(index=sample_id_col, errors='ignore')
+        features = pd.to_numeric(features, errors='coerce')
 
         colors = [config.PLOT_LEFT_COLOR if v < 0 else config.PLOT_RIGHT_COLOR for v in features.values]
 

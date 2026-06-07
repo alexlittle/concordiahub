@@ -18,8 +18,8 @@ EMBEDDING_ENCODER: Final[str] ="all-MiniLM-L6-v2"
 COEFFICIENTS_DEFAULT_VIZ = "forceplot"
 COEFFICIENTS_COMPATIBLE_VIZ = ["waterfall", "forceplot"]
 
-COR_DEFAULT_VIZ = None
-COR_COMPATIBLE_VIZ = []
+COR_DEFAULT_VIZ = "forceplot"
+COR_COMPATIBLE_VIZ = ["forceplot"]
 
 KERNEL_SHAP_DEFAULT_VIZ = None
 KERNEL_SHAP_COMPATIBLE_VIZ = []
@@ -29,7 +29,7 @@ TREE_SHAP_COMPATIBLE_VIZ = ["waterfall", "forceplot", "beeswarm"]
 
 
 FORCE_PLOT_COMPATIBLE_XAI = ["shap_tree", "coefficients"]
-WATERFALL_COMPATIBLE_XAI = ["shap_tree","coefficients"]
+WATERFALL_COMPATIBLE_XAI = ["shap_tree","coefficients","cor"]
 
 
 # Graph/Plot colour scheme

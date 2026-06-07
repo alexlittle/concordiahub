@@ -2,8 +2,7 @@ import pandas as pd
 from abc import ABC, abstractmethod
 from typing import Any
 
-from xai_compare.context import RunContext, RunData
-from xai_compare.services.preprocess import normalise_values
+from xai_compare.context import RunContext
 
 
 class XAIMethodAdapter(ABC):
@@ -21,14 +20,12 @@ class XAIMethodAdapter(ABC):
     explanation_file_type: str = "df"
 
     @classmethod
-    def load_explanation(cls, store, sample_id: str):
+    def load_explanation(cls, store, sample_id: str) -> pd.Series:
         raise NotImplementedError
 
     @classmethod
     def get_abs_max(cls, explanation: pd.Series, sample_id_column) -> float:
-        """ calculate absolute max value from explanation
-        required for ensuring charts use the same scales """
-        features = normalise_values(explanation, sample_id_column)
+        features = explanation.drop(index=sample_id_column, errors='ignore')
         return pd.to_numeric(features, errors='coerce').abs().max()
 
     @abstractmethod

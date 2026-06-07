@@ -13,20 +13,19 @@ def render_run_html(run: Run) -> str:
     <div class="run-cell">
         <table>
             <tr>
-                <td class="label">Model</td>
-                <td><code>{model}</code></td>
+                <td class="model" colspan=2><strong>{model}</strong></td>
             </tr>
             <tr>
                  <td class="label">XAI methods</td>
-                <td><code>{xai}</code></td>
+                <td>{xai}</td>
             </tr>
             <tr>
                  <td class="label">Run name</td>
-                <td><code>{run.get('run_name')}</code></td>
+                <td>{run.get('run_name')}</td>
             </tr>
             <tr>
                  <td class="label">Date/time</td>
-                <td><code>{format_datetime(run.datetime)}</code></td>
+                <td>{format_datetime(run.datetime)}</td>
             </tr>
         </table></div>
     """
@@ -34,6 +33,7 @@ def render_run_html(run: Run) -> str:
 
 def display_run_cell(col, run: Run):
     col.markdown(render_run_html(run), unsafe_allow_html=True)
+
 
 def display_comparable_runs(groups: list[list[Run]]):
     if not groups:
@@ -57,6 +57,4 @@ def display_comparable_runs(groups: list[list[Run]]):
         cols[4].markdown(
             f'<a href="/overview?runs={runs_value}" target="_self" class="button">Go to Comparison</a>',
             unsafe_allow_html=True)
-
-
-    st.divider()
+        st.divider()

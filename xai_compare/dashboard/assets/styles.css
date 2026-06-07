@@ -93,8 +93,8 @@ section[data-testid="stSidebar"] {
     }
 .run-cell table { font-size: 0.85rem; border-collapse: collapse; border: none; width: 100%; }
 .run-cell td, .run-cell tr { border: none !important; border-top: none !important; }
-.run-cell td.label { color: grey; padding: 2px 8px 2px 0; white-space: nowrap; }
-
+.run-cell td.label { color: grey; padding: 2px 8px 2px 0; white-space: nowrap; width: 100px }
+.run-cell td.model { font-size:110%;  padding: 2px 8px 2px 0; white-space: nowrap; }
 
 .report-table {
     border-collapse: collapse;

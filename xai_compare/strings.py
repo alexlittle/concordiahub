@@ -2,7 +2,7 @@
 # ----------------
 # App/page layout
 # ----------------
-APP_NAME = "XAI Compare"
+APP_NAME = "XAI Lens"
 
 # ----------------
 # Error/Warning messages

@@ -21,3 +21,6 @@ class DataStore(ABC):
 
     @abstractmethod
     def load_dataframe(self, filename) -> pd.DataFrame: pass
+
+    @abstractmethod
+    def load_json(self, filename) -> pd.DataFrame: pass

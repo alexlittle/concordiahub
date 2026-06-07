@@ -50,7 +50,7 @@ def test_render_run_html_no_xai_methods():
 
     html = render_run_html(run)
 
-    assert "<code></code>" in html
+    assert "run-cell" in html
 
 
 def test_display_run_cell_calls_markdown():

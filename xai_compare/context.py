@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from typing import Any, Optional
 
 from xai_compare import constants
-from xai_compare.services.preprocess import normalise_values
+from xai_compare.services.preprocess import normalise_by_sum
 from xai_compare.run import Run
 
 @dataclass
@@ -70,5 +70,5 @@ class ComparisonContext:
     features_b: pd.Series = field(init=False)
 
     def __post_init__(self):
-        self.features_a = normalise_values(self.explanation_a, self.run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-        self.features_b = normalise_values(self.explanation_b, self.run_b.get(constants.DATA_SCHEMA_ID_COLUMN))
+        self.features_a = normalise_by_sum(self.explanation_a, self.run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
+        self.features_b = normalise_by_sum(self.explanation_b, self.run_b.get(constants.DATA_SCHEMA_ID_COLUMN))

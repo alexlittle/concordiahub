@@ -8,7 +8,8 @@ from xai_compare.context import RunContext, ResponseSchema
 from xai_compare.exceptions import MissingDataError
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
-from xai_compare import strings, config
+from xai_compare import strings, config, constants
+from xai_compare.run import Run
 
 
 @dataclass
@@ -49,6 +50,21 @@ class CoRAdapter(XAIMethodAdapter):
 
     # uses a json file for explanation storage
     explanation_file_type: str = "json"
+
+    @classmethod
+    def load_explanation(cls, run: Run, sample_id: str) -> pd.Series:
+        records = run.store.load_json(f"explanations_{cls.key}")
+        sample_id_col = run.get(constants.DATA_SCHEMA_ID_COLUMN)
+
+        row = next((r for r in records if r[sample_id_col] == sample_id), None)
+        if row is None:
+            raise ValueError(
+                f"Sample '{sample_id}' not found in explanations for {cls.key}")
+
+        return pd.Series({
+            feature: data["score"]
+            for feature, data in row["contributions"].items()
+        }, name=sample_id)
 
     def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
         raise NotImplementedError

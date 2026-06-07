@@ -17,7 +17,11 @@ device = check_gpu()
 print(f"System check: {device} detected.")
 
 # load the spaCy model
-nlp = spacy.load("en_core_web_sm")
+# uses: https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl
+try:
+    nlp = spacy.load("en_core_web_sm")
+except OSError:
+    raise OSError("spaCy model not found. Run: python -m spacy download en_core_web_sm")
 
 def extract_spans_from_doc(doc) -> str:
     """Extracts noun chunks from a sentence."""
@@ -37,13 +41,22 @@ def extract_spans_from_doc(doc) -> str:
     return " | ".join(unique_spans)
 
 
+def clean_text(text: str) -> str:
+    """Strip formatting/punctuation/spaces before processing."""
+    text = re.sub(r'#{1,6}\s*', '', text)
+    text = re.sub(r'\*{1,2}', '', text)
+    text = re.sub(r'^\s*[\*\-]\s+', '', text, flags=re.MULTILINE)
+    text = re.sub(r'^\s*\d+\.\s+', '', text, flags=re.MULTILINE)
+    text = re.sub(r'\s+', ' ', text)
+    return text.strip()
+
 # data to extract from the input file
 df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 
 y = df.set_index(config.SAMPLE_UUID_COL)['target'].astype('category').cat.codes
 
 docs = list(tqdm(
-    nlp.pipe(df['scenario'], batch_size=64),
+    nlp.pipe(df['scenario'].map(clean_text), batch_size=64),
     total=len(df),
     desc="Extracting spans"
 ))

@@ -18,7 +18,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     compatible_visualisations = config.TREE_SHAP_COMPATIBLE_VIZ
 
     @classmethod
-    def load_explanation(cls, run: Run, sample_id: str):
+    def load_explanation(cls, run: Run, sample_id: str) -> pd.Series:
         df = run.store.load_dataframe(f"explanations_{cls.key}")
         row = df[df[run.get(constants.DATA_SCHEMA_ID_COLUMN)] == sample_id]
         if row.empty:
