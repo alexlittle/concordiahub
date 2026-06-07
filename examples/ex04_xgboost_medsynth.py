@@ -77,7 +77,7 @@ model = XGBClassifier(
     tree_method='hist',
     device=device
 )
-model.fit(X_train, y_train)
+model.fit(X_train, y_train, verbose=10)
 
 # keep raw array for sklearn metrics, wrap as DataFrame for framework
 y_pred_array = model.predict(X_test)
