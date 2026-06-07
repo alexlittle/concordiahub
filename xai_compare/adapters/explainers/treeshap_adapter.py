@@ -40,12 +40,18 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         """
         if not hasattr(ctx.data, "x_test") or ctx.data.x_test is None:
             raise MissingDataError("CoefficientsAdapter requires x_test in RunData")
+
+        data = ctx.data.x_test
+        if ctx.data.data_schema.sample_id_column in data.columns:
+            data = data.set_index(ctx.data.data_schema.sample_id_column)
+        data = data.select_dtypes(include=['number'])
+
         explainer = shap.TreeExplainer(model)
-        shap_values = explainer.shap_values(ctx.data.x_test)
+        shap_values = explainer.shap_values(data)
 
         # (n_samples, 1, n_features)
         if shap_values.ndim == 2:
-            dfs = [pd.DataFrame(shap_values, index=ctx.data.x_test.index, columns=ctx.data.x_test.columns)]
+            dfs = [pd.DataFrame(shap_values, index=data.index, columns=ctx.data.x_test.columns)]
             dfs[0]['class'] = 0
             return dfs[0].set_index('class', append=True)
 
@@ -59,13 +65,13 @@ class TreeSHAPAdapter(XAIMethodAdapter):
                 # Slice the last axis [:, :, i] to get (n_samples, n_features)
                 df = pd.DataFrame(
                     shap_values[:, :, i],
-                    index=ctx.data.x_test.index,
-                    columns=ctx.data.x_test.columns
+                    index=data.index,
+                    columns=data.columns
                 )
                 dfs.append(df)
 
             keys = ctx.data.data_schema.class_names if ctx.data.data_schema.class_names is not None else range(n_classes)
-            return pd.concat(dfs, keys=keys, names=['class', ctx.data.x_test.index.name])
+            return pd.concat(dfs, keys=keys, names=['class', data.index.name])
 
     def explain_local_json(self, ctx: RunContext) -> dict[str, Any]:
         raise NotImplementedError

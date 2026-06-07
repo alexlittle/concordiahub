@@ -12,8 +12,6 @@ y_pred = pd.read_parquet('./cache/medsynth/xgboost/y_pred.parquet')
 model = joblib.load('./cache/medsynth/xgboost/model.joblib')
 
 
-
-
 data_schema = xai.DataSchema(
     sample_id_column=config.SAMPLE_UUID_COL,
     target_column="target",
