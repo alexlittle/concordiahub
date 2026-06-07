@@ -64,7 +64,7 @@ def test_axis_range_not_applied_when_none(comparison):
 
 def test_render_alignment_scale(comparison):
     ctx = make_ctx()
-    fig = comparison.render_comparison(ctx, "Alignment Scale")
+    fig = comparison.render_comparison(ctx, "alignment_scale")
     assert fig is not None
 
 def test_render_invalid_viz_type_raises(comparison):

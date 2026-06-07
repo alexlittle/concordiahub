@@ -65,7 +65,7 @@ try:
         run_a=run_a,
         run_b=run_b,
         **kwargs)
-    fig = comparison_class().render_comparison(ctx, "Alignment Scale")
+    fig = comparison_class().render_comparison(ctx)
     st.plotly_chart(fig, key="comparison")
 except InvalidConfigurationError as e:
     st.warning(f"No comparison available for {method_a} vs {method_b}")

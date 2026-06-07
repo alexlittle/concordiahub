@@ -1,12 +1,21 @@
 import pandas as pd
+import plotly.graph_objects as go
+
 from abc import ABC, abstractmethod
 from typing import Any
-import plotly.graph_objects as go
+from dataclasses import dataclass
 
 from xai_compare.dashboard.utils.formatting import format_model_name
 from xai_compare.context import ComparisonContext
 from xai_compare.services.preprocess import normalise_by_sum
 from xai_compare import config
+
+
+@dataclass
+class VizOption:
+    display_name: str
+    method: str
+
 
 class ComparisonAdapter(ABC):
     """Handles comparison between two XAI explanations."""
@@ -26,17 +35,17 @@ class ComparisonAdapter(ABC):
         return diff.abs().max()
 
     @abstractmethod
-    def render_comparison(self, ctx: ComparisonContext, viz_type) -> Any:
+    def render_comparison(self, ctx: ComparisonContext, viz_key:str =None) -> Any:
         raise NotImplementedError
 
 
-    def viz_diff_bar(self, features_a, features_b, run_a, run_b, axis_range=None):
+    def viz_diff_bar(self, ctx: ComparisonContext):
         raise NotImplementedError
 
-    def viz_dumbbell(self, features_a, features_b, run_a, run_b, axis_range=None):
+    def viz_dumbbell(self, ctx: ComparisonContext):
         raise NotImplementedError
 
-    def viz_alignment_scale(self, ctx: ComparisonContext ):
+    def viz_alignment_scale(self, ctx: ComparisonContext):
         diff = ctx.features_a.sub(ctx.features_b, fill_value=0)
         diff = diff.sort_values()
 
