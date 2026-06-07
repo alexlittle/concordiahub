@@ -2,18 +2,19 @@ import pandas as pd
 import joblib
 import spacy
 import re
+import sys
+import logging
+
 from tqdm import tqdm
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
 
-from helpers import check_gpu
 from examples import config
 
-
-device = check_gpu()
-print(f"System check: {device} detected.")
+# set logging
+logging.basicConfig(level=logging.INFO, stream=sys.stdout)
 
 # load the spaCy model
 nlp = spacy.load("en_core_web_sm")
@@ -80,7 +81,7 @@ model = XGBClassifier(
     objective='multi:softprob',
     random_state=42,
     tree_method='hist',
-    device=device
+    device="cpu"
 )
 model.fit(X_train, y_train, verbose=10)
 

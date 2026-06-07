@@ -1,0 +1,20 @@
+{
+    "model_type": "xgboost",
+    "xai_methods": [
+        "shap_tree"
+    ],
+    "dataset_id": "medsynth",
+    "model_subtype": null,
+    "run_name": "xgboost_medsynth",
+    "model_id": "XGBoost",
+    "response_schema": null,
+    "datetime": "20260607-113833",
+    "run_uuid": "2d9f2d6e-0f11-4f69-a13a-1a32cb922458",
+    "data_schema": {
+        "sample_id_column": "sample_uuid",
+        "target_column": "target",
+        "prediction_column": "y_pred",
+        "feature_columns": null,
+        "class_names": null
+    }
+}
