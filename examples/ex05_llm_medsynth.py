@@ -14,6 +14,7 @@ from examples.helpers import safe_dirname
 df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 
 # only run on those that match the test samples from XGboost model
+# as these will be the only ones that appear in the comparison
 xgboost_df = pd.read_parquet('./cache/medsynth/xgboost/y_test.parquet')
 
 df = df[df['sample_uuid'].isin(xgboost_df['sample_uuid'])].reset_index(drop=True)
