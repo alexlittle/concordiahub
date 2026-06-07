@@ -27,6 +27,7 @@ def extract_spans_from_doc(doc) -> str:
     seen = set()
     unique_spans = []
     for s in spans:
+        # strip chars that will break feature name columns
         s = re.sub(r'[\[\]<>]', '', s).strip()
         s = s.strip()
         if s and s not in seen:
