@@ -1,6 +1,6 @@
 import pytest
 
-from xai_compare.dashboard.components.breadcrumb import display_breadcrumbs
+from xai_compare.dashboard.utils.breadcrumb import display_breadcrumbs
 from xai_compare.run import Run
 
 @pytest.fixture

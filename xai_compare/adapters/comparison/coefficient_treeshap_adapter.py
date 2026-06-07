@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 from xai_compare.context import ComparisonContext
 from xai_compare.registry.comparison_registry import register_comparison
 from xai_compare.adapters.comparison.comparison_base import ComparisonAdapter
-from xai_compare.dashboard.components.formatting import format_model_name
+from xai_compare.dashboard.utils.formatting import format_model_name
 from xai_compare import config, context
 
 

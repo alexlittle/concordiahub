@@ -2,9 +2,9 @@ import streamlit as st
 
 from xai_compare.context import ComparisonContext
 from xai_compare.exceptions import InvalidConfigurationError, InvalidUrlParamsError
-from xai_compare.dashboard.components.formatting import format_model_name
-from xai_compare.dashboard.components.layout import apply_layout
-from xai_compare.dashboard.components.breadcrumb import display_breadcrumbs
+from xai_compare.dashboard.utils.formatting import format_model_name
+from xai_compare.dashboard.utils.layout import apply_layout
+from xai_compare.dashboard.utils.breadcrumb import display_breadcrumbs
 from xai_compare.dashboard.utils.params import get_runs_from_url_param
 from xai_compare.registry.xai_registry import get_xai_adapter
 from xai_compare.registry.viz_registry import get_viz_adapter

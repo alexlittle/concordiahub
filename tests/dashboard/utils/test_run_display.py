@@ -1,9 +1,9 @@
 from unittest.mock import patch, MagicMock
 
-from xai_compare.dashboard.components.run_display import render_run_html, display_run_cell
+from xai_compare.dashboard.utils.run_display import render_run_html, display_run_cell
 from xai_compare.run import Run
 
-MODULE_UNDER_TEST = "xai_compare.dashboard.components.run_display"
+MODULE_UNDER_TEST = "xai_compare.dashboard.utils.run_display"
 
 
 
@@ -73,9 +73,9 @@ def test_display_run_cell_calls_markdown():
     assert kwargs["unsafe_allow_html"] is True
 
 
-@patch("xai_compare.dashboard.components.run_display.st")
+@patch("xai_compare.dashboard.utils.run_display.st")
 def test_display_comparable_runs_renders(mock_st):
-    from xai_compare.dashboard.components.run_display import display_comparable_runs
+    from xai_compare.dashboard.utils.run_display import display_comparable_runs
 
     mock_col = MagicMock()
     mock_col.button.return_value = False

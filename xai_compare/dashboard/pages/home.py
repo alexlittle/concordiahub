@@ -1,7 +1,7 @@
 import streamlit as st
 
-from xai_compare.dashboard.components.layout import apply_layout
-from xai_compare.dashboard.components.run_display import display_comparable_runs
+from xai_compare.dashboard.utils.layout import apply_layout
+from xai_compare.dashboard.utils.run_display import display_comparable_runs
 from xai_compare.dashboard.services import get_explorer
 
 from xai_compare import strings

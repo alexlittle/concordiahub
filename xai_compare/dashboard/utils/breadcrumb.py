@@ -1,6 +1,6 @@
 
 from xai_compare.run import Run
-from xai_compare.dashboard.components.formatting import format_model_name
+from xai_compare.dashboard.utils.formatting import format_model_name
 
 
 def display_breadcrumbs(run_a: Run=None, run_b: Run=None, sample_id:str = None) -> str:

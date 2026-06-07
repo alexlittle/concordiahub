@@ -1,12 +1,12 @@
 
 import streamlit as st
 
-from xai_compare.dashboard.components.layout import apply_layout
+from xai_compare.dashboard.utils.layout import apply_layout
 from xai_compare.services.comparison import build_comparison_df
 from xai_compare.exceptions import  InvalidUrlParamsError
 from xai_compare.dashboard.utils.params import get_runs_from_url_param
 from xai_compare.dashboard.utils.comparison import generate_comparison_table_html, render_run_summary
-from xai_compare.dashboard.components.breadcrumb import display_breadcrumbs
+from xai_compare.dashboard.utils.breadcrumb import display_breadcrumbs
 from xai_compare import strings
 
 # Get/load the necessary data for this page

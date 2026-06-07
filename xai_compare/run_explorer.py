@@ -7,7 +7,7 @@ from itertools import combinations
 
 from xai_compare import config
 from xai_compare.run import Run
-from xai_compare.dashboard.components.formatting import format_model_name
+from xai_compare.dashboard.utils.formatting import format_model_name
 
 class RunExplorer():
 

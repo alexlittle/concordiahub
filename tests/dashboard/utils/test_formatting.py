@@ -1,4 +1,4 @@
-from xai_compare.dashboard.components.formatting import format_datetime
+from xai_compare.dashboard.utils.formatting import format_datetime
 
 
 def test_format_datetime():

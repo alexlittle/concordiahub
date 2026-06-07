@@ -1,7 +1,7 @@
 
 import streamlit as st
-from .sidebar import sidebar
-from .styles import load_css
+from xai_compare.dashboard.utils.sidebar import sidebar
+from xai_compare.dashboard.utils.styles import load_css
 
 def apply_layout(title: str):
     # Page title

@@ -1,7 +1,7 @@
 import streamlit as st
 
 from xai_compare.run import Run
-from xai_compare.dashboard.components.formatting import format_model_name, format_datetime
+from xai_compare.dashboard.utils.formatting import format_model_name, format_datetime
 
 
 def render_run_html(run: Run) -> str:

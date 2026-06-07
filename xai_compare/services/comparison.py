@@ -1,7 +1,7 @@
 import numpy as np
 
 
-from xai_compare.dashboard.components.formatting import format_model_name
+from xai_compare.dashboard.utils.formatting import format_model_name
 from xai_compare import constants
 from xai_compare.exceptions import InvalidSelectionError
 
