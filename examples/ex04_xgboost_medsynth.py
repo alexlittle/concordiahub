@@ -1,6 +1,7 @@
 import pandas as pd
 import joblib
 import spacy
+import tqdm
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
@@ -14,14 +15,12 @@ print(f"System check: {device} detected.")
 # load the spaCy model
 nlp = spacy.load("en_core_web_sm")
 
-def extract_spans(text: str) -> str:
+def extract_spans_from_doc(doc) -> str:
     """Extracts noun chunks from a sentence."""
-    doc = nlp(text)
     spans = (
-        [chunk.text.lower() for chunk in doc.noun_chunks] +
-        [ent.text.lower() for ent in doc.ents]
+            [chunk.text.lower() for chunk in doc.noun_chunks] +
+            [ent.text.lower() for ent in doc.ents]
     )
-    # remove duplicates
     seen = set()
     unique_spans = []
     for s in spans:
@@ -37,7 +36,12 @@ df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 
 y = df.set_index(config.SAMPLE_UUID_COL)['target'].astype('category').cat.codes
 
-df['scenario_spans'] = df['scenario'].apply(extract_spans)
+docs = list(tqdm(
+    nlp.pipe(df['scenario'], batch_size=64),
+    total=len(df),
+    desc="Extracting spans"
+))
+df['scenario_spans'] = [extract_spans_from_doc(doc) for doc in docs]
 
 
 # vectorize texts based on the "noun chunks"
