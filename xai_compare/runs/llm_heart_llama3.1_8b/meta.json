@@ -4,11 +4,15 @@
         "cor"
     ],
     "dataset_id": "cleveland-heart-data",
-    "model_subtype": "llama3.1:8b",
+    "model_subtype": "llama3.1_8b",
     "run_name": "llm_heart_llama3.1_8b",
     "model_id": "LLM",
-    "datetime": "20260605-205120",
-    "run_uuid": "5f255aec-9036-46c0-8f33-6a82f7534f52",
+    "response_schema": {
+        "contributions_field": "feature_contributions",
+        "contribution_key": null
+    },
+    "datetime": "20260607-100613",
+    "run_uuid": "e4e8b8c4-67cb-4ca0-bac0-ae215de34da4",
     "data_schema": {
         "sample_id_column": "sample_uuid",
         "target_column": "target",

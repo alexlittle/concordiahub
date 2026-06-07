@@ -10,6 +10,11 @@ y = pd.read_parquet(f"./cache/medsynth/{dir_name}/y.parquet")
 y_preds = pd.read_parquet(f"./cache/medsynth/{dir_name}/y_preds.parquet")
 y_exp = pd.read_parquet(f"./cache/medsynth/{dir_name}/y_exp.parquet")
 
+schema = xai.ResponseSchema(
+    contributions_field="feature_contributions",
+    contribution_key=None,
+)
+
 data_schema = xai.DataSchema(
     sample_id_column=config.SAMPLE_UUID_COL,
     target_column="target",
@@ -29,6 +34,7 @@ ctx = xai.RunContext(
     run_data,
     model_subtype=config.MEDSYNTH_OLLAMA_MODEL,
     run_name="llm_medsynth",
-    model_id="LLM v1")
+    model_id="LLM v1",
+    response_schema=schema)
 
 xai.run(ctx)
