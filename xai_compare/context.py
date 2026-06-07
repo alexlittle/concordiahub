@@ -18,6 +18,10 @@ class DataSchema:
     feature_columns: Optional[list[str]] = None
     class_names: Optional[list] = None
 
+@dataclass
+class ResponseSchema:
+    contributions_field: str
+    contribution_key: str | None
 
 @dataclass
 class RunData:
@@ -48,6 +52,7 @@ class RunContext:
     model_subtype: Optional[str] = None
     run_name: Optional[str] = None
     model_id: Optional[str] = None
+    response_schema: Optional[ResponseSchema] = None
 
 
 @dataclass
