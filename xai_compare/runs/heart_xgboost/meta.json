@@ -1,14 +1,14 @@
 {
-    "model_type": "logistic_regression",
+    "model_type": "xgboost",
     "xai_methods": [
-        "coefficients"
+        "shap_tree"
     ],
     "dataset_id": "cleveland-heart-data",
     "model_subtype": null,
-    "run_name": "lr_heart",
-    "model_id": "LR v1",
-    "datetime": "20260605-165811",
-    "run_uuid": "c99d94b9-5df6-4883-b7b4-37d90e2a2262",
+    "run_name": "heart_xgboost",
+    "model_id": "XGBoost v1",
+    "datetime": "20260605-163843",
+    "run_uuid": "cba794f7-93c0-4eab-b45e-89331b7d500c",
     "data_schema": {
         "sample_id_column": "sample_uuid",
         "target_column": "target",
