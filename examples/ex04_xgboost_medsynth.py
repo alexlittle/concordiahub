@@ -1,10 +1,13 @@
 import pandas as pd
 import joblib
 import spacy
+import re
 from tqdm import tqdm
+
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
+
 from helpers import check_gpu
 from examples import config
 
@@ -24,6 +27,7 @@ def extract_spans_from_doc(doc) -> str:
     seen = set()
     unique_spans = []
     for s in spans:
+        s = re.sub(r'[\[\]<>]', '', s).strip()
         s = s.strip()
         if s and s not in seen:
             seen.add(s)
