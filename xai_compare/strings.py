@@ -32,7 +32,11 @@ XGBOOST_DISPLAY_NAME = "XGBoost"
 FORCE_PLOT_DISPLAY_NAME = "Force Plot"
 FORCE_PLOT_TITLE = "Feature Contributions (normalised)"
 FORCE_PLOT_X_AXIS = "Normalised contribution"
+
 # Waterfall Visualisation
 WATERFALL_DISPLAY_NAME = "Waterfall"
 WATERFALL_TITLE = "Feature Contributions (normalised)"
 WATERFALL_X_AXIS = "Normalised contribution"
+
+# Tabular Visualisation
+TABULAR_DISPLAY_NAME = "Tabluar (text)"

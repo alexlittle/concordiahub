@@ -3,7 +3,8 @@ Configuration file for XAI-Compare
 """
 
 from typing import Final
-from xai_compare import context
+
+from xai_compare import context, strings
 
 # Constants for artifact filename/structure
 RUNS_DIR_NAME: Final[str] = "runs"
@@ -19,27 +20,28 @@ EMBEDDING_ENCODER: Final[str] ="all-MiniLM-L6-v2"
 #------------------------
 COEFFS_DEFAULT_VIZ = "forceplot"
 COEFFS_COMPATIBLE_VIZ = {
-        "forceplot": context.VizOption(display_name="Forceplot"),
-        "waterfall": context.VizOption(display_name="Waterfall")}
+        "forceplot": context.VizOption(display_name=strings.FORCE_PLOT_DISPLAY_NAME),
+        "waterfall": context.VizOption(display_name=strings.WATERFALL_DISPLAY_NAME),}
 
 
 TREE_SHAP_DEFAULT_VIZ = "forceplot"
 TREE_SHAP_COMPATIBLE_VIZ = {
-        "forceplot": context.VizOption(display_name="Forceplot"),
-        "waterfall": context.VizOption(display_name="Waterfall"),
-        "beeswarm": context.VizOption(display_name="Beeswarm"),
+        "forceplot": context.VizOption(display_name=strings.FORCE_PLOT_DISPLAY_NAME),
+        "waterfall": context.VizOption(display_name=strings.WATERFALL_DISPLAY_NAME),
     }
 
 COR_DEFAULT_VIZ = "forceplot"
 COR_COMPATIBLE_VIZ = {
-        "forceplot": context.VizOption(display_name="Forceplot"),
+        "forceplot": context.VizOption(display_name=strings.FORCE_PLOT_DISPLAY_NAME),
+        "tabular": context.VizOption(display_name=strings.TABULAR_DISPLAY_NAME),
     }
 
 #------------------------
 # Visualisation compatibility with XAI methods
 #------------------------
 FORCE_PLOT_COMPATIBLE_XAI = ["tree_shap", "coefficients"]
-WATERFALL_COMPATIBLE_XAI = ["tree_shap","coefficients","cor"]
+WATERFALL_COMPATIBLE_XAI = ["tree_shap", "coefficients", "cor"]
+TABULAR_COMPATIBLE_XAI = ["cor"]
 
 #------------------------
 # Comparison Visualisation compatibility combinations

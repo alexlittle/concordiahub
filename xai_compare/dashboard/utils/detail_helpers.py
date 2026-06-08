@@ -1,5 +1,8 @@
-from dataclasses import dataclass
 import streamlit as st
+import plotly
+
+from dataclasses import dataclass
+
 from xai_compare.registry.xai_registry import get_xai_adapter
 from xai_compare.registry.viz_registry import get_viz_adapter
 from xai_compare.services.preprocess import normalise_by_max
@@ -90,6 +93,9 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
             panel.run.get(constants.DATA_SCHEMA_ID_COLUMN),
             axis_range=axis_range,
         )
-        st.plotly_chart(fig, key=plot_key)
+        if isinstance(fig, plotly.graph_objs.Figure):
+            st.plotly_chart(fig, key=plot_key)
+        else:
+            st.html(fig)
     except NotImplementedError:
         st.warning(f"{panel.viz_name} is not yet implemented for {format_model_name(panel.run)}")
