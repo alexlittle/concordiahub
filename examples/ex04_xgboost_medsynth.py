@@ -94,7 +94,7 @@ model = XGBClassifier(
     objective='multi:softprob',
     random_state=42,
     tree_method='hist',
-    device=device
+    device="cpu"
 )
 model.fit(X_train, y_train, verbose=10)
 
