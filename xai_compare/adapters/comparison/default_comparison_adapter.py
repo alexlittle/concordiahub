@@ -17,6 +17,6 @@ class DefaultComparisonAdapter(ComparisonAdapter):
                                      method="viz_alignment_scale"),
     }
 
-    def render_comparison(self, ctx: context.ComparisonContext, viz_key:str ="alignment_scale"):
+    def render_comparison(self, ctx: context.ComparisonContext, viz_key:str ="dumbbell"):
         option = self.visualisations_available[viz_key]
         return getattr(self, option.method)(ctx)
