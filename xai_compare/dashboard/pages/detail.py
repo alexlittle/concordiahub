@@ -11,6 +11,7 @@ from xai_compare.registry.viz_registry import get_viz_adapter
 from xai_compare.registry.comparison_registry import get_comparison_adapter
 from xai_compare import constants, strings
 from xai_compare.services.preprocess import normalise_by_max
+from xai_compare.dashboard.utils.viz import select_comparison_viz, select_individual_viz
 
 # get the runs from the parameters
 try:
@@ -59,18 +60,27 @@ if axis_range is not None:
     kwargs['axis_range'] = axis_range
 
 try:
+    comparison = comparison_class()
+    viz_options = comparison.get_visualisations_available()
+    comp_viz = st.query_params.get("comp_viz",
+                                   comparison.get_default_visualisation())
+    existing_params = dict(st.query_params)
+    select_text = select_comparison_viz(comp_viz, viz_options, existing_params)
+    st.html(select_text)
+
     ctx = ComparisonContext(
         explanation_a=explanation_a,
         explanation_b=explanation_b,
         run_a=run_a,
         run_b=run_b,
         **kwargs)
-    fig = comparison_class().render_comparison(ctx)
+    fig = comparison.render_comparison(ctx, comp_viz)
     st.plotly_chart(fig, key="comparison")
-except InvalidConfigurationError as e:
+
+except (InvalidConfigurationError, NameError) as e:
     st.warning(f"No comparison available for {method_a} vs {method_b}")
-except NameError as e:
-    st.warning(f"No comparison available for {method_a} vs {method_b}")
+except NotImplementedError as e:
+    st.warning(f"{comp_viz} is not yet implemented")
 
 
 col1, col2 = st.columns(2)

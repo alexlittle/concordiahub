@@ -72,3 +72,9 @@ class ComparisonContext:
     def __post_init__(self):
         self.features_a = normalise_by_sum(self.explanation_a, self.run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
         self.features_b = normalise_by_sum(self.explanation_b, self.run_b.get(constants.DATA_SCHEMA_ID_COLUMN))
+
+
+@dataclass
+class VizOption:
+    display_name: str
+    method: str

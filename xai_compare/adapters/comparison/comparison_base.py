@@ -3,7 +3,7 @@ import plotly.graph_objects as go
 
 from abc import ABC, abstractmethod
 from typing import Any
-from dataclasses import dataclass
+
 
 from xai_compare.dashboard.utils.formatting import format_model_name
 from xai_compare.context import ComparisonContext
@@ -11,16 +11,14 @@ from xai_compare.services.preprocess import normalise_by_sum
 from xai_compare import config
 
 
-@dataclass
-class VizOption:
-    display_name: str
-    method: str
+
 
 
 class ComparisonAdapter(ABC):
     """Handles comparison between two XAI explanations."""
 
     compatible_pairs: set[frozenset[str]]
+    default_visualisation = None
     visualisations_available = []
 
     @classmethod
@@ -35,9 +33,14 @@ class ComparisonAdapter(ABC):
         return diff.abs().max()
 
     @abstractmethod
-    def render_comparison(self, ctx: ComparisonContext, viz_key:str =None) -> Any:
+    def render_comparison(self, ctx: ComparisonContext, viz_key:str = None) -> Any:
         raise NotImplementedError
 
+    def get_visualisations_available(self):
+        return self.visualisations_available
+
+    def get_default_visualisation(self):
+        return self.default_visualisation
 
     def viz_diff_bar(self, ctx: ComparisonContext):
         diff = ctx.features_a.sub(ctx.features_b, fill_value=0)

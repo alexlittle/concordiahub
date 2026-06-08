@@ -3,6 +3,8 @@ from pathlib import Path
 from streamlit.testing.v1 import AppTest
 from unittest.mock import patch, MagicMock
 
+from xai_compare.context import VizOption
+
 MODULE_UNDER_TEST = "xai_compare.dashboard.pages.detail"
 
 PAGE_PATH = Path(__file__).parents[3] / "xai_compare/dashboard/pages/detail.py"
@@ -16,6 +18,7 @@ def test_explorer_called_with_correct_ids(mock_get_explorer):
     at.query_params["runs"] = "uuid1,uuid2"
     at.run()
     mock_explorer.get_runs_by_uuids.assert_called_once_with(["uuid1", "uuid2"])
+
 
 
 
@@ -61,10 +64,19 @@ def patched_app(mock_runs):
         mock_viz_instance.return_value.render_local.return_value = mock_fig
         mock_viz.return_value = mock_viz_instance
 
+        mock_comp_class = MagicMock()
         mock_comp_instance = MagicMock()
+        mock_comp_class.return_value = mock_comp_instance
+
+        mock_comp_instance.get_visualisations_available.return_value = {
+            "diff_bar": VizOption(display_name="Difference (bar)",
+                                  method="viz_diff_bar")
+        }
+        mock_comp_instance.get_default_visualisation.return_value = "diff_bar"
         mock_comp_instance.get_abs_max.return_value = 0.5
-        mock_comp_instance.return_value.render_comparison.return_value = mock_fig
-        mock_comp.return_value = mock_comp_instance
+        mock_comp_instance.render_comparison.return_value = mock_fig
+
+        mock_comp.return_value = mock_comp_class
 
         yield {
             "mock_get_explorer": mock_get_explorer,
@@ -89,7 +101,8 @@ def test_no_runs_param_shows_error():
 
 def test_no_comparison_available_shows_warning(patched_app):
     from xai_compare.exceptions import InvalidConfigurationError
-    patched_app["mock_comp"].return_value.return_value.render_comparison.side_effect = InvalidConfigurationError
+    mock_comp = patched_app["mock_comp"]
+    mock_comp.return_value.return_value.render_comparison.side_effect = InvalidConfigurationError
     at = AppTest.from_file(str(PAGE_PATH))
     at.query_params["runs"] = "uuid1,uuid2"
     at.run()

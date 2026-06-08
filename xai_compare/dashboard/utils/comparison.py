@@ -64,3 +64,5 @@ def generate_comparison_table_html(df, run_a, run_b):
         </tbody>
     </table>
     """
+
+
