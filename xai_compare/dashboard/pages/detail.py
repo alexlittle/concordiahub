@@ -2,116 +2,76 @@ import streamlit as st
 
 from xai_compare.context import ComparisonContext
 from xai_compare.exceptions import InvalidConfigurationError, InvalidUrlParamsError
-from xai_compare.dashboard.utils.formatting import format_model_name
 from xai_compare.dashboard.utils.layout import apply_layout
 from xai_compare.dashboard.utils.breadcrumb import display_breadcrumbs
 from xai_compare.dashboard.utils.params import get_runs_from_url_param
-from xai_compare.registry.xai_registry import get_xai_adapter
-from xai_compare.registry.viz_registry import get_viz_adapter
 from xai_compare.registry.comparison_registry import get_comparison_adapter
+from xai_compare.dashboard.utils.detail_helpers import build_model_panel, render_model_panel, select_comparison_viz
 from xai_compare import constants, strings
-from xai_compare.services.preprocess import normalise_by_max
-from xai_compare.dashboard.utils.viz import select_comparison_viz, select_individual_viz
 
-# get the runs from the parameters
-try:
-    run_a, run_b = get_runs_from_url_param(st.query_params)
-except InvalidUrlParamsError as e:
-    st.error(e)
-    st.stop()
-
-existing_params = dict(st.query_params)
-
-# get the sample id from the parameters
-sample_id = st.query_params.get("sample_id")
-
-method_a = run_a.get("xai_methods")[0]
-method_b = run_b.get("xai_methods")[0]
-
-xai_class_a = get_xai_adapter(method_a)
-xai_instance_a = xai_class_a()
-model_a_viz = st.query_params.get("model_a_viz", xai_instance_a.get_default_visualisation())
-viz_class_a = get_viz_adapter(model_a_viz)
-explanation_a = xai_class_a.load_explanation(run_a, sample_id)
-
-xai_class_b = get_xai_adapter(method_b)
-xai_instance_b = xai_class_b()
-model_b_viz = st.query_params.get("model_b_viz", xai_instance_b.get_default_visualisation())
-viz_class_b = get_viz_adapter(model_b_viz)
-explanation_b = xai_class_b.load_explanation(run_b, sample_id)
-
-axis_range = None
-
-try:
-    comparison_class = get_comparison_adapter(method_a, method_b)
-    xai_a = get_xai_adapter(method_a)
-    xai_b = get_xai_adapter(method_b)
-
-    comp_max = comparison_class.get_abs_max(explanation_a, explanation_b, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-
-    # add some tolerance
-    margin = comp_max * 0.15
-    axis_range = [-(comp_max + margin), comp_max + margin]
-except InvalidConfigurationError as e:
-    pass
-
-# Display page
-apply_layout(strings.APP_NAME)
-
-st.html(display_breadcrumbs(run_a, run_b, sample_id))
-
-st.subheader("**Comparison Explanation:**")
-
-kwargs = {}
-if axis_range is not None:
-    kwargs['axis_range'] = axis_range
-
-try:
-    comparison = comparison_class()
-    viz_options = comparison.get_visualisations_available()
-    comp_viz = st.query_params.get("comp_viz", comparison.get_default_visualisation())
-    select_text = select_comparison_viz(comp_viz, viz_options, existing_params)
-    st.html(select_text)
-
-    ctx = ComparisonContext(
-        explanation_a=explanation_a,
-        explanation_b=explanation_b,
-        run_a=run_a,
-        run_b=run_b,
-        **kwargs)
-    fig = comparison.render_comparison(ctx, comp_viz)
-    st.plotly_chart(fig, key="comparison")
-
-except (InvalidConfigurationError, NameError) as e:
-    st.warning(f"No comparison available for {method_a} vs {method_b}")
-except NotImplementedError as e:
-    st.warning(f"{comp_viz} is not yet implemented")
+def main():
+    try:
+        run_a, run_b = get_runs_from_url_param(st.query_params)
+    except InvalidUrlParamsError as e:
+        st.error(e)
+        st.stop()
 
 
-col1, col2 = st.columns(2)
+    existing_params = dict(st.query_params)
+    sample_id = st.query_params.get("sample_id")
+    method_a = run_a.get("xai_methods")[0]
+    method_b = run_b.get("xai_methods")[0]
 
-with col1:
-    st.subheader(f"**{format_model_name(run_a)} Explanation:**")
-    normed_a = normalise_by_max(explanation_a, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-    normed_a = normed_a.sort_values(ascending=True)
-    axis_range = [-1.1, 1.1]
+    panel_a = build_model_panel(run_a, "model_a_viz", st.query_params)
+    panel_b = build_model_panel(run_b, "model_b_viz", st.query_params)
 
-    model_a_viz_options = xai_instance_a.get_compatible_visualisations()
-    select_text = select_individual_viz("model_a_viz", model_a_viz, model_a_viz_options, existing_params)
-    st.html(select_text)
+    # Axis range for comparison
+    axis_range = None
+    try:
+        comparison_class = get_comparison_adapter(method_a, method_b)
+        comp_max = comparison_class.get_abs_max(
+            panel_a.explanation, panel_b.explanation,
+            run_a.get(constants.DATA_SCHEMA_ID_COLUMN)
+        )
+        margin = comp_max * 0.15
+        axis_range = [-(comp_max + margin), comp_max + margin]
+    except InvalidConfigurationError:
+        pass
 
-    fig = viz_class_a().render_local(normed_a, run_a.get(constants.DATA_SCHEMA_ID_COLUMN), axis_range=axis_range)
-    st.plotly_chart(fig, key="explanation_a")
+    # Display
+    apply_layout(strings.APP_NAME)
+    st.html(display_breadcrumbs(run_a, run_b, sample_id))
+    st.subheader("**Comparison Explanation:**")
 
-with col2:
-    st.subheader(f"**{format_model_name(run_b)} Explanation:**")
-    normed_b = normalise_by_max(explanation_b, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-    normed_b = normed_b.sort_values(ascending=True)
-    axis_range = [-1.1, 1.1]
+    kwargs = {}
+    if axis_range is not None:
+        kwargs['axis_range'] = axis_range
 
-    model_b_viz_options = xai_instance_b.get_compatible_visualisations()
-    select_text = select_individual_viz("model_b_viz", model_b_viz, model_b_viz_options, existing_params)
-    st.html(select_text)
+    try:
+        comparison = comparison_class()
+        viz_options = comparison.get_visualisations_available()
+        comp_viz = st.query_params.get("comp_viz", comparison.get_default_visualisation())
+        st.html(select_comparison_viz(comp_viz, viz_options, existing_params))
+        ctx = ComparisonContext(
+            explanation_a=panel_a.explanation,
+            explanation_b=panel_b.explanation,
+            run_a=run_a,
+            run_b=run_b,
+            **kwargs,
+        )
+        fig = comparison.render_comparison(ctx, comp_viz)
+        st.plotly_chart(fig, key="comparison")
+    except (InvalidConfigurationError, NameError):
+        st.warning(f"No comparison available for {method_a} vs {method_b}")
+    except NotImplementedError:
+        st.warning(f"{comp_viz} is not yet implemented")
 
-    fig = viz_class_b().render_local(normed_b, run_b.get(constants.DATA_SCHEMA_ID_COLUMN), axis_range=axis_range)
-    st.plotly_chart(fig, key="explanation_b")
+    col1, col2 = st.columns(2)
+    with col1:
+        render_model_panel(panel_a, existing_params, plot_key="explanation_a")
+    with col2:
+        render_model_panel(panel_b, existing_params, plot_key="explanation_b")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,4 +1,8 @@
-
+:root {
+    --color-sidebar-bg: #D4E4E455;
+    --color-link: #1A6B6B;
+    --sidebar-width:244px;
+}
 
 
 .block-container {
@@ -16,12 +20,12 @@ hr {
 
 a, a:visited {
     text-decoration: none !important;
-    color: #7F4707 !important;
+    color: var(--color-link) !important;
 }
 
 a:hover, a:active {
     text-decoration: underline !important;
-    color: #7F4707 !important;
+    color: var(--color-link) !important;
 }
 
 code {
@@ -35,9 +39,9 @@ code {
 .button {
     display: inline-block;
     padding:0.4rem 0.8rem;
-    background-color:#E8D5B055 !important;
-    border: 1px solid #7F4707 !important;
-    color: #7F4707 !important;
+    background-color: var(--color-sidebar-bg) !important;
+    border: 1px solid var(--color-link) !important;
+    color: var(--color-link) !important;
     border-radius: 0.4rem;
     text-decoration:none;
 }
@@ -46,7 +50,7 @@ code {
     Sidebar elements
  */
 section[data-testid="stSidebar"] {
-    background-color: #F5F0E8;
+    background-color: var(--color-sidebar-bg);
 }
 
 [data-testid="stSidebar"] .block-container,
