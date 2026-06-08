@@ -8,4 +8,5 @@ class LLMAdapter(ModelAdapter):
     display_name = strings.LLM_DISPLAY_NAME
 
     def prepare(self):
+        # no model to prepare/return for LLM
         pass
