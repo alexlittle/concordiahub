@@ -10,7 +10,7 @@ from xai_compare.dashboard.services import get_explorer
 
 def sidebar():
     with st.sidebar:
-        logo_path = Path(__file__).parent.parent / "assets" / "xai-logo.svg"
+        logo_path = Path(__file__).parent.parent / "assets" / "xai-lens-logo.svg"
 
         with open(logo_path, "rb") as f:
             svg_base64 = base64.b64encode(f.read()).decode()
