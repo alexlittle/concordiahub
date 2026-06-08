@@ -1,6 +1,6 @@
 import pandas as pd
 from abc import ABC, abstractmethod
-from typing import Any
+from typing import Any, Optional
 
 from xai_compare.context import RunContext
 
@@ -10,13 +10,13 @@ class XAIMethodAdapter(ABC):
     Abstract class for XAI method adapter.
     """
     display_name: str | None = None
-    default_visualisation: str = None
-    compatible_visualisations: dict = None
+    default_visualisation: Optional[str]
+    compatible_visualisations: Optional[dict]
 
     # default to true for most explanation adapters
     requires_encoded_features: bool = True
 
-    # type of explanation storage - df or JSON
+    # type of explanation storage - df or JSON, default to df
     explanation_file_type: str = "df"
 
     @classmethod
@@ -30,9 +30,11 @@ class XAIMethodAdapter(ABC):
 
 
     def get_compatible_visualisations(self):
+        """Gets the compatible visualisations for the instantiated class"""
         return self.compatible_visualisations
 
     def get_default_visualisation(self):
+        """Gets the default visualisation for the instantiated class"""
         return self.default_visualisation
 
     @abstractmethod

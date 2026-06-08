@@ -38,8 +38,8 @@ COR_COMPATIBLE_VIZ = {
 #------------------------
 # Visualisation compatibility with XAI methods
 #------------------------
-FORCE_PLOT_COMPATIBLE_XAI = ["shap_tree", "coefficients"]
-WATERFALL_COMPATIBLE_XAI = ["shap_tree","coefficients","cor"]
+FORCE_PLOT_COMPATIBLE_XAI = ["tree_shap", "coefficients"]
+WATERFALL_COMPATIBLE_XAI = ["tree_shap","coefficients","cor"]
 
 #------------------------
 # Comparison Visualisation compatibility combinations

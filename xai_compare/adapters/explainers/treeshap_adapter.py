@@ -2,16 +2,16 @@ import shap
 import pandas as pd
 from typing import Any
 
-from xai_compare.exceptions import MissingDataError
+from xai_compare.exceptions import MissingDataError, DataProcessingError
 from xai_compare.context import RunContext
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xai_compare.run import Run
 from xai_compare import constants, strings, config
 
-@register_xai("shap_tree")
+@register_xai("tree_shap")
 class TreeSHAPAdapter(XAIMethodAdapter):
-    """Tree Shap Explainer"""
+    """Tree SHAP Explainer"""
 
     display_name = strings.TREE_SHAP_DISPLAY_NAME
     default_visualisation = config.TREE_SHAP_DEFAULT_VIZ
@@ -57,7 +57,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
 
         # SHAP returns (n_samples, n_features, n_classes) for multiclass tree models
         # slice last axis per class to get (n_samples, n_features) per DataFrame
-        if shap_values.ndim == 3:
+        elif shap_values.ndim == 3:
             n_classes = shap_values.shape[2]
             dfs = []
 
@@ -72,6 +72,8 @@ class TreeSHAPAdapter(XAIMethodAdapter):
 
             keys = ctx.data.data_schema.class_names if ctx.data.data_schema.class_names is not None else range(n_classes)
             return pd.concat(dfs, keys=keys, names=['class', data.index.name])
+        else:
+            raise DataProcessingError("The return values from SHAP don't match")
 
     def explain_local_json(self, ctx: RunContext) -> dict[str, Any]:
         raise NotImplementedError

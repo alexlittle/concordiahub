@@ -26,7 +26,7 @@ run_data = xai.RunData(
 
 ctx = xai.RunContext(
     "xgboost",
-    ["shap_tree"],
+    ["tree_shap"],
     "cleveland-heart-data",
     run_data,
     model=model,

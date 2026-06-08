@@ -1,7 +1,7 @@
 {
     "model_type": "xgboost",
     "xai_methods": [
-        "shap_tree"
+        "tree_shap"
     ],
     "dataset_id": "cleveland-heart-data",
     "model_subtype": null,

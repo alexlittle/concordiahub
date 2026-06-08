@@ -10,3 +10,6 @@ class InvalidSelectionError(Exception):
 
 class InvalidUrlParamsError(Exception):
     pass
+
+class DataProcessingError(Exception):
+    pass
