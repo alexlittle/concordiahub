@@ -25,8 +25,7 @@ def test_explorer_called_with_correct_ids(mock_get_explorer):
 def make_run(model_id="model-a",
              model_type="xgboost",
              xai_methods=None,
-             sample_id_column="id",
-             run_id="run_a"):
+             sample_id_column="id"):
     run = MagicMock()
     run.get = lambda key, default=None: {
         "model_id": model_id,
@@ -38,7 +37,7 @@ def make_run(model_id="model-a",
 
 @pytest.fixture
 def mock_runs():
-    return make_run(model_id="model-a", run_id="run_a"), make_run(model_id="model-b", run_id="run_b")
+    return make_run(model_id="model-a"), make_run(model_id="model-b")
 
 
 @pytest.fixture

@@ -20,6 +20,8 @@ except InvalidUrlParamsError as e:
     st.error(e)
     st.stop()
 
+existing_params = dict(st.query_params)
+
 # get the sample id from the parameters
 sample_id = st.query_params.get("sample_id")
 
@@ -27,11 +29,15 @@ method_a = run_a.get("xai_methods")[0]
 method_b = run_b.get("xai_methods")[0]
 
 xai_class_a = get_xai_adapter(method_a)
-viz_class_a = get_viz_adapter(xai_class_a.default_visualisation)
+xai_instance_a = xai_class_a()
+model_a_viz = st.query_params.get("model_a_viz", xai_instance_a.get_default_visualisation())
+viz_class_a = get_viz_adapter(model_a_viz)
 explanation_a = xai_class_a.load_explanation(run_a, sample_id)
 
 xai_class_b = get_xai_adapter(method_b)
-viz_class_b = get_viz_adapter(xai_class_b.default_visualisation)
+xai_instance_b = xai_class_b()
+model_b_viz = st.query_params.get("model_b_viz", xai_instance_b.get_default_visualisation())
+viz_class_b = get_viz_adapter(model_b_viz)
 explanation_b = xai_class_b.load_explanation(run_b, sample_id)
 
 axis_range = None
@@ -43,7 +49,8 @@ try:
 
     comp_max = comparison_class.get_abs_max(explanation_a, explanation_b, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
 
-    margin = comp_max * 0.15 # add some tolerance
+    # add some tolerance
+    margin = comp_max * 0.15
     axis_range = [-(comp_max + margin), comp_max + margin]
 except InvalidConfigurationError as e:
     pass
@@ -62,9 +69,7 @@ if axis_range is not None:
 try:
     comparison = comparison_class()
     viz_options = comparison.get_visualisations_available()
-    comp_viz = st.query_params.get("comp_viz",
-                                   comparison.get_default_visualisation())
-    existing_params = dict(st.query_params)
+    comp_viz = st.query_params.get("comp_viz", comparison.get_default_visualisation())
     select_text = select_comparison_viz(comp_viz, viz_options, existing_params)
     st.html(select_text)
 
@@ -90,6 +95,11 @@ with col1:
     normed_a = normalise_by_max(explanation_a, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
     normed_a = normed_a.sort_values(ascending=True)
     axis_range = [-1.1, 1.1]
+
+    model_a_viz_options = xai_instance_a.get_compatible_visualisations()
+    select_text = select_individual_viz("model_a_viz", model_a_viz, model_a_viz_options, existing_params)
+    st.html(select_text)
+
     fig = viz_class_a().render_local(normed_a, run_a.get(constants.DATA_SCHEMA_ID_COLUMN), axis_range=axis_range)
     st.plotly_chart(fig, key="explanation_a")
 
@@ -98,5 +108,10 @@ with col2:
     normed_b = normalise_by_max(explanation_b, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
     normed_b = normed_b.sort_values(ascending=True)
     axis_range = [-1.1, 1.1]
+
+    model_b_viz_options = xai_instance_b.get_compatible_visualisations()
+    select_text = select_individual_viz("model_b_viz", model_b_viz, model_b_viz_options, existing_params)
+    st.html(select_text)
+
     fig = viz_class_b().render_local(normed_b, run_b.get(constants.DATA_SCHEMA_ID_COLUMN), axis_range=axis_range)
     st.plotly_chart(fig, key="explanation_b")

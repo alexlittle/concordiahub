@@ -10,13 +10,13 @@ class XAIMethodAdapter(ABC):
     Abstract class for XAI method adapter.
     """
     display_name: str | None = None
-    default_visualisation: str | None = None
-    compatible_visualisations: list[str] = []
+    default_visualisation: str = None
+    compatible_visualisations: dict = None
 
     # default to true for most explanation adapters
     requires_encoded_features: bool = True
 
-    # type of explanation storage - df or json
+    # type of explanation storage - df or JSON
     explanation_file_type: str = "df"
 
     @classmethod
@@ -27,6 +27,13 @@ class XAIMethodAdapter(ABC):
     def get_abs_max(cls, explanation: pd.Series, sample_id_column) -> float:
         features = explanation.drop(index=sample_id_column, errors='ignore')
         return pd.to_numeric(features, errors='coerce').abs().max()
+
+
+    def get_compatible_visualisations(self):
+        return self.compatible_visualisations
+
+    def get_default_visualisation(self):
+        return self.default_visualisation
 
     @abstractmethod
     def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
@@ -50,7 +57,7 @@ class XAIMethodAdapter(ABC):
             ctx: RunContext object
 
         Returns:
-            list of dicts - json containing local explanations
+            list of dicts - JSON containing local explanations
 
         Raises:
             MissingDataError: if required data is not provided

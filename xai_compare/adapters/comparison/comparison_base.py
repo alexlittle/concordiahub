@@ -11,9 +11,6 @@ from xai_compare.services.preprocess import normalise_by_sum
 from xai_compare import config
 
 
-
-
-
 class ComparisonAdapter(ABC):
     """Handles comparison between two XAI explanations."""
 

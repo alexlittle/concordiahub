@@ -77,4 +77,4 @@ class ComparisonContext:
 @dataclass
 class VizOption:
     display_name: str
-    method: str
+    method: str | None = None

@@ -3,6 +3,7 @@ Configuration file for XAI-Compare
 """
 
 from typing import Final
+from xai_compare import context
 
 # Constants for artifact filename/structure
 RUNS_DIR_NAME: Final[str] = "runs"
@@ -13,26 +14,47 @@ MODEL_FILENAME: Final[str] = "model"
 # Configuration & Constants for NLP tasks
 EMBEDDING_ENCODER: Final[str] ="all-MiniLM-L6-v2"
 
+#------------------------
+# XAI Method default visualisations & defaults
+#------------------------
+COEFFS_DEFAULT_VIZ = "forceplot"
+COEFFS_COMPATIBLE_VIZ = {
+        "forceplot": context.VizOption(display_name="Forceplot"),
+        "waterfall": context.VizOption(display_name="Waterfall")}
 
-# XAI Method/Visualisation compatability & defaults
-COEFFICIENTS_DEFAULT_VIZ = "forceplot"
-COEFFICIENTS_COMPATIBLE_VIZ = ["waterfall", "forceplot"]
-
-COR_DEFAULT_VIZ = "forceplot"
-COR_COMPATIBLE_VIZ = ["forceplot"]
-
-KERNEL_SHAP_DEFAULT_VIZ = None
-KERNEL_SHAP_COMPATIBLE_VIZ = []
 
 TREE_SHAP_DEFAULT_VIZ = "forceplot"
-TREE_SHAP_COMPATIBLE_VIZ = ["waterfall", "forceplot", "beeswarm"]
+TREE_SHAP_COMPATIBLE_VIZ = {
+        "forceplot": context.VizOption(display_name="Forceplot"),
+        "waterfall": context.VizOption(display_name="Waterfall"),
+        "beeswarm": context.VizOption(display_name="Beeswarm"),
+    }
 
+COR_DEFAULT_VIZ = "forceplot"
+COR_COMPATIBLE_VIZ = {
+        "forceplot": context.VizOption(display_name="Forceplot"),
+    }
 
+#------------------------
+# Visualisation compatibility with XAI methods
+#------------------------
 FORCE_PLOT_COMPATIBLE_XAI = ["shap_tree", "coefficients"]
 WATERFALL_COMPATIBLE_XAI = ["shap_tree","coefficients","cor"]
 
+#------------------------
+# Comparison Visualisation compatibility combinations
+#------------------------
+DEFAULT_COMPARISON_VISUALISATION = "dumbbell"
+DEFAULT_COMPARISON_VISUALISATION_OPTIONS = {
+        "diff_bar": context.VizOption(display_name="Difference (bar)", method="viz_diff_bar"),
+        "dumbbell": context.VizOption(display_name="Dumbbell", method="viz_dumbbell"),
+        "alignment_scale": context.VizOption(display_name="Alignment Scale", method="viz_alignment_scale")
+    }
 
+#------------------------
 # Graph/Plot colour scheme
+#------------------------
+
 PLOT_LEFT_COLOR = "brown"
 PLOT_RIGHT_COLOR = "teal"
 

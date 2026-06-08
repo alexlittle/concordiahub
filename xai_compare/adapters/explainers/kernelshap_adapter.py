@@ -13,8 +13,9 @@ class KernalSHAPAdapter(XAIMethodAdapter):
     """Model-agnostic Kernel Shap Explainer"""
 
     display_name = strings.KERNEL_SHAP_DISPLAY_NAME
-    default_visualisation = config.KERNEL_SHAP_DEFAULT_VIZ
-    compatible_visualisations = config.KERNEL_SHAP_COMPATIBLE_VIZ
+
+    default_visualisation = None
+    compatible_visualisations = {}
 
     def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
         """Computes the local explanation using KernelShap method

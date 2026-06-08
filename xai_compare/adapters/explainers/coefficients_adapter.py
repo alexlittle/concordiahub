@@ -2,12 +2,11 @@
 import pandas as pd
 from typing import Any
 
-from xai_compare.context import RunData
 from xai_compare.exceptions import MissingDataError
 from xai_compare.registry.xai_registry import register_xai
 from xai_compare.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xai_compare.run import Run
-from xai_compare import constants, strings, config
+from xai_compare import constants, strings, config, context
 from xai_compare.context import RunContext
 
 
@@ -16,8 +15,9 @@ class CoefficientsAdapter(XAIMethodAdapter):
     """For models with native interpretability"""
 
     display_name = strings.COEFFICIENTS_DISPLAY_NAME
-    default_visualisation = config.COEFFICIENTS_DEFAULT_VIZ
-    compatible_visualisations = config.COEFFICIENTS_COMPATIBLE_VIZ
+    default_visualisation = config.COEFFS_DEFAULT_VIZ
+
+    compatible_visualisations = config.COEFFS_COMPATIBLE_VIZ
 
     @classmethod
     def load_explanation(cls, run: Run, sample_id: str) -> pd.Series:
