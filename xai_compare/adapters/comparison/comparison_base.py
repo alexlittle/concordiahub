@@ -90,7 +90,7 @@ class ComparisonAdapter(ABC):
                 type="line",
                 x0=a, x1=b,
                 y0=feature, y1=feature,
-                line=dict(color="grey", width=1.5),
+                line={"color":"grey", "width":1.5},
             )
 
         # Dot for model A
@@ -99,7 +99,8 @@ class ComparisonAdapter(ABC):
             y=order,
             mode="markers",
             name=label_a,
-            marker=dict(color=config.PLOT_LEFT_COLOR, size=10, symbol="circle"),
+            marker={"color": config.PLOT_LEFT_COLOR, "size": 10,
+                    "symbol": "circle"},
         ))
 
         # Dot for model B
@@ -108,8 +109,8 @@ class ComparisonAdapter(ABC):
             y=order,
             mode="markers",
             name=label_b,
-            marker=dict(color=config.PLOT_RIGHT_COLOR, size=10,
-                        symbol="circle"),
+            marker={"color":config.PLOT_RIGHT_COLOR, "size":10,
+                        "symbol":"circle"},
         ))
 
         fig.update_layout(
@@ -118,8 +119,8 @@ class ComparisonAdapter(ABC):
             xaxis=config.PLOT_ZERO_LINE,
             yaxis_title="Feature",
             height=400 + len(order) * 20,
-            legend=dict(orientation="h", yanchor="bottom", y=1.02,
-                        xanchor="right", x=1),
+            legend={"orientation":"h", "yanchor":"bottom", "y":1.02,
+                        "xanchor":"right", "x":1},
         )
 
         if ctx.axis_range:
