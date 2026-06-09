@@ -1,9 +1,9 @@
 import pytest
 import pandas as pd
 
-from xai_compare.adapters.comparison.comparison_base import ComparisonAdapter
+from xailens.adapters.comparison.comparison_base import ComparisonAdapter
 
-MODULE_UNDER_TEST = "xai_compare.adapters.comparison.comparison_base"
+MODULE_UNDER_TEST = "xailens.adapters.comparison.comparison_base"
 
 def test_returns_correct_abs_max():
     explanation_a = pd.Series({"feat1": 0.5, "feat2": 0.2})

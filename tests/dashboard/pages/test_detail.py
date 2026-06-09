@@ -3,11 +3,11 @@ from pathlib import Path
 from streamlit.testing.v1 import AppTest
 from unittest.mock import patch, MagicMock
 
-from xai_compare import constants
-from xai_compare.context import VizOption
-from xai_compare.exceptions import InvalidConfigurationError
+from xailens import constants
+from xailens.context import VizOption
+from xailens.exceptions import InvalidConfigurationError
 
-PAGE_PATH = Path(__file__).parents[3] / "xai_compare/dashboard/pages/detail.py"
+PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/detail.py"
 
 
 def make_run(model_id="model-a", model_type="xgboost", xai_methods=None):
@@ -35,14 +35,14 @@ def mock_runs():
 # ---------
 
 def test_no_runs_shows_error():
-    with patch("xai_compare.dashboard.utils.params.get_explorer") as mock_get_explorer:
+    with patch("xailens.dashboard.utils.params.get_explorer") as mock_get_explorer:
         mock_get_explorer.return_value.get_runs_by_uuids.return_value = []
         at = AppTest.from_file(str(PAGE_PATH))
         at.run()
         assert any("No runs selected" in e.value for e in at.error)
 
 def test_no_runs_param_shows_error():
-    with patch("xai_compare.dashboard.utils.params.get_explorer") as mock_get_explorer:
+    with patch("xailens.dashboard.utils.params.get_explorer") as mock_get_explorer:
         mock_get_explorer.return_value.get_runs_by_uuids.return_value = []
         at = AppTest.from_file(str(PAGE_PATH))
         at.run()
@@ -70,18 +70,18 @@ def test_no_comparison_available_shows_warning(mock_runs):
     mock_explorer = MagicMock()
     mock_explorer.get_runs_by_uuids.return_value = [run_a, run_b]
 
-    with patch("xai_compare.dashboard.utils.params.get_explorer", return_value=mock_explorer), \
-         patch("xai_compare.dashboard.utils.detail_helpers.build_model_panel",
+    with patch("xailens.dashboard.utils.params.get_explorer", return_value=mock_explorer), \
+         patch("xailens.dashboard.utils.detail_helpers.build_model_panel",
                side_effect=[mock_panel_a, mock_panel_b]), \
-         patch("xai_compare.dashboard.utils.detail_helpers.render_model_panel"), \
-         patch("xai_compare.dashboard.utils.detail_helpers.select_comparison_viz",
+         patch("xailens.dashboard.utils.detail_helpers.render_model_panel"), \
+         patch("xailens.dashboard.utils.detail_helpers.select_comparison_viz",
                return_value="<p>viz</p>"), \
-         patch("xai_compare.dashboard.utils.breadcrumb.display_breadcrumbs",
+         patch("xailens.dashboard.utils.breadcrumb.display_breadcrumbs",
                return_value="<p>breadcrumb</p>"), \
-         patch("xai_compare.dashboard.utils.layout.apply_layout"), \
-         patch("xai_compare.registry.comparison_registry.get_comparison_adapter",
+         patch("xailens.dashboard.utils.layout.apply_layout"), \
+         patch("xailens.registry.comparison_registry.get_comparison_adapter",
                return_value=mock_comp_class), \
-         patch("xai_compare.context.ComparisonContext"):
+         patch("xailens.context.ComparisonContext"):
 
         at = AppTest.from_file(str(PAGE_PATH))
         at.query_params["runs"] = "uuid1,uuid2"

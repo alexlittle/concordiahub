@@ -2,9 +2,9 @@ import pytest
 import pandas as pd
 from unittest.mock import MagicMock
 
-from xai_compare.run import Run
+from xailens.run import Run
 
-MODULE_UNDER_TEST = "xai_compare.run"
+MODULE_UNDER_TEST = "xailens.run"
 
 # -----------------
 # Fixtures

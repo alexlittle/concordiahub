@@ -1,6 +1,6 @@
 
 import pandas as pd
-import xai_compare as xai
+import xailens as xai
 
 from examples import config
 from examples.helpers import safe_dirname

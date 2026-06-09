@@ -6,35 +6,35 @@ from types import ModuleType
 
 import pytest
 
-from xai_compare.exceptions import InvalidConfigurationError
+from xailens.exceptions import InvalidConfigurationError
 
 # Import registry APIs from their respective modules
-from xai_compare.registry.model_registry import (
+from xailens.registry.model_registry import (
     MODEL_REGISTRY,
     register_model,
     get_model_adapter,
 )
 
-from xai_compare.registry.xai_registry import (
+from xailens.registry.xai_registry import (
     XAI_REGISTRY,
     register_xai,
     get_xai_adapter,
 )
 
-from xai_compare.registry.viz_registry import (
+from xailens.registry.viz_registry import (
     VIZ_REGISTRY,
     register_viz,
     get_viz_adapter,
 )
 
-from xai_compare.registry.comparison_registry import (
+from xailens.registry.comparison_registry import (
     COMPARISON_REGISTRY,
     register_comparison,
     get_comparison_adapter,
 )
 
 
-MODULE_UNDER_TEST = "xai_compare.registry.autodiscover"
+MODULE_UNDER_TEST = "xailens.registry.autodiscover"
 
 
 def _ensure_clean_import():
@@ -50,15 +50,15 @@ def _ensure_clean_import():
 def fresh_module(monkeypatch):
     """
     Provides a freshly imported module for each test and ensures
-    the xai_compare.adapters package exists with a __path__.
+    the xailens.adapters package exists with a __path__.
     """
-    #  'xai_compare' package in sys.modules
-    if "xai_compare" not in sys.modules:
-        xai_compare = ModuleType("xai_compare")
-        sys.modules["xai_compare"] = xai_compare
+    #  'xailens' package in sys.modules
+    if "xailens" not in sys.modules:
+        xailens = ModuleType("xailens")
+        sys.modules["xailens"] = xailens
 
-    # xai_compare.adapters exists and has a __path__
-    adapters_pkg_name = "xai_compare.adapters"
+    # xailens.adapters exists and has a __path__
+    adapters_pkg_name = "xailens.adapters"
     adapters_pkg = ModuleType(adapters_pkg_name)
     adapters_pkg.__path__ = ["FAKE_PATH"]
     sys.modules[adapters_pkg_name] = adapters_pkg
@@ -166,15 +166,15 @@ def test_autodiscover_imports_all_submodules(monkeypatch, fresh_module):
 
     # Simulate modules under each adapter type (subdirectories):
     discovered = [
-        ("finder", "xai_compare.adapters.models.alpha", False),
-        ("finder", "xai_compare.adapters.xai.bravo", False),
-        ("finder", "xai_compare.adapters.viz.charlie", False),
+        ("finder", "xailens.adapters.models.alpha", False),
+        ("finder", "xailens.adapters.xai.bravo", False),
+        ("finder", "xailens.adapters.viz.charlie", False),
     ]
     import_calls = []
 
     def fake_walk_packages(path, prefix):
         assert isinstance(path, (list, tuple))
-        assert prefix == "xai_compare.adapters."
+        assert prefix == "xailens.adapters."
         yield from discovered
 
     def fake_import_module(name):
@@ -194,14 +194,14 @@ def test_autodiscover_continues_on_import_error(monkeypatch, fresh_module, capsy
     autodiscover = fresh_module
 
     discovered = [
-        ("finder", "xai_compare.adapters.good1", False),
-        ("finder", "xai_compare.adapters.bad", False),
-        ("finder", "xai_compare.adapters.good2", False),
+        ("finder", "xailens.adapters.good1", False),
+        ("finder", "xailens.adapters.bad", False),
+        ("finder", "xailens.adapters.good2", False),
     ]
 
     def fake_walk_packages(path, prefix):
         assert isinstance(path, (list, tuple))
-        assert prefix == "xai_compare.adapters."
+        assert prefix == "xailens.adapters."
         for item in discovered:
             yield item
 
@@ -219,18 +219,18 @@ def test_autodiscover_continues_on_import_error(monkeypatch, fresh_module, capsy
 
     # Verify warning printed but function did not raise
     out = capsys.readouterr().out
-    assert "[WARN] Failed importing xai_compare.adapters.bad: boom" in out
+    assert "[WARN] Failed importing xailens.adapters.bad: boom" in out
 
     # Good modules should still be imported
-    assert "xai_compare.adapters.good1" in sys.modules
-    assert "xai_compare.adapters.good2" in sys.modules
+    assert "xailens.adapters.good1" in sys.modules
+    assert "xailens.adapters.good2" in sys.modules
 
 
 def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     autodiscover = fresh_module
 
     discovered_once = [
-        ("finder", "xai_compare.adapters.once", False),
+        ("finder", "xailens.adapters.once", False),
     ]
 
     import_calls = []
@@ -238,7 +238,7 @@ def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     def fake_walk_packages(path, prefix):
         # Relaxed: path type + correct prefix
         assert isinstance(path, (list, tuple))
-        assert prefix == "xai_compare.adapters."
+        assert prefix == "xailens.adapters."
         for item in discovered_once:
             yield item
 
@@ -256,7 +256,7 @@ def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     # Second call
     autodiscover.autodiscover_adapters()
 
-    assert import_calls.count("xai_compare.adapters.once") == 1
+    assert import_calls.count("xailens.adapters.once") == 1
 
 
 def test_autodiscover_thread_safety(monkeypatch, fresh_module):
@@ -267,14 +267,14 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
     autodiscover = fresh_module
 
     discovered = [
-        ("finder", "xai_compare.adapters.threaded", False),
+        ("finder", "xailens.adapters.threaded", False),
     ]
 
     import_calls = []
 
     def fake_walk_packages(path, prefix):
         assert isinstance(path, (list, tuple))
-        assert prefix == "xai_compare.adapters."
+        assert prefix == "xailens.adapters."
         for item in discovered:
             yield item
 
@@ -294,4 +294,4 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
         t.join()
 
     # Even with many concurrent calls, the module should be imported once
-    assert import_calls.count("xai_compare.adapters.threaded") == 1
+    assert import_calls.count("xailens.adapters.threaded") == 1

@@ -1,10 +1,10 @@
 import pandas as pd
 import pytest
 
-from xai_compare.exceptions import InvalidSelectionError
-from xai_compare.services.comparison import build_comparison_df
+from xailens.exceptions import InvalidSelectionError
+from xailens.services.comparison import build_comparison_df
 
-MODULE_UNDER_TEST = "xai_compare.services.comparison"
+MODULE_UNDER_TEST = "xailens.services.comparison"
 
 class MockRun:
     def __init__(self, y_true, y_pred, metadata):

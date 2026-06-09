@@ -2,12 +2,12 @@ from pathlib import Path
 from streamlit.testing.v1 import AppTest
 from unittest.mock import patch, MagicMock
 
-MODULE_UNDER_TEST = "xai_compare.dashboard.pages.overview"
+MODULE_UNDER_TEST = "xailens.dashboard.pages.overview"
 
-PAGE_PATH = Path(__file__).parents[3] / "xai_compare/dashboard/pages/overview.py"
+PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/overview.py"
 
 def test_overview_no_runs():
-    with patch("xai_compare.dashboard.services.get_explorer") as mock_explorer:
+    with patch("xailens.dashboard.services.get_explorer") as mock_explorer:
         mock_explorer.return_value.get_runs_by_uuids.return_value = []
         at = AppTest.from_file(str(PAGE_PATH))
         at.run()
@@ -21,7 +21,7 @@ def test_overview_reads_query_params():
     assert len(at.warning) == 0
 
 
-@patch("xai_compare.dashboard.utils.params.get_explorer")
+@patch("xailens.dashboard.utils.params.get_explorer")
 def test_explorer_called_with_correct_ids(mock_get_explorer):
     mock_explorer = MagicMock()
     mock_get_explorer.return_value = mock_explorer
@@ -31,8 +31,8 @@ def test_explorer_called_with_correct_ids(mock_get_explorer):
     mock_explorer.get_runs_by_uuids.assert_called_once_with(["uuid1", "uuid2"])
 
 
-@patch("xai_compare.dashboard.utils.params.get_explorer")
-@patch("xai_compare.services.comparison.build_comparison_df")
+@patch("xailens.dashboard.utils.params.get_explorer")
+@patch("xailens.services.comparison.build_comparison_df")
 def test_build_comparison_df_called_with_runs(mock_build_comparison_df, mock_get_explorer):
     mock_run_a = MagicMock()
     mock_run_b = MagicMock()

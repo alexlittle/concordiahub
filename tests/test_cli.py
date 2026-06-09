@@ -1,7 +1,7 @@
 from unittest.mock import patch
-from xai_compare.cli import main
+from xailens.cli import main
 
-MODULE_UNDER_TEST = "xai_compare.cli"
+MODULE_UNDER_TEST = "xailens.cli"
 
 def test_main_runs_streamlit(tmp_path):
     with patch("subprocess.run") as mock_run:

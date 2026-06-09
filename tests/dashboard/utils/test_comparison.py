@@ -1,7 +1,7 @@
 import pandas as pd
 
-from xai_compare.dashboard.utils.comparison import generate_comparison_table_html
-from xai_compare import constants
+from xailens.dashboard.utils.comparison import generate_comparison_table_html
+from xailens import constants
 
 class MockRun:
     def __init__(self, model_name):

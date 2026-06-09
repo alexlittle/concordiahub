@@ -1,7 +1,7 @@
 import joblib
 import pandas as pd
 
-import xai_compare as xai
+import xailens as xai
 from examples import config
 
 X_train = pd.read_parquet('./cache/medsynth/xgboost/X_train.parquet')

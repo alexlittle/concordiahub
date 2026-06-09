@@ -2,11 +2,11 @@ import pytest
 from unittest.mock import patch, MagicMock
 
 
-from xai_compare import runner
-from xai_compare.exceptions import InvalidConfigurationError
-from xai_compare.context import RunContext, RunData, DataSchema
+from xailens import runner
+from xailens.exceptions import InvalidConfigurationError
+from xailens.context import RunContext, RunData, DataSchema
 
-MODULE_UNDER_TEST = "xai_compare.runner"
+MODULE_UNDER_TEST = "xailens.runner"
 
 
 # Test with no context provided
@@ -25,7 +25,7 @@ def test_runner_invalid_model() -> None:
     data_schema = DataSchema("a","b","c")
     run_data = RunData(data_schema)
     ctx = RunContext("unknown", [], "test_dataset", run_data)
-    with patch("xai_compare.runner.ArtifactStore") as mock_store:
+    with patch("xailens.runner.ArtifactStore") as mock_store:
         mock_store.return_value = MagicMock()
         with pytest.raises(InvalidConfigurationError, match="Model adapter"):
             runner.run(ctx)

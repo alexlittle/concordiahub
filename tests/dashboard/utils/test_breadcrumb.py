@@ -1,7 +1,7 @@
 import pytest
 
-from xai_compare.dashboard.utils.breadcrumb import display_breadcrumbs
-from xai_compare.run import Run
+from xailens.dashboard.utils.breadcrumb import display_breadcrumbs
+from xailens.run import Run
 
 @pytest.fixture
 def run_a():

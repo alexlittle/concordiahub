@@ -1,4 +1,4 @@
-# xaicompare
+# XAILens
 
 Under development as part of my MSc project, XAI Compare allows model developers to compare Explainable AI methods and 
 explanations between models, including scikit-learn models and LLMs.

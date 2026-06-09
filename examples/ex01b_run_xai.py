@@ -2,7 +2,7 @@
 import joblib
 import pandas as pd
 
-import xai_compare as xai
+import xailens as xai
 from examples import config
 
 X = pd.read_parquet('./cache/heart/baseline/X.parquet')

@@ -1,9 +1,9 @@
 import pytest
 import pandas as pd
 from unittest.mock import MagicMock
-from xai_compare.adapters.explainers.coefficients_adapter import CoefficientsAdapter
-from xai_compare.exceptions import MissingDataError
-from xai_compare import constants
+from xailens.adapters.explainers.coefficients_adapter import CoefficientsAdapter
+from xailens.exceptions import MissingDataError
+from xailens import constants
 
 def make_run(sample_id_column="id", dataframe=None):
     run = MagicMock()

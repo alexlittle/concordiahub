@@ -34,7 +34,7 @@ dependencies = [
 
 
 [project.scripts]
-xailens-dash = "xai_compare.cli:main"
+xailens-dash = "xailens.cli:main"
 
 # Tell setuptools where to find code and how to determine the version
 [tool.setuptools]
@@ -42,16 +42,16 @@ package-dir = {"" = "."}
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["xai_compare*"]
+include = ["xailens*"]
 
 
-# Read version from xaicompare/_version.py
+# Read version from xailens/_version.py
 [tool.setuptools.dynamic]
-version = { attr = "xai_compare._version.__version__" }
+version = { attr = "xailens._version.__version__" }
 
 [tool.coverage.run]
 relative_files = true
-source = ["xai_compare"]
+source = ["xailens"]
 
 [project.optional-dependencies]
 dev = [

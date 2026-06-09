@@ -5,8 +5,8 @@ import plotly.graph_objects as go
 from unittest.mock import MagicMock
 
 
-from xai_compare.context import ComparisonContext
-from xai_compare.adapters.comparison.default_comparison_adapter import DefaultComparisonAdapter
+from xailens.context import ComparisonContext
+from xailens.adapters.comparison.default_comparison_adapter import DefaultComparisonAdapter
 
 
 def make_run(model_id="model-a", model_type="xgboost", model_subtype=None):

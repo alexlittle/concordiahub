@@ -1,10 +1,10 @@
 from streamlit.testing.v1 import AppTest
 from pathlib import Path
 
-MODULE_UNDER_TEST = "xai_compare.dashboard.app"
+MODULE_UNDER_TEST = "xailens.dashboard.app"
 
 
-APP_PATH = Path(__file__).parent.parent.parent / "xai_compare" / "dashboard" / "app.py"
+APP_PATH = Path(__file__).parent.parent.parent / "xailens" / "dashboard" / "app.py"
 
 def test_app_main():
     at = AppTest.from_file(APP_PATH).run()

@@ -9,7 +9,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('../..'))
 
-from xai_compare._version import __version__
+from xailens._version import __version__
 release = __version__
 version = ".".join(__version__.split(".")[:2])
 

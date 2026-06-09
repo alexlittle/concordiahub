@@ -4,10 +4,10 @@ import pandas as pd
 import uuid
 
 from unittest.mock import MagicMock
-from xai_compare.artifacts import ArtifactStore
-from xai_compare import RunContext, RunData, DataSchema
+from xailens.artifacts import ArtifactStore
+from xailens import RunContext, RunData, DataSchema
 
-MODULE_UNDER_TEST = "xai_compare.artifacts"
+MODULE_UNDER_TEST = "xailens.artifacts"
 
 @pytest.fixture
 def mock_store():

@@ -4,9 +4,9 @@ import pandas as pd
 
 from unittest.mock import MagicMock, patch
 
-from xai_compare.encoder import XAITextEncoder
+from xailens.encoder import XAITextEncoder
 
-MODULE_UNDER_TEST = "xai_compare.encoder"
+MODULE_UNDER_TEST = "xailens.encoder"
 
 @pytest.fixture
 def sample_df():

@@ -2,11 +2,11 @@ import pytest
 import numpy as np
 import pandas as pd
 from unittest.mock import MagicMock, patch
-from xai_compare.adapters.explainers.treeshap_adapter import TreeSHAPAdapter
-from xai_compare.context import RunData, DataSchema, RunContext
-from xai_compare.exceptions import MissingDataError
+from xailens.adapters.explainers.treeshap_adapter import TreeSHAPAdapter
+from xailens.context import RunData, DataSchema, RunContext
+from xailens.exceptions import MissingDataError
 
-MODULE_UNDER_TEST = "xai_compare.adapters.explainers.treeshap_adapter"
+MODULE_UNDER_TEST = "xailens.adapters.explainers.treeshap_adapter"
 
 @pytest.fixture
 def adapter():

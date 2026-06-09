@@ -1,5 +1,5 @@
 import pytest
-from xai_compare.adapters.explainers.cor_adapter import CoRAdapter, ResponseSchema, LLMResponse, ContribScore
+from xailens.adapters.explainers.cor_adapter import CoRAdapter, ResponseSchema, LLMResponse, ContribScore
 
 
 @pytest.fixture
