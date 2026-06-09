@@ -3,20 +3,27 @@
 Under development as part of my MSc project, XAI Compare allows model developers to compare Explainable AI methods and 
 explanations between models, including scikit-learn models and LLMs.
 
-## Setup & Install
-
-* This repo uses Git LFS for large files. Before cloning, install Git LFS:
-    ```bash
-    sudo apt install git-lfs  # Ubuntu
-    brew install git-lfs      # macOS
-    git lfs install
-    ```
-* Install with 
 
 
 As this is a proof of concept framework, not all model, XAI method or visualisation type has been developed. However,
 the architecture (adapter pattern) allows new model types, XAI methods and visualisations to be added without large 
 changes to the codebase.
+
+
+## Install
+
+* Install with `pip install xailens`
+* Lanuch the dashboard with `xailens-dash`
+
+
+## Source code/Development
+* This repo uses Git LFS for large files. Before cloning, install Git LFS:
+    ```bash
+    sudo apt install git-lfs  # Ubuntu
+    brew install git-lfs      # macOS
+    git lfs install
+      ```
+
 
 
 
