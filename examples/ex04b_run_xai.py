@@ -31,7 +31,7 @@ ctx = xai.RunContext(
     "medsynth",
     run_data,
     model=model,
-    run_name="xgboost_medsynth",
+    run_name="medsynth_xgboost",
     model_id="XGBoost")
 
 xai.run(ctx)

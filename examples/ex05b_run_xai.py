@@ -4,15 +4,16 @@ import xai_compare as xai
 from examples import config
 from examples.helpers import safe_dirname
 
-dir_name = f"llm_{safe_dirname(config.MEDSYNTH_OLLAMA_MODEL)}"
+current_model = "qwen2.5_14b-instruct-q8_0"
+dir_name = f"llm_{safe_dirname(current_model)}"
 X = pd.read_parquet(f"./cache/medsynth/{dir_name}/X.parquet")
 y = pd.read_parquet(f"./cache/medsynth/{dir_name}/y.parquet")
 y_preds = pd.read_parquet(f"./cache/medsynth/{dir_name}/y_preds.parquet")
 y_exp = pd.read_parquet(f"./cache/medsynth/{dir_name}/y_exp.parquet")
 
 schema = xai.ResponseSchema(
-    contributions_field="feature_contributions",
-    contribution_key=None,
+    contributions_field="key_factors",
+    contribution_key="phrase",
 )
 
 data_schema = xai.DataSchema(
@@ -32,9 +33,9 @@ ctx = xai.RunContext(
     ["cor"],
     "medsynth",
     run_data,
-    model_subtype=config.MEDSYNTH_OLLAMA_MODEL,
-    run_name="llm_medsynth",
-    model_id="LLM v1",
+    model_subtype=current_model,
+    run_name=f"medsynth_llm_{safe_dirname(current_model)}",
+    model_id="LLM",
     response_schema=schema)
 
 xai.run(ctx)

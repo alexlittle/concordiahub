@@ -1,0 +1,23 @@
+{
+    "model_type": "llm",
+    "xai_methods": [
+        "cor"
+    ],
+    "dataset_id": "medsynth",
+    "model_subtype": "gemma3_27b-it-qat",
+    "run_name": "medsynth_llm_gemma3_27b-it-qat",
+    "model_id": "LLM",
+    "response_schema": {
+        "contributions_field": "key_factors",
+        "contribution_key": "phrase"
+    },
+    "datetime": "20260609-141108",
+    "run_uuid": "994527ab-64ed-44a4-888b-a27a72e7c9ff",
+    "data_schema": {
+        "sample_id_column": "sample_uuid",
+        "target_column": "target",
+        "prediction_column": "prediction",
+        "feature_columns": null,
+        "class_names": null
+    }
+}
