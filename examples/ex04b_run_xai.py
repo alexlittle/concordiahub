@@ -14,7 +14,7 @@ model = joblib.load('./cache/medsynth/xgboost/model.joblib')
 
 data_schema = xai.DataSchema(
     sample_id_column=config.SAMPLE_UUID_COL,
-    target_column="target",
+    target_column="y_test",
     prediction_column="y_pred")
 
 run_data = xai.RunData(

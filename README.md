@@ -18,11 +18,11 @@ changes to the codebase.
 
 ## Source code/Development
 * This repo uses Git LFS for large files. Before cloning, install Git LFS:
-    ```bash
-    sudo apt install git-lfs  # Ubuntu
-    brew install git-lfs      # macOS
-    git lfs install
-      ```
+```bash
+sudo apt install git-lfs  # Ubuntu
+brew install git-lfs      # macOS
+git lfs install
+```
 
 
 

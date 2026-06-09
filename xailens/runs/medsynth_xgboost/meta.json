@@ -12,7 +12,7 @@
     "run_uuid": "4312b97b-4c63-40e7-8c86-22e54f336468",
     "data_schema": {
         "sample_id_column": "sample_uuid",
-        "target_column": "target",
+        "target_column": "y_test",
         "prediction_column": "y_pred",
         "feature_columns": null,
         "class_names": null
