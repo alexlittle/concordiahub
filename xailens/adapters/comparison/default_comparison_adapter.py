@@ -3,9 +3,9 @@ from xailens.adapters.comparison.comparison_base import ComparisonAdapter
 from xailens import context, config
 
 
-@register_comparison("coefficients", "shap_tree")
+@register_comparison("coefficients", "tree_shap")
 @register_comparison("coefficients", "coefficients")
-@register_comparison("shap_tree", "shap_tree")
+@register_comparison("tree_shap", "tree_shap")
 class DefaultComparisonAdapter(ComparisonAdapter):
     """A default comparison adapter for shap_tree and coefficients"""
 

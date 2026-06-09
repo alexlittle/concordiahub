@@ -22,31 +22,31 @@ LIST_RAW = {
 LIST_SCHEMA = ResponseSchema(contributions_field="contributions", contribution_key="feature")
 
 
-def test_normalise_list_format_returns_llm_response(adapter):
-    result = adapter._normalise(LIST_RAW, LIST_SCHEMA)
+def test_reformat_list_format_returns_llm_response(adapter):
+    result = adapter._reformat(LIST_RAW, LIST_SCHEMA)
     assert isinstance(result, LLMResponse)
 
 
-def test_normalise_list_format_top_level_fields(adapter):
-    result = adapter._normalise(LIST_RAW, LIST_SCHEMA)
+def test_reformat_list_format_top_level_fields(adapter):
+    result = adapter._reformat(LIST_RAW, LIST_SCHEMA)
     assert result.reasoning == LIST_RAW["reasoning"]
     assert result.prediction == LIST_RAW["prediction"]
     assert result.confidence == LIST_RAW["confidence"]
 
 
-def test_normalise_list_format_contributions_keyed_by_feature(adapter):
-    result = adapter._normalise(LIST_RAW, LIST_SCHEMA)
+def test_reformat_list_format_contributions_keyed_by_feature(adapter):
+    result = adapter._reformat(LIST_RAW, LIST_SCHEMA)
     assert set(result.contributions.keys()) == {"age", "cholesterol"}
 
 
-def test_normalise_list_format_contrib_score_values(adapter):
-    result = adapter._normalise(LIST_RAW, LIST_SCHEMA)
+def test_reformat_list_format_contrib_score_values(adapter):
+    result = adapter._reformat(LIST_RAW, LIST_SCHEMA)
     assert result.contributions["age"] == ContribScore(score=2, reasoning="older age increases risk")
     assert result.contributions["cholesterol"] == ContribScore(score=1, reasoning="elevated levels noted")
 
 
-def test_normalise_list_format_raw_preserved(adapter):
-    result = adapter._normalise(LIST_RAW, LIST_SCHEMA)
+def test_reformat_list_format_raw_preserved(adapter):
+    result = adapter._reformat(LIST_RAW, LIST_SCHEMA)
     assert result.raw is LIST_RAW
 
 
@@ -65,32 +65,32 @@ DICT_RAW = {
 DICT_SCHEMA = ResponseSchema(contributions_field="contributions", contribution_key=None)
 
 
-def test_normalise_dict_format_contributions_keyed_by_feature(adapter):
-    result = adapter._normalise(DICT_RAW, DICT_SCHEMA)
+def test_reformat_dict_format_contributions_keyed_by_feature(adapter):
+    result = adapter._reformat(DICT_RAW, DICT_SCHEMA)
     assert set(result.contributions.keys()) == {"exercise_angina", "chest_pain"}
 
 
-def test_normalise_dict_format_contrib_score_values(adapter):
-    result = adapter._normalise(DICT_RAW, DICT_SCHEMA)
+def test_reformat_dict_format_contrib_score_values(adapter):
+    result = adapter._reformat(DICT_RAW, DICT_SCHEMA)
     assert result.contributions["chest_pain"] == ContribScore(score=2, reasoning="atypical angina present")
 
 
 # --- edge cases ---
 
-def test_normalise_empty_contributions_list(adapter):
+def test_reformat_empty_contributions_list(adapter):
     raw = {**LIST_RAW, "contributions": []}
-    result = adapter._normalise(raw, LIST_SCHEMA)
+    result = adapter._reformat(raw, LIST_SCHEMA)
     assert result.contributions == {}
 
 
-def test_normalise_empty_contributions_dict(adapter):
+def test_reformat_empty_contributions_dict(adapter):
     raw = {**DICT_RAW, "contributions": {}}
-    result = adapter._normalise(raw, DICT_SCHEMA)
+    result = adapter._reformat(raw, DICT_SCHEMA)
     assert result.contributions == {}
 
 
-def test_normalise_custom_contributions_field(adapter):
+def test_reformat_custom_contributions_field(adapter):
     raw = {**LIST_RAW, "feature_scores": LIST_RAW["contributions"]}
     schema = ResponseSchema(contributions_field="feature_scores", contribution_key="feature")
-    result = adapter._normalise(raw, schema)
+    result = adapter._reformat(raw, schema)
     assert set(result.contributions.keys()) == {"age", "cholesterol"}

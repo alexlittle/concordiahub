@@ -3,11 +3,9 @@ Context dataclasses for XAI-Compare
 '''
 
 import pandas as pd
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Optional
 
-from xailens import constants
-from xailens.services.preprocess import normalise_by_sum
 from xailens.run import Run
 
 @dataclass
@@ -65,13 +63,6 @@ class ComparisonContext:
     explanation_a: pd.Series
     explanation_b: pd.Series
     axis_range: tuple | None = None
-
-    features_a: pd.Series = field(init=False)
-    features_b: pd.Series = field(init=False)
-
-    def __post_init__(self):
-        self.features_a = normalise_by_sum(self.explanation_a, self.run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-        self.features_b = normalise_by_sum(self.explanation_b, self.run_b.get(constants.DATA_SCHEMA_ID_COLUMN))
 
 
 @dataclass

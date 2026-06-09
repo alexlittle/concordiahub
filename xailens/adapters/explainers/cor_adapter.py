@@ -52,7 +52,7 @@ class CoRAdapter(XAIMethodAdapter):
     explanation_file_type: str = "json"
 
     @classmethod
-    def load_explanation(cls, run: Run, sample_id: str) -> pd.Series:
+    def load_explanation(cls, run: Run, sample_id: str) -> pd.DataFrame:
         records = run.store.load_json(f"explanations_{cls.key}")
         sample_id_col = run.get(constants.DATA_SCHEMA_ID_COLUMN)
 
@@ -60,11 +60,19 @@ class CoRAdapter(XAIMethodAdapter):
         if row is None:
             raise ValueError(
                 f"Sample '{sample_id}' not found in explanations for {cls.key}")
-
-        return pd.Series({
-            feature: data["score"]
+        scores = [data["score"] for data in row["contributions"].values()]
+        abs_sum = sum(abs(s) for s in scores)
+        abs_max = max(abs(s) for s in scores)
+        return pd.DataFrame([
+            {
+                "feature_name": feature,
+                "score": data["score"],
+                "score_normalised_sum": data["score"] / abs_sum if abs_sum != 0 else data["score"],
+                "score_normalised_max": data["score"] / abs_max if abs_max != 0 else data["score"],
+                "reasoning": data["reasoning"]
+            }
             for feature, data in row["contributions"].items()
-        }, name=sample_id)
+        ])
 
     def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
         raise NotImplementedError
@@ -90,11 +98,11 @@ class CoRAdapter(XAIMethodAdapter):
         output = []
         for idx, row in ctx.data.y_exp.iterrows():
             raw = json.loads(row["explanation"])
-            response = self._normalise(raw, ctx.response_schema)
+            response = self._reformat(raw, ctx.response_schema)
             output.append(response.to_dict(sample_id_col, row[sample_id_col]))
         return output
 
-    def _normalise(self, raw: dict, schema: ResponseSchema) -> LLMResponse:
+    def _reformat(self, raw: dict, schema: ResponseSchema) -> LLMResponse:
         raw_contribs = raw[schema.contributions_field]
 
         if schema.contribution_key is not None:

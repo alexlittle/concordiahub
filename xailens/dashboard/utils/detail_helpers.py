@@ -5,7 +5,6 @@ from dataclasses import dataclass
 
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.registry.viz_registry import get_viz_adapter
-from xailens.services.preprocess import normalise_by_max
 from xailens import constants, exceptions
 from xailens.dashboard.utils.formatting import format_model_name
 
@@ -75,8 +74,6 @@ def build_model_panel(run, viz_param_key, query_params) -> ModelPanel:
 
 def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
     st.subheader(f"**{format_model_name(panel.run)} Explanation:**")
-    normed = normalise_by_max(panel.explanation, panel.run.get(constants.DATA_SCHEMA_ID_COLUMN))
-    normed = normed.sort_values(ascending=True)
     axis_range = [-1.1, 1.1]
 
     viz_options = panel.xai_instance.get_compatible_visualisations()
@@ -89,8 +86,7 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
 
     try:
         fig = panel.viz_class().render_local(
-            normed,
-            panel.run.get(constants.DATA_SCHEMA_ID_COLUMN),
+            panel.explanation,
             axis_range=axis_range,
         )
         if isinstance(fig, plotly.graph_objs.Figure):

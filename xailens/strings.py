@@ -35,8 +35,8 @@ FORCE_PLOT_X_AXIS = "Normalised contribution"
 
 # Waterfall Visualisation
 WATERFALL_DISPLAY_NAME = "Waterfall"
-WATERFALL_TITLE = "Feature Contributions (normalised)"
-WATERFALL_X_AXIS = "Normalised contribution"
+WATERFALL_TITLE = "Feature Contributions"
+WATERFALL_X_AXIS = "Contribution"
 
 # Tabular Visualisation
-TABULAR_DISPLAY_NAME = "Tabluar (text)"
+TABULAR_DISPLAY_NAME = "Tabular (text)"

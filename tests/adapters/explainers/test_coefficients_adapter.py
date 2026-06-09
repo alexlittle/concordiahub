@@ -23,12 +23,13 @@ def make_run(sample_id_column="id", dataframe=None):
 def test_returns_correct_row():
     run = make_run()
     result = CoefficientsAdapter.load_explanation(run, "sample-1")
-    assert result["feat1"] == 0.5
+    row = result[result["feature_name"] == "feat1"].iloc[0]
+    assert row["score"] == 0.5
 
-def test_returns_series():
+def test_returns_dataframe():
     run = make_run()
     result = CoefficientsAdapter.load_explanation(run, "sample-1")
-    assert isinstance(result, pd.Series)
+    assert isinstance(result, pd.DataFrame)
 
 def test_missing_sample_raises():
     run = make_run()
@@ -47,4 +48,5 @@ def test_uses_correct_id_column():
     })
     run = make_run(dataframe=df)
     result = CoefficientsAdapter.load_explanation(run, "sample-1")
-    assert result["feat1"] == 0.5
+    row = result[result["feature_name"] == "feat1"].iloc[0]
+    assert row["score"] == 0.5

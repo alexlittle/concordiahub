@@ -29,14 +29,11 @@ def main():
     axis_range = None
     try:
         comparison_class = get_comparison_adapter(method_a, method_b)
-        comp_max = comparison_class.get_abs_max(
-            panel_a.explanation, panel_b.explanation,
-            run_a.get(constants.DATA_SCHEMA_ID_COLUMN)
-        )
+        comp_max = comparison_class.get_abs_max(panel_a.explanation, panel_b.explanation)
         margin = comp_max * 0.15
         axis_range = [-(comp_max + margin), comp_max + margin]
-    except InvalidConfigurationError:
-        pass
+    except InvalidConfigurationError as e:
+        print(e)
 
     # Display
     apply_layout(strings.APP_NAME)

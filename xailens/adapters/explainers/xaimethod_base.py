@@ -3,6 +3,9 @@ from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 from xailens.context import RunContext
+from xailens.run import Run
+from xailens.exceptions import MissingDataError
+from xailens import constants
 
 
 class XAIMethodAdapter(ABC):
@@ -20,14 +23,22 @@ class XAIMethodAdapter(ABC):
     explanation_file_type: str = "df"
 
     @classmethod
-    def load_explanation(cls, store, sample_id: str) -> pd.Series:
-        raise NotImplementedError
-
-    @classmethod
-    def get_abs_max(cls, explanation: pd.Series, sample_id_column) -> float:
-        features = explanation.drop(index=sample_id_column, errors='ignore')
-        return pd.to_numeric(features, errors='coerce').abs().max()
-
+    def load_explanation(cls, run: Run, sample_id: str) -> pd.DataFrame:
+        df = run.store.load_dataframe(f"explanations_{cls.key}")
+        row = df[df[run.get(constants.DATA_SCHEMA_ID_COLUMN)] == sample_id]
+        if row.empty:
+            raise MissingDataError(
+                f"Sample '{sample_id}' not found in explanations for {cls.key}")
+        explanation = row.iloc[0].drop(run.get(constants.DATA_SCHEMA_ID_COLUMN), errors='coerce')
+        abs_sum = explanation.abs().sum()
+        abs_max = explanation.abs().max()
+        return pd.DataFrame({
+            "feature_name": explanation.index,
+            "score": explanation.values,
+            "score_normalised_sum": explanation.values / abs_sum if abs_sum != 0 else explanation.values,
+            "score_normalised_max": explanation.values / abs_max if abs_max != 0 else explanation.values,
+            "reasoning": None
+        })
 
     def get_compatible_visualisations(self):
         """Gets the compatible visualisations for the instantiated class"""

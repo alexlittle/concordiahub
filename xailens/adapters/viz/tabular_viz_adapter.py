@@ -9,7 +9,7 @@ class TabularAdapter(VizAdapter):
     display_name = strings.TABULAR_DISPLAY_NAME
     compatible_explanations = config.TABULAR_COMPATIBLE_XAI
 
-    def render_local(self, explanation, sample_id_col, axis_range=None):
+    def render_local(self, explanation, axis_range=None):
         return explanation
 
     def render_global(self, explanations):

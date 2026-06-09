@@ -5,8 +5,8 @@ from typing import Any
 from xailens.exceptions import MissingDataError
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
-from xailens.run import Run
-from xailens import constants, strings, config, context
+
+from xailens import strings, config
 from xailens.context import RunContext
 
 
@@ -19,13 +19,6 @@ class CoefficientsAdapter(XAIMethodAdapter):
 
     compatible_visualisations = config.COEFFS_COMPATIBLE_VIZ
 
-    @classmethod
-    def load_explanation(cls, run: Run, sample_id: str) -> pd.Series:
-        df = run.store.load_dataframe(f"explanations_{cls.key}")
-        row = df[df[run.get(constants.DATA_SCHEMA_ID_COLUMN)] == sample_id]
-        if row.empty:
-            raise MissingDataError(f"Sample '{sample_id}' not found in explanations for {cls.key}")
-        return row.iloc[0]
 
     def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
