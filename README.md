@@ -13,14 +13,14 @@ changes to the codebase.
 ## Install
 
 * Install with `pip install xailens`
-* Lanuch the dashboard with `xailens-dash`
+* Launch the dashboard with `xailens-dash`
 
 
 ## Source code/Development
 * This repo uses Git LFS for large files. Before cloning, install Git LFS:
 ```bash
-sudo apt install git-lfs  # Ubuntu
-brew install git-lfs      # macOS
+sudo apt install git-lfs # Ubuntu
+brew install git-lfs # macOS
 git lfs install
 ```
 

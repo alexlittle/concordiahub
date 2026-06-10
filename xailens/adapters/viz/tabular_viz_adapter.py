@@ -10,7 +10,14 @@ class TabularAdapter(VizAdapter):
     compatible_explanations = config.TABULAR_COMPATIBLE_XAI
 
     def render_local(self, explanation, axis_range=None):
-        return explanation
+        # drop unnecessary columns
+        explanation = explanation.drop(columns=["score", "score_normalised_sum"])
+        # rename for display
+        explanation = explanation.rename(
+            columns={"feature_name": "Feature",
+                     "score_normalised_max": "Score (1 to -1)",
+                     "reasoning": "Reasoning"})
+        return explanation.sort_values("Score (1 to -1)", ascending=False)
 
     def render_global(self, explanations):
         # Placeholder function

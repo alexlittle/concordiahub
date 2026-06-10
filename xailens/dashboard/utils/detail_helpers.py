@@ -1,13 +1,14 @@
 import streamlit as st
 import plotly
+import pandas as pd
 
 from dataclasses import dataclass
 
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.registry.viz_registry import get_viz_adapter
-from xailens import constants, exceptions
+from xailens import exceptions
 from xailens.dashboard.utils.formatting import format_model_name
-
+from xailens.dashboard.utils.display_table import render_dataframe
 
 @dataclass
 class ModelPanel:
@@ -85,13 +86,15 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
         return
 
     try:
-        fig = panel.viz_class().render_local(
+        viz = panel.viz_class().render_local(
             panel.explanation,
             axis_range=axis_range,
         )
-        if isinstance(fig, plotly.graph_objs.Figure):
-            st.plotly_chart(fig, key=plot_key)
+        if isinstance(viz, plotly.graph_objs.Figure):
+            st.plotly_chart(viz, key=plot_key)
+        elif isinstance(viz, pd.DataFrame):
+            st.html(render_dataframe(viz))
         else:
-            st.html(fig)
+            st.html(viz)
     except NotImplementedError:
         st.warning(f"{panel.viz_name} is not yet implemented for {format_model_name(panel.run)}")
