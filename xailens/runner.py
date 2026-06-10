@@ -1,10 +1,11 @@
 
+from sklearn.metrics import accuracy_score, f1_score
 from dataclasses import fields
 
 from xailens.exceptions import InvalidConfigurationError
 from xailens.encoder import XAITextEncoder
 from xailens.artifacts import ArtifactStore
-from xailens.context import RunContext
+from xailens.context import RunContext, RunMetrics
 from xailens.registry.model_registry import get_model_adapter
 from xailens.registry.xai_registry import get_xai_adapter
 
@@ -12,6 +13,20 @@ def run(ctx: RunContext):
     # check ctx provided
     if ctx is None:
         raise InvalidConfigurationError("Context (ctx) is required")
+
+    if (ctx.data.y_test is not None or ctx.data.y is not None) and ctx.data.y_pred is not None:
+        sample_id = ctx.data.data_schema.sample_id_column
+        full_test = ctx.data.y_test if ctx.data.y_test is not None else ctx.data.y
+
+        pred_data = ctx.data.y_pred.set_index(sample_id)
+        test_data = full_test.set_index(sample_id).loc[pred_data.index]
+
+        ctx.metrics = RunMetrics(
+            n_samples=len(test_data),
+            n_failed=len(full_test) - len(test_data),
+            accuracy=round(accuracy_score(test_data, pred_data), 4),
+            f1_macro=round(f1_score(test_data, pred_data, average='macro'), 4),
+            f1_weighted=round(f1_score(test_data, pred_data, average='weighted'), 4))
 
     # store all the raw data
     artifact_store = ArtifactStore(ctx)

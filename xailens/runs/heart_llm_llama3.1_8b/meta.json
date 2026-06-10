@@ -11,8 +11,15 @@
         "contributions_field": "feature_contributions",
         "contribution_key": null
     },
-    "datetime": "20260607-100613",
-    "run_uuid": "e4e8b8c4-67cb-4ca0-bac0-ae215de34da4",
+    "metrics": {
+        "accuracy": 0.4507,
+        "f1_macro": 0.3437,
+        "f1_weighted": 0.3052,
+        "n_samples": 213,
+        "n_failed": 90
+    },
+    "datetime": "20260610-205257",
+    "run_uuid": "b15aa6d5-7688-4b0f-b4ce-fffba95b585e",
     "data_schema": {
         "sample_id_column": "sample_uuid",
         "target_column": "target",

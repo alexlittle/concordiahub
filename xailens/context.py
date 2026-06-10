@@ -22,6 +22,15 @@ class ResponseSchema:
     contribution_key: str | None
 
 @dataclass
+class RunMetrics:
+    accuracy: Optional[float] = None
+    f1_macro: Optional[float] = None
+    f1_weighted: Optional[float] = None
+    n_samples: Optional[int] = None
+    n_failed: Optional[int] = None
+
+
+@dataclass
 class RunData:
     """
     Dataclass structure for RunData to be passed to runner
@@ -51,6 +60,7 @@ class RunContext:
     run_name: Optional[str] = None
     model_id: Optional[str] = None
     response_schema: Optional[ResponseSchema] = None
+    metrics: Optional[RunMetrics] = None
 
 
 @dataclass

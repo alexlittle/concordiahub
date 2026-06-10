@@ -4,7 +4,7 @@ import xailens as xai
 from examples import config
 from examples.helpers import safe_dirname
 
-current_model = "qwen2.5_14b-instruct-q8_0"
+current_model = "gemma3_27b-it-qat"
 dir_name = f"llm_{safe_dirname(current_model)}"
 X = pd.read_parquet(f"./cache/medsynth/{dir_name}/X.parquet")
 y = pd.read_parquet(f"./cache/medsynth/{dir_name}/y.parquet")

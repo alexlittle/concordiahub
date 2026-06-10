@@ -7,8 +7,16 @@
     "model_subtype": null,
     "run_name": "heart_lr",
     "model_id": "LR v1",
-    "datetime": "20260605-165811",
-    "run_uuid": "c99d94b9-5df6-4883-b7b4-37d90e2a2262",
+    "response_schema": null,
+    "metrics": {
+        "accuracy": 0.8449,
+        "f1_macro": 0.8429,
+        "f1_weighted": 0.8444,
+        "n_samples": 303,
+        "n_failed": 0
+    },
+    "datetime": "20260610-205150",
+    "run_uuid": "4dd56b8c-d22e-4d1e-9cc3-c9dbb696c105",
     "data_schema": {
         "sample_id_column": "sample_uuid",
         "target_column": "target",

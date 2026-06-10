@@ -11,8 +11,15 @@
         "contributions_field": "key_factors",
         "contribution_key": "phrase"
     },
-    "datetime": "20260609-141108",
-    "run_uuid": "994527ab-64ed-44a4-888b-a27a72e7c9ff",
+    "metrics": {
+        "accuracy": 0.5532,
+        "f1_macro": 0.4892,
+        "f1_weighted": 0.4872,
+        "n_samples": 2048,
+        "n_failed": 0
+    },
+    "datetime": "20260610-205724",
+    "run_uuid": "fca57554-6ede-4f8d-bedc-64e82e96065c",
     "data_schema": {
         "sample_id_column": "sample_uuid",
         "target_column": "target",
