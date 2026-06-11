@@ -2,6 +2,7 @@
     --color-sidebar-bg: #D4E4E455;
     --color-link: #1A6B6B;
     --sidebar-width:244px;
+    --model-name-colour: #0d4f4f
 }
 
 
@@ -20,7 +21,7 @@ hr {
 
 a, a:visited {
     text-decoration: none !important;
-    color: var(--color-link) !important;
+    color: var(--color-link);
 }
 
 a:hover, a:active {
@@ -113,7 +114,7 @@ section[data-testid="stSidebar"] {
 
 .run-card-row {
     display: grid;
-    grid-template-columns: 140px 1fr 48px 1fr 140px;
+    grid-template-columns: 180px 1fr 48px 1fr 180px;
     align-items: center;
     padding: 14px 0;
     border-bottom: 0.5px solid rgba(0,0,0,0.1);
@@ -135,25 +136,25 @@ section[data-testid="stSidebar"] {
 }
 
 .run-cell-model-name {
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 500;
-    color: #0d4f4f;
+    color: var(--model-name-colour);
 }
 
 .run-cell-meta {
-    font-size: 12px;
+    font-size: 14px;
     color: #666;
     margin-top: 2px;
 }
 
 .run-cell-run-name {
-    font-size: 11px;
+    font-size: 13px;
     color: #999;
     margin-top: 1px;
 }
 
 .badge {
-    font-size: 11px;
+    font-size: 13px;
     font-weight: 500;
     padding: 2px 7px;
     border-radius: 4px;
@@ -167,35 +168,65 @@ section[data-testid="stSidebar"] {
 
 .vs-col {
     text-align: center;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     color: #999;
 }
 
 .dataset-col {
-    font-size: 13px;
+    font-size: 16px;
     color: #444;
     padding-right: 8px;
 }
 
 .acc-pill {
-    font-size: 11px;
+    font-size: 13px;
     color: #888;
 }
 
 .run-card-header {
     display: grid;
-    grid-template-columns: 140px 1fr 48px 1fr 140px;
+    grid-template-columns: 180px 1fr 48px 1fr 180px;
     padding: 0 0 8px 0;
     border-bottom: 1px solid rgba(0,0,0,0.15);
     margin-bottom: 4px;
 }
 
 .run-card-header span {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
-    color: #888;
+    color: #666;
     padding: 0 12px;
+}
+
+/*
+ homepage filter/pill display
+ */
+
+.pill-bar { display: flex; gap: 8px; flex-wrap: wrap; padding: 4px 0 12px 0; }
+
+a.pill {
+font-size: 12px;
+padding: 5px 14px;
+border-radius: 20px;
+border: 1px solid #b2cece;
+color: #1A6B6B;
+background: #ffffff;
+text-decoration: none;
+transition: background 0.15s, border-color 0.15s;
+}
+
+a.pill:hover {
+background: #e6f3f3;
+border-color: #1A6B6B;
+color: #0d4f4f;
+}
+
+a.pill--active {
+background: #1A6B6B;
+border-color: #1A6B6B;
+color: #ffffff;
+font-weight: 500;
 }
 
 /*

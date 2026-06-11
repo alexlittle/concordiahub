@@ -53,6 +53,13 @@ DEFAULT_COMPARISON_VISUALISATION_OPTIONS = {
         "alignment_scale": context.VizOption(display_name="Alignment Scale", method="viz_alignment_scale")
     }
 
+#-------------------------
+# Filtering/search defaults
+#---------------------------
+ALL_RUN_OPTIONS = ("all", "All runs")
+
+
+
 #------------------------
 # Graph/Plot colour scheme
 #------------------------

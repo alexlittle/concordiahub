@@ -5,9 +5,10 @@ from collections import defaultdict
 from pathlib import Path
 from itertools import combinations
 
-from xailens import config
+from xailens import config, strings
 from xailens.run import Run
 from xailens.dashboard.utils.formatting import format_model_name
+
 
 class RunExplorer():
 
@@ -70,6 +71,26 @@ class RunExplorer():
                     pairs.append(list(pair))
 
         return sorted(pairs, key=lambda g: max(r.datetime for r in g), reverse=True)
+
+    def get_run_filter_options(self) -> dict[str, str]:
+        datasets = defaultdict(list)
+        for run_md in self._load_all_metadata():
+            datasets[run_md["dataset_id"]].append(run_md["model_type"])
+
+        valid_pairs = set()
+        for model_types in datasets.values():
+            types = sorted(model_types)
+            for a, b in combinations(types, 2):
+                valid_pairs.add((a, b))
+            for t in set(types):
+                if types.count(t) >= 2:
+                    valid_pairs.add((t, t))
+
+        options = {config.ALL_RUN_OPTIONS[0]: config.ALL_RUN_OPTIONS[1]}
+        for a, b in sorted(valid_pairs):
+            options[f"{a}_vs_{b}"] = f"{strings.MODEL_DISPLAY_NAME[a]} vs {strings.MODEL_DISPLAY_NAME[b]}"
+
+        return options
 
     def get_run_by_uuid(self, uuid: str) -> Run | None:
         """Gets a Run by its UUID

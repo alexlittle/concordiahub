@@ -47,9 +47,6 @@ class Run():
         merged = y_true.merge(y_pred, on=self.get(constants.DATA_SCHEMA_ID_COLUMN), how='inner')
         return (merged[target_cols], merged[pred_cols])
 
-    def accuracy(self):
-        y_true, y_pred = self._get_series()
-        return accuracy_score(y_true, y_pred)
 
     def confusion_matrix(self):
         y_true, y_pred = self._get_series()

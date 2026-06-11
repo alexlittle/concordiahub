@@ -3,16 +3,32 @@
 # App/page layout
 # ----------------
 APP_NAME = "XAI Lens"
+
+# sidebar
+SIDEBAR_FILTER_TITLE = "Quick Filter:"
+
+# homepage
 HOMEPAGE_TITLE = "Run browser"
 HOMEPAGE_HELPER = "Select a comparison to explore, or use the filters to narrow down runs."
+BTN_GO_TO_COMPARISON = "Go to comparison &#10132;"
 
-SIDEBAR_FILTER_TITLE = "Quick Filter:"
+
 
 # ----------------
 # Error/Warning messages
 # ----------------
 ERR_NO_RUNS = "No runs selected"
 ERR_NOT_2_RUNS = "You need exactly 2 runs to compare"
+
+# ----------------
+# MODEL_TYPES
+# ----------------
+
+MODEL_DISPLAY_NAME = {
+    "logistic_regression": "Logistic Regression",
+    "xgboost": "XGBoost",
+    "llm": "LLM"
+}
 
 # ----------------
 # XAI METHODS

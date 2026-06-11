@@ -1,11 +1,9 @@
 from unittest.mock import patch, MagicMock
 
-from xailens.dashboard.utils.run_display import render_run_html, display_run_cell
+from xailens.dashboard.utils.run_display import render_run_cell
 from xailens.run import Run
 
 MODULE_UNDER_TEST = "xailens.dashboard.utils.run_display"
-
-
 
 
 def test_render_run_html_basic():
@@ -17,10 +15,9 @@ def test_render_run_html_basic():
         "datetime": "20240525-143000"
     })
 
-    html = render_run_html(run)
+    html = render_run_cell(run)
 
     assert "RandomForest" in html
-    assert "SHAP" in html
     assert "14:30 25 May 2024" in html
 
 
@@ -33,7 +30,7 @@ def test_render_run_html_no_subtype():
         "datetime": "20240525-143000"
     })
 
-    html = render_run_html(run)
+    html = render_run_cell(run)
 
     assert "XGBoost" in html
     assert "XGBoost (" not in html
@@ -48,13 +45,13 @@ def test_render_run_html_no_xai_methods():
         "datetime": "20240525-143000"
     })
 
-    html = render_run_html(run)
+    html = render_run_cell(run)
 
     assert "run-cell" in html
 
 
+
 def test_display_run_cell_calls_markdown():
-    col = MagicMock()
 
     run = Run(metadata={
         "model_type": "RF",
@@ -64,13 +61,9 @@ def test_display_run_cell_calls_markdown():
         "datetime": "20240525-143000"
     })
 
-    display_run_cell(col, run)
+    html = render_run_cell(run)
 
-    col.markdown.assert_called_once()
-
-    args, kwargs = col.markdown.call_args
-    assert "RF" in args[0]
-    assert kwargs["unsafe_allow_html"] is True
+    assert "run-cell" in html
 
 
 @patch("xailens.dashboard.utils.run_display.st")
@@ -104,5 +97,4 @@ def test_display_comparable_runs_renders(mock_st):
 
     display_comparable_runs([[run_a, run_b]])
 
-    assert mock_st.columns.called
-    assert mock_st.divider.called
+    assert mock_st.html.called

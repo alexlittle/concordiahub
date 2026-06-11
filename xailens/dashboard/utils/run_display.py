@@ -2,7 +2,7 @@ import streamlit as st
 
 from xailens.run import Run
 from xailens.dashboard.utils.formatting import format_model_name, format_datetime
-
+from xailens import strings
 
 def _badge_class(model_type: str) -> str:
     t = (model_type or "").upper()
@@ -23,14 +23,14 @@ def render_run_cell(run: Run) -> str:
     metrics    = run.get("metrics") or {}
     acc        = metrics.get("accuracy")
     f1         = metrics.get("f1_macro")
-    acc_str    = f"acc {acc:.2f}" if acc is not None else ""
-    f1_str     = f"F1 {f1:.2f}"  if f1  is not None else ""
+    acc_str    = f"accuracy {acc:.2f}" if acc is not None else ""
+    f1_str     = f"F1-macro {f1:.2f}"  if f1  is not None else ""
     metric_str = " &middot; ".join(filter(None, [acc_str, f1_str]))
 
     return f"""
     <div class="run-cell">
         <div class="run-cell-model">
-            <span class="{_badge_class(model_type)}">{model_type}</span>
+            <span class="{_badge_class(model_type)}">{strings.MODEL_DISPLAY_NAME[model_type]}</span>
             <span class="run-cell-model-name">{model_name}</span>
         </div>
         <div class="run-cell-meta">
@@ -66,9 +66,9 @@ def display_comparable_runs(groups: list[list[Run]]):
                 <div class="vs-col">vs</div>
                 {render_run_cell(run_b)}
                 <div style="padding-left:12px">
-                    <a href="/overview?runs={runs_value}" target="_self" class="button">Go to comparison</a>
+                    <a href="/overview?runs={runs_value}" target="_self" class="button">{strings.BTN_GO_TO_COMPARISON}</a>
                 </div>
             </div>
             """
 
-    st.html(rows_html)
+    return rows_html

@@ -57,11 +57,6 @@ def y_pred():
 #--------------------
 # Tests
 
-# Accuracy
-def test_get_accuracy_score_falls_back_to_y(y_test, y_pred, store_with_fallback):
-    store, metadata = store_with_fallback
-    run = Run(store=store, metadata=metadata)
-    assert run.accuracy() == 0.75
 
 # Confusion matrix
 def test_get_confusion_matrix_falls_back_to_y(y_test, y_pred, store_with_fallback):
