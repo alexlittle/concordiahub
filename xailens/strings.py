@@ -3,6 +3,10 @@
 # App/page layout
 # ----------------
 APP_NAME = "XAI Lens"
+HOMEPAGE_TITLE = "Run browser"
+HOMEPAGE_HELPER = "Select a comparison to explore, or use the filters to narrow down runs."
+
+SIDEBAR_FILTER_TITLE = "Quick Filter:"
 
 # ----------------
 # Error/Warning messages

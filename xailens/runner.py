@@ -9,24 +9,30 @@ from xailens.context import RunContext, RunMetrics
 from xailens.registry.model_registry import get_model_adapter
 from xailens.registry.xai_registry import get_xai_adapter
 
-def run(ctx: RunContext):
-    # check ctx provided
-    if ctx is None:
-        raise InvalidConfigurationError("Context (ctx) is required")
 
-    if (ctx.data.y_test is not None or ctx.data.y is not None) and ctx.data.y_pred is not None:
-        sample_id = ctx.data.data_schema.sample_id_column
-        full_test = ctx.data.y_test if ctx.data.y_test is not None else ctx.data.y
+def compute_metrics(data):
+    if (data.y_test is not None or data.y is not None) and data.y_pred is not None:
+        sample_id = data.data_schema.sample_id_column
+        full_test = data.y_test if data.y_test is not None else data.y
 
-        pred_data = ctx.data.y_pred.set_index(sample_id)
+        pred_data = data.y_pred.set_index(sample_id)
         test_data = full_test.set_index(sample_id).loc[pred_data.index]
 
-        ctx.metrics = RunMetrics(
+        return RunMetrics(
             n_samples=len(test_data),
             n_failed=len(full_test) - len(test_data),
             accuracy=round(accuracy_score(test_data, pred_data), 4),
             f1_macro=round(f1_score(test_data, pred_data, average='macro'), 4),
             f1_weighted=round(f1_score(test_data, pred_data, average='weighted'), 4))
+    else:
+        return RunMetrics()
+
+def run(ctx: RunContext):
+    # check ctx provided
+    if ctx is None:
+        raise InvalidConfigurationError("Context (ctx) is required")
+
+    ctx.metrics = RunMetrics(ctx.data)
 
     # store all the raw data
     artifact_store = ArtifactStore(ctx)
@@ -66,9 +72,3 @@ def run(ctx: RunContext):
             results = xai_adapter.explain_local_df(ctx, model_adapter.prepare())
             artifact_store.write_explanation(f"explanations_{xai_method}", results, type="df")
 
-    '''
-    run_exp = RunExplorer(artifact_store)
-    print(run_exp.get_confusion_matrix())
-    print(run_exp.get_accuracy_score())
-    print(run_exp.get_classification_report())
-    '''

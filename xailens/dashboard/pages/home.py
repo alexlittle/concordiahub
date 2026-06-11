@@ -11,9 +11,10 @@ def main():
 
     recent_runs = explorer.get_comparable_runs(10)
 
-    apply_layout(strings.APP_NAME)
+    apply_layout(strings.HOMEPAGE_TITLE)
 
-    st.markdown("**Recent Datasets/Models:**")
+    st.html(strings.HOMEPAGE_HELPER)
+    
     display_comparable_runs(recent_runs)
 
 if __name__ == "__main__":

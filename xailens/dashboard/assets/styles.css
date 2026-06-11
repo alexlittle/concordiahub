@@ -32,6 +32,26 @@ code {
     font-size: 100% !important;
 }
 
+h1 {
+    padding-top: 0 !important;
+}
+
+h1.header {
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+h1.logo {
+    text-align: center;
+}
+
+h2 {
+    font-size: 120% !important;
+    font-weight: normal !important;
+    padding: 0;
+    margin: 0;
+}
+
 /*
     General re-used elements
  */
@@ -87,6 +107,96 @@ section[data-testid="stSidebar"] {
     justify-content: center;
 }
 
+/*
+    Run card elements
+ */
+
+.run-card-row {
+    display: grid;
+    grid-template-columns: 140px 1fr 48px 1fr 140px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 0.5px solid rgba(0,0,0,0.1);
+    gap: 0;
+}
+
+.run-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 12px;
+}
+
+.run-cell-model {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.run-cell-model-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #0d4f4f;
+}
+
+.run-cell-meta {
+    font-size: 12px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.run-cell-run-name {
+    font-size: 11px;
+    color: #999;
+    margin-top: 1px;
+}
+
+.badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.badge-llm  { background: #E1F5EE; color: #0F6E56; }
+.badge-xgb  { background: #E6F1FB; color: #185FA5; }
+.badge-lr   { background: #EEEDFE; color: #534AB7; }
+.badge-other{ background: #F1EFE8; color: #5F5E5A; }
+
+.vs-col {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 500;
+    color: #999;
+}
+
+.dataset-col {
+    font-size: 13px;
+    color: #444;
+    padding-right: 8px;
+}
+
+.acc-pill {
+    font-size: 11px;
+    color: #888;
+}
+
+.run-card-header {
+    display: grid;
+    grid-template-columns: 140px 1fr 48px 1fr 140px;
+    padding: 0 0 8px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+    margin-bottom: 4px;
+}
+
+.run-card-header span {
+    font-size: 12px;
+    font-weight: 500;
+    color: #888;
+    padding: 0 12px;
+}
 
 /*
     Overview table elements

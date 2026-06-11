@@ -69,7 +69,7 @@ class RunExplorer():
                 for pair in combinations(models.values(), 2):
                     pairs.append(list(pair))
 
-        return sorted(pairs, key=lambda g: max(r.datetime for r in g), reverse=True)[:n]
+        return sorted(pairs, key=lambda g: max(r.datetime for r in g), reverse=True)
 
     def get_run_by_uuid(self, uuid: str) -> Run | None:
         """Gets a Run by its UUID

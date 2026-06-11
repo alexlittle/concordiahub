@@ -7,6 +7,7 @@ from pathlib import Path
 
 from xailens._version import __version__
 from xailens.dashboard.services import get_explorer
+from xailens import strings
 
 def sidebar():
     with st.sidebar:
@@ -21,6 +22,7 @@ def sidebar():
                 <div class="logo-container">
                     <img src="data:image/svg+xml;base64,{svg_base64}">
                 </div>
+                <h1 class="logo">{strings.APP_NAME}</h1>
             </a>
             """,
             unsafe_allow_html=True
@@ -28,7 +30,8 @@ def sidebar():
 
         explorer = get_explorer()
         datasets = explorer.get_datasets()
-        st.header("Select:")
+
+        st.html(f"<h2>{strings.SIDEBAR_FILTER_TITLE}</h2>")
         dataset = st.selectbox("Dataset", datasets)
 
         models = explorer.get_models_for_dataset(dataset)
