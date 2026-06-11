@@ -95,6 +95,6 @@ def test_display_comparable_runs_renders(mock_st):
         "run_uuid": "run2-uuid"
     })
 
-    display_comparable_runs([[run_a, run_b]])
+    html = display_comparable_runs([[run_a, run_b]])
 
-    assert mock_st.html.called
+    assert "run-card-header" in html

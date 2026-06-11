@@ -23,12 +23,15 @@ ERR_NOT_2_RUNS = "You need exactly 2 runs to compare"
 # ----------------
 # MODEL_TYPES
 # ----------------
+class DisplayNameDict(dict):
+    def __missing__(self, key: str) -> str:
+        return key.replace("_", " ").title()
 
-MODEL_DISPLAY_NAME = {
+MODEL_DISPLAY_NAME = DisplayNameDict({
     "logistic_regression": "Logistic Regression",
     "xgboost": "XGBoost",
-    "llm": "LLM"
-}
+    "llm": "LLM",
+})
 
 # ----------------
 # XAI METHODS
