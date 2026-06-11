@@ -2,7 +2,21 @@
     --color-sidebar-bg: #D4E4E455;
     --color-link: #1A6B6B;
     --sidebar-width:244px;
-    --model-name-colour: #0d4f4f
+    --model-name-colour: #0d4f4f;
+
+    --pill-model-border: #b2cece;
+    --pill-model-text: #1A6B6B;
+    --pill-model-hover-bg: #e6f3f3;
+    --pill-model-hover-border: #1A6B6B;
+    --pill-model-hover-text: #0d4f4f;
+    --pill-model-active-bg: #1A6B6B;
+
+    --pill-dataset-border: #b2bece;
+    --pill-dataset-text: #2a5278;
+    --pill-dataset-hover-bg: #e8eef5;
+    --pill-dataset-hover-border: #2a5278;
+    --pill-dataset-hover-text: #1a3a5c;
+    --pill-dataset-active-bg: #2a5278;
 }
 
 
@@ -203,30 +217,51 @@ section[data-testid="stSidebar"] {
  homepage filter/pill display
  */
 
-.pill-bar { display: flex; gap: 8px; flex-wrap: wrap; padding: 4px 0 12px 0; }
+.pill-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 0 0 3px 0; }
 
-a.pill {
-font-size: 12px;
-padding: 5px 14px;
-border-radius: 20px;
-border: 1px solid #b2cece;
-color: #1A6B6B;
-background: #ffffff;
-text-decoration: none;
-transition: background 0.15s, border-color 0.15s;
+a.pill-model, a.pill-dataset {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: #ffffff;
+    text-decoration: none;
+    transition: background 0.15s, border-color 0.15s;
 }
 
-a.pill:hover {
-background: #e6f3f3;
-border-color: #1A6B6B;
-color: #0d4f4f;
+a.pill-model {
+    border: 1px solid var(--pill-model-border);
+    color: var(--pill-model-text);
+}
+a.pill-model:hover {
+    background: var(--pill-model-hover-bg);
+    border-color: var(--pill-model-hover-border);
+    color: var(--pill-model-hover-text);
+}
+a.pill-model--active {
+    background: var(--pill-model-active-bg);
+    border-color: var(--pill-model-active-bg);
+    color: #ffffff;
+    font-weight: 500;
 }
 
-a.pill--active {
-background: #1A6B6B;
-border-color: #1A6B6B;
-color: #ffffff;
-font-weight: 500;
+a.pill-dataset {
+    border: 1px solid var(--pill-dataset-border);
+    color: var(--pill-dataset-text);
+}
+a.pill-dataset:hover {
+    background: var(--pill-dataset-hover-bg);
+    border-color: var(--pill-dataset-hover-border);
+    color: var(--pill-dataset-hover-text);
+}
+a.pill-dataset--active {
+    background: var(--pill-dataset-active-bg);
+    border-color: var(--pill-dataset-active-bg);
+    color: #ffffff;
+    font-weight: 500;
 }
 
 /*

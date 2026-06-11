@@ -72,7 +72,16 @@ class RunExplorer():
 
         return sorted(pairs, key=lambda g: max(r.datetime for r in g), reverse=True)
 
-    def get_run_filter_options(self) -> dict[str, str]:
+    def get_dataset_filter_options(self) -> dict[str, str]:
+        """Returns dataset filter options based on available datasets in metadata."""
+        datasets = sorted({
+            run_md["dataset_id"]
+            for run_md in self._load_all_metadata()
+        })
+
+        return {config.ALL_DATASET_OPTIONS[0]: config.ALL_DATASET_OPTIONS[1]} | {d: d for d in datasets}
+
+    def get_model_filter_options(self) -> dict[str, str]:
         datasets = defaultdict(list)
         for run_md in self._load_all_metadata():
             datasets[run_md["dataset_id"]].append(run_md["model_type"])
@@ -86,7 +95,7 @@ class RunExplorer():
                 if types.count(t) >= 2:
                     valid_pairs.add((t, t))
 
-        options = {config.ALL_RUN_OPTIONS[0]: config.ALL_RUN_OPTIONS[1]}
+        options = {config.ALL_COMP_OPTIONS[0]: config.ALL_COMP_OPTIONS[1]}
         for a, b in sorted(valid_pairs):
             options[f"{a}_vs_{b}"] = f"{strings.MODEL_DISPLAY_NAME[a]} vs {strings.MODEL_DISPLAY_NAME[b]}"
 

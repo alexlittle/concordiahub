@@ -1,26 +1,34 @@
 
 
-from xailens import config
-
-def build_filter_pills_html(active: str = "all", param: str = "pill_filter",
-    pill_options: dict[str, str] | None = None) -> str:
+def build_filter_pills_html(active: str = "all",
+                            param: str = "pill_filter",
+                            pill_options: dict[str, str] | None = None,
+                            variant: str = "model",
+                            current_params: dict[str, str] | None = None) -> str:
 
     if pill_options is None:
-        pill_options = {config.ALL_RUN_OPTIONS[0]: config.ALL_RUN_OPTIONS[1]}
-
+        pill_options = {"all": "All runs"}
     if active not in pill_options:
         active = "all"
 
-    pills = []
+    pills =[]
     for key, label in pill_options.items():
-        css_class = "pill pill--active" if key == active else "pill"
+        params = dict(current_params or {})
+        params[param] = key
+        query_string = "&".join(f"{k}={v}" for k, v in params.items())
+
+        css_class = f"pill-{variant} pill-{variant}--active" if key == active else f"pill-{variant}"
         pills.append(
-            f'<a href="?{param}={key}" target="_parent" class="{css_class}">{label}</a>'
+            f'<a href="?{query_string}" target="_parent" class="{css_class}">{label}</a>'
         )
+    return f'<div class="pill-bar">{"".join(pills)}</div>'
 
-    return f"<div class='pill-bar'>{''.join(pills)}</div>"
+def apply_dataset_filter(pairs: list[list], dataset_key: str) -> list[list]:
+    if dataset_key == "all":
+        return pairs
+    return [pair for pair in pairs if pair[0].get("dataset_id") == dataset_key]
 
-def apply_pill_filter(pairs: list[list], pill_key: str) -> list[list]:
+def apply_model_filter(pairs: list[list], pill_key: str) -> list[list]:
     """Filter comparable run pairs by model type pairing."""
     if pill_key == "all":
         return pairs

@@ -56,8 +56,30 @@ DEFAULT_COMPARISON_VISUALISATION_OPTIONS = {
 #-------------------------
 # Filtering/search defaults
 #---------------------------
-ALL_RUN_OPTIONS = ("all", "All runs")
+ALL_DATASET_OPTIONS = ("all", "All datasets")
+ALL_COMP_OPTIONS = ("all", "All comparisons")
 
+PILL_COLOURS_MODEL = {
+    "border": "#b2cece",
+    "text": "#1A6B6B",
+    "hover_bg": "#e6f3f3",
+    "hover_border": "#1A6B6B",
+    "hover_text": "#0d4f4f",
+    "active_bg": "#1A6B6B",
+    "active_border": "#1A6B6B",
+    "active_text": "#ffffff",
+}
+
+PILL_COLOURS_DATASET = {
+    "border": "#b2bece",
+    "text": "#2a5278",
+    "hover_bg": "#e8eef5",
+    "hover_border": "#2a5278",
+    "hover_text": "#1a3a5c",
+    "active_bg": "#2a5278",
+    "active_border": "#2a5278",
+    "active_text": "#ffffff",
+}
 
 
 #------------------------
