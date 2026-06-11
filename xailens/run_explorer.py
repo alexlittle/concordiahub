@@ -47,7 +47,7 @@ class RunExplorer():
                     models[format_model_name(run_obj)] = run["run_uuid"]
         return dict(sorted(models.items()))
 
-    def get_comparable_runs(self, n: int = 10) -> list[list[dict]]:
+    def get_comparable_runs(self, n: int = 50) -> list[list[dict]]:
         """Returns pairs of runs that share a dataset but have different model types
         Args:
             n: number of comparison groups to return
@@ -70,7 +70,7 @@ class RunExplorer():
                 for pair in combinations(models.values(), 2):
                     pairs.append(list(pair))
 
-        return sorted(pairs, key=lambda g: max(r.datetime for r in g), reverse=True)
+        return sorted(pairs, key=lambda g: max(r.datetime for r in g), reverse=True)[:n]
 
     def get_dataset_filter_options(self) -> dict[str, str]:
         """Returns dataset filter options based on available datasets in metadata."""
