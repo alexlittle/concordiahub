@@ -3,6 +3,7 @@ import pandas as pd
 from typing import Any
 from abc import ABC, abstractmethod
 
+from xailens.context import DataSchema
 
 class VizAdapter(ABC):
 
@@ -10,7 +11,7 @@ class VizAdapter(ABC):
     compatible_explanations: list[str] = []
 
     @abstractmethod
-    def render_local(self, explanation: pd.DataFrame, axis_range=None) -> Any:
+    def render_local(self, explanation: pd.DataFrame, schema: DataSchema,  axis_range=None) -> Any:
         raise NotImplementedError
 
     @abstractmethod

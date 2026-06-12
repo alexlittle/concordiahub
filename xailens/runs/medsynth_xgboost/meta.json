@@ -15,13 +15,14 @@
         "n_samples": 2048,
         "n_failed": 0
     },
-    "datetime": "20260612-103200",
-    "run_uuid": "34721a14-8b87-4cdb-8e87-3488b2123ea6",
+    "datetime": "20260612-193256",
+    "run_uuid": "5e7c7d3b-5089-44b9-b271-8bdebe4dd492",
     "data_schema": {
         "sample_id_column": "sample_uuid",
         "target_column": "y_test",
         "prediction_column": "y_pred",
         "feature_columns": null,
-        "class_names": null
+        "class_names": null,
+        "hide_zero_threshold": 0.1
     }
 }

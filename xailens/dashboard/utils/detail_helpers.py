@@ -6,7 +6,7 @@ from dataclasses import dataclass
 
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.registry.viz_registry import get_viz_adapter
-from xailens import exceptions
+from xailens import exceptions, DataSchema
 from xailens.dashboard.utils.formatting import format_model_name
 from xailens.dashboard.utils.display_table import render_dataframe
 
@@ -15,10 +15,11 @@ class ModelPanel:
     run: dict
     xai_class: type
     xai_instance: object
-    viz_key: str       # e.g. "model_a_viz"
-    viz_name: str      # e.g. "bar"
+    viz_key: str
+    viz_name: str
     viz_class: type
     explanation: object
+    data_schema: DataSchema
 
 def select_individual_viz(viz_id: str, current: str, options: dict, existing_params: dict) -> str:
     option_list = []
@@ -70,6 +71,7 @@ def build_model_panel(run, viz_param_key, query_params) -> ModelPanel:
         viz_name=viz_name,
         viz_class=viz_class,
         explanation=explanation,
+        data_schema=run.get_data_schema()
     )
 
 
@@ -88,6 +90,7 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
     try:
         viz = panel.viz_class().render_local(
             panel.explanation,
+            schema=panel.data_schema,
             axis_range=axis_range,
         )
         if isinstance(viz, plotly.graph_objs.Figure):

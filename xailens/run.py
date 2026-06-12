@@ -1,8 +1,10 @@
 import pandas as pd
+import dataclasses
 
 from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
 from xailens.storage.filesystem_store import FilesystemStore
 from xailens import constants
+from xailens.schema import DataSchema
 
 class Run():
 
@@ -30,6 +32,13 @@ class Run():
             else:
                 return default
         return value
+
+    def get_data_schema(self) -> DataSchema:
+        kwargs = {}
+        for field in dataclasses.fields(DataSchema):
+            value = self.get(f"data_schema.{field.name}", field.default)
+            kwargs[field.name] = value
+        return DataSchema(**kwargs)
 
     def _get_series(self):
         y_true, y_pred = self.load_targets()

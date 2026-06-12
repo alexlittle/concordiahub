@@ -1,7 +1,7 @@
 import plotly.graph_objects as go
 from xailens.adapters.viz.viz_base import VizAdapter
 from xailens.registry.viz_registry import register_viz
-from xailens import strings, config
+from xailens import strings, config, context
 
 @register_viz("waterfall")
 class WaterfallVizAdapter(VizAdapter):
@@ -9,7 +9,7 @@ class WaterfallVizAdapter(VizAdapter):
     display_name = strings.WATERFALL_DISPLAY_NAME
     compatible_explanations = config.WATERFALL_COMPATIBLE_XAI
 
-    def render_local(self, explanation, axis_range=None)  -> go.Figure:
+    def render_local(self, explanation, schema: context.DataSchema, axis_range=None)  -> go.Figure:
         explanation.sort_values("score_normalised_max", inplace=True, ascending=True)
         fig = go.Figure(go.Waterfall(
             orientation="h",

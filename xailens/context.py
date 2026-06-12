@@ -7,19 +7,8 @@ from dataclasses import dataclass
 from typing import Any, Optional
 
 from xailens.run import Run
+from xailens.schema import DataSchema, ResponseSchema
 
-@dataclass
-class DataSchema:
-    sample_id_column: str
-    target_column: str
-    prediction_column: str
-    feature_columns: Optional[list[str]] = None
-    class_names: Optional[list] = None
-
-@dataclass
-class ResponseSchema:
-    contributions_field: str
-    contribution_key: str | None
 
 @dataclass
 class RunMetrics:

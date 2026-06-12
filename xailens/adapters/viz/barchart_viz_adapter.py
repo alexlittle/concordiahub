@@ -3,7 +3,7 @@ import pandas as pd
 
 from xailens.adapters.viz.viz_base import VizAdapter
 from xailens.registry.viz_registry import register_viz
-from xailens import strings, config
+from xailens import strings, config, context
 
 
 @register_viz("barchart")
@@ -12,7 +12,11 @@ class BarChartVizAdapter(VizAdapter):
     display_name = strings.BARCHART_DISPLAY_NAME
     compatible_explanations = config.BARCHART_COMPATIBLE_XAI
 
-    def render_local(self, explanation: pd.DataFrame, axis_range=None):
+    def render_local(self, explanation: pd.DataFrame, schema: context.DataSchema, axis_range=None):
+        # remove zero weight features if necessary (eg very large feature pace)
+        if schema is not None and schema.hide_zero_threshold is not None:
+            explanation = explanation[explanation["score_normalised_max"].abs() > schema.hide_zero_threshold]
+
         explanation = explanation.sort_values("score_normalised_max", ascending=True)
         colors = [config.PLOT_LEFT_COLOR if v < 0 else config.PLOT_RIGHT_COLOR
                   for v in explanation["score_normalised_max"]]
