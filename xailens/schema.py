@@ -16,3 +16,18 @@ class DataSchema:
 class ResponseSchema:
     contributions_field: str
     contribution_key: str | None
+
+
+@dataclass
+class AlignmentLevel:
+    level: int          # 1-5
+    label: str
+    description: str
+
+ALIGNMENT_LEVELS = [
+    AlignmentLevel(1, "Fully Conflicting", "..."),
+    AlignmentLevel(2, "Mostly Conflicting", "..."),
+    AlignmentLevel(3, "Mixed", "..."),
+    AlignmentLevel(4, "Mostly Agreeing", "..."),
+    AlignmentLevel(5, "Fully Agreeing", "..."),
+]

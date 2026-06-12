@@ -44,7 +44,7 @@ WATERFALL_COMPATIBLE_XAI = ["tree_shap", "coefficients", "cor"]
 TABULAR_COMPATIBLE_XAI = ["cor"]
 
 #------------------------
-# Comparison Visualisation compatibility combinations
+# Comparison Visualisation compatibility combinations & configuration
 #------------------------
 DEFAULT_COMPARISON_VISUALISATION = "dumbbell"
 DEFAULT_COMPARISON_VISUALISATION_OPTIONS = {
@@ -53,33 +53,18 @@ DEFAULT_COMPARISON_VISUALISATION_OPTIONS = {
         "alignment_scale": context.VizOption(display_name="Alignment Scale", method="viz_alignment_scale")
     }
 
+ALIGNMENT_SCALE_COMPARISON_VISUALISATION = "alignment_scale"
+ALIGNMENT_SCALE_COMPARISON_VISUALISATION_OPTIONS = {
+        "alignment_scale": context.VizOption(display_name="Alignment Scale", method="viz_alignment_scale")
+    }
+ALIGNMENT_THRESHOLDS = [0.5, 1.0, 1.5, 2.0]
+ALIGNMENT_ABSENT_PENALTY = 1.0
+
 #-------------------------
 # Filtering/search defaults
 #---------------------------
 ALL_DATASET_OPTIONS = ("all", "All datasets")
 ALL_COMP_OPTIONS = ("all", "All comparisons")
-
-PILL_COLOURS_MODEL = {
-    "border": "#b2cece",
-    "text": "#1A6B6B",
-    "hover_bg": "#e6f3f3",
-    "hover_border": "#1A6B6B",
-    "hover_text": "#0d4f4f",
-    "active_bg": "#1A6B6B",
-    "active_border": "#1A6B6B",
-    "active_text": "#ffffff",
-}
-
-PILL_COLOURS_DATASET = {
-    "border": "#b2bece",
-    "text": "#2a5278",
-    "hover_bg": "#e8eef5",
-    "hover_border": "#2a5278",
-    "hover_text": "#1a3a5c",
-    "active_bg": "#2a5278",
-    "active_border": "#2a5278",
-    "active_text": "#ffffff",
-}
 
 
 #------------------------

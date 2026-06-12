@@ -1,4 +1,5 @@
 import streamlit as st
+import plotly
 
 from xailens.context import ComparisonContext
 from xailens.exceptions import InvalidConfigurationError, InvalidUrlParamsError
@@ -7,7 +8,7 @@ from xailens.dashboard.utils.breadcrumb import display_breadcrumbs
 from xailens.dashboard.utils.params import get_runs_from_url_param
 from xailens.registry.comparison_registry import get_comparison_adapter
 from xailens.dashboard.utils.detail_helpers import build_model_panel, render_model_panel, select_comparison_viz
-from xailens import constants, strings
+from xailens import strings
 
 def main():
     try:
@@ -56,8 +57,11 @@ def main():
             run_b=run_b,
             **kwargs,
         )
-        fig = comparison.render_comparison(ctx, comp_viz)
-        st.plotly_chart(fig, key="comparison")
+        display_data = comparison.render_comparison(ctx, comp_viz)
+        if isinstance(display_data, plotly.graph_objs.Figure):
+            st.plotly_chart(display_data, key="comparison")
+        else:
+            st.html(display_data)
     except (InvalidConfigurationError, NameError):
         st.warning(f"No comparison available for {method_a} vs {method_b}")
     except NotImplementedError:
