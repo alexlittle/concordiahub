@@ -4,7 +4,7 @@ import numpy as np
 import uuid
 
 from datetime import datetime
-from dataclasses import asdict
+from dataclasses import asdict, fields, is_dataclass
 
 from xailens import RunContext
 from xailens import config
@@ -38,13 +38,16 @@ class ArtifactStore:
         """Writes the artifact metadata directly from the context dataclass
         """
         excluded = {'data', 'model'}
-        obj = {k: v for k, v in asdict(self.ctx).items() if k not in excluded}
+        obj = {}
+        for f in fields(self.ctx):
+            if f.name in excluded:
+                continue
+            value = getattr(self.ctx, f.name)
+            obj[f.name] = asdict(value) if is_dataclass(value) else value
+
         obj['datetime'] = self.run_datetime
         obj['run_uuid'] = str(uuid.uuid4())
-
-        # Add the dataschema info
         obj['data_schema'] = asdict(self.ctx.data.data_schema)
-
         self.store.save_json(config.META_INFO_FILENAME, obj)
 
     def write_model(self):

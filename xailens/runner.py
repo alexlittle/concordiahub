@@ -32,7 +32,7 @@ def run(ctx: RunContext):
     if ctx is None:
         raise InvalidConfigurationError("Context (ctx) is required")
 
-    ctx.metrics = RunMetrics(ctx.data)
+    ctx.metrics = compute_metrics(ctx.data)
 
     # store all the raw data
     artifact_store = ArtifactStore(ctx)

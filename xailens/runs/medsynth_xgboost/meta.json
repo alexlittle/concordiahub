@@ -15,8 +15,8 @@
         "n_samples": 2048,
         "n_failed": 0
     },
-    "datetime": "20260610-205437",
-    "run_uuid": "1de20d7e-bf65-4558-a77f-9851511af54b",
+    "datetime": "20260612-103200",
+    "run_uuid": "34721a14-8b87-4cdb-8e87-3488b2123ea6",
     "data_schema": {
         "sample_id_column": "sample_uuid",
         "target_column": "y_test",

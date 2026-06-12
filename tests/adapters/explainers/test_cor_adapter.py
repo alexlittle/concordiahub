@@ -23,30 +23,30 @@ LIST_SCHEMA = ResponseSchema(contributions_field="contributions", contribution_k
 
 
 def test_reformat_list_format_returns_llm_response(adapter):
-    result = adapter._reformat(LIST_RAW, LIST_SCHEMA)
+    result = adapter._reformat(LIST_RAW, LIST_SCHEMA, 1)
     assert isinstance(result, LLMResponse)
 
 
 def test_reformat_list_format_top_level_fields(adapter):
-    result = adapter._reformat(LIST_RAW, LIST_SCHEMA)
+    result = adapter._reformat(LIST_RAW, LIST_SCHEMA, 1)
     assert result.reasoning == LIST_RAW["reasoning"]
     assert result.prediction == LIST_RAW["prediction"]
     assert result.confidence == LIST_RAW["confidence"]
 
 
 def test_reformat_list_format_contributions_keyed_by_feature(adapter):
-    result = adapter._reformat(LIST_RAW, LIST_SCHEMA)
+    result = adapter._reformat(LIST_RAW, LIST_SCHEMA, 1)
     assert set(result.contributions.keys()) == {"age", "cholesterol"}
 
 
 def test_reformat_list_format_contrib_score_values(adapter):
-    result = adapter._reformat(LIST_RAW, LIST_SCHEMA)
+    result = adapter._reformat(LIST_RAW, LIST_SCHEMA, 1)
     assert result.contributions["age"] == ContribScore(score=2, reasoning="older age increases risk")
     assert result.contributions["cholesterol"] == ContribScore(score=1, reasoning="elevated levels noted")
 
 
 def test_reformat_list_format_raw_preserved(adapter):
-    result = adapter._reformat(LIST_RAW, LIST_SCHEMA)
+    result = adapter._reformat(LIST_RAW, LIST_SCHEMA, 1)
     assert result.raw is LIST_RAW
 
 
@@ -66,12 +66,12 @@ DICT_SCHEMA = ResponseSchema(contributions_field="contributions", contribution_k
 
 
 def test_reformat_dict_format_contributions_keyed_by_feature(adapter):
-    result = adapter._reformat(DICT_RAW, DICT_SCHEMA)
+    result = adapter._reformat(DICT_RAW, DICT_SCHEMA, 0)
     assert set(result.contributions.keys()) == {"exercise_angina", "chest_pain"}
 
 
 def test_reformat_dict_format_contrib_score_values(adapter):
-    result = adapter._reformat(DICT_RAW, DICT_SCHEMA)
+    result = adapter._reformat(DICT_RAW, DICT_SCHEMA,0)
     assert result.contributions["chest_pain"] == ContribScore(score=2, reasoning="atypical angina present")
 
 
@@ -79,18 +79,18 @@ def test_reformat_dict_format_contrib_score_values(adapter):
 
 def test_reformat_empty_contributions_list(adapter):
     raw = {**LIST_RAW, "contributions": []}
-    result = adapter._reformat(raw, LIST_SCHEMA)
+    result = adapter._reformat(raw, LIST_SCHEMA,1)
     assert result.contributions == {}
 
 
 def test_reformat_empty_contributions_dict(adapter):
     raw = {**DICT_RAW, "contributions": {}}
-    result = adapter._reformat(raw, DICT_SCHEMA)
+    result = adapter._reformat(raw, DICT_SCHEMA, 0)
     assert result.contributions == {}
 
 
 def test_reformat_custom_contributions_field(adapter):
     raw = {**LIST_RAW, "feature_scores": LIST_RAW["contributions"]}
     schema = ResponseSchema(contributions_field="feature_scores", contribution_key="feature")
-    result = adapter._reformat(raw, schema)
+    result = adapter._reformat(raw, schema, 1)
     assert set(result.contributions.keys()) == {"age", "cholesterol"}

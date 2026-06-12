@@ -18,8 +18,8 @@
         "n_samples": 2048,
         "n_failed": 0
     },
-    "datetime": "20260610-205724",
-    "run_uuid": "fca57554-6ede-4f8d-bedc-64e82e96065c",
+    "datetime": "20260612-104338",
+    "run_uuid": "f78fb351-2942-4cfe-ada0-b49f93034bcc",
     "data_schema": {
         "sample_id_column": "sample_uuid",
         "target_column": "target",

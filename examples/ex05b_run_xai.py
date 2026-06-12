@@ -3,13 +3,24 @@ import xailens as xai
 
 from examples import config
 from examples.helpers import safe_dirname
+from helpers import ICD10_CHAPTERS
 
-current_model = "gemma3_27b-it-qat"
+current_model = "qwen2.5_14b-instruct-q8_0"
 dir_name = f"llm_{safe_dirname(current_model)}"
 X = pd.read_parquet(f"./cache/medsynth/{dir_name}/X.parquet")
 y = pd.read_parquet(f"./cache/medsynth/{dir_name}/y.parquet")
-y_preds = pd.read_parquet(f"./cache/medsynth/{dir_name}/y_preds.parquet")
+y_pred = pd.read_parquet(f"./cache/medsynth/{dir_name}/y_preds.parquet")
 y_exp = pd.read_parquet(f"./cache/medsynth/{dir_name}/y_exp.parquet")
+
+
+
+y["target"] = y["target"].map(
+    lambda code: f"{code}: {ICD10_CHAPTERS[code]}" if code in ICD10_CHAPTERS else code
+)
+y_pred["prediction"] = y_pred["prediction"].map(
+    lambda code: f"{code}: {ICD10_CHAPTERS[code]}" if code in ICD10_CHAPTERS else code
+)
+
 
 schema = xai.ResponseSchema(
     contributions_field="key_factors",
@@ -25,7 +36,7 @@ run_data = xai.RunData(
     data_schema=data_schema,
     x=X,
     y=y,
-    y_pred=y_preds,
+    y_pred=y_pred,
     y_exp=y_exp)
 
 ctx = xai.RunContext(

@@ -88,23 +88,27 @@ class CoRAdapter(XAIMethodAdapter):
         Raises:
             MissingDataError: if data.x is not provided
         """
-        if ctx.data.y_exp is None:
-            raise MissingDataError("CoRAdapter requires y_exp in RunData")
+        if ctx.data.y_exp is None or ctx.data.y_pred is None:
+            raise MissingDataError("CoRAdapter requires y_exp and y_pred in RunData")
         if ctx.response_schema is None:
             raise MissingDataError(
                 "CoRAdapter requires a ResponseSchema on RunContext")
 
         sample_id_col = ctx.data.data_schema.sample_id_column
+        prediction_col = ctx.data.data_schema.prediction_column
+        y_pred_indexed = ctx.data.y_pred.set_index(sample_id_col)
         output = []
         for idx, row in ctx.data.y_exp.iterrows():
             raw = json.loads(row["explanation"])
-            response = self._reformat(raw, ctx.response_schema)
-            output.append(response.to_dict(sample_id_col, row[sample_id_col]))
+            sample_id = row[sample_id_col]
+            prediction = y_pred_indexed.loc[sample_id, prediction_col]
+            response = self._reformat(raw, ctx.response_schema, prediction)
+            output.append(response.to_dict(sample_id_col, sample_id))
         return output
 
-    def _reformat(self, raw: dict, schema: ResponseSchema) -> LLMResponse:
+    def _reformat(self, raw: dict, schema: ResponseSchema,
+                  prediction: str) -> LLMResponse:
         raw_contribs = raw[schema.contributions_field]
-
         if schema.contribution_key is not None:
             contributions = {
                 item[schema.contribution_key]: ContribScore(
@@ -121,10 +125,9 @@ class CoRAdapter(XAIMethodAdapter):
                 )
                 for feature, values in raw_contribs.items()
             }
-
         return LLMResponse(
             reasoning=raw["reasoning"],
-            prediction=raw["prediction"],
+            prediction=prediction,
             confidence=raw["confidence"],
             contributions=contributions,
             raw=raw,
