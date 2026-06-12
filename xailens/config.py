@@ -18,28 +18,28 @@ EMBEDDING_ENCODER: Final[str] ="all-MiniLM-L6-v2"
 #------------------------
 # XAI Method default visualisations & defaults
 #------------------------
-COEFFS_DEFAULT_VIZ = "forceplot"
+COEFFS_DEFAULT_VIZ = "barchart"
 COEFFS_COMPATIBLE_VIZ = {
-        "forceplot": context.VizOption(display_name=strings.FORCE_PLOT_DISPLAY_NAME),
+        "barchart": context.VizOption(display_name=strings.BARCHART_DISPLAY_NAME),
         "waterfall": context.VizOption(display_name=strings.WATERFALL_DISPLAY_NAME),}
 
 
-TREE_SHAP_DEFAULT_VIZ = "forceplot"
+TREE_SHAP_DEFAULT_VIZ = "barchart"
 TREE_SHAP_COMPATIBLE_VIZ = {
-        "forceplot": context.VizOption(display_name=strings.FORCE_PLOT_DISPLAY_NAME),
+        "barchart": context.VizOption(display_name=strings.BARCHART_DISPLAY_NAME),
         "waterfall": context.VizOption(display_name=strings.WATERFALL_DISPLAY_NAME),
     }
 
-COR_DEFAULT_VIZ = "forceplot"
+COR_DEFAULT_VIZ = "barchart"
 COR_COMPATIBLE_VIZ = {
-        "forceplot": context.VizOption(display_name=strings.FORCE_PLOT_DISPLAY_NAME),
+        "barchart": context.VizOption(display_name=strings.BARCHART_DISPLAY_NAME),
         "tabular": context.VizOption(display_name=strings.TABULAR_DISPLAY_NAME),
     }
 
 #------------------------
 # Visualisation compatibility with XAI methods
 #------------------------
-FORCE_PLOT_COMPATIBLE_XAI = ["tree_shap", "coefficients"]
+BARCHART_COMPATIBLE_XAI = ["tree_shap", "coefficients"]
 WATERFALL_COMPATIBLE_XAI = ["tree_shap", "coefficients", "cor"]
 TABULAR_COMPATIBLE_XAI = ["cor"]
 

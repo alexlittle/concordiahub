@@ -51,10 +51,10 @@ XGBOOST_DISPLAY_NAME = "XGBoost"
 # ----------------
 # VISUALISATIONS
 # ----------------
-# Force Plot Visualisation
-FORCE_PLOT_DISPLAY_NAME = "Force Plot"
-FORCE_PLOT_TITLE = "Feature Contributions (normalised)"
-FORCE_PLOT_X_AXIS = "Normalised contribution"
+# Bar Chart Visualisation
+BARCHART_DISPLAY_NAME = "Bar Chart"
+BARCHART_TITLE = "Feature Contributions (normalised)"
+BARCHART_X_AXIS = "Normalised contribution"
 
 # Waterfall Visualisation
 WATERFALL_DISPLAY_NAME = "Waterfall"
