@@ -34,13 +34,13 @@ hr {
 }
 
 a, a:visited {
-    text-decoration: none !important;
+    text-decoration: none;
     color: var(--color-link);
 }
 
 a:hover, a:active {
-    text-decoration: underline !important;
-    color: var(--color-link) !important;
+    text-decoration: underline;
+    color: var(--color-link);
 }
 
 code {
@@ -58,6 +58,7 @@ h1.header {
 
 h1.logo {
     text-align: center;
+    color: var(--color-link);
 }
 
 h2 {
