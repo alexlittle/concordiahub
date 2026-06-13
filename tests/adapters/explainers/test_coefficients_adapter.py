@@ -4,14 +4,18 @@ from unittest.mock import MagicMock
 from xailens.adapters.explainers.coefficients_adapter import CoefficientsAdapter
 from xailens.exceptions import MissingDataError
 from xailens import constants
+from xailens.schema import DataSchema
 
 def make_run(sample_id_column="id", dataframe=None):
     run = MagicMock()
     sample_id_column = constants.DATA_SCHEMA_ID_COLUMN
-    run.get = lambda key, default=None: {
-        constants.DATA_SCHEMA_ID_COLUMN: sample_id_column,
-    }.get(key, default)
-
+    run.get = lambda key, default=None: {constants.DATA_SCHEMA_ID_COLUMN: sample_id_column,
+        }.get(key, default)
+    run.get_data_schema.return_value = DataSchema(
+        sample_id_column=sample_id_column,
+        target_column="target",
+        prediction_column="prediction",
+    )
     run.store.load_dataframe.return_value = dataframe if dataframe is not None else pd.DataFrame({
         sample_id_column: ["sample-1", "sample-2"],
         "feat1": [0.5, 0.3],
