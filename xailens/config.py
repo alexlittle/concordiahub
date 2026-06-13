@@ -58,7 +58,6 @@ ALIGNMENT_SCALE_COMPARISON_VISUALISATION_OPTIONS = {
         "alignment_scale": context.VizOption(display_name="Alignment Scale", method="viz_alignment_scale")
     }
 ALIGNMENT_THRESHOLDS = [0.25, 0.5, 0.75, 1.0]
-ALIGNMENT_ABSENT_PENALTY = 1.0
 
 #-------------------------
 # Filtering/search defaults

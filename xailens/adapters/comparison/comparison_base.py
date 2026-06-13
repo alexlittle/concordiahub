@@ -112,50 +112,81 @@ class ComparisonAdapter(ABC):
 
     def viz_alignment_summary(self, ctx: ComparisonContext) -> str:
         """Single dot scale from mean difference - for sample list."""
+        '''
         differences = self._compute_differences(ctx)
         mean_diff = sum(d for _, d in differences) / len(
             differences) if differences else 0.0
         return self._render_dot_scale(self._score_to_level(mean_diff))
-
+        '''
+        raise NotImplementedError
+    
     def viz_alignment_scale(self, ctx: ComparisonContext) -> str:
         """Per-feature dot scale - for detail page."""
-        differences = self._compute_differences(ctx)
-        rows_html = "".join(
+        label_a = format_model_name(ctx.run_a)
+        label_b = format_model_name(ctx.run_b)
+        matched, only_in_a, only_in_b = self._compute_differences(ctx)
+
+        matched_rows = "".join(
             f'<tr>'
             f'<td style="padding:4px 12px 4px 0;color:#0d4f4f;font-size:13px;">{feature}</td>'
             f'<td>{self._render_dot_scale(self._score_to_level(diff))}</td>'
             f'</tr>'
-            for feature, diff in differences
+            for feature, diff in matched
         )
-        return f'<table style="border-collapse:collapse;">{rows_html}</table>'
+
+        def absent_section(title: str, items: list[tuple[str, str]]) -> str:
+            if not items:
+                return ""
+            header = (
+                f'<tr><td colspan="2" style="'
+                f'padding:8px 0 4px 0;'
+                f'color:#888;'
+                f'font-size:12px;'
+                f'border-top:1px solid #D4E4E4;'
+                f'">{title}</td></tr>'
+            )
+            rows = "".join(
+                f'<tr>'
+                f'<td style="padding:4px 12px 4px 0;color:#0d4f4f;font-size:13px;">{feature}</td>'
+                f'<td style="color:#888;font-size:12px;">score: {score}</td>'
+                f'</tr>'
+                for feature, score in items
+            )
+            return header + rows
+
+        absent_html = (
+                absent_section(f"Only in {label_a}", only_in_a) +
+                absent_section(f"Only in {label_b}", only_in_b)
+        )
+
+        return f'<table style="border-collapse:collapse;">{matched_rows}{absent_html}</table>'
 
     #-----------------------------
     # Private helper functions
     #-----------------------------
 
     @staticmethod
-    def _compute_differences(ctx: ComparisonContext) -> list[tuple[str, float]]:
-        """Returns list of (feature_name, difference) for all features"""
+    def _compute_differences(ctx: ComparisonContext) -> tuple[
+        list[tuple[str, float]], list[tuple[str, str, float]], list[
+            tuple[str, str, float]]]:
+        """Returns (matched, only_in_a, only_in_b) where only_in_x is (feature, score_str)"""
         a = ctx.explanation_a.set_index("feature_name")["score_normalised_max"]
         b = ctx.explanation_b.set_index("feature_name")["score_normalised_max"]
         features = a.index.union(b.index)
-        result = []
+        matched = []
+        only_in_a = []
+        only_in_b = []
         for feature in features:
             a_present = feature in a.index
             b_present = feature in b.index
             if a_present and b_present:
                 diff = abs(a[feature] - b[feature])
+                matched.append((feature, diff))
+            elif a_present:
+                only_in_a.append((feature, f"{a[feature]:.4f}"))
             else:
-                present_value = a[feature] if a_present else b[feature]
-                diff = abs(present_value)
-            a_val = f"{a[feature]:.4f}" if a_present else "ABSENT"
-            b_val = f"{b[feature]:.4f}" if b_present else "ABSENT"
-            print(
-                f"[alignment] {feature}: a={a_val}, b={b_val}, diff={diff:.4f}")
-            result.append((feature, diff))
-        mean_diff = sum(d for _, d in result) / len(result) if result else 0.0
-        print(f"[alignment] mean_diff={mean_diff:.4f}, thresholds={config.ALIGNMENT_THRESHOLDS}")
-        return result
+                only_in_b.append((feature, f"{b[feature]:.4f}"))
+        return matched, only_in_a, only_in_b
 
     @staticmethod
     def _score_to_level(score: float) -> int:

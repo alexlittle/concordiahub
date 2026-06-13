@@ -7,6 +7,7 @@ from xailens.context import RunContext
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config
+from xailens.run import Run
 
 @register_xai("tree_shap")
 class TreeSHAPAdapter(XAIMethodAdapter):
@@ -15,6 +16,14 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     display_name = strings.TREE_SHAP_DISPLAY_NAME
     default_visualisation = config.TREE_SHAP_DEFAULT_VIZ
     compatible_visualisations = config.TREE_SHAP_COMPATIBLE_VIZ
+
+    # SHAP adds a "class" column, so this needs to be removed
+    EXCLUDED_CONTRIBUTION_KEYS = {"class"}
+    
+    @classmethod
+    def load_explanation(cls, run: Run, sample_id: str) -> pd.DataFrame:
+        df = super().load_explanation(run, sample_id)
+        return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
     def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
