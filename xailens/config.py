@@ -49,11 +49,11 @@ TABULAR_COMPATIBLE_XAI = ["cor"]
 
 DEFAULT_COMPARISON_AXIS_RANGE = [-1.1, 1.1]
 
-DEFAULT_COMPARISON_VISUALISATION = "dumbbell"
+DEFAULT_COMPARISON_VISUALISATION = "alignment_scale"
 DEFAULT_COMPARISON_VISUALISATION_OPTIONS = {
+        "alignment_scale": context.VizOption(display_name="Alignment Scale", method="viz_alignment_scale"),
         "diff_bar": context.VizOption(display_name="Difference (bar)", method="viz_diff_bar"),
-        "dumbbell": context.VizOption(display_name="Dumbbell", method="viz_dumbbell"),
-        "alignment_scale": context.VizOption(display_name="Alignment Scale", method="viz_alignment_scale")
+        "dumbbell": context.VizOption(display_name="Dumbbell", method="viz_dumbbell")
     }
 
 ALIGNMENT_SCALE_COMPARISON_VISUALISATION = "alignment_scale"

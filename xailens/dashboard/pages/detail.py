@@ -25,8 +25,6 @@ def main():
     panel_a = build_model_panel(run_a, "model_a_viz", st.query_params)
     panel_b = build_model_panel(run_b, "model_b_viz", st.query_params)
 
-    # Axis range for comparison
-    axis_range = config.DEFAULT_COMPARISON_AXIS_RANGE
     try:
         comparison_class = get_comparison_adapter(method_a, method_b)
     except InvalidConfigurationError as e:
@@ -36,10 +34,6 @@ def main():
     apply_layout(strings.APP_NAME)
     st.html(display_breadcrumbs(run_a, run_b, sample_id))
     st.subheader("**Comparison Explanation:**")
-
-    kwargs = {}
-    if axis_range is not None:
-        kwargs['axis_range'] = axis_range
 
     try:
         comparison = comparison_class()
@@ -51,7 +45,7 @@ def main():
             explanation_b=panel_b.explanation,
             run_a=run_a,
             run_b=run_b,
-            **kwargs,
+            axis_range = config.DEFAULT_COMPARISON_AXIS_RANGE,
         )
         display_data = comparison.render_comparison(ctx, comp_viz)
         if isinstance(display_data, plotly.graph_objs.Figure):

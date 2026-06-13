@@ -30,6 +30,12 @@ class XAIMethodAdapter(ABC):
             raise MissingDataError(
                 f"Sample '{sample_id}' not found in explanations for {cls.key}")
         explanation = row.iloc[0].drop(run.get(constants.DATA_SCHEMA_ID_COLUMN), errors='coerce')
+
+        # filter out near-zero valued features if a threshold is set
+        schema = run.get_data_schema()
+        if schema.hide_zero_threshold is not None:
+            explanation = explanation[explanation.abs() > schema.hide_zero_threshold]
+
         abs_sum = explanation.abs().sum()
         abs_max = explanation.abs().max()
         return pd.DataFrame({

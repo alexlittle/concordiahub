@@ -7,6 +7,7 @@ from xailens import context, config
 
 @register_comparison("tree_shap", "cor")
 @register_comparison("cor", "cor")
+@register_comparison("coefficients", "cor")
 class AlignmentScaleComparisonAdapter(ComparisonAdapter):
 
     default_visualisation = config.ALIGNMENT_SCALE_COMPARISON_VISUALISATION
