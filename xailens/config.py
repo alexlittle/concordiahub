@@ -46,6 +46,9 @@ TABULAR_COMPATIBLE_XAI = ["cor"]
 #------------------------
 # Comparison Visualisation compatibility combinations & configuration
 #------------------------
+
+DEFAULT_COMPARISON_AXIS_RANGE = [-1.1, 1.1]
+
 DEFAULT_COMPARISON_VISUALISATION = "dumbbell"
 DEFAULT_COMPARISON_VISUALISATION_OPTIONS = {
         "diff_bar": context.VizOption(display_name="Difference (bar)", method="viz_diff_bar"),

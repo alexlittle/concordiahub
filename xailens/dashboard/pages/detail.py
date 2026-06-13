@@ -8,7 +8,7 @@ from xailens.dashboard.utils.breadcrumb import display_breadcrumbs
 from xailens.dashboard.utils.params import get_runs_from_url_param
 from xailens.registry.comparison_registry import get_comparison_adapter
 from xailens.dashboard.utils.detail_helpers import build_model_panel, render_model_panel, select_comparison_viz
-from xailens import strings
+from xailens import strings, config
 
 def main():
     try:
@@ -16,7 +16,6 @@ def main():
     except InvalidUrlParamsError as e:
         st.error(e)
         st.stop()
-
 
     existing_params = dict(st.query_params)
     sample_id = st.query_params.get("sample_id")
@@ -27,12 +26,9 @@ def main():
     panel_b = build_model_panel(run_b, "model_b_viz", st.query_params)
 
     # Axis range for comparison
-    axis_range = None
+    axis_range = config.DEFAULT_COMPARISON_AXIS_RANGE
     try:
         comparison_class = get_comparison_adapter(method_a, method_b)
-        comp_max = comparison_class.get_abs_max(panel_a.explanation, panel_b.explanation)
-        margin = comp_max * 0.15
-        axis_range = [-(comp_max + margin), comp_max + margin]
     except InvalidConfigurationError as e:
         print(e)
 
