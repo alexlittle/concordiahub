@@ -1,5 +1,5 @@
 :root {
-    --color-sidebar-bg: #D4E4E455;
+    --color-sidebar-bg: #D4E4E477;
     --color-link: #1A6B6B;
     --sidebar-width:244px;
     --model-name-colour: #0d4f4f;
@@ -17,6 +17,8 @@
     --pill-dataset-hover-border: #2a5278;
     --pill-dataset-hover-text: #1a3a5c;
     --pill-dataset-active-bg: #2a5278;
+
+    --color-metric-bg: #D4E4E4AA;
 }
 
 
@@ -263,6 +265,17 @@ a.pill-dataset--active {
     border-color: var(--pill-dataset-active-bg);
     color: #ffffff;
     font-weight: 500;
+}
+
+
+
+/*
+    Overview page elements
+ */
+[data-testid="stMetric"] {
+    background-color: var(--color-metric-bg);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
 }
 
 /*

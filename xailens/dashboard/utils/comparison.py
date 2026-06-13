@@ -8,8 +8,28 @@ def render_run_summary(run):
     st.subheader(f"Model: {format_model_name(run)}")
     st.markdown(f"**Date**: {format_datetime(run.get('datetime'))}")
     st.markdown(f"**XAI Methods**: {run.get('xai_methods')}")
-    st.markdown("**Classification Report:**")
-    st.dataframe(run.classification_report())
+
+    metrics = run.get("metrics") or {}
+
+    col1, col2, col3, col4 = st.columns(4)
+
+    col1.metric("Accuracy", f"{metrics.get("accuracy"):.1%}")
+    col2.metric("Macro F1", f"{metrics.get("f1_macro"):.3f}")
+
+    col3.metric("Weighted F1", f"{metrics.get("f1_weighted"):.3f}")
+
+    n_failed = metrics['n_failed']
+    n_samples = metrics['n_samples']
+
+    if n_failed > 0:
+        col4.metric("Failed samples", n_failed,
+                    delta=f"{n_failed / n_samples:.0%} of run",
+                    delta_color="inverse")
+    else:
+        col4.metric("Samples", n_samples)
+
+    with st.expander("Full classification report"):
+        st.dataframe(run.classification_report())
 
 
 def generate_comparison_rows_html(df, run_a, run_b):
