@@ -127,29 +127,9 @@ class ComparisonAdapter(ABC):
             for feature, diff in matched
         )
 
-        def absent_section(title: str, items: list[tuple[str, str]]) -> str:
-            if not items:
-                return ""
-            header = (
-                f'<tr><td colspan="2" style="'
-                f'padding:8px 0 4px 0;'
-                f'color:#888;'
-                f'font-size:12px;'
-                f'border-top:1px solid #D4E4E4;'
-                f'">{title}</td></tr>'
-            )
-            rows = "".join(
-                f'<tr>'
-                f'<td style="padding:4px 12px 4px 0;color:#0d4f4f;font-size:13px;">{feature}</td>'
-                f'<td style="color:#888;font-size:12px;">score: {score}</td>'
-                f'</tr>'
-                for feature, score in items
-            )
-            return header + rows
-
         absent_html = (
-                absent_section(f"Only in {label_a}", only_in_a) +
-                absent_section(f"Only in {label_b}", only_in_b)
+                self.absent_section(f"Only in {label_a}", only_in_a) +
+                self.absent_section(f"Only in {label_b}", only_in_b)
         )
 
         return f'<table style="border-collapse:collapse;">{matched_rows}{absent_html}</table>'
@@ -190,26 +170,48 @@ class ComparisonAdapter(ABC):
 
     @staticmethod
     def _render_dot_scale(level: int) -> str:
+        active_entry = next(e for e in ALIGNMENT_LEVELS if e.level == level)
         dots = []
         for entry in ALIGNMENT_LEVELS:
             active = entry.level == level
-            color = "#1A6B6B" if active else "#D4E4E4"
+            colour = active_entry.colour if active else "#D4E4E4"
+            border = active_entry.colour if active else "#aaaaaa"
             size = "18px" if active else "12px"
             dots.append(
                 f'<span title="{entry.label}" style="'
                 f'display:inline-block;'
                 f'width:{size};height:{size};'
                 f'border-radius:50%;'
-                f'background:{color};'
-                f'border: 2px solid #1A6B6B;'
+                f'background:{colour};'
+                f'border: 2px solid {border};'
                 f'margin: 0 4px;'
                 f'vertical-align:middle;'
                 f'"></span>'
             )
-        label_text = next(e.label for e in ALIGNMENT_LEVELS if e.level == level)
         return (
             f'<div style="display:flex;align-items:center;gap:4px;">'
             f'{"".join(dots)}'
-            f'<span style="margin-left:8px;font-size:14px;color:#0d4f4f;">{label_text}</span>'
+            f'<span style="margin-left:8px;font-size:14px;color:{active_entry.colour};">'
+            f'{active_entry.label}</span>'
             f'</div>'
         )
+
+    def absent_section(self, title: str, items: list[tuple[str, str]]) -> str:
+        if not items:
+            return ""
+        header = (
+            f'<tr><td colspan="2" style="'
+            f'padding:8px 0 4px 0;'
+            f'color:#888;'
+            f'font-size:12px;'
+            f'border-top:1px solid #D4E4E4;'
+            f'">{title}</td></tr>'
+        )
+        rows = "".join(
+            f'<tr>'
+            f'<td style="padding:4px 12px 4px 0;color:#0d4f4f;font-size:13px;">{feature}</td>'
+            f'<td style="color:#888;font-size:12px;">score: {score}</td>'
+            f'</tr>'
+            for feature, score in items
+        )
+        return header + rows
