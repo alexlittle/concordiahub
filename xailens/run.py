@@ -63,6 +63,6 @@ class Run():
 
     def classification_report(self):
         y_true, y_pred = self._get_series()
-        report = classification_report(y_true, y_pred, output_dict=True)
+        report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
         return pd.DataFrame(report).transpose()
 
