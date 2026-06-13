@@ -1,7 +1,7 @@
 import streamlit as st
 
 from xailens.run import Run
-from xailens.dashboard.utils.formatting import format_model_name, format_datetime
+from xailens.formatting import format_model_name, format_datetime
 from xailens import strings
 
 def _badge_class(model_type: str) -> str:

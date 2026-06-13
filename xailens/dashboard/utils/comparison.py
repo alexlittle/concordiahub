@@ -1,6 +1,6 @@
 import streamlit as st
 from xailens import constants
-from xailens.dashboard.utils.formatting import format_model_name, format_datetime
+from xailens.formatting import format_model_name, format_datetime
 
 
 

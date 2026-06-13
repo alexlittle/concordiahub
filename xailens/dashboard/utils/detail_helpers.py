@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.registry.viz_registry import get_viz_adapter
 from xailens import exceptions, DataSchema
-from xailens.dashboard.utils.formatting import format_model_name
+from xailens.formatting import format_model_name
 from xailens.dashboard.utils.display_table import render_dataframe
 
 @dataclass

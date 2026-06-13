@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 from typing import Any
 
 
-from xailens.dashboard.utils.formatting import format_model_name
+from xailens.formatting import format_model_name
 from xailens.context import ComparisonContext
 from xailens import config
 from xailens.schema import ALIGNMENT_LEVELS

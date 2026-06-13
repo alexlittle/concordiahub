@@ -1,4 +1,3 @@
-
 from datetime import datetime
 
 from xailens.run import Run
@@ -31,9 +30,3 @@ def format_model_name(run: Run) -> str:
         return " ".join(parts)
     else:
         return run.get("model_type")
-
-
-
-
-
-

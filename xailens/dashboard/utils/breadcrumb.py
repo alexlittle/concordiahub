@@ -1,6 +1,6 @@
 
 from xailens.run import Run
-from xailens.dashboard.utils.formatting import format_model_name
+from xailens.formatting import format_model_name
 
 
 def display_breadcrumbs(run_a: Run=None, run_b: Run=None, sample_id:str = None) -> str:

@@ -1,7 +1,7 @@
 import numpy as np
 
 
-from xailens.dashboard.utils.formatting import format_model_name
+from xailens.formatting import format_model_name
 from xailens import constants
 from xailens.exceptions import InvalidSelectionError
 

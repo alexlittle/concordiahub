@@ -7,7 +7,7 @@ from itertools import combinations
 
 from xailens import config, strings
 from xailens.run import Run
-from xailens.dashboard.utils.formatting import format_model_name
+from xailens.formatting import format_model_name
 
 
 class RunExplorer():
