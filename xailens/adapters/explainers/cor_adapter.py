@@ -60,16 +60,23 @@ class CoRAdapter(XAIMethodAdapter):
         if row is None:
             raise ValueError(
                 f"Sample '{sample_id}' not found in explanations for {cls.key}")
+
         scores = [data["score"] for data in row["contributions"].values()]
         abs_sum = sum(abs(s) for s in scores)
         abs_max = max(abs(s) for s in scores)
+
+        overall_reasoning = row["reasoning"]
+        overall_confidence = row["confidence"]
+
         return pd.DataFrame([
             {
                 "feature_name": feature,
                 "score": data["score"],
                 "score_normalised_sum": data["score"] / abs_sum if abs_sum != 0 else data["score"],
                 "score_normalised_max": data["score"] / abs_max if abs_max != 0 else data["score"],
-                "reasoning": data["reasoning"]
+                "reasoning": data["reasoning"],
+                "overall_reasoning": overall_reasoning,
+                "overall_confidence": overall_confidence
             }
             for feature, data in row["contributions"].items()
         ])

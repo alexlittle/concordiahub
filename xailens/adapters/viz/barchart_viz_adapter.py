@@ -1,3 +1,5 @@
+from typing import Any
+
 import plotly.graph_objects as go
 import pandas as pd
 
@@ -12,7 +14,7 @@ class BarChartVizAdapter(VizAdapter):
     display_name = strings.BARCHART_DISPLAY_NAME
     compatible_explanations = config.BARCHART_COMPATIBLE_XAI
 
-    def render_local(self, explanation: pd.DataFrame, axis_range=None):
+    def render_local(self, explanation: pd.DataFrame, axis_range=None) -> list[Any]:
 
         explanation = explanation.sort_values("score_normalised_max", ascending=True)
         colors = [config.PLOT_LEFT_COLOR if v < 0 else config.PLOT_RIGHT_COLOR
@@ -32,7 +34,7 @@ class BarChartVizAdapter(VizAdapter):
         if axis_range:
             fig.update_layout(xaxis={"range": axis_range})
 
-        return fig
+        return [fig]
 
     def render_global(self, explanations):
         # Placeholder function

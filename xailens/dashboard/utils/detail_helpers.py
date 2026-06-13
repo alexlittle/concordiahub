@@ -86,15 +86,13 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
         return
 
     try:
-        viz = panel.viz_class().render_local(
-            panel.explanation,
-            axis_range=axis_range,
-        )
-        if isinstance(viz, plotly.graph_objs.Figure):
-            st.plotly_chart(viz, key=plot_key)
-        elif isinstance(viz, pd.DataFrame):
-            st.html(render_dataframe(viz))
-        else:
-            st.html(viz)
+        viz_list = panel.viz_class().render_local(panel.explanation, axis_range=axis_range)
+        for viz in viz_list:
+            if isinstance(viz, plotly.graph_objs.Figure):
+                st.plotly_chart(viz, key=plot_key)
+            elif isinstance(viz, pd.DataFrame):
+                st.html(render_dataframe(viz))
+            else:
+                st.html(viz)
     except NotImplementedError:
         st.warning(f"{panel.viz_name} is not yet implemented for {format_model_name(panel.run)}")

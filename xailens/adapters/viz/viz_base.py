@@ -10,7 +10,7 @@ class VizAdapter(ABC):
     compatible_explanations: list[str] = []
 
     @abstractmethod
-    def render_local(self, explanation: pd.DataFrame,  axis_range=None) -> Any:
+    def render_local(self, explanation: pd.DataFrame,  axis_range=None) -> list[Any]:
         raise NotImplementedError
 
     @abstractmethod
