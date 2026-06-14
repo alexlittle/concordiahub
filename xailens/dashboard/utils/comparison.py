@@ -13,10 +13,10 @@ def render_run_summary(run):
 
     col1, col2, col3, col4 = st.columns(4)
 
-    col1.metric("Accuracy", f"{metrics.get("accuracy"):.1%}")
-    col2.metric("Macro F1", f"{metrics.get("f1_macro"):.3f}")
+    col1.metric("Accuracy", f"{metrics.get('accuracy'):.1%}")
+    col2.metric("Macro F1", f"{metrics.get('f1_macro'):.3f}")
 
-    col3.metric("Weighted F1", f"{metrics.get("f1_weighted"):.3f}")
+    col3.metric("Weighted F1", f"{metrics.get('f1_weighted'):.3f}")
 
     n_failed = metrics['n_failed']
     n_samples = metrics['n_samples']
