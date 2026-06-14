@@ -1,4 +1,4 @@
-import pandas as pd
+
 import plotly.graph_objects as go
 
 from abc import ABC, abstractmethod
@@ -9,6 +9,7 @@ from xailens.formatting import format_model_name
 from xailens.context import ComparisonContext
 from xailens import config
 from xailens.schema import ALIGNMENT_LEVELS
+from xailens.services.alignment import compute_feature_differences, score_to_level
 
 class ComparisonAdapter(ABC):
     """Handles comparison between two XAI explanations."""
@@ -117,56 +118,24 @@ class ComparisonAdapter(ABC):
         """Per-feature dot scale - for detail page."""
         label_a = format_model_name(ctx.run_a)
         label_b = format_model_name(ctx.run_b)
-        matched, only_in_a, only_in_b = self._compute_differences(ctx)
-
+        matched, only_in_a, only_in_b = compute_feature_differences(
+            ctx.explanation_a, ctx.explanation_b)
         matched_rows = "".join(
             f'<tr>'
             f'<td style="padding:4px 12px 4px 0;color:#0d4f4f;font-size:13px;">{feature}</td>'
-            f'<td>{self._render_dot_scale(self._score_to_level(diff))}</td>'
+            f'<td>{self._render_dot_scale(score_to_level(diff))}</td>'
             f'</tr>'
             for feature, diff in matched
         )
-
         absent_html = (
                 self.absent_section(f"Only in {label_a}", only_in_a) +
                 self.absent_section(f"Only in {label_b}", only_in_b)
         )
-
         return f'<table style="border-collapse:collapse;">{matched_rows}{absent_html}</table>'
 
     #-----------------------------
     # Private helper functions
     #-----------------------------
-
-    @staticmethod
-    def _compute_differences(ctx: ComparisonContext) -> tuple[
-        list[tuple[str, float]], list[tuple[str, str, float]], list[
-            tuple[str, str, float]]]:
-        """Returns (matched, only_in_a, only_in_b) where only_in_x is (feature, score_str)"""
-        a = ctx.explanation_a.set_index("feature_name")["score_normalised_max"]
-        b = ctx.explanation_b.set_index("feature_name")["score_normalised_max"]
-        features = a.index.union(b.index)
-        matched = []
-        only_in_a = []
-        only_in_b = []
-        for feature in features:
-            a_present = feature in a.index
-            b_present = feature in b.index
-            if a_present and b_present:
-                diff = abs(a[feature] - b[feature])
-                matched.append((feature, diff))
-            elif a_present:
-                only_in_a.append((feature, f"{a[feature]:.4f}"))
-            else:
-                only_in_b.append((feature, f"{b[feature]:.4f}"))
-        return matched, only_in_a, only_in_b
-
-    @staticmethod
-    def _score_to_level(score: float) -> int:
-        for i, threshold in enumerate(config.ALIGNMENT_THRESHOLDS):
-            if score < threshold:
-                return len(ALIGNMENT_LEVELS) - i
-        return 1
 
     @staticmethod
     def _render_dot_scale(level: int) -> str:
