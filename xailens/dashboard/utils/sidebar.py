@@ -1,4 +1,4 @@
-# xailens/dashboard/components/sidebar.py
+
 import streamlit as st
 import base64
 import urllib.parse
@@ -56,7 +56,11 @@ def sidebar():
         st.markdown(
             f"""
                     <div class="sidebar-footer">
-                        XAI Compare v{__version__}
+                        XAI Lens v{__version__}<br/>
+                        <a href="https://github.com/alexlittle/xailens">Source Code (GitHub)</a> 
+                        &middot; 
+                        Documentation
+                        
                     </div>
                     """,
             unsafe_allow_html=True

@@ -3,17 +3,7 @@ import streamlit as st
 from xailens.run import Run
 from xailens.formatting import format_model_name, format_datetime
 from xailens import strings
-
-def _badge_class(model_type: str) -> str:
-    t = (model_type or "").upper()
-    if t == "LLM":
-        return "badge badge-llm"
-    if t in ("XGBOOST", "XGB"):
-        return "badge badge-xgb"
-    if t == "LR":
-        return "badge badge-lr"
-    return "badge badge-other"
-
+from xailens.dashboard.utils.styles import get_badge_class
 
 def render_run_cell(run: Run) -> str:
     model_name = format_model_name(run)
@@ -30,7 +20,7 @@ def render_run_cell(run: Run) -> str:
     return f"""
     <div class="run-cell">
         <div class="run-cell-model">
-            <span class="{_badge_class(model_type)}">{strings.MODEL_DISPLAY_NAME[model_type]}</span>
+            <span class="{get_badge_class(model_type)}">{strings.MODEL_DISPLAY_NAME[model_type]}</span>
             <span class="run-cell-model-name">{model_name}</span>
         </div>
         <div class="run-cell-meta">

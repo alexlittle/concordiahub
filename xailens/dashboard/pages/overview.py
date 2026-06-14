@@ -20,12 +20,10 @@ def main():
     df = build_comparison_df(run_a=run_a, run_b=run_b)
 
     # Page layout/display
-    apply_layout(strings.APP_NAME)
+    apply_layout(strings.OVERVIEW_TITLE)
 
     st.html(display_breadcrumbs(run_a, run_b))
 
-
-    st.subheader(f"**Dataset:** {run_a.get('dataset_id')}")
     col1, col2 = st.columns(2)
 
     with col1:

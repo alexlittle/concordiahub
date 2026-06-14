@@ -1,7 +1,7 @@
 :root {
     --color-sidebar-bg: #D4E4E477;
     --color-link: #1A6B6B;
-    --sidebar-width:244px;
+    --sidebar-width: 300px;
     --model-name-colour: #0d4f4f;
 
     --pill-model-border: #b2cece;
@@ -70,6 +70,9 @@ h2 {
     margin: 0;
 }
 
+p {
+    margin: 5px 0 !important;
+}
 /*
     General re-used elements
  */
@@ -121,8 +124,18 @@ section[data-testid="stSidebar"] {
     left: 0;
     font-size: 14px;
     color: gray;
-    display: flex;
-    justify-content: center;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.sidebar-footer > a, a:visited {
+    text-decoration: none;
+    color: var(--color-link);
+}
+
+.sidebar-footer > a:hover, a:active {
+    text-decoration: underline;
+    color: var(--color-link);
 }
 
 /*
@@ -276,6 +289,33 @@ a.pill-dataset--active {
     background-color: var(--color-metric-bg);
     border-radius: 8px;
     padding: 1rem 1.25rem;
+}
+
+.model-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.model-header h3 {
+    margin: 0;
+    font-weight: 500;
+}
+.model-meta {
+    font-size: 14px;
+    color: gray;
+}
+
+.tag {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    background: #F1EFE8;
+    color: #5F5E5A;
+    margin: 0 5px;
 }
 
 /*

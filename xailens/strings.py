@@ -8,9 +8,11 @@ APP_NAME = "XAI Lens"
 SIDEBAR_FILTER_TITLE = "Quick Filter:"
 
 # homepage
-HOMEPAGE_TITLE = "Comparison browser"
+HOMEPAGE_TITLE = "Comparison Browser"
 HOMEPAGE_HELPER = "Select a comparison to explore, or use the filters to narrow down."
 BTN_GO_TO_COMPARISON = "Go to comparison &#10132;"
+OVERVIEW_TITLE = "Comparison Overview"
+DETAIL_TITLE = "Comparison Detail"
 
 
 

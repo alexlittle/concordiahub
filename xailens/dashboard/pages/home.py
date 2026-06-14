@@ -42,7 +42,9 @@ def main():
     filtered_runs = apply_model_filter(all_runs, active_models)
     filtered_runs = apply_dataset_filter(filtered_runs, active_dataset)
 
-    st.html(display_comparable_runs(filtered_runs))
+    runs = display_comparable_runs(filtered_runs)
+    if runs is not None:
+        st.html(runs)
 
 if __name__ == "__main__":
     main()
