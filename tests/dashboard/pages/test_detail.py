@@ -76,7 +76,7 @@ def test_no_comparison_available_shows_warning(mock_runs):
          patch("xailens.dashboard.utils.detail_helpers.render_model_panel"), \
          patch("xailens.dashboard.utils.detail_helpers.select_comparison_viz",
                return_value="<p>viz</p>"), \
-         patch("xailens.dashboard.utils.breadcrumb.display_breadcrumbs",
+         patch("xailens.dashboard.utils.layout.display_breadcrumbs",
                return_value="<p>breadcrumb</p>"), \
          patch("xailens.dashboard.utils.layout.apply_layout"), \
          patch("xailens.registry.comparison_registry.get_comparison_adapter",

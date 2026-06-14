@@ -1,6 +1,6 @@
 import pytest
 
-from xailens.dashboard.utils.breadcrumb import display_breadcrumbs
+from xailens.dashboard.utils.layout import display_breadcrumbs
 from xailens.run import Run
 
 @pytest.fixture

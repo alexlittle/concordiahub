@@ -3,8 +3,7 @@ import plotly
 
 from xailens.context import ComparisonContext
 from xailens.exceptions import InvalidConfigurationError, InvalidUrlParamsError
-from xailens.dashboard.utils.layout import apply_layout
-from xailens.dashboard.utils.breadcrumb import display_breadcrumbs
+from xailens.dashboard.utils.layout import apply_layout, display_breadcrumbs
 from xailens.dashboard.utils.params import get_runs_from_url_param
 from xailens.registry.comparison_registry import get_comparison_adapter
 from xailens.dashboard.utils.detail_helpers import build_model_panel, render_model_panel, select_comparison_viz
