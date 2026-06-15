@@ -107,6 +107,12 @@ section[data-testid="stSidebar"] {
     padding-top: 0;
 }
 
+/* so hide/show arrow always appears */
+[data-testid="stSidebarCollapseButton"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
 .logo-container {
     display: flex;
     justify-content: center;

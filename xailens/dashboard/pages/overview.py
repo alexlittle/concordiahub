@@ -23,7 +23,7 @@ def main():
 
     st.html(display_breadcrumbs(run_a, run_b))
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="large")
 
     with col1:
         render_run_summary(run_a)

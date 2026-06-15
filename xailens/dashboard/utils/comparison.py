@@ -12,7 +12,7 @@ def render_run_summary(run):
     date_str = format_datetime(run.get("datetime"))
     dataset_id = run.get("dataset_id")
     methods_html = "".join(
-        f'<span class="tag">{m}</span> ' for m in (run.get("xai_methods") or [])
+        f'<span class="tag">{strings.XAI_METHOD_DISPLAY_NAME[m]}</span> ' for m in (run.get("xai_methods") or [])
     )
 
     st.html(f"""
@@ -27,7 +27,8 @@ def render_run_summary(run):
         {methods_html}
     </p>
     <p class="model-meta">
-        {run_name}
+        <em>Run name</em>: {run_name}<br/>
+        <em>Run ID</em>: {run.get("run_uuid")}
     </p>
     """)
 

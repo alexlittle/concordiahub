@@ -14,6 +14,9 @@ BTN_GO_TO_COMPARISON = "Go to comparison &#10132;"
 OVERVIEW_TITLE = "Comparison Overview"
 DETAIL_TITLE = "Comparison Detail"
 
+# Filtering/search defaults
+ALL_DATASET_OPTIONS = ("all", "All datasets")
+ALL_COMP_OPTIONS = ("all", "All model types")
 
 
 # ----------------
@@ -38,6 +41,12 @@ MODEL_DISPLAY_NAME = DisplayNameDict({
 # ----------------
 # XAI METHODS
 # ----------------
+XAI_METHOD_DISPLAY_NAME = DisplayNameDict({
+    "coefficients": "Coefficients",
+    "tree_shap": "Tree SHAP",
+    "cor": "Chain of Reasoning",
+})
+
 COEFFICIENTS_DISPLAY_NAME = "Coefficients"
 COR_DISPLAY_NAME = "Chain of Reasoning"
 KERNEL_SHAP_DISPLAY_NAME = "Kernel Shap"

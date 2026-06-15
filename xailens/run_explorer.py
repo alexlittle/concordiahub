@@ -79,7 +79,7 @@ class RunExplorer():
             for run_md in self._load_all_metadata()
         })
 
-        return {config.ALL_DATASET_OPTIONS[0]: config.ALL_DATASET_OPTIONS[1]} | {d: d for d in datasets}
+        return {strings.ALL_DATASET_OPTIONS[0]: strings.ALL_DATASET_OPTIONS[1]} | {d: d for d in datasets}
 
     def get_model_filter_options(self) -> dict[str, str]:
         datasets = defaultdict(list)
@@ -95,7 +95,7 @@ class RunExplorer():
                 if types.count(t) >= 2:
                     valid_pairs.add((t, t))
 
-        options = {config.ALL_COMP_OPTIONS[0]: config.ALL_COMP_OPTIONS[1]}
+        options = {strings.ALL_COMP_OPTIONS[0]: strings.ALL_COMP_OPTIONS[1]}
         for a, b in sorted(valid_pairs):
             options[f"{a}_vs_{b}"] = f"{strings.MODEL_DISPLAY_NAME[a]} vs {strings.MODEL_DISPLAY_NAME[b]}"
 

@@ -62,11 +62,6 @@ ALIGNMENT_SCALE_COMPARISON_VISUALISATION_OPTIONS = {
     }
 ALIGNMENT_THRESHOLDS = [0.25, 0.5, 0.75, 1.0]
 
-#-------------------------
-# Filtering/search defaults
-#---------------------------
-ALL_DATASET_OPTIONS = ("all", "All datasets")
-ALL_COMP_OPTIONS = ("all", "All comparisons")
 
 
 #------------------------
