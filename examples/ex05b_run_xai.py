@@ -46,7 +46,7 @@ ctx = xai.RunContext(
     run_data,
     model_subtype=current_model,
     run_name=f"medsynth_llm_{safe_dirname(current_model)}",
-    model_id="LLM",
+    model_id="Example 5a",
     response_schema=schema)
 
 xai.run(ctx)

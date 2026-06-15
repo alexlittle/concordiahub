@@ -42,6 +42,7 @@ class CoRAdapter(XAIMethodAdapter):
     """For chain-of-reasoning/chain-of-thought explanations"""
 
     display_name = strings.COR_DISPLAY_NAME
+    display_notes = strings.COR_NOTES
     default_visualisation = config.COR_DEFAULT_VIZ
     compatible_visualisations = config.COR_COMPATIBLE_VIZ
 

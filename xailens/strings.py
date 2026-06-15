@@ -9,7 +9,7 @@ SIDEBAR_FILTER_TITLE = "Quick Filter:"
 
 # homepage
 HOMEPAGE_TITLE = "Comparison Browser"
-HOMEPAGE_HELPER = "Select a comparison to explore, or use the filters to narrow down."
+HOMEPAGE_HELPER = "Select a comparison to explore, or use the filters to narrow down by dataset and/or model type."
 BTN_GO_TO_COMPARISON = "Go to comparison &#10132;"
 OVERVIEW_TITLE = "Comparison Overview"
 DETAIL_TITLE = "Comparison Detail"
@@ -51,6 +51,20 @@ COEFFICIENTS_DISPLAY_NAME = "Coefficients"
 COR_DISPLAY_NAME = "Chain of Reasoning"
 KERNEL_SHAP_DISPLAY_NAME = "Kernel Shap"
 TREE_SHAP_DISPLAY_NAME = "Tree Shap"
+
+COEFFICIENTS_NOTES = """
+    Coefficients are considered inherently interpretable for linear models, meaning the values directly reflect each 
+    feature's contribution to the model's decision.
+    """
+COR_NOTES = """
+    Chain of Reasoning explanations may be post-rationalised by the model, and so may not 
+    truly reflect the decision process the model used to arrive at the explanation.
+    """
+TREE_SHAP_NOTES = """
+    SHAP values estimate each feature's contribution to a prediction relative to a baseline, but when features are 
+    correlated, the model may distribute credit across them in ways that don't clearly correspond to which feature 
+    is truly responsible.
+    """
 
 # ----------------
 # MODELS

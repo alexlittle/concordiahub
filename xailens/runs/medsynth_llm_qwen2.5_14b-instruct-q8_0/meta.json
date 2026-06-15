@@ -6,7 +6,7 @@
     "dataset_id": "medsynth",
     "model_subtype": "qwen2.5_14b-instruct-q8_0",
     "run_name": "medsynth_llm_qwen2.5_14b-instruct-q8_0",
-    "model_id": "LLM",
+    "model_id": "Example 5b",
     "response_schema": {
         "contributions_field": "key_factors",
         "contribution_key": "phrase"

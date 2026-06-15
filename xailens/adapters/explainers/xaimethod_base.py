@@ -13,6 +13,7 @@ class XAIMethodAdapter(ABC):
     Abstract class for XAI method adapter.
     """
     display_name: str | None = None
+    display_notes: str | None = None
     default_visualisation: Optional[str]
     compatible_visualisations: Optional[dict]
 

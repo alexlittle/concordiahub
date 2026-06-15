@@ -14,6 +14,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     """Tree SHAP Explainer"""
 
     display_name = strings.TREE_SHAP_DISPLAY_NAME
+    display_notes = strings.TREE_SHAP_NOTES
     default_visualisation = config.TREE_SHAP_DEFAULT_VIZ
     compatible_visualisations = config.TREE_SHAP_COMPATIBLE_VIZ
 

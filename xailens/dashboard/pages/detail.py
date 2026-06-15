@@ -56,7 +56,7 @@ def main():
     except NotImplementedError:
         st.warning(f"{comp_viz} is not yet implemented")
 
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns(2, gap="large")
     with col1:
         render_model_panel(panel_a, existing_params, plot_key="explanation_a")
     with col2:

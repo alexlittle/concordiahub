@@ -94,5 +94,6 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
                 st.html(render_dataframe(viz))
             else:
                 st.html(viz)
+        st.html(panel.xai_instance.display_notes)
     except NotImplementedError:
         st.warning(f"{panel.viz_name} is not yet implemented for {format_model_name(panel.run)}")

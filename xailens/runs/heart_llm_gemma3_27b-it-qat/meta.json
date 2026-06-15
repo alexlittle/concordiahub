@@ -6,7 +6,7 @@
     "dataset_id": "cleveland-heart-data",
     "model_subtype": "gemma3_27b-it-qat",
     "run_name": "heart_llm_gemma3_27b-it-qat",
-    "model_id": "LLM",
+    "model_id": "Example 3a",
     "response_schema": {
         "contributions_field": "feature_contributions",
         "contribution_key": null

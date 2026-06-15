@@ -28,6 +28,6 @@ ctx = xai.RunContext(
     run_data,
     model=model,
     run_name="heart_lr",
-    model_id="LR v1")
+    model_id="Example 1")
 
 xai.run(ctx)

@@ -15,8 +15,8 @@ class CoefficientsAdapter(XAIMethodAdapter):
     """For models with native interpretability"""
 
     display_name = strings.COEFFICIENTS_DISPLAY_NAME
+    display_notes = strings.COEFFICIENTS_NOTES
     default_visualisation = config.COEFFS_DEFAULT_VIZ
-
     compatible_visualisations = config.COEFFS_COMPATIBLE_VIZ
 
 
