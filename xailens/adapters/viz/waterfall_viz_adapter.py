@@ -13,16 +13,29 @@ class WaterfallVizAdapter(VizAdapter):
 
     def render_local(self, explanation, axis_range=None) -> list[Any]:
         explanation.sort_values("score_normalised_max", inplace=True, ascending=True)
+
+        feature_names = explanation["feature_name"].tolist()
+        # use the total n features to determine the necessary height
+        n_features = len(feature_names)
+
         fig = go.Figure(go.Waterfall(
             orientation="h",
-            measure=["relative"] * len(explanation["feature_name"]),
-            y=explanation["feature_name"].tolist(),
+            measure=["relative"] * len(feature_names),
+            y=feature_names,
             x=explanation["score"].tolist(),
             connector={"line": {"color": "rgb(63, 63, 63)"}},
+            increasing={"marker": {"color": config.PLOT_RIGHT_COLOR}},
+            decreasing={"marker": {"color": config.PLOT_LEFT_COLOR}},
         ))
         fig.update_layout(
+            height=max(400, n_features * 25),
             title=strings.WATERFALL_TITLE,
             xaxis_title=strings.WATERFALL_X_AXIS,
+            yaxis=dict(
+                tickmode="array",
+                tickvals=list(range(len(feature_names))),
+                ticktext=feature_names,
+            )
         )
         return [fig]
 
