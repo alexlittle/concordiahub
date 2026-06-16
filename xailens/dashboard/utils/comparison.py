@@ -80,6 +80,7 @@ def generate_comparison_rows_html(df, run_a, run_b):
                 {row[f"{format_model_name(run_b)} prediction"]}
                 {run_b_icon} 
             </td>
+            <td></td>
         </tr>
         """
     return rows_html
@@ -97,6 +98,7 @@ def generate_comparison_table_html(df, run_a, run_b):
                 <th>True Value</th>
                 <th>{format_model_name(run_a)}</th>
                 <th>{format_model_name(run_b)}</th>
+                <th>Spearman Rank Correlation (&rho;)</th>
             </tr>
         </thead>
         <tbody>

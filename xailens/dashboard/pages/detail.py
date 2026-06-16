@@ -30,7 +30,7 @@ def main():
         print(e)
 
     # Display
-    apply_layout(strings.APP_NAME)
+    apply_layout(strings.DETAIL_TITLE)
     st.html(display_breadcrumbs(run_a, run_b, sample_id))
     st.subheader("**Comparison Explanation:**")
 

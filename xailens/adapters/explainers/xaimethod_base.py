@@ -28,8 +28,7 @@ class XAIMethodAdapter(ABC):
         df = run.store.load_dataframe(f"explanations_{cls.key}")
         row = df[df[run.get(constants.DATA_SCHEMA_ID_COLUMN)] == sample_id]
         if row.empty:
-            raise MissingDataError(
-                f"Sample '{sample_id}' not found in explanations for {cls.key}")
+            raise MissingDataError(f"Sample '{sample_id}' not found in explanations for {cls.key}")
         explanation = row.iloc[0].drop(run.get(constants.DATA_SCHEMA_ID_COLUMN), errors='coerce')
 
         # filter out near-zero valued features if a threshold is set

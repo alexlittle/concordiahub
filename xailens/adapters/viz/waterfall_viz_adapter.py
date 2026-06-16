@@ -31,11 +31,11 @@ class WaterfallVizAdapter(VizAdapter):
             height=max(400, n_features * 25),
             title=strings.WATERFALL_TITLE,
             xaxis_title=strings.WATERFALL_X_AXIS,
-            yaxis=dict(
-                tickmode="array",
-                tickvals=list(range(len(feature_names))),
-                ticktext=feature_names,
-            )
+            yaxis={
+                "tickmode": "array",
+                "tickvals": list(range(len(feature_names))),
+                "ticktext": feature_names
+            }
         )
         return [fig]
 

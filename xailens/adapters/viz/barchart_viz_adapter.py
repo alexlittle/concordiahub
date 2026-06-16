@@ -36,11 +36,11 @@ class BarChartVizAdapter(VizAdapter):
             xaxis_title=strings.BARCHART_X_AXIS,
             xaxis=config.PLOT_ZERO_LINE,
             showlegend=False,
-            yaxis=dict(
-                tickmode="array",
-                tickvals=list(range(len(feature_names))),
-                ticktext=feature_names,
-            )
+            yaxis={
+                "tickmode": "array",
+                "tickvals": list(range(len(feature_names))),
+                "ticktext": feature_names
+            }
         )
         if axis_range:
             fig.update_layout(xaxis={"range": axis_range})
