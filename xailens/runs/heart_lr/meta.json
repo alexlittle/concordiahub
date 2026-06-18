@@ -12,16 +12,17 @@
         "accuracy": 0.8449,
         "f1_macro": 0.8429,
         "f1_weighted": 0.8444,
-        "n_samples": 303,
+        "n_instances": 303,
         "n_failed": 0
     },
-    "datetime": "20260610-205150",
-    "run_uuid": "4dd56b8c-d22e-4d1e-9cc3-c9dbb696c105",
+    "datetime": "20260618-170751",
+    "run_uuid": "c350b5a7-7758-4108-829e-7a4bbe5b53d9",
     "data_schema": {
-        "sample_id_column": "sample_uuid",
+        "instance_id_column": "instance_uuid",
         "target_column": "target",
         "prediction_column": "y_pred",
         "feature_columns": null,
-        "class_names": null
+        "class_names": null,
+        "hide_zero_threshold": null
     }
 }

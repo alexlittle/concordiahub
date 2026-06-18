@@ -48,7 +48,7 @@ def test_build_comparison_basic():
     run_a = MockRun(df_true, df_pred_a, {
         "model_type": "ModelA",
         "data_schema": {
-            "sample_id_column": "id",
+            "instance_id_column": "id",
             "target_column": "target"
         }
     })
@@ -56,7 +56,7 @@ def test_build_comparison_basic():
     run_b = MockRun(df_true, df_pred_b, {
         "model_type": "ModelB",
         "data_schema": {
-            "sample_id_column": "id",
+            "instance_id_column": "id",
             "target_column": "target"
         }
     })
@@ -95,12 +95,12 @@ def test_build_comparison_aligns_on_index():
 
     run_a = MockRun(df_true, df_pred_a, {
         "model_type": "ModelA",
-        "data_schema": {"sample_id_column": "id", "target_column": "target"}
+        "data_schema": {"instance_id_column": "id", "target_column": "target"}
     })
 
     run_b = MockRun(df_true, df_pred_b, {
         "model_type": "ModelB",
-        "data_schema": {"sample_id_column": "id", "target_column": "target"}
+        "data_schema": {"instance_id_column": "id", "target_column": "target"}
     })
 
     result = build_comparison_df(run_a, run_b, mock_ensure_index).sort_values("id")
@@ -127,12 +127,12 @@ def test_build_comparison_missing_ids():
 
     run_a = MockRun(df_true, df_pred_a, {
         "model_type": "A",
-        "data_schema": {"sample_id_column": "id", "target_column": "target"}
+        "data_schema": {"instance_id_column": "id", "target_column": "target"}
     })
 
     run_b = MockRun(df_true, df_pred_b, {
         "model_type": "B",
-        "data_schema": {"sample_id_column": "id", "target_column": "target"}
+        "data_schema": {"instance_id_column": "id", "target_column": "target"}
     })
 
     result = build_comparison_df(run_a, run_b, mock_ensure_index)
@@ -153,7 +153,7 @@ def test_build_comparison_raises_if_same_formatted_name():
         "model_type": "XGBoost",
         "model_subtype": "v1",
         "data_schema": {
-            "sample_id_column": "id",
+            "instance_id_column": "id",
             "target_column": "target"
         }
     }

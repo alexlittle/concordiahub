@@ -42,8 +42,8 @@ class TreeSHAPAdapter(XAIMethodAdapter):
             raise MissingDataError("CoefficientsAdapter requires x_test in RunData")
 
         data = ctx.data.x_test
-        if ctx.data.data_schema.sample_id_column in data.columns:
-            data = data.set_index(ctx.data.data_schema.sample_id_column)
+        if ctx.data.data_schema.instance_id_column in data.columns:
+            data = data.set_index(ctx.data.data_schema.instance_id_column)
         data = data.select_dtypes(include=['number'])
 
         explainer = shap.TreeExplainer(model)

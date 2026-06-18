@@ -100,7 +100,7 @@ for idx, row in df.iterrows():
 pred_outputs_df = pd.DataFrame(pred_outputs)
 exp_outputs_df = pd.DataFrame(exp_outputs)
 
-y = df[[config.SAMPLE_UUID_COL, "target"]]
+y = df[[config.INSTANCE_UUID_COL, "target"]]
 X = df.drop(columns=["target"])
 
 

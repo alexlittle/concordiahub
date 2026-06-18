@@ -102,7 +102,7 @@ class CoRAdapter(XAIMethodAdapter):
             raise MissingDataError(
                 "CoRAdapter requires a ResponseSchema on RunContext")
 
-        sample_id_col = ctx.data.data_schema.sample_id_column
+        sample_id_col = ctx.data.data_schema.instance_id_column
         prediction_col = ctx.data.data_schema.prediction_column
         y_pred_indexed = ctx.data.y_pred.set_index(sample_id_col)
         output = []

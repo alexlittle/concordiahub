@@ -53,7 +53,7 @@ def clean_text(text: str) -> str:
 # data to extract from the input file
 df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 
-y = df.set_index(config.SAMPLE_UUID_COL)['target'].astype('category').cat.codes
+y = df.set_index(config.INSTANCE_UUID_COL)['target'].astype('category').cat.codes
 
 docs = list(tqdm(
     nlp.pipe(df['scenario'].map(clean_text), batch_size=64),
@@ -80,7 +80,7 @@ feature_names = scenario_tfidf.get_feature_names_out()
 X_df = pd.DataFrame(
     X.toarray(),
     columns=feature_names,
-    index=df[config.SAMPLE_UUID_COL]
+    index=df[config.INSTANCE_UUID_COL]
 )
 
 # train/test split

@@ -1,7 +1,7 @@
 from pathlib import Path
 
 # General config
-SAMPLE_UUID_COL = "sample_uuid"
+INSTANCE_UUID_COL = "instance_uuid"
 LLM_TEMPLATE_DIR = Path("./prompt_templates")
 
 

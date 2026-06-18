@@ -1,4 +1,4 @@
-DATA_SCHEMA_ID_COLUMN = 'data_schema.sample_id_column'
+DATA_SCHEMA_ID_COLUMN = 'data_schema.instance_id_column'
 DATA_SCHEMA_TARGET_COLUMN = 'data_schema.target_column'
 DATA_SCHEMA_PREDICTION_COLUMN = 'data_schema.prediction_column'
 

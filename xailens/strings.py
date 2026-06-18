@@ -1,3 +1,12 @@
+# ---------------------
+# Runner messages
+# ---------------------
+RUN_COMPLETE = """
+XAI Lens run completed, all the data and explanations have now ben stored. \n    
+You can now run the dashboard with xailens-dash to view the results
+"""
+
+
 
 # ----------------
 # App/page layout

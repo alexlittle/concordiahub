@@ -16,7 +16,7 @@ def mock_metadata():
         "model_type": "xgboost",
         "dataset_id": "heart",
         "data_schema": {
-            "sample_id_column": "sample_uuid",
+            "instance_id_column": "sample_uuid",
             "target_column": "target",
             "prediction_column": "y_pred"
         }

@@ -31,7 +31,7 @@ columns = [
 df = pd.read_csv("./data/cleveland-data-downloaded.csv", header=None, names=columns, na_values="?")
 
 # Assign a UUID
-df.insert(0, config.SAMPLE_UUID_COL, [str(uuid.uuid4()) for _ in range(len(df))])
+df.insert(0, config.INSTANCE_UUID_COL, [str(uuid.uuid4()) for _ in range(len(df))])
 
 # Change to a binary target
 df['target'] = (df['target'] > 0).astype(int)
@@ -40,4 +40,4 @@ df['target'] = (df['target'] > 0).astype(int)
 df.fillna(df.median(numeric_only=True), inplace=True)
 
 # Save processed file
-df.to_csv(config.HEART_INPUT_FILE, index=df[config.SAMPLE_UUID_COL])
+df.to_csv(config.HEART_INPUT_FILE, index=False)

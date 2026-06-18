@@ -14,11 +14,11 @@ print(f"System check: {device} detected.")
 
 df = pd.read_csv(config.HEART_INPUT_FILE)
 
-X = df.drop(columns=[config.SAMPLE_UUID_COL, "target"])
-X.index = df[config.SAMPLE_UUID_COL]
+X = df.drop(columns=[config.INSTANCE_UUID_COL, "target"])
+X.index = df[config.INSTANCE_UUID_COL]
 
 y = df["target"]
-y.index = df[config.SAMPLE_UUID_COL]
+y.index = df[config.INSTANCE_UUID_COL]
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y,

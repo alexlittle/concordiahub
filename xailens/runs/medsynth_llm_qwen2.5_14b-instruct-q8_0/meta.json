@@ -21,7 +21,7 @@
     "datetime": "20260612-104428",
     "run_uuid": "2c7ebd26-8894-4492-8211-cae650bca450",
     "data_schema": {
-        "sample_id_column": "sample_uuid",
+        "instance_id_column": "sample_uuid",
         "target_column": "target",
         "prediction_column": "prediction",
         "feature_columns": null,

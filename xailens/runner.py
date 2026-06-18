@@ -2,6 +2,7 @@
 from sklearn.metrics import accuracy_score, f1_score
 from dataclasses import fields
 
+import strings
 from xailens.exceptions import InvalidConfigurationError
 from xailens.encoder import XAITextEncoder
 from xailens.artifacts import ArtifactStore
@@ -12,14 +13,17 @@ from xailens.registry.xai_registry import get_xai_adapter
 
 def compute_metrics(data):
     if (data.y_test is not None or data.y is not None) and data.y_pred is not None:
-        sample_id = data.data_schema.sample_id_column
+        sample_id = data.data_schema.instance_id_column
         full_test = data.y_test if data.y_test is not None else data.y
 
-        pred_data = data.y_pred.set_index(sample_id)
-        test_data = full_test.set_index(sample_id).loc[pred_data.index]
+        pred_data = data.y_pred.set_index(sample_id).squeeze()
+        test_data = full_test.set_index(sample_id).loc[pred_data.index].squeeze()
+
+        print(type(test_data), test_data.shape, test_data.head())
+        print(type(pred_data), pred_data.shape, pred_data.head())
 
         return RunMetrics(
-            n_samples=len(test_data),
+            n_instances=len(test_data),
             n_failed=len(full_test) - len(test_data),
             accuracy=round(accuracy_score(test_data, pred_data), 4),
             f1_macro=round(f1_score(test_data, pred_data, average='macro'), 4),
@@ -72,3 +76,4 @@ def run(ctx: RunContext):
             results = xai_adapter.explain_local_df(ctx, model_adapter.prepare())
             artifact_store.write_explanation(f"explanations_{xai_method}", results, type="df")
 
+    print(strings.RUN_COMPLETE)

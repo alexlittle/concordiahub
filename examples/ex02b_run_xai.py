@@ -12,7 +12,7 @@ y_pred = pd.read_parquet('./cache/heart/xgboost/y_pred.parquet')
 model = joblib.load('./cache/heart/xgboost/model.joblib')
 
 data_schema = xai.DataSchema(
-    sample_id_column=config.SAMPLE_UUID_COL,
+    instance_id_column=config.INSTANCE_UUID_COL,
     target_column="target",
     prediction_column="y_pred")
 

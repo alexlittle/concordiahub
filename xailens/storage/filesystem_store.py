@@ -20,14 +20,14 @@ class FilesystemStore(DataStore):
             json.dump(data, f, indent=4)
 
     def save_dataframe(self, name, df):
-        path = os.path.join(self.dirname, f"{name}.parquet")
-        df.to_parquet(path)
+        path = os.path.join(self.dirname, f"{name}.csv")
+        df.to_csv(path, index=False)
 
     def save_explanation(self, name, data, type="df"):
         if type == "df":
-            path = os.path.join(self.dirname, f"{name}.parquet")
+            path = os.path.join(self.dirname, f"{name}.csv")
             data.columns = data.columns.astype(str)
-            data.reset_index().to_parquet(path)
+            data.to_csv(path, index=False)
         else:
             with open(os.path.join(self.dirname, f"{name}.json"), "w") as f:
                 json.dump(data, f, indent=4)
@@ -37,7 +37,7 @@ class FilesystemStore(DataStore):
         joblib.dump(model, os.path.join(self.dirname, f"{name}.joblib"))
 
     def load_dataframe(self, name:str) -> pd.DataFrame:
-        return pd.read_parquet(os.path.join(self.dirname, f"{name}.parquet"))
+        return pd.read_csv(os.path.join(self.dirname, f"{name}.csv"))
 
     def load_json(self, name:str) -> list:
         with open(os.path.join(self.dirname, f"{name}.json"), 'r') as f:

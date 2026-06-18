@@ -28,7 +28,7 @@ schema = xai.ResponseSchema(
 )
 
 data_schema = xai.DataSchema(
-    sample_id_column=config.SAMPLE_UUID_COL,
+    instance_id_column=config.INSTANCE_UUID_COL,
     target_column="target",
     prediction_column="prediction")
 

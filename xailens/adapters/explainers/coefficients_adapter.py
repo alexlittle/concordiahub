@@ -35,7 +35,10 @@ class CoefficientsAdapter(XAIMethodAdapter):
         if ctx.data.x is None:
             raise MissingDataError("CoefficientsAdapter requires x in RunData")
         coef = model.coef_[0]
-        local_explanations = ctx.data.x * coef
+        instance_id = ctx.data.data_schema.instance_id_column
+        x = ctx.data.x.drop(columns=instance_id)
+        local_explanations = x * coef
+        local_explanations.insert(0, instance_id, ctx.data.x[instance_id].values)
         return local_explanations
 
     def explain_local_json(self, ctx: RunContext) -> dict[str, Any]:

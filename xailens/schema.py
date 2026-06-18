@@ -3,7 +3,7 @@ from typing import Optional
 
 @dataclass
 class DataSchema:
-    sample_id_column: str
+    instance_id_column: str
     target_column: str
     prediction_column: str
     feature_columns: Optional[list[str]] = None

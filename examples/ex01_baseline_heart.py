@@ -11,11 +11,11 @@ from examples import config
 
 df = pd.read_csv(config.HEART_INPUT_FILE)
 
-X = df.drop(columns=[config.SAMPLE_UUID_COL, "target"])
-X.index = df[config.SAMPLE_UUID_COL]
+X = df.drop(columns=[config.INSTANCE_UUID_COL, "target"])
+X.index = df[config.INSTANCE_UUID_COL]
 
 y = df["target"]
-y.index = df[config.SAMPLE_UUID_COL]
+y.index = df[config.INSTANCE_UUID_COL]
 
 
 imputer = SimpleImputer(strategy="median")
@@ -35,8 +35,10 @@ model.fit(X_scaled, y)
 
 y_pred = pd.DataFrame({'y_pred': model.predict(X_scaled)}, index=X_scaled.index)
 
-print(accuracy_score(y, y_pred))
+for frame in [X_scaled, y.to_frame(), y_pred]:
+    frame.insert(0, config.INSTANCE_UUID_COL, df[config.INSTANCE_UUID_COL].values)
 
+print(accuracy_score(y, y_pred['y_pred']))
 
 coef_df = pd.DataFrame(
     model.coef_,
@@ -45,10 +47,14 @@ coef_df = pd.DataFrame(
 )
 print(coef_df)
 
+
+
 # save to files for loading to XAI later
-X.to_parquet('./cache/heart/baseline/X.parquet')
-y.to_frame().reset_index().to_parquet('./cache/heart/baseline/y.parquet')
-y_pred.reset_index().to_parquet('./cache/heart/baseline/y_pred.parquet')
+X_scaled.to_parquet('./cache/heart/baseline/X.parquet', index=False)
+y_df = y.to_frame()
+y_df.insert(0, config.INSTANCE_UUID_COL, df[config.INSTANCE_UUID_COL].values)
+y_df.to_parquet('./cache/heart/baseline/y.parquet', index=False)
+y_pred.to_parquet('./cache/heart/baseline/y_pred.parquet', index=False)
 joblib.dump(model, './cache/heart/baseline/model.joblib')
 
 
