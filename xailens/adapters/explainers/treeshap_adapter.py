@@ -38,6 +38,9 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         Raises:
             MissingDataError: if data.x_test is not provided
         """
+        if not hasattr(ctx.data, "x_test") or ctx.data.x_test is None:
+            raise MissingDataError("TreeSHAPAdapter requires x_test in RunData")
+
         instance_id = ctx.data.data_schema.instance_id_column
         data = ctx.data.x_test.copy()
         uuids = data[instance_id].values
@@ -46,15 +49,15 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         explainer = shap.TreeExplainer(model)
         shap_values = explainer.shap_values(data)
 
-        # (n_samples, 1, n_features)
+        # (n_instances, 1, n_features)
         if shap_values.ndim == 2:
             result = pd.DataFrame(shap_values, columns=data.columns)
             result.insert(0, instance_id, uuids)
             result['class'] = 0
             return result
 
-        # SHAP returns (n_samples, n_features, n_classes) for multiclass tree models
-        # slice last axis per class to get (n_samples, n_features) per DataFrame
+        # SHAP returns (n_instances, n_features, n_classes) for multiclass tree models
+        # slice last axis per class to get (n_instances, n_features) per DataFrame
         elif shap_values.ndim == 3:
             n_classes = shap_values.shape[2]
             dfs = []

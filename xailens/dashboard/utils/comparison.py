@@ -39,13 +39,13 @@ def render_run_summary(run):
     col3.metric("Weighted F1", f"{metrics.get('f1_weighted'):.3f}")
 
     n_failed = metrics['n_failed']
-    n_samples = metrics['n_samples']
+    n_instances = metrics['n_instances']
     if n_failed > 0:
-        col4.metric("Failed samples", n_failed,
-                    delta=f"{n_failed / n_samples:.0%} of run",
+        col4.metric("Failed instances", n_failed,
+                    delta=f"{n_failed / n_instances:.0%} of run",
                     delta_color="inverse")
     else:
-        col4.metric("Samples", n_samples)
+        col4.metric("Instances", n_instances)
 
     with st.expander("Full classification report"):
         st.dataframe(run.classification_report())

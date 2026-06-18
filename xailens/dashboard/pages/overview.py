@@ -31,7 +31,7 @@ def main():
     with col2:
         render_run_summary(run_b)
 
-    st.markdown("**Test samples available for comparison:**")
+    st.markdown("**Test instances available for comparison:**")
     table_html = generate_comparison_table_html(df, run_a, run_b)
     st.html(table_html)
 

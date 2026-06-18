@@ -2,7 +2,7 @@
 from sklearn.metrics import accuracy_score, f1_score
 from dataclasses import fields
 
-import strings
+from xailens import strings
 from xailens.exceptions import InvalidConfigurationError
 from xailens.encoder import XAITextEncoder
 from xailens.artifacts import ArtifactStore
