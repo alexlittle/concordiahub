@@ -38,40 +38,35 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         Raises:
             MissingDataError: if data.x_test is not provided
         """
-        if not hasattr(ctx.data, "x_test") or ctx.data.x_test is None:
-            raise MissingDataError("CoefficientsAdapter requires x_test in RunData")
-
-        data = ctx.data.x_test
-        if ctx.data.data_schema.instance_id_column in data.columns:
-            data = data.set_index(ctx.data.data_schema.instance_id_column)
-        data = data.select_dtypes(include=['number'])
+        instance_id = ctx.data.data_schema.instance_id_column
+        data = ctx.data.x_test.copy()
+        uuids = data[instance_id].values
+        data = data.drop(columns=[instance_id]).select_dtypes(include=['number'])
 
         explainer = shap.TreeExplainer(model)
         shap_values = explainer.shap_values(data)
 
         # (n_samples, 1, n_features)
         if shap_values.ndim == 2:
-            dfs = [pd.DataFrame(shap_values, index=data.index, columns=ctx.data.x_test.columns)]
-            dfs[0]['class'] = 0
-            return dfs[0].set_index('class', append=True)
+            result = pd.DataFrame(shap_values, columns=data.columns)
+            result.insert(0, instance_id, uuids)
+            result['class'] = 0
+            return result
 
         # SHAP returns (n_samples, n_features, n_classes) for multiclass tree models
         # slice last axis per class to get (n_samples, n_features) per DataFrame
         elif shap_values.ndim == 3:
             n_classes = shap_values.shape[2]
             dfs = []
-
+            keys = ctx.data.data_schema.class_names if ctx.data.data_schema.class_names is not None else range(
+                n_classes)
             for i in range(n_classes):
-                # Slice the last axis [:, :, i] to get (n_samples, n_features)
-                df = pd.DataFrame(
-                    shap_values[:, :, i],
-                    index=data.index,
-                    columns=data.columns
-                )
+                df = pd.DataFrame(shap_values[:, :, i], columns=data.columns)
+                df.insert(0, instance_id, uuids)
+                df['class'] = keys[i]
                 dfs.append(df)
+            return pd.concat(dfs, ignore_index=True)
 
-            keys = ctx.data.data_schema.class_names if ctx.data.data_schema.class_names is not None else range(n_classes)
-            return pd.concat(dfs, keys=keys, names=['class', data.index.name])
         else:
             raise DataProcessingError("The return values from SHAP don't match")
 

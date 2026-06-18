@@ -19,9 +19,6 @@ def compute_metrics(data):
         pred_data = data.y_pred.set_index(sample_id).squeeze()
         test_data = full_test.set_index(sample_id).loc[pred_data.index].squeeze()
 
-        print(type(test_data), test_data.shape, test_data.head())
-        print(type(pred_data), pred_data.shape, pred_data.head())
-
         return RunMetrics(
             n_instances=len(test_data),
             n_failed=len(full_test) - len(test_data),
