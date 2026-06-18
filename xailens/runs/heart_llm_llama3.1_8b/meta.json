@@ -6,7 +6,7 @@
     "dataset_id": "cleveland-heart-data",
     "model_subtype": "llama3.1_8b",
     "run_name": "heart_llm_llama3.1_8b",
-    "model_id": "Example 3b",
+    "model_id": "Example 3a",
     "response_schema": {
         "contributions_field": "feature_contributions",
         "contribution_key": null
@@ -15,16 +15,17 @@
         "accuracy": 0.4507,
         "f1_macro": 0.3437,
         "f1_weighted": 0.3052,
-        "n_samples": 213,
+        "n_instances": 213,
         "n_failed": 90
     },
-    "datetime": "20260610-205257",
-    "run_uuid": "b15aa6d5-7688-4b0f-b4ce-fffba95b585e",
+    "datetime": "20260618-173155",
+    "run_uuid": "35ed90cb-ea36-46c2-92f5-102eb620a83c",
     "data_schema": {
-        "instance_id_column": "sample_uuid",
+        "instance_id_column": "instance_uuid",
         "target_column": "target",
         "prediction_column": "prediction",
         "feature_columns": null,
-        "class_names": null
+        "class_names": null,
+        "hide_zero_threshold": null
     }
 }

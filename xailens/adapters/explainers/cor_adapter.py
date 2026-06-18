@@ -102,16 +102,20 @@ class CoRAdapter(XAIMethodAdapter):
             raise MissingDataError(
                 "CoRAdapter requires a ResponseSchema on RunContext")
 
-        sample_id_col = ctx.data.data_schema.instance_id_column
+        instance_id_col = ctx.data.data_schema.instance_id_column
         prediction_col = ctx.data.data_schema.prediction_column
-        y_pred_indexed = ctx.data.y_pred.set_index(sample_id_col)
+        y_pred = ctx.data.y_pred
         output = []
-        for idx, row in ctx.data.y_exp.iterrows():
+
+        for _, row in ctx.data.y_exp.iterrows():
             raw = json.loads(row["explanation"])
-            sample_id = row[sample_id_col]
-            prediction = y_pred_indexed.loc[sample_id, prediction_col]
+            instance_id = row[instance_id_col]
+            match = y_pred.loc[y_pred[instance_id_col] == instance_id, prediction_col]
+            if match.empty:
+                continue
+            prediction = match.iloc[0].item() if hasattr(match.iloc[0], 'item') else match.iloc[0]
             response = self._reformat(raw, ctx.response_schema, prediction)
-            output.append(response.to_dict(sample_id_col, sample_id))
+            output.append(response.to_dict(instance_id_col, instance_id))
         return output
 
     def _reformat(self, raw: dict, schema: ResponseSchema,
