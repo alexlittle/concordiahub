@@ -57,27 +57,27 @@ def generate_comparison_rows_html(df, modeleval_a, modeleval_b):
     for _, row in df.iterrows():
         instance_id = row[modeleval_a.get(constants.DATA_SCHEMA_ID_COLUMN)]
 
-        if row['True Value'] == row[f"{format_model_name(modeleval_a)} prediction"]:
+        if row['True Value'] == row[f"{modeleval_a.get('model_display_name')} prediction"]:
             modeleval_a_icon = "<span class='tick'>&#10004;</span>"
         else:
             modeleval_a_icon = "<span class='cross'>&#10008;</span>"
 
-        if row['True Value'] == row[f"{format_model_name(modeleval_b)} prediction"]:
+        if row['True Value'] == row[f"{modeleval_b.get('model_display_name')} prediction"]:
             modeleval_b_icon = "<span class='tick'>&#10004;</span>"
         else:
             modeleval_b_icon = "<span class='cross'>&#10008;</span>"
 
         rows_html += f"""
         <tr>
-            <td><a href='/pwinstance?modelevals={modeleval_a.get("model_uuid")},{modeleval_b.get("model_uuid")}&sample_id={instance_id}' target='_self'>{instance_id}</a></td>
+            <td><a href='/pwinstance?modelevals={modeleval_a.get("model_uuid")},{modeleval_b.get("model_uuid")}&instance_id={instance_id}' target='_self'>{instance_id}</a></td>
             <td>{row['Comparison']}</td>
             <td class="report-table-align">{row['True Value']}</td>
             <td class="report-table-align">
-                {row[f"{format_model_name(modeleval_a)} prediction"]}
+                {row[f"{modeleval_a.get('model_display_name')} prediction"]}
                 {modeleval_a_icon} 
             </td>
             <td class="report-table-align">
-                {row[f"{format_model_name(modeleval_b)} prediction"]}
+                {row[f"{modeleval_b.get('model_display_name')} prediction"]}
                 {modeleval_b_icon} 
             </td>
             <td></td>

@@ -7,17 +7,14 @@ from xailens.entities.modeleval import ModelEval
 def ensure_instance_index(df, key="instance_uuid"):
     # already a column so set as index
     if key in df.columns:
-        print(f"{key} already present in dataframe")
         return df.set_index(key)
 
     # already index with correct name
     if df.index.name == key:
-        print(f"{key} already present in dataframe")
         return df
 
     # index exists but unnamed so assume it's instance_uuid
     if df.index.name is None:
-        print(f"{key} not present in dataframe")
         df = df.copy()
         df.index.name = key
         return df
@@ -51,12 +48,6 @@ def build_comparison_df(modeleval_a: ModelEval,
     y_pred_a.columns = [f"{name_a} {constants.PREDICTION_COLUMN_LABEL}"]
     y_pred_b.columns = [f"{name_b} {constants.PREDICTION_COLUMN_LABEL}"]
 
-    print("y_true_a index:", y_true_a.index[:5].tolist())
-    print("y_pred_a index:", y_pred_a.index[:5].tolist())
-    print("y_pred_b index:", y_pred_b.index[:5].tolist())
-    print("overlap a:", len(y_true_a.index.intersection(y_pred_a.index)))
-    print("overlap b:", len(y_true_a.index.intersection(y_pred_b.index)))
-    
     df = y_true_a.join(y_pred_a, how="inner").join(y_pred_b, how="inner")
 
     # relabel columns and show which are correct/wrong

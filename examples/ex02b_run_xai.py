@@ -31,6 +31,6 @@ ctx = xai.ModelContext(
     model_data,
     model=model,
     model_name="heart_xgboost",
-    model_display_name="Example 2")
+    model_display_name="XGBoost")
 
 xai.run(ctx)

@@ -5,8 +5,8 @@
     ],
     "dataset_id": "cleveland-heart-data",
     "model_subtype": null,
-    "run_name": "heart_xgboost",
-    "model_display_name": "Example 2",
+    "model_display_name": "XGBoost",
+    "model_name": "heart_xgboost",
     "response_schema": null,
     "metrics": {
         "accuracy": 0.8689,
@@ -15,8 +15,8 @@
         "n_instances": 61,
         "n_failed": 0
     },
-    "datetime": "20260618-172236",
-    "model_uuid": "63fa133a-4452-4e33-8bdf-ec5f7e5d65eb",
+    "datetime": "20260622-194844",
+    "model_uuid": "9a18e0fb-a587-4c18-b6e0-123ffdb42a0c",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
