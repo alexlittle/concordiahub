@@ -6,7 +6,7 @@ from xailens.storage.filesystem_store import FilesystemStore
 from xailens import constants
 from xailens.schema import DataSchema
 
-class Model:
+class ModelEval:
 
     def __init__(self, path: str = None, store=None, metadata: dict = None):
         self.path = path

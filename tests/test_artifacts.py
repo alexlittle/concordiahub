@@ -70,8 +70,8 @@ def test_write_metadata(ctx_with_run_name, mock_store):
     saved = mock_store.save_json.call_args[0][1]
     assert saved["model_type"] == ctx_with_run_name.model_type
     assert saved["run_name"] == ctx_with_run_name.run_name
-    assert "run_uuid" in saved
-    uuid.UUID(saved["run_uuid"])
+    assert "model_uuid" in saved
+    uuid.UUID(saved["model_uuid"])
 
 #--------------------
 # write_model

@@ -1,13 +1,13 @@
 from unittest.mock import patch, MagicMock
 
 from xailens.dashboard.utils.run_display import render_run_cell
-from xailens.entities.model import Model
+from xailens.entities.model import ModelEval
 
 MODULE_UNDER_TEST = "xailens.dashboard.utils.run_display"
 
 
 def test_render_run_html_basic():
-    run = Model(metadata={
+    run = ModelEval(metadata={
         "model_type": "RandomForest",
         "model_subtype": "Classifier",
         "xai_methods": ["SHAP"],
@@ -22,7 +22,7 @@ def test_render_run_html_basic():
 
 
 def test_render_run_html_no_subtype():
-    run = Model(metadata={
+    run = ModelEval(metadata={
         "model_type": "XGBoost",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
@@ -37,7 +37,7 @@ def test_render_run_html_no_subtype():
 
 
 def test_render_run_html_no_xai_methods():
-    run = Model(metadata={
+    run = ModelEval(metadata={
         "model_type": "SVM",
         "model_subtype": None,
         "xai_methods": None,
@@ -53,7 +53,7 @@ def test_render_run_html_no_xai_methods():
 
 def test_display_run_cell_calls_markdown():
 
-    run = Model(metadata={
+    run = ModelEval(metadata={
         "model_type": "RF",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
@@ -75,7 +75,7 @@ def test_display_comparable_runs_renders(mock_st):
 
     mock_st.columns.return_value = [mock_col] * 5
 
-    run_a = Model(metadata={
+    run_a = ModelEval(metadata={
         "dataset_id": "ds1",
         "model_type": "RF",
         "model_subtype": None,
@@ -85,7 +85,7 @@ def test_display_comparable_runs_renders(mock_st):
         "model_uuid": "run1-uuid"
     })
 
-    run_b = Model(metadata={
+    run_b = ModelEval(metadata={
         "dataset_id": "ds1",
         "model_type": "XGB",
         "model_subtype": None,

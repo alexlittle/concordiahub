@@ -7,7 +7,7 @@ from xailens.entities.context import RunContext
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config
-from xailens.entities.model import Model
+from xailens.entities.model import ModelEval
 
 @register_xai("tree_shap")
 class TreeSHAPAdapter(XAIMethodAdapter):
@@ -22,7 +22,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     EXCLUDED_CONTRIBUTION_KEYS = {"class"}
     
     @classmethod
-    def load_explanation(cls, run: Model, sample_id: str) -> pd.DataFrame:
+    def load_explanation(cls, run: ModelEval, sample_id: str) -> pd.DataFrame:
         df = super().load_explanation(run, sample_id)
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 

@@ -4,22 +4,22 @@
         "cor"
     ],
     "dataset_id": "cleveland-heart-data",
-    "model_subtype": "qwen2.5_14b-instruct-q8_0",
-    "run_name": "heart_llm_qwen2.5_14b-instruct-q8_0",
+    "model_subtype": "gemma3_27b-it-qat",
+    "run_name": "heart_llm_gemma3_27b-it-qat",
     "model_id": "Example 3a",
     "response_schema": {
         "contributions_field": "feature_contributions",
         "contribution_key": null
     },
     "metrics": {
-        "accuracy": 0.7459,
-        "f1_macro": 0.7375,
-        "f1_weighted": 0.7414,
+        "accuracy": 0.7228,
+        "f1_macro": 0.7219,
+        "f1_weighted": 0.7232,
         "n_instances": 303,
         "n_failed": 0
     },
-    "datetime": "20260618-173308",
-    "run_uuid": "fb14eaa7-b98e-4109-8eb4-dd5ce3a1b356",
+    "datetime": "20260618-173233",
+    "model_uuid": "42fed929-84dd-4319-b3e6-c8a265c89c62",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

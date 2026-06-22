@@ -6,7 +6,7 @@ import pandas as pd
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from xailens.entities.model import Model
+from xailens.entities.model import ModelEval
 from xailens.schema import DataSchema, ResponseSchema
 
 
@@ -56,8 +56,8 @@ class ComparisonContext:
     """
     Dataclass structure for passing data to comparison visualisations
     """
-    run_a: Model
-    run_b: Model
+    run_a: ModelEval
+    run_b: ModelEval
     explanation_a: pd.Series
     explanation_b: pd.Series
     axis_range: tuple | None = None

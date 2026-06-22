@@ -4,22 +4,22 @@
         "cor"
     ],
     "dataset_id": "medsynth",
-    "model_subtype": "gemma3_27b-it-qat",
-    "run_name": "medsynth_llm_gemma3_27b-it-qat",
+    "model_subtype": "qwen2.5_14b-instruct-q8_0",
+    "run_name": "medsynth_llm_qwen2.5_14b-instruct-q8_0",
     "model_id": "Example 5a",
     "response_schema": {
         "contributions_field": "key_factors",
         "contribution_key": "phrase"
     },
     "metrics": {
-        "accuracy": 0.5532,
-        "f1_macro": 0.4892,
-        "f1_weighted": 0.4872,
+        "accuracy": 0.5527,
+        "f1_macro": 0.4562,
+        "f1_weighted": 0.481,
         "n_instances": 2048,
         "n_failed": 0
     },
-    "datetime": "20260618-174108",
-    "run_uuid": "1ccdcbfd-8daf-4352-a880-26be3d4f5115",
+    "datetime": "20260618-174009",
+    "model_uuid": "eb04eb1c-30bb-47e7-bef6-c61c9bb13e4b",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

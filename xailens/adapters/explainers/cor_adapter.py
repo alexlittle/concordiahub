@@ -9,7 +9,7 @@ from xailens.exceptions import MissingDataError
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config, constants
-from xailens.entities.model import Model
+from xailens.entities.model import ModelEval
 
 
 @dataclass
@@ -53,7 +53,7 @@ class CoRAdapter(XAIMethodAdapter):
     explanation_file_type: str = "json"
 
     @classmethod
-    def load_explanation(cls, run: Model, sample_id: str) -> pd.DataFrame:
+    def load_explanation(cls, run: ModelEval, sample_id: str) -> pd.DataFrame:
         records = run.store.load_json(f"explanations_{cls.key}")
         sample_id_col = run.get(constants.DATA_SCHEMA_ID_COLUMN)
 

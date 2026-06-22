@@ -1,11 +1,11 @@
 import streamlit as st
 
-from xailens.entities.model import Model
+from xailens.entities.model import ModelEval
 from xailens.formatting import format_model_name, format_datetime
 from xailens import strings
 from xailens.dashboard.utils.styles import get_badge_class
 
-def render_run_cell(run: Model) -> str:
+def render_run_cell(run: ModelEval) -> str:
     model_name = format_model_name(run)
     model_type = run.get("model_type", "")
     run_name   = run.get("run_name") or ""
@@ -32,7 +32,7 @@ def render_run_cell(run: Model) -> str:
     """
 
 
-def display_comparable_runs(groups: list[list[Model]]):
+def display_comparable_runs(groups: list[list[ModelEval]]):
     if not groups:
         st.info("No comparable models found.")
         return

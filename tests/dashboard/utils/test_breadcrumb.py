@@ -1,11 +1,11 @@
 import pytest
 
 from xailens.dashboard.utils.layout import display_breadcrumbs
-from xailens.entities.model import Model
+from xailens.entities.model import ModelEval
 
 @pytest.fixture
 def run_a():
-    return Model(metadata={
+    return ModelEval(metadata={
         "model_type": "XGBoost",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
@@ -16,7 +16,7 @@ def run_a():
 
 @pytest.fixture
 def run_b():
-    return Model(metadata={
+    return ModelEval(metadata={
         "model_type": "LinReg",
         "model_subtype": None,
         "xai_methods": ["SHAP"],

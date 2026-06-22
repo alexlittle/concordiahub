@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from xailens.entities.model import Model
+from xailens.entities.model import ModelEval
 
 def format_datetime(dt_str: str) -> str:
     """For string formatting of the datetime
@@ -14,10 +14,10 @@ def format_datetime(dt_str: str) -> str:
     dt = datetime.strptime(dt_str, "%Y%m%d-%H%M%S")
     return dt.strftime("%H:%M %d %b %Y")
 
-def format_model_name(run: Model) -> str:
+def format_model_name(run: ModelEval) -> str:
     """Formats the model name based on run object
     Args:
-        run (Model): run object
+        run (ModelEval): run object
 
     Returns:
         String: formatted model name

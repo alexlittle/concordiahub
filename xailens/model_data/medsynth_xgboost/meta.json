@@ -16,7 +16,7 @@
         "n_failed": 0
     },
     "datetime": "20260618-173538",
-    "run_uuid": "87f9b7c1-df16-409e-8a6b-17c3e39226a5",
+    "model_uuid": "87f9b7c1-df16-409e-8a6b-17c3e39226a5",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "y_test",

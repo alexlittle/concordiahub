@@ -19,7 +19,7 @@
         "n_failed": 90
     },
     "datetime": "20260618-173155",
-    "run_uuid": "35ed90cb-ea36-46c2-92f5-102eb620a83c",
+    "model_uuid": "35ed90cb-ea36-46c2-92f5-102eb620a83c",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

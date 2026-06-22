@@ -28,7 +28,7 @@ def render_run_summary(run):
     </p>
     <p class="model-meta">
         <em>Run name</em>: {run_name}<br/>
-        <em>Run ID</em>: {run.get("run_uuid")}
+        <em>Run ID</em>: {run.get("runmodel_uuid_uuid")}
     </p>
     """)
 
@@ -69,7 +69,7 @@ def generate_comparison_rows_html(df, run_a, run_b):
 
         rows_html += f"""
         <tr>
-            <td><a href='/detail?runs={run_a.get("run_uuid")},{run_b.get("run_uuid")}&sample_id={sample_id}' target='_self'>{sample_id}</a></td>
+            <td><a href='/detail?runs={run_a.get("model_uuid")},{run_b.get("model_uuid")}&sample_id={sample_id}' target='_self'>{sample_id}</a></td>
             <td>{row['Comparison']}</td>
             <td class="report-table-align">{row['True Value']}</td>
             <td class="report-table-align">

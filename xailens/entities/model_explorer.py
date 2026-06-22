@@ -6,7 +6,7 @@ from pathlib import Path
 from itertools import combinations
 
 from xailens import config, strings
-from xailens.entities.model import Model
+from xailens.entities.model import ModelEval
 from xailens.formatting import format_model_name
 
 
@@ -101,7 +101,7 @@ class ModelExplorer:
 
         return options
 
-    def get_run_by_uuid(self, uuid: str) -> Model | None:
+    def get_run_by_uuid(self, uuid: str) -> ModelEval | None:
         """Gets a Run by its UUID
         Args:
             uuid: Run's UUID
@@ -109,9 +109,9 @@ class ModelExplorer:
         Returns:
             Run or None"""
         meta = self._uuid_index.get(uuid)
-        return Model(path=meta["_path"], metadata=meta) if meta else None
+        return ModelEval(path=meta["_path"], metadata=meta) if meta else None
 
-    def get_runs_by_uuids(self, uuids: list[str]) -> list[Model]:
+    def get_runs_by_uuids(self, uuids: list[str]) -> list[ModelEval]:
         """Gets a list of Runs by their UUIDs
         Args:
             List[uuid]: Run UUIDs
@@ -124,7 +124,7 @@ class ModelExplorer:
             meta = self._uuid_index.get(u)
             if not meta:
                 continue
-            runs.append(Model(path=meta["_path"], metadata=meta))
+            runs.append(ModelEval(path=meta["_path"], metadata=meta))
         return runs
 
     #---------------------------

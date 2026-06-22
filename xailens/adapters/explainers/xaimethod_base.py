@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 from xailens.entities.context import RunContext
-from xailens.entities.model import Model
+from xailens.entities.model import ModelEval
 from xailens.exceptions import MissingDataError
 from xailens import constants
 
@@ -24,7 +24,7 @@ class XAIMethodAdapter(ABC):
     explanation_file_type: str = "df"
 
     @classmethod
-    def load_explanation(cls, run: Model, sample_id: str) -> pd.DataFrame:
+    def load_explanation(cls, run: ModelEval, sample_id: str) -> pd.DataFrame:
         df = run.store.load_dataframe(f"explanations_{cls.key}")
         row = df[df[run.get(constants.DATA_SCHEMA_ID_COLUMN)] == sample_id]
         if row.empty:

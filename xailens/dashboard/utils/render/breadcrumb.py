@@ -1,9 +1,9 @@
-from xailens.entities.model import Model
+from xailens.entities.model import ModelEval
 from xailens.formatting import format_model_name
 
 
 
-def display_breadcrumbs(run_a: Model=None, run_b: Model=None, sample_id:str = None) -> str:
+def display_breadcrumbs(run_a: ModelEval=None, run_b: ModelEval=None, sample_id:str = None) -> str:
     parts = []
     parts.append("<a href='/' target='_self'>Home</a>")
 

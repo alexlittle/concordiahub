@@ -3,23 +3,23 @@
     "xai_methods": [
         "cor"
     ],
-    "dataset_id": "cleveland-heart-data",
+    "dataset_id": "medsynth",
     "model_subtype": "gemma3_27b-it-qat",
-    "run_name": "heart_llm_gemma3_27b-it-qat",
-    "model_id": "Example 3a",
+    "run_name": "medsynth_llm_gemma3_27b-it-qat",
+    "model_id": "Example 5a",
     "response_schema": {
-        "contributions_field": "feature_contributions",
-        "contribution_key": null
+        "contributions_field": "key_factors",
+        "contribution_key": "phrase"
     },
     "metrics": {
-        "accuracy": 0.7228,
-        "f1_macro": 0.7219,
-        "f1_weighted": 0.7232,
-        "n_instances": 303,
+        "accuracy": 0.5532,
+        "f1_macro": 0.4892,
+        "f1_weighted": 0.4872,
+        "n_instances": 2048,
         "n_failed": 0
     },
-    "datetime": "20260618-173233",
-    "run_uuid": "42fed929-84dd-4319-b3e6-c8a265c89c62",
+    "datetime": "20260618-174108",
+    "run_model_uuiduuid": "1ccdcbfd-8daf-4352-a880-26be3d4f5115",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
