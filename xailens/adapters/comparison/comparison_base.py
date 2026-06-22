@@ -4,8 +4,6 @@ import plotly.graph_objects as go
 from abc import ABC, abstractmethod
 from typing import Any
 
-
-from xailens.formatting import format_model_name
 from xailens.entities.context import ComparisonContext
 from xailens import config
 from xailens.schema import ALIGNMENT_LEVELS
@@ -40,8 +38,8 @@ class ComparisonAdapter(ABC):
             orientation='h',
             marker_color=colors,
         ))
-        label_a = format_model_name(ctx.modeleval_a)
-        label_b = format_model_name(ctx.modeleval_b)
+        label_a = ctx.modeleval_a.get("model_display_name")
+        label_b = ctx.modeleval_b.get("model_display_name")
         fig.update_layout(
             title=f"Explanation Difference: {label_a} → {label_b}",
             xaxis_title=f"Attribution difference ({label_a} → {label_b})",
@@ -65,8 +63,8 @@ class ComparisonAdapter(ABC):
         order = midpoints.sort_values().index
         a_vals = series_a.reindex(order)
         b_vals = series_b.reindex(order)
-        label_a = format_model_name(ctx.modeleval_a)
-        label_b = format_model_name(ctx.modeleval_b)
+        label_a = ctx.modeleval_a.get("model_display_name")
+        label_b = ctx.modeleval_b.get("model_display_name")
         fig = go.Figure()
         for feature, a, b in zip(order, a_vals, b_vals):
             fig.add_shape(
@@ -116,8 +114,8 @@ class ComparisonAdapter(ABC):
 
     def viz_alignment_scale(self, ctx: ComparisonContext) -> str:
         """Per-feature dot scale - for detail page."""
-        label_a = format_model_name(ctx.modeleval_a)
-        label_b = format_model_name(ctx.modeleval_b)
+        label_a = ctx.modeleval_a.get("model_display_name")
+        label_b = ctx.modeleval_b.get("model_display_name")
         matched, only_in_a, only_in_b = compute_feature_differences(
             ctx.explanation_a, ctx.explanation_b)
         matched_rows = "".join(

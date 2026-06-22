@@ -3,9 +3,10 @@ import pandas as pd
 from xailens.dashboard.utils.comparison import generate_comparison_table_html
 from xailens import constants
 
-class MockRun:
-    def __init__(self, model_name):
-        self.model_name = model_name
+class MockModelEval:
+    def __init__(self, model_dir_name, model_display_name):
+        self.model_dir_name = model_dir_name
+        self.model_display_name = model_display_name
 
     def get(self, key):
         if key == "dataset_id":
@@ -13,7 +14,9 @@ class MockRun:
         if key == "datetime":
             return "2024-01-01"
         if key == "model_type":
-            return self.model_name
+            return "XGBoost"
+        if key == "model_display_name":
+            return self.model_display_name
         if key == constants.DATA_SCHEMA_ID_COLUMN:
             return "sample_uuid"
         return None
@@ -28,15 +31,15 @@ def test_generate_comparison_table_html():
             "sample_uuid": "123",
             "Comparison": "Match",
             "True Value": 1,
-            "Model A prediction": 1,
-            "Model B prediction": 0,
+            "model 1 prediction": 1,
+            "model 2 prediction": 0,
         }
     ])
 
-    run_a = MockRun("Model A")
-    run_b = MockRun("Model B")
+    modeleval_a = MockModelEval("Model A", "model 1")
+    modeleval_b = MockModelEval("Model B", "model 2")
 
-    html = generate_comparison_table_html(df, run_a, run_b)
+    html = generate_comparison_table_html(df, modeleval_a, modeleval_b)
 
     assert "<table" in html
     assert "123" in html

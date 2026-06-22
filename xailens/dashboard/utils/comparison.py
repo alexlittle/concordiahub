@@ -1,24 +1,24 @@
 import streamlit as st
 from xailens import constants, strings
-from xailens.formatting import format_model_name, format_datetime
+from xailens.formatting import format_datetime
 from xailens.dashboard.utils.styles import get_badge_class
+from xailens.entities.modeleval import ModelEval
 
-
-def render_run_summary(run):
-    badge_class = get_badge_class(run.get("model_type"))
-    badge_label = run.get("model_type")
-    run_name = run.get("run_name")
-    model_name = format_model_name(run)
-    date_str = format_datetime(run.get("datetime"))
-    dataset_id = run.get("dataset_id")
+def render_run_summary(model:ModelEval):
+    badge_class = get_badge_class(model.get("model_type"))
+    badge_label = model.get("model_type")
+    run_name = model.get("run_name")
+    model_display_name = model.get("model_display_name")
+    date_str = format_datetime(model.get("datetime"))
+    dataset_id = model.get("dataset_id")
     methods_html = "".join(
-        f'<span class="tag">{strings.XAI_METHOD_DISPLAY_NAME[m]}</span> ' for m in (run.get("xai_methods") or [])
+        f'<span class="tag">{strings.XAI_METHOD_DISPLAY_NAME[m]}</span> ' for m in (model.get("xai_methods") or [])
     )
 
     st.html(f"""
     <div class="model-header">
         <span class="{badge_class}">{strings.MODEL_DISPLAY_NAME[badge_label]}</span>
-        <h3>{model_name}</h3>
+        <h3>{model_display_name}</h3>
     </div>
     <p class="model-meta">
         {date_str}
@@ -28,11 +28,11 @@ def render_run_summary(run):
     </p>
     <p class="model-meta">
         <em>Run name</em>: {run_name}<br/>
-        <em>Run ID</em>: {run.get("runmodel_uuid_uuid")}
+        <em>Run ID</em>: {model.get("runmodel_uuid_uuid")}
     </p>
     """)
 
-    metrics = run.get("metrics") or {}
+    metrics = model.get("metrics") or {}
     col1, col2, col3, col4 = st.columns(4)
     col1.metric("Accuracy", f"{metrics.get('accuracy'):.1%}")
     col2.metric("Macro F1", f"{metrics.get('f1_macro'):.3f}")
@@ -48,7 +48,7 @@ def render_run_summary(run):
         col4.metric("Instances", n_instances)
 
     with st.expander("Full classification report"):
-        st.dataframe(run.classification_report())
+        st.dataframe(model.classification_report())
 
 
 

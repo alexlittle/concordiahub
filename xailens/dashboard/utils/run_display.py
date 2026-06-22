@@ -1,13 +1,13 @@
 import streamlit as st
 
 from xailens.entities.modeleval import ModelEval
-from xailens.formatting import format_model_name, format_datetime
+from xailens.formatting import format_datetime
 from xailens import strings
 from xailens.dashboard.utils.styles import get_badge_class
 from xailens.dashboard import settings
 
 def render_modeleval_cell(modeleval: ModelEval) -> str:
-    model_name = format_model_name(modeleval)
+    model_display_name = modeleval.get("model_display_name")
     model_type = modeleval.get("model_type", "")
     dt         = format_datetime(modeleval.datetime)
     metrics    = modeleval.get("metrics") or {}
@@ -21,13 +21,13 @@ def render_modeleval_cell(modeleval: ModelEval) -> str:
     <div class="run-cell">
         <div class="run-cell-model">
             <span class="{get_badge_class(model_type)}">{strings.MODEL_DISPLAY_NAME[model_type]}</span>
-            <span class="run-cell-model-name">{model_name}</span>
+            <span class="run-cell-model-name">{model_display_name}</span>
         </div>
         <div class="run-cell-meta">
             {metric_str}
             &nbsp;&middot;&nbsp; {dt}
         </div>
-        <div class="run-cell-run-name">{model_name}</div>
+        <div class="run-cell-run-name">{model_display_name}</div>
     </div>
     """
 

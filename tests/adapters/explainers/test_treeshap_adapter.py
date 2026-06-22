@@ -38,7 +38,8 @@ def test_raises_missing_data_error_when_x_test_is_none(adapter, mock_model, data
     ctx = ModelContext(model_type="xgboost",
                        xai_methods=["shap_tree"],
                        dataset_id="dataset",
-                       data=data)
+                       data=data,
+                       model_display_name="model_display_name")
     with pytest.raises(MissingDataError):
         adapter.explain_local_df(ctx, mock_model)
 
@@ -50,7 +51,8 @@ def test_binary_returns_dataframe(adapter, mock_model, x_test, data_schema):
         ctx = ModelContext(model_type="xgboost",
                            xai_methods=["shap_tree"],
                            dataset_id="dataset",
-                           data=data)
+                           data=data,
+                           model_display_name="model_display_name")
         result = adapter.explain_local_df(ctx, mock_model)
         assert isinstance(result, pd.DataFrame)
 
@@ -62,7 +64,8 @@ def test_binary_has_class_column(adapter, mock_model, x_test, data_schema):
         ctx = ModelContext(model_type="xgboost",
                            xai_methods=["shap_tree"],
                            dataset_id="dataset",
-                           data=data)
+                           data=data,
+                           model_display_name="model_display_name")
         result = adapter.explain_local_df(ctx, mock_model)
         assert 'class' in result.columns
 
@@ -74,7 +77,8 @@ def test_multiclass_returns_dataframe(adapter, mock_model, x_test, data_schema):
         ctx = ModelContext(model_type="xgboost",
                            xai_methods=["shap_tree"],
                            dataset_id="dataset",
-                           data=data)
+                           data=data,
+                           model_display_name="model_display_name")
         result = adapter.explain_local_df(ctx, mock_model)
         assert isinstance(result, pd.DataFrame)
 
@@ -86,7 +90,8 @@ def test_multiclass_has_correct_shape(adapter, mock_model, x_test, data_schema):
         ctx = ModelContext(model_type="xgboost",
                            xai_methods=["shap_tree"],
                            dataset_id="dataset",
-                           data=data)
+                           data=data,
+                           model_display_name="model_display_name")
         result = adapter.explain_local_df(ctx, mock_model)
         assert result.shape == (9, 7)  # 3 instances * 3 classes, 7 features including class and instance_uuid
 
@@ -100,7 +105,8 @@ def test_multiclass_uses_class_names(adapter, mock_model, x_test, data_schema):
         ctx = ModelContext(model_type="xgboost",
                            xai_methods=["shap_tree"],
                            dataset_id="dataset",
-                           data=data)
+                           data=data,
+                           model_display_name="model_display_name")
         result = adapter.explain_local_df(ctx, mock_model)
         assert sorted(result['class'].unique().tolist()) == sorted(class_names)
 
@@ -113,6 +119,7 @@ def test_multiclass_falls_back_to_integer_class_index(adapter, mock_model, x_tes
         ctx = ModelContext(model_type="xgboost",
                            xai_methods=["shap_tree"],
                            dataset_id="dataset",
-                           data=data)
+                           data=data,
+                           model_display_name="model_display_name")
         result = adapter.explain_local_df(ctx, mock_model)
         assert sorted(result['class'].unique().tolist()) == [0, 1, 2]

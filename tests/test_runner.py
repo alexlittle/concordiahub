@@ -24,7 +24,7 @@ def test_runner_empty_context() -> None:
 def test_runner_invalid_model() -> None:
     data_schema = DataSchema("a","b","c")
     run_data = ModelData(data_schema)
-    ctx = ModelContext("unknown", [], "test_dataset", run_data)
+    ctx = ModelContext("unknown", [], "test_dataset", run_data, "model disp name")
     with patch("xailens.runner.ArtifactStore") as mock_store:
         mock_store.return_value = MagicMock()
         with pytest.raises(InvalidConfigurationError, match="Model adapter"):

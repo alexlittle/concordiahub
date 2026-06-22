@@ -6,7 +6,7 @@
     "dataset_id": "cleveland-heart-data",
     "model_subtype": null,
     "model_display_name": "XGBoost",
-    "model_name": "heart_xgboost",
+    "model_dir_name": "heart_xgboost",
     "response_schema": null,
     "metrics": {
         "accuracy": 0.8689,

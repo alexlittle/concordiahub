@@ -30,12 +30,12 @@ def ensure_instance_index(df, key="instance_uuid"):
 def build_comparison_df(modeleval_a: ModelEval,
                         modeleval_b: ModelEval,
                         ensure_instance_index_fn=ensure_instance_index):
-    name_a = modeleval_a.get("model_display_name")
-    name_b = modeleval_b.get("model_display_name")
 
+    label_a = modeleval_a.get("model_display_name")
+    label_b = modeleval_b.get("model_display_name")
 
-    if name_a == name_b:
-        raise InvalidSelectionError(f"Cannot compare models with identical model names: '{name_a}'")
+    if modeleval_a.get("model_dir_name") == modeleval_b.get("model_dir_name"):
+        raise InvalidSelectionError(f"Cannot compare models with identical model names: '{modeleval_a.get("model_dir_name")}'")
 
     y_true_a, y_pred_a = modeleval_a.load_targets()
     _, y_pred_b = modeleval_b.load_targets()
@@ -45,14 +45,14 @@ def build_comparison_df(modeleval_a: ModelEval,
     y_pred_b = ensure_instance_index_fn(y_pred_b, modeleval_b.get(constants.DATA_SCHEMA_ID_COLUMN))
 
     y_true_a = y_true_a.rename(columns={modeleval_a.get(constants.DATA_SCHEMA_TARGET_COLUMN): constants.TRUE_VALUE_COLUMN_LABEL})
-    y_pred_a.columns = [f"{name_a} {constants.PREDICTION_COLUMN_LABEL}"]
-    y_pred_b.columns = [f"{name_b} {constants.PREDICTION_COLUMN_LABEL}"]
+    y_pred_a.columns = [f"{label_a} {constants.PREDICTION_COLUMN_LABEL}"]
+    y_pred_b.columns = [f"{label_b} {constants.PREDICTION_COLUMN_LABEL}"]
 
     df = y_true_a.join(y_pred_a, how="inner").join(y_pred_b, how="inner")
 
     # relabel columns and show which are correct/wrong
-    pred_a = f"{name_a} {constants.PREDICTION_COLUMN_LABEL}"
-    pred_b = f"{name_b} {constants.PREDICTION_COLUMN_LABEL}"
+    pred_a = f"{label_a} {constants.PREDICTION_COLUMN_LABEL}"
+    pred_b = f"{label_b} {constants.PREDICTION_COLUMN_LABEL}"
 
     p1_correct = df[pred_a] == df[constants.TRUE_VALUE_COLUMN_LABEL]
     p2_correct = df[pred_b] == df[constants.TRUE_VALUE_COLUMN_LABEL]
@@ -61,8 +61,8 @@ def build_comparison_df(modeleval_a: ModelEval,
     comparison_order = {
         constants.COMPARISON_BOTH_INCORRECT_DIFF: 1,
         constants.COMPARISON_BOTH_INCORRECT_SAME: 2,
-        f"{name_a} {constants.COMPARISON_CORRECT}": 3,
-        f"{name_b} {constants.COMPARISON_CORRECT}": 4,
+        f"{label_a} {constants.COMPARISON_CORRECT}": 3,
+        f"{label_b} {constants.COMPARISON_CORRECT}": 4,
         constants.COMPARISON_BOTH_CORRECT: 5,
     }
 
@@ -77,8 +77,8 @@ def build_comparison_df(modeleval_a: ModelEval,
         ],
         [
             constants.COMPARISON_BOTH_CORRECT,
-            f"{name_a} {constants.COMPARISON_CORRECT}",
-            f"{name_b} {constants.COMPARISON_CORRECT}",
+            f"{label_a} {constants.COMPARISON_CORRECT}",
+            f"{label_b} {constants.COMPARISON_CORRECT}",
             constants.COMPARISON_BOTH_INCORRECT_SAME,
             constants.COMPARISON_BOTH_INCORRECT_DIFF
         ],

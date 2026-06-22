@@ -7,7 +7,6 @@ from dataclasses import dataclass
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.registry.viz_registry import get_viz_adapter
 from xailens import exceptions
-from xailens.formatting import format_model_name
 from xailens.dashboard.utils.display_table import render_dataframe
 from xailens.dashboard import settings
 
@@ -75,7 +74,7 @@ def build_model_panel(run, viz_param_key, query_params) -> ModelPanel:
 
 
 def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
-    st.subheader(f"**{format_model_name(panel.run)} Explanation:**")
+    st.subheader(f"**{panel.run.get('model_display_name')} Explanation:**")
     axis_range = [-1.1, 1.1]
 
     viz_options = panel.xai_instance.get_compatible_visualisations()
@@ -97,4 +96,4 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
                 st.html(viz)
         st.html(panel.xai_instance.display_notes)
     except NotImplementedError:
-        st.warning(f"{panel.viz_name} is not yet implemented for {format_model_name(panel.run)}")
+        st.warning(f"{panel.viz_name} is not yet implemented for {panel.run.get('model_display_name')}")

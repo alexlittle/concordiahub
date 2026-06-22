@@ -4,9 +4,9 @@
         "coefficients"
     ],
     "dataset_id": "cleveland-heart-data",
-    "model_subtype": null,
     "model_display_name": "Logistic Regression",
-    "model_name": "heart_lr",
+    "model_subtype": null,
+    "model_dir_name": "heart_lr",
     "response_schema": null,
     "metrics": {
         "accuracy": 0.8449,
@@ -15,8 +15,8 @@
         "n_instances": 303,
         "n_failed": 0
     },
-    "datetime": "20260622-194036",
-    "model_uuid": "55e0197d-6937-4ff5-94b8-2d78102a30c0",
+    "datetime": "20260622-201318",
+    "model_uuid": "c8bdf326-f7dd-4791-8a09-510d76abd59a",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

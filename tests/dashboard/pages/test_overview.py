@@ -8,7 +8,7 @@ PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/pwoverview.py"
 
 def test_overview_reads_query_params():
     at = AppTest.from_file(str(PAGE_PATH))
-    at.query_params["model_data"] = "a,b"
+    at.query_params["modelevals"] = "a,b"
     at.run()
     assert len(at.warning) == 0
 
@@ -18,7 +18,7 @@ def test_explorer_called_with_correct_ids(mock_get_explorer):
     mock_explorer = MagicMock()
     mock_get_explorer.return_value = mock_explorer
     at = AppTest.from_file(str(PAGE_PATH))
-    at.query_params["model_data"] = "uuid1,uuid2"
+    at.query_params["modelevals"] = "uuid1,uuid2"
     at.run()
     mock_explorer.get_modelevals_by_uuids.assert_called_once_with(["uuid1", "uuid2"])
 
@@ -34,7 +34,7 @@ def test_build_comparison_df_called_with_models(mock_build_comparison_df, mock_g
     mock_build_comparison_df.return_value = MagicMock()
 
     at = AppTest.from_file(str(PAGE_PATH))
-    at.query_params["model_data"] = "uuid1,uuid2"
+    at.query_params["modelevals"] = "uuid1,uuid2"
     at.run()
 
     mock_build_comparison_df.assert_called_once_with(modeleval_a=mock_modeleval_a, modeleval_b=mock_modeleval_b)

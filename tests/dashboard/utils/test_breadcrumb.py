@@ -9,9 +9,9 @@ def modeleval_a():
         "model_type": "XGBoost",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
-        "model_name": "run1",
+        "model_dir_name": "run1",
         "datetime": "20240525-143000",
-        "model_display_name": None
+        "model_display_name": "XGBoost"
     })
 
 @pytest.fixture
@@ -20,9 +20,9 @@ def modeleval_b():
         "model_type": "LinReg",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
-        "model_name": "run1",
+        "model_dir_name": "run1",
         "datetime": "20240525-143000",
-        "model_display_name": None
+        "model_display_name": "LinReg"
     })
 
 def test_no_params():

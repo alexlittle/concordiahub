@@ -43,7 +43,7 @@ ctx = xai.ModelContext(
     "medsynth",
     model_data,
     model=model,
-    model_name="medsynth_xgboost",
+    model_dir_name="medsynth_xgboost",
     model_display_name="Example 4")
 
 xai.run(ctx)

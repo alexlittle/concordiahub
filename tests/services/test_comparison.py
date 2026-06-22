@@ -6,7 +6,7 @@ from xailens.services.comparison import build_comparison_df
 
 MODULE_UNDER_TEST = "xailens.services.comparison"
 
-class MockRun:
+class MockModelEval:
     def __init__(self, y_true, y_pred, metadata):
         self._y_true = y_true
         self._y_pred = y_pred
@@ -45,36 +45,40 @@ def test_build_comparison_basic():
         "pred": [9, 21]
     })
 
-    run_a = MockRun(df_true, df_pred_a, {
+    modeleval_a = MockModelEval(df_true, df_pred_a, {
         "model_type": "ModelA",
         "data_schema": {
             "instance_id_column": "id",
             "target_column": "target"
-        }
+        },
+        "model_display_name": "Model A",
+        "model_dir_name": "model_a"
     })
 
-    run_b = MockRun(df_true, df_pred_b, {
+    modeleval_b = MockModelEval(df_true, df_pred_b, {
         "model_type": "ModelB",
         "data_schema": {
             "instance_id_column": "id",
             "target_column": "target"
-        }
+        },
+        "model_display_name": "Model B",
+        "model_dir_name": "model_b"
     })
 
-    result = build_comparison_df(run_a, run_b, mock_ensure_index)
+    result = build_comparison_df(modeleval_a, modeleval_b, mock_ensure_index)
 
     assert list(result.columns) == [
         "id",
         "Comparison",
         "True Value",
-        "ModelA prediction",
-        "ModelB prediction",
+        "Model A prediction",
+        "Model B prediction",
     ]
 
     assert result.shape == (2, 5)
     assert result["True Value"].tolist() == [10, 20]
-    assert result["ModelA prediction"].tolist() == [11, 19]
-    assert result["ModelB prediction"].tolist() == [9, 21]
+    assert result["Model A prediction"].tolist() == [11, 19]
+    assert result["Model B prediction"].tolist() == [9, 21]
 
 # test join
 def test_build_comparison_aligns_on_index():
@@ -93,20 +97,23 @@ def test_build_comparison_aligns_on_index():
         "pred": [21, 9]
     })
 
-    run_a = MockRun(df_true, df_pred_a, {
+    modeleval_a = MockModelEval(df_true, df_pred_a, {
         "model_type": "ModelA",
-        "data_schema": {"instance_id_column": "id", "target_column": "target"}
-    })
+        "data_schema": {"instance_id_column": "id", "target_column": "target"},
+        "model_display_name": "Model A",
+        "model_dir_name": "model_a"})
 
-    run_b = MockRun(df_true, df_pred_b, {
+    modeleval_b = MockModelEval(df_true, df_pred_b, {
         "model_type": "ModelB",
-        "data_schema": {"instance_id_column": "id", "target_column": "target"}
+        "data_schema": {"instance_id_column": "id", "target_column": "target"},
+        "model_display_name": "Model B",
+        "model_dir_name": "model_b"
     })
 
-    result = build_comparison_df(run_a, run_b, mock_ensure_index).sort_values("id")
+    result = build_comparison_df(modeleval_a, modeleval_b, mock_ensure_index).sort_values("id")
 
-    assert result["ModelA prediction"].tolist() == [11, 19]
-    assert result["ModelB prediction"].tolist() == [9, 21]
+    assert result["Model A prediction"].tolist() == [11, 19]
+    assert result["Model B prediction"].tolist() == [9, 21]
 
 # test when missing IDs
 def test_build_comparison_missing_ids():
@@ -125,22 +132,26 @@ def test_build_comparison_missing_ids():
         "pred": [21, 23]
     })
 
-    run_a = MockRun(df_true, df_pred_a, {
+    modeleval_a = MockModelEval(df_true, df_pred_a, {
         "model_type": "A",
-        "data_schema": {"instance_id_column": "id", "target_column": "target"}
+        "data_schema": {"instance_id_column": "id", "target_column": "target"},
+        "model_display_name": "Model A",
+        "model_dir_name": "model_a"
     })
 
-    run_b = MockRun(df_true, df_pred_b, {
+    modeleval_b = MockModelEval(df_true, df_pred_b, {
         "model_type": "B",
-        "data_schema": {"instance_id_column": "id", "target_column": "target"}
+        "data_schema": {"instance_id_column": "id", "target_column": "target"},
+        "model_display_name": "Model B",
+        "model_dir_name": "model_b"
     })
 
-    result = build_comparison_df(run_a, run_b, mock_ensure_index)
+    result = build_comparison_df(modeleval_a, modeleval_b, mock_ensure_index)
 
     # Expect no NaNs because inner join
     assert result.shape[0] == 1
-    assert result["A prediction"].isna().sum() == 0
-    assert result["B prediction"].isna().sum() == 0
+    assert result["Model A prediction"].isna().sum() == 0
+    assert result["Model B prediction"].isna().sum() == 0
 
 
 # test if same model format name
@@ -155,11 +166,13 @@ def test_build_comparison_raises_if_same_formatted_name():
         "data_schema": {
             "instance_id_column": "id",
             "target_column": "target"
-        }
+        },
+        "model_display_name": "Model A",
+        "model_dir_name": "model_a"
     }
 
-    run_a = MockRun(df_true, df_pred, metadata)
-    run_b = MockRun(df_true, df_pred, metadata)
+    modeleval_a = MockModelEval(df_true, df_pred, metadata)
+    modeleval_b = MockModelEval(df_true, df_pred, metadata)
 
     with pytest.raises(InvalidSelectionError, match="identical model names"):
-        build_comparison_df(run_a, run_b, mock_ensure_index)
+        build_comparison_df(modeleval_a, modeleval_b, mock_ensure_index)

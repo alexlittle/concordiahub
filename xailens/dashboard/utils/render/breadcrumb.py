@@ -1,5 +1,4 @@
 from xailens.entities.modeleval import ModelEval
-from xailens.formatting import format_model_name
 
 
 
@@ -11,11 +10,11 @@ def display_breadcrumbs(modeleval_a: ModelEval=None, modeleval_b: ModelEval=None
         if instance_id:
             parts.append(f"""
             <a href='/overview?runs={modeleval_a.get('model_uuid')},{modeleval_b.get('model_uuid')}' target='_self'>
-            {format_model_name(modeleval_a)} &amp; {format_model_name(modeleval_b)}</a>
+            {modeleval_a.get("model_display_name")} &amp; {modeleval_b.get("model_display_name")}</a>
             """)
         else:
             parts.append(f"""
-                        {format_model_name(modeleval_a)} &amp; {format_model_name(modeleval_b)}
+                        {modeleval_a.get("model_display_name")} &amp; {modeleval_b.get("model_display_name")}
                         """)
 
     if instance_id:

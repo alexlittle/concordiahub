@@ -44,10 +44,10 @@ class ModelContext:
     xai_methods: list[str]
     dataset_id: str
     data: ModelData
+    model_display_name: str
     model: Optional[Any] = None
     model_subtype: Optional[str] = None
-    model_display_name: Optional[str] = None
-    model_name: Optional[str] = None
+    model_dir_name: Optional[str] = None
     response_schema: Optional[ResponseSchema] = None
     metrics: Optional[ModelMetrics] = None
 

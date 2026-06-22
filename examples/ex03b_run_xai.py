@@ -35,7 +35,7 @@ ctx = xai.ModelContext(
     "cleveland-heart-data",
     model_data,
     model_subtype=current_model,
-    model_name=f"heart_llm_{safe_dirname(current_model)}",
+    model_dir_name=f"heart_llm_{safe_dirname(current_model)}",
     model_display_name="Qwen 2.5",
     response_schema=schema)
 

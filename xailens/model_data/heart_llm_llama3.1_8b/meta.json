@@ -6,7 +6,7 @@
     "dataset_id": "cleveland-heart-data",
     "model_subtype": "llama3.1:8b",
     "model_display_name": "Llama 3.1",
-    "model_name": "heart_llm_llama3.1_8b",
+    "model_dir_name": "heart_llm_llama3.1_8b",
     "response_schema": {
         "contributions_field": "feature_contributions",
         "contribution_key": null

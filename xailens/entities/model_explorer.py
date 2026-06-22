@@ -7,7 +7,6 @@ from itertools import combinations
 
 from xailens import config, strings
 from xailens.entities.modeleval import ModelEval
-from xailens.formatting import format_model_name
 
 
 class ModelExplorer:
@@ -44,7 +43,7 @@ class ModelExplorer:
             if modeleval["dataset_id"] == dataset:
                 modeleval_obj = self.get_modeleval_by_uuid(modeleval["model_uuid"])
                 if modeleval_obj:
-                    models[format_model_name(modeleval_obj)] = modeleval["model_uuid"]
+                    models[modeleval_obj.get("model_display_name")] = modeleval["model_uuid"]
         return dict(sorted(models.items()))
 
     def get_comparable_modelevals(self, n: int = 50) -> list[list[dict]]:
