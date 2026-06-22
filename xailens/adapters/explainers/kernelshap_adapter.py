@@ -30,7 +30,7 @@ class KernalSHAPAdapter(XAIMethodAdapter):
             MissingDataError: if x_train or x_test is not provided
         """
         if ctx.data.x_train is None or ctx.data.x_test is None:
-            raise MissingDataError("KernalSHAPAdapter requires x_train and x_test in RunData")
+            raise MissingDataError("KernalSHAPAdapter requires x_train and x_test in ModelData")
         explainer = shap.KernelExplainer(model.predict_proba, ctx.data.x_train)
         return explainer.shap_values(ctx.data.x_test)
 

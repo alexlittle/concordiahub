@@ -16,7 +16,7 @@ class ArtifactStore:
     """ArtifactStore - handles the data storage
 
      Args:
-        ctx (ModelContext): The current run configuration.
+        ctx (ModelContext): The current model configuration.
         store (DataStore): Storage backend. Defaults to FilesystemStore.
     """
 

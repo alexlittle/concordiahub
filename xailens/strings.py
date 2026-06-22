@@ -1,9 +1,11 @@
 # ---------------------
 # Runner messages
 # ---------------------
+RUN_STARTING = "XAI Lens starting..."
+
 RUN_COMPLETE = """
-XAI Lens run completed, all the data and explanations have now ben stored. \n    
-You can now run the dashboard with xailens-dash to view the results
+XAI Lens run completed, all the data and explanations have now been stored.    
+You can now run the dashboard with `xailens-dash` to view the results.
 """
 
 
@@ -36,8 +38,8 @@ ALL_COMP_OPTIONS = ("all", "All model types")
 # ----------------
 # Error/Warning messages
 # ----------------
-ERR_NO_RUNS = "No model_data selected"
-ERR_NOT_2_RUNS = "You need exactly 2 model_data to compare"
+ERR_NO_MODELS = "No model_data selected"
+ERR_NOT_2_MODELS = "You need exactly 2 models to compare"
 
 # ----------------
 # MODEL_TYPES

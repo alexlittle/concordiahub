@@ -5,7 +5,7 @@ import xailens as xai
 from examples import config
 from examples.helpers import safe_dirname
 
-current_model = "qwen2.5_14b-instruct-q8_0"
+current_model = "qwen2.5:14b-instruct-q8_0"
 dir_name = f"llm_{safe_dirname(current_model)}"
 X = pd.read_parquet(f"./cache/heart/{dir_name}/X.parquet")
 y = pd.read_parquet(f"./cache/heart/{dir_name}/y.parquet")
@@ -36,7 +36,7 @@ ctx = xai.ModelContext(
     model_data,
     model_subtype=current_model,
     model_name=f"heart_llm_{safe_dirname(current_model)}",
-    model_display_name="Example 3a",
+    model_display_name="Qwen 2.5",
     response_schema=schema)
 
 xai.run(ctx)

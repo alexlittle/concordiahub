@@ -5,8 +5,8 @@
     ],
     "dataset_id": "medsynth",
     "model_subtype": null,
-    "run_name": "medsynth_xgboost",
     "model_display_name": "Example 4",
+    "model_name": "medsynth_xgboost",
     "response_schema": null,
     "metrics": {
         "accuracy": 0.5767,
@@ -15,8 +15,8 @@
         "n_instances": 2048,
         "n_failed": 0
     },
-    "datetime": "20260618-173538",
-    "model_uuid": "87f9b7c1-df16-409e-8a6b-17c3e39226a5",
+    "datetime": "20260622-185037",
+    "model_uuid": "9389837b-0bc5-4ac9-bc7e-7984d778975e",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "y_test",

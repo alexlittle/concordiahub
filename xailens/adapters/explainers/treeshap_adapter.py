@@ -22,8 +22,8 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     EXCLUDED_CONTRIBUTION_KEYS = {"class"}
     
     @classmethod
-    def load_explanation(cls, run: ModelEval, instance_id: str) -> pd.DataFrame:
-        df = super().load_explanation(run, instance_id)
+    def load_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
+        df = super().load_explanation(modeleval, instance_id)
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
@@ -39,7 +39,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
             MissingDataError: if data.x_test is not provided
         """
         if not hasattr(ctx.data, "x_test") or ctx.data.x_test is None:
-            raise MissingDataError("TreeSHAPAdapter requires x_test in RunData")
+            raise MissingDataError("TreeSHAPAdapter requires x_test in ModelData")
 
         instance_id = ctx.data.data_schema.instance_id_column
         data = ctx.data.x_test.copy()

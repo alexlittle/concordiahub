@@ -1,21 +1,23 @@
 import numpy as np
 
-
-from xailens.formatting import format_model_name
 from xailens import constants
 from xailens.exceptions import InvalidSelectionError
+from xailens.entities.modeleval import ModelEval
 
 def ensure_instance_index(df, key="instance_uuid"):
     # already a column so set as index
     if key in df.columns:
+        print(f"{key} already present in dataframe")
         return df.set_index(key)
 
     # already index with correct name
     if df.index.name == key:
+        print(f"{key} already present in dataframe")
         return df
 
-    # index exists but unnamed so assume it's sample_uuid
+    # index exists but unnamed so assume it's instance_uuid
     if df.index.name is None:
+        print(f"{key} not present in dataframe")
         df = df.copy()
         df.index.name = key
         return df
@@ -28,31 +30,33 @@ def ensure_instance_index(df, key="instance_uuid"):
 
 
 
-def build_comparison_df(modeleval_a,
-                        modeleval_b,
+def build_comparison_df(modeleval_a: ModelEval,
+                        modeleval_b: ModelEval,
                         ensure_instance_index_fn=ensure_instance_index):
-    name_a = format_model_name(modeleval_a)
-    name_b = format_model_name(modeleval_b)
+    name_a = modeleval_a.get("model_display_name")
+    name_b = modeleval_b.get("model_display_name")
 
 
     if name_a == name_b:
-        raise InvalidSelectionError(f"Cannot compare runs with identical model names: '{name_a}'")
+        raise InvalidSelectionError(f"Cannot compare models with identical model names: '{name_a}'")
 
     y_true_a, y_pred_a = modeleval_a.load_targets()
     _, y_pred_b = modeleval_b.load_targets()
 
-    y_true_a = ensure_instance_index_fn(
-        y_true_a,modeleval_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-    y_pred_a = ensure_instance_index_fn(
-        y_pred_a, modeleval_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-    y_pred_b = ensure_instance_index_fn(
-        y_pred_b, modeleval_b.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_true_a = ensure_instance_index_fn(y_true_a, modeleval_a.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_pred_a = ensure_instance_index_fn(y_pred_a, modeleval_a.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_pred_b = ensure_instance_index_fn(y_pred_b, modeleval_b.get(constants.DATA_SCHEMA_ID_COLUMN))
 
-    y_true_a = y_true_a.rename(columns=
-        {modeleval_a.get(constants.DATA_SCHEMA_TARGET_COLUMN): constants.TRUE_VALUE_COLUMN_LABEL})
+    y_true_a = y_true_a.rename(columns={modeleval_a.get(constants.DATA_SCHEMA_TARGET_COLUMN): constants.TRUE_VALUE_COLUMN_LABEL})
     y_pred_a.columns = [f"{name_a} {constants.PREDICTION_COLUMN_LABEL}"]
     y_pred_b.columns = [f"{name_b} {constants.PREDICTION_COLUMN_LABEL}"]
 
+    print("y_true_a index:", y_true_a.index[:5].tolist())
+    print("y_pred_a index:", y_pred_a.index[:5].tolist())
+    print("y_pred_b index:", y_pred_b.index[:5].tolist())
+    print("overlap a:", len(y_true_a.index.intersection(y_pred_a.index)))
+    print("overlap b:", len(y_true_a.index.intersection(y_pred_b.index)))
+    
     df = y_true_a.join(y_pred_a, how="inner").join(y_pred_b, how="inner")
 
     # relabel columns and show which are correct/wrong
@@ -94,8 +98,7 @@ def build_comparison_df(modeleval_a,
     df.insert(0, "Comparison", col)
 
     df["comparison_order"] = df["Comparison"].map(comparison_order)
-    df = df.sort_values(by=["comparison_order",
-        constants.TRUE_VALUE_COLUMN_LABEL]).drop(columns=["comparison_order"])
+    df = df.sort_values(by=["comparison_order", constants.TRUE_VALUE_COLUMN_LABEL]).drop(columns=["comparison_order"])
 
     return df.reset_index()
 

@@ -24,15 +24,15 @@ class XAIMethodAdapter(ABC):
     explanation_file_type: str = "df"
 
     @classmethod
-    def load_explanation(cls, run: ModelEval, instance_id: str) -> pd.DataFrame:
-        df = run.store.load_dataframe(f"explanations_{cls.key}")
-        row = df[df[run.get(constants.DATA_SCHEMA_ID_COLUMN)] == instance_id]
+    def load_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
+        df = modeleval.store.load_dataframe(f"explanations_{cls.key}")
+        row = df[df[modeleval.get(constants.DATA_SCHEMA_ID_COLUMN)] == instance_id]
         if row.empty:
             raise MissingDataError(f"Instance '{instance_id}' not found in explanations for {cls.key}")
-        explanation = row.iloc[0].drop(run.get(constants.DATA_SCHEMA_ID_COLUMN), errors='coerce')
+        explanation = row.iloc[0].drop(modeleval.get(constants.DATA_SCHEMA_ID_COLUMN), errors='coerce')
 
         # filter out near-zero valued features if a threshold is set
-        schema = run.get_data_schema()
+        schema = modeleval.get_data_schema()
         if schema.hide_zero_threshold is not None:
             explanation = explanation[explanation.abs() > schema.hide_zero_threshold]
 

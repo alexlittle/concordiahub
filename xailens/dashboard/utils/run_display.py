@@ -4,13 +4,13 @@ from xailens.entities.modeleval import ModelEval
 from xailens.formatting import format_model_name, format_datetime
 from xailens import strings
 from xailens.dashboard.utils.styles import get_badge_class
+from xailens.dashboard import settings
 
-def render_run_cell(run: ModelEval) -> str:
-    model_name = format_model_name(run)
-    model_type = run.get("model_type", "")
-    run_name   = run.get("run_name") or ""
-    dt         = format_datetime(run.datetime)
-    metrics    = run.get("metrics") or {}
+def render_modeleval_cell(modeleval: ModelEval) -> str:
+    model_name = format_model_name(modeleval)
+    model_type = modeleval.get("model_type", "")
+    dt         = format_datetime(modeleval.datetime)
+    metrics    = modeleval.get("metrics") or {}
     acc        = metrics.get("accuracy")
     f1         = metrics.get("f1_macro")
     acc_str    = f"accuracy {acc:.2f}" if acc is not None else ""
@@ -27,7 +27,7 @@ def render_run_cell(run: ModelEval) -> str:
             {metric_str}
             &nbsp;&middot;&nbsp; {dt}
         </div>
-        <div class="run-cell-run-name">{run_name}</div>
+        <div class="run-cell-run-name">{model_name}</div>
     </div>
     """
 
@@ -47,16 +47,16 @@ def display_comparable_runs(groups: list[list[ModelEval]]):
        </div>
        """
 
-    for run_a, run_b in groups:
-        runs_value = f"{run_a.get('model_uuid')},{run_b.get('model_uuid')}"
+    for modeleval_a, modeleval_b in groups:
+        modelevals_value = f"{modeleval_a.get('model_uuid')},{modeleval_b.get('model_uuid')}"
         rows_html += f"""
             <div class="run-card-row">
-                <div class="dataset-col">{run_a.get('dataset_id')}</div>
-                {render_run_cell(run_a)}
+                <div class="dataset-col">{modeleval_a.get('dataset_id')}</div>
+                {render_modeleval_cell(modeleval_a)}
                 <div class="vs-col">vs</div>
-                {render_run_cell(run_b)}
+                {render_modeleval_cell(modeleval_b)}
                 <div style="padding-left:12px">
-                    <a href="/overview?runs={runs_value}" target="_self" class="button">{strings.BTN_GO_TO_COMPARISON}</a>
+                    <a href="/{settings.PW_OVERVIEW_FILENAME}?modelevals={modelevals_value}" target="_self" class="button">{strings.BTN_GO_TO_COMPARISON}</a>
                 </div>
             </div>
             """

@@ -53,9 +53,9 @@ class CoRAdapter(XAIMethodAdapter):
     explanation_file_type: str = "json"
 
     @classmethod
-    def load_explanation(cls, run: ModelEval, instance_id: str) -> pd.DataFrame:
-        records = run.store.load_json(f"explanations_{cls.key}")
-        instance_id_col = run.get(constants.DATA_SCHEMA_ID_COLUMN)
+    def load_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
+        records = modeleval.store.load_json(f"explanations_{cls.key}")
+        instance_id_col = modeleval.get(constants.DATA_SCHEMA_ID_COLUMN)
 
         row = next((r for r in records if r[instance_id_col] == instance_id), None)
         if row is None:
@@ -97,7 +97,7 @@ class CoRAdapter(XAIMethodAdapter):
             MissingDataError: if data.x is not provided
         """
         if ctx.data.y_exp is None or ctx.data.y_pred is None:
-            raise MissingDataError("CoRAdapter requires y_exp and y_pred in RunData")
+            raise MissingDataError("CoRAdapter requires y_exp and y_pred in ModelData")
         if ctx.response_schema is None:
             raise MissingDataError(
                 "CoRAdapter requires a ResponseSchema in ModelContext")

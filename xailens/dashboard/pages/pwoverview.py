@@ -19,6 +19,7 @@ def main():
 
     df = build_comparison_df(modeleval_a=modeleval_a, modeleval_b=modeleval_b)
 
+    print(df.head())
     # Page layout/display
     apply_layout(strings.OVERVIEW_TITLE)
 

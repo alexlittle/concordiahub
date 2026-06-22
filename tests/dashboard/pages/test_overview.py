@@ -2,9 +2,9 @@ from pathlib import Path
 from streamlit.testing.v1 import AppTest
 from unittest.mock import patch, MagicMock
 
-MODULE_UNDER_TEST = "xailens.dashboard.pages.pairwise_overview"
+MODULE_UNDER_TEST = "xailens.dashboard.pages.pwoverview"
 
-PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/pairwise_overview.py"
+PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/pwoverview.py"
 
 def test_overview_reads_query_params():
     at = AppTest.from_file(str(PAGE_PATH))

@@ -28,6 +28,6 @@ ctx = xai.ModelContext(
     model_data,
     model=model,
     model_name="heart_lr",
-    model_display_name="Example 1")
+    model_display_name="Logistic Regression",)
 
 xai.run(ctx)

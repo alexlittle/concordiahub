@@ -1,6 +1,6 @@
 from unittest.mock import patch, MagicMock
 
-from xailens.dashboard.utils.run_display import render_run_cell
+from xailens.dashboard.utils.run_display import render_modeleval_cell
 from xailens.entities.modeleval import ModelEval
 
 MODULE_UNDER_TEST = "xailens.dashboard.utils.run_display"
@@ -15,7 +15,7 @@ def test_render_run_html_basic():
         "datetime": "20240525-143000"
     })
 
-    html = render_run_cell(run)
+    html = render_modeleval_cell(run)
 
     assert "RandomForest" in html
     assert "14:30 25 May 2024" in html
@@ -30,7 +30,7 @@ def test_render_run_html_no_subtype():
         "datetime": "20240525-143000"
     })
 
-    html = render_run_cell(run)
+    html = render_modeleval_cell(run)
 
     assert "XGBoost" in html
     assert "XGBoost (" not in html
@@ -45,7 +45,7 @@ def test_render_run_html_no_xai_methods():
         "datetime": "20240525-143000"
     })
 
-    html = render_run_cell(run)
+    html = render_modeleval_cell(run)
 
     assert "run-cell" in html
 
@@ -61,7 +61,7 @@ def test_display_run_cell_calls_markdown():
         "datetime": "20240525-143000"
     })
 
-    html = render_run_cell(run)
+    html = render_modeleval_cell(run)
 
     assert "run-cell" in html
 

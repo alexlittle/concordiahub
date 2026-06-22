@@ -8,14 +8,14 @@ from xailens.entities.context import ComparisonContext
 from xailens.adapters.comparison.default_comparison_adapter import DefaultComparisonAdapter
 from tests.helpers import make_explanation
 
-def make_run(model_display_name="model-a", model_type="xgboost", model_subtype=None):
-    run = MagicMock()
-    run.get = lambda key, default=None: {
+def make_modeleval(model_display_name="model-a", model_type="xgboost", model_subtype=None):
+    modeleval = MagicMock()
+    modeleval.get = lambda key, default=None: {
         "model_display_name": model_display_name,
         "model_type": model_type,
         "model_subtype": model_subtype,
     }.get(key, default)
-    return run
+    return modeleval
 
 def make_ctx(explanation_a=None, explanation_b=None, axis_range=None):
     """Helper for creating a ComparisonContext"""
@@ -23,8 +23,8 @@ def make_ctx(explanation_a=None, explanation_b=None, axis_range=None):
     ctx.explanation_a = explanation_a if explanation_a is not None else make_explanation({"feat1": 0.5, "feat2": -0.3})
     ctx.explanation_b = explanation_b if explanation_b is not None else make_explanation({"feat1": 0.2, "feat2": -0.1})
     ctx.axis_range = axis_range
-    ctx.run_a = make_run("model-a")
-    ctx.run_b = make_run("model-b")
+    ctx.modeleval_a = make_modeleval("model-a")
+    ctx.modeleval_b = make_modeleval("model-b")
     return ctx
 
 

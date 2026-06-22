@@ -5,7 +5,7 @@
     ],
     "dataset_id": "cleveland-heart-data",
     "model_subtype": null,
-    "model_display_name": "Example 1",
+    "model_display_name": "Logistic Regression",
     "model_name": "heart_lr",
     "response_schema": null,
     "metrics": {
@@ -15,8 +15,8 @@
         "n_instances": 303,
         "n_failed": 0
     },
-    "datetime": "20260622-165705",
-    "model_uuid": "90216028-4616-4fff-90e3-787136cc873f",
+    "datetime": "20260622-194036",
+    "model_uuid": "55e0197d-6937-4ff5-94b8-2d78102a30c0",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

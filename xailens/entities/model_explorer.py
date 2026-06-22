@@ -119,13 +119,13 @@ class ModelExplorer:
         Returns:
             List[Run] or None"""
 
-        runs = []
+        modelevals = []
         for u in uuids:
             meta = self._uuid_index.get(u)
             if not meta:
                 continue
-            runs.append(ModelEval(path=meta["_path"], metadata=meta))
-        return runs
+            modelevals.append(ModelEval(path=meta["_path"], metadata=meta))
+        return modelevals
 
     #---------------------------
     # Private helper functions

@@ -4,9 +4,9 @@
         "cor"
     ],
     "dataset_id": "cleveland-heart-data",
-    "model_subtype": "gemma3_27b-it-qat",
-    "run_name": "heart_llm_gemma3_27b-it-qat",
-    "model_display_name": "Example 3a",
+    "model_subtype": "gemma3:27b-it-qat",
+    "model_display_name": "Gemma 3",
+    "model_name": "heart_llm_gemma3_27b-it-qat",
     "response_schema": {
         "contributions_field": "feature_contributions",
         "contribution_key": null
@@ -18,8 +18,8 @@
         "n_instances": 303,
         "n_failed": 0
     },
-    "datetime": "20260618-173233",
-    "model_uuid": "42fed929-84dd-4319-b3e6-c8a265c89c62",
+    "datetime": "20260622-183914",
+    "model_uuid": "d1ff126e-5560-46be-8a84-661cea51bdcd",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

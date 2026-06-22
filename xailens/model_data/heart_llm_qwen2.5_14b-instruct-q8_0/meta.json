@@ -4,9 +4,9 @@
         "cor"
     ],
     "dataset_id": "cleveland-heart-data",
-    "model_subtype": "qwen2.5_14b-instruct-q8_0",
-    "run_name": "heart_llm_qwen2.5_14b-instruct-q8_0",
-    "model_display_name": "Example 3a",
+    "model_subtype": "qwen2.5:14b-instruct-q8_0",
+    "model_display_name": "Qwen 2.5",
+    "model_name": "heart_llm_qwen2.5_14b-instruct-q8_0",
     "response_schema": {
         "contributions_field": "feature_contributions",
         "contribution_key": null
@@ -18,8 +18,8 @@
         "n_instances": 303,
         "n_failed": 0
     },
-    "datetime": "20260618-173308",
-    "model_uuid": "fb14eaa7-b98e-4109-8eb4-dd5ce3a1b356",
+    "datetime": "20260622-185352",
+    "model_uuid": "fb0a6f19-6ced-48d2-a7d1-65075732419f",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
