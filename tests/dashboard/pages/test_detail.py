@@ -4,7 +4,7 @@ from streamlit.testing.v1 import AppTest
 from unittest.mock import patch, MagicMock
 
 from xailens import constants
-from xailens.context import VizOption
+from xailens.entities.context import VizOption
 from xailens.exceptions import InvalidConfigurationError
 
 PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/pairwise_instance.py"
@@ -39,7 +39,7 @@ def test_no_runs_shows_error():
         mock_get_explorer.return_value.get_runs_by_uuids.return_value = []
         at = AppTest.from_file(str(PAGE_PATH))
         at.run()
-        assert any("No runs selected" in e.value for e in at.error)
+        assert any("No model_data selected" in e.value for e in at.error)
 
 def test_no_runs_param_shows_error():
     with patch("xailens.dashboard.utils.params.get_explorer") as mock_get_explorer:
@@ -84,7 +84,7 @@ def test_no_comparison_available_shows_warning(mock_runs):
          patch("xailens.context.ComparisonContext"):
 
         at = AppTest.from_file(str(PAGE_PATH))
-        at.query_params["runs"] = "uuid1,uuid2"
+        at.query_params["model_data"] = "uuid1,uuid2"
         at.query_params["sample_id"] = "some_sample_id"
         at.run()
 

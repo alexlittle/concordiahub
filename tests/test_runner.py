@@ -4,7 +4,7 @@ from unittest.mock import patch, MagicMock
 
 from xailens import runner
 from xailens.exceptions import InvalidConfigurationError
-from xailens.context import RunContext, RunData, DataSchema
+from xailens.entities.context import RunContext, RunData, DataSchema
 
 MODULE_UNDER_TEST = "xailens.runner"
 

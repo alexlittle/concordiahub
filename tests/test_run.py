@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 from unittest.mock import MagicMock
 
-from xailens.run import Run
+from xailens.entities.model import Model
 
 MODULE_UNDER_TEST = "xailens.run"
 
@@ -40,7 +40,7 @@ def mock_store():
 
 @pytest.fixture
 def explorer(mock_store):
-    return Run(store=mock_store, metadata=mock_metadata)
+    return Model(store=mock_store, metadata=mock_metadata)
 
 @pytest.fixture
 def y_test():
@@ -61,14 +61,14 @@ def y_pred():
 # Confusion matrix
 def test_get_confusion_matrix_falls_back_to_y(y_test, y_pred, store_with_fallback):
     store, metadata = store_with_fallback
-    run = Run(store=store, metadata=metadata)
+    run = Model(store=store, metadata=metadata)
     cm = run.confusion_matrix()
     assert cm.shape == (2, 2)
 
 # Classification report
 def test_get_classification_report_falls_back_to_y(y_test, y_pred, store_with_fallback):
     store, metadata = store_with_fallback
-    run = Run(store=store, metadata=metadata)
+    run = Model(store=store, metadata=metadata)
     report = run.classification_report()
     assert "precision" in report
     assert "recall" in report

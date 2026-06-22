@@ -36,8 +36,8 @@ ALL_COMP_OPTIONS = ("all", "All model types")
 # ----------------
 # Error/Warning messages
 # ----------------
-ERR_NO_RUNS = "No runs selected"
-ERR_NOT_2_RUNS = "You need exactly 2 runs to compare"
+ERR_NO_RUNS = "No model_data selected"
+ERR_NOT_2_RUNS = "You need exactly 2 model_data to compare"
 
 # ----------------
 # MODEL_TYPES

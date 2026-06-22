@@ -1,13 +1,13 @@
 from unittest.mock import patch, MagicMock
 
 from xailens.dashboard.utils.run_display import render_run_cell
-from xailens.run import Run
+from xailens.entities.model import Model
 
 MODULE_UNDER_TEST = "xailens.dashboard.utils.run_display"
 
 
 def test_render_run_html_basic():
-    run = Run(metadata={
+    run = Model(metadata={
         "model_type": "RandomForest",
         "model_subtype": "Classifier",
         "xai_methods": ["SHAP"],
@@ -22,7 +22,7 @@ def test_render_run_html_basic():
 
 
 def test_render_run_html_no_subtype():
-    run = Run(metadata={
+    run = Model(metadata={
         "model_type": "XGBoost",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
@@ -37,7 +37,7 @@ def test_render_run_html_no_subtype():
 
 
 def test_render_run_html_no_xai_methods():
-    run = Run(metadata={
+    run = Model(metadata={
         "model_type": "SVM",
         "model_subtype": None,
         "xai_methods": None,
@@ -53,7 +53,7 @@ def test_render_run_html_no_xai_methods():
 
 def test_display_run_cell_calls_markdown():
 
-    run = Run(metadata={
+    run = Model(metadata={
         "model_type": "RF",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
@@ -75,24 +75,24 @@ def test_display_comparable_runs_renders(mock_st):
 
     mock_st.columns.return_value = [mock_col] * 5
 
-    run_a = Run(metadata={
+    run_a = Model(metadata={
         "dataset_id": "ds1",
         "model_type": "RF",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
         "run_name": "run1",
         "datetime": "20240525-143000",
-        "run_uuid": "run1-uuid"
+        "model_uuid": "run1-uuid"
     })
 
-    run_b = Run(metadata={
+    run_b = Model(metadata={
         "dataset_id": "ds1",
         "model_type": "XGB",
         "model_subtype": None,
         "xai_methods": ["LIME"],
         "run_name": "run2",
         "datetime": "20240525-150000",
-        "run_uuid": "run2-uuid"
+        "runmodel_uuid_uuid": "run2-uuid"
     })
 
     html = display_comparable_runs([[run_a, run_b]])

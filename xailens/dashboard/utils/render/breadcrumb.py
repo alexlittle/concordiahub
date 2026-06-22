@@ -1,16 +1,16 @@
-from xailens.run import Run
+from xailens.entities.model import Model
 from xailens.formatting import format_model_name
 
 
 
-def display_breadcrumbs(run_a: Run=None, run_b: Run=None, sample_id:str = None) -> str:
+def display_breadcrumbs(run_a: Model=None, run_b: Model=None, sample_id:str = None) -> str:
     parts = []
     parts.append("<a href='/' target='_self'>Home</a>")
 
     if run_a and run_b:
         if sample_id:
             parts.append(f"""
-            <a href='/overview?runs={run_a.get('run_uuid')},{run_b.get('run_uuid')}' target='_self'>
+            <a href='/overview?runs={run_a.get('model_uuid')},{run_b.get('model_uuid')}' target='_self'>
             {format_model_name(run_a)} &amp; {format_model_name(run_b)}</a>
             """)
         else:

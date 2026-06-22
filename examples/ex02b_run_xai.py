@@ -16,7 +16,7 @@ data_schema = xai.DataSchema(
     target_column="target",
     prediction_column="y_pred")
 
-run_data = xai.RunData(
+model_data = xai.ModelData(
     data_schema=data_schema,
     x_train=X_train,
     x_test=X_test,
@@ -24,11 +24,11 @@ run_data = xai.RunData(
     y_test=y_test,
     y_pred=y_pred)
 
-ctx = xai.RunContext(
+ctx = xai.ModelContext(
     "xgboost",
     ["tree_shap"],
     "cleveland-heart-data",
-    run_data,
+    model_data,
     model=model,
     run_name="heart_xgboost",
     model_id="Example 2")

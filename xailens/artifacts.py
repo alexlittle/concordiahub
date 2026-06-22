@@ -30,8 +30,8 @@ class ArtifactStore:
     def _resolve_dirname(self, ctx):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
         if ctx.run_name:
-            return os.path.join(BASE_DIR, config.RUNS_DIR_NAME, ctx.run_name)
-        return os.path.join(BASE_DIR, config.RUNS_DIR_NAME, self.run_datetime)
+            return os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME, ctx.run_name)
+        return os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME, self.run_datetime)
 
 
     def write_metadata(self):
@@ -46,7 +46,7 @@ class ArtifactStore:
             obj[f.name] = asdict(value) if is_dataclass(value) else value
 
         obj['datetime'] = self.run_datetime
-        obj['run_uuid'] = str(uuid.uuid4())
+        obj['model_uuid'] = str(uuid.uuid4())
         obj['data_schema'] = asdict(self.ctx.data.data_schema)
         self.store.save_json(config.META_INFO_FILENAME, obj)
 

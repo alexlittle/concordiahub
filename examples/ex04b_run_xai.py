@@ -29,7 +29,7 @@ data_schema = xai.DataSchema(
     prediction_column="y_pred",
     hide_zero_threshold=0.1)
 
-run_data = xai.RunData(
+model_data = xai.ModelData(
     data_schema=data_schema,
     x_train=X_train,
     x_test=X_test,
@@ -37,11 +37,11 @@ run_data = xai.RunData(
     y_test=y_test,
     y_pred=y_pred)
 
-ctx = xai.RunContext(
+ctx = xai.ModelContext(
     "xgboost",
     ["tree_shap"],
     "medsynth",
-    run_data,
+    model_data,
     model=model,
     run_name="medsynth_xgboost",
     model_id="Example 4")

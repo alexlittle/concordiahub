@@ -6,23 +6,23 @@ from pathlib import Path
 from itertools import combinations
 
 from xailens import config, strings
-from xailens.run import Run
+from xailens.entities.model import Model
 from xailens.formatting import format_model_name
 
 
-class RunExplorer():
+class ModelExplorer:
 
     def __init__(self):
-        """Initializes RunExplorer"""
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        self.runs_dir = os.path.join(BASE_DIR, config.RUNS_DIR_NAME)
+        """Initializes ModelExplorer"""
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        self.runs_dir = os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME)
         self._metadata_cache = self._load_all_metadata()
         self._uuid_index = {
-            run.get("run_uuid"): run for run in self._metadata_cache
+            model.get("model_uuid"): model for model in self._metadata_cache
         }
 
     def get_datasets(self):
-        """Gets names of all datasets stored in the runs directory
+        """Gets names of all datasets stored in the models directory
 
         Returns:
             set: set of distinct dataset names
@@ -37,18 +37,18 @@ class RunExplorer():
         Args:
             dataset str: dataset name
         Returns:
-            dict of model names and runs"""
+            dict of model names and model_data"""
     
         models = {}
         for run in self._metadata_cache:
             if run["dataset_id"] == dataset:
-                run_obj = self.get_run_by_uuid(run["run_uuid"])
+                run_obj = self.get_run_by_uuid(run["model_uuid"])
                 if run_obj:
-                    models[format_model_name(run_obj)] = run["run_uuid"]
+                    models[format_model_name(run_obj)] = run["model_uuid"]
         return dict(sorted(models.items()))
 
     def get_comparable_runs(self, n: int = 50) -> list[list[dict]]:
-        """Returns pairs of runs that share a dataset but have different model types
+        """Returns pairs of model_data that share a dataset but have different model types
         Args:
             n: number of comparison groups to return
         Returns:
@@ -60,7 +60,7 @@ class RunExplorer():
             model = run_md["model_type"]
             if run_md["model_subtype"]:
                 model = f"{model}_{run_md['model_subtype']}"
-            run = self.get_run_by_uuid(run_md["run_uuid"])
+            run = self.get_run_by_uuid(run_md["model_uuid"])
             if model not in datasets[dataset]:
                 datasets[dataset][model] = run
 
@@ -101,7 +101,7 @@ class RunExplorer():
 
         return options
 
-    def get_run_by_uuid(self, uuid: str) -> Run | None:
+    def get_run_by_uuid(self, uuid: str) -> Model | None:
         """Gets a Run by its UUID
         Args:
             uuid: Run's UUID
@@ -109,9 +109,9 @@ class RunExplorer():
         Returns:
             Run or None"""
         meta = self._uuid_index.get(uuid)
-        return Run(path=meta["_path"], metadata=meta) if meta else None
+        return Model(path=meta["_path"], metadata=meta) if meta else None
 
-    def get_runs_by_uuids(self, uuids: list[str]) -> list[Run]:
+    def get_runs_by_uuids(self, uuids: list[str]) -> list[Model]:
         """Gets a list of Runs by their UUIDs
         Args:
             List[uuid]: Run UUIDs
@@ -124,7 +124,7 @@ class RunExplorer():
             meta = self._uuid_index.get(u)
             if not meta:
                 continue
-            runs.append(Run(path=meta["_path"], metadata=meta))
+            runs.append(Model(path=meta["_path"], metadata=meta))
         return runs
 
     #---------------------------

@@ -6,7 +6,7 @@ from typing import Any
 
 
 from xailens.formatting import format_model_name
-from xailens.context import ComparisonContext
+from xailens.entities.context import ComparisonContext
 from xailens import config
 from xailens.schema import ALIGNMENT_LEVELS
 from xailens.services.alignment import compute_feature_differences, score_to_level

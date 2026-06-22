@@ -1,11 +1,11 @@
 import pytest
 
 from xailens.dashboard.utils.layout import display_breadcrumbs
-from xailens.run import Run
+from xailens.entities.model import Model
 
 @pytest.fixture
 def run_a():
-    return Run(metadata={
+    return Model(metadata={
         "model_type": "XGBoost",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
@@ -16,7 +16,7 @@ def run_a():
 
 @pytest.fixture
 def run_b():
-    return Run(metadata={
+    return Model(metadata={
         "model_type": "LinReg",
         "model_subtype": None,
         "xai_methods": ["SHAP"],
@@ -37,11 +37,11 @@ def test_two_runs(run_a, run_b):
     breadcrumbs = display_breadcrumbs(run_a, run_b)
     assert "LinReg" in breadcrumbs
     assert "XGBoost" in breadcrumbs
-    assert "/overview?runs" not in breadcrumbs
+    assert "/overview?model_data" not in breadcrumbs
 
 def test_sample_id(run_a, run_b):
     breadcrumbs = display_breadcrumbs(run_a, run_b, sample_id="12345")
     assert "LinReg" in breadcrumbs
     assert "XGBoost" in breadcrumbs
-    assert "/overview?runs" in breadcrumbs
+    assert "/overview?model_data" in breadcrumbs
     assert "12345" in breadcrumbs

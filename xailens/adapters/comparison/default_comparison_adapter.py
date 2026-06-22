@@ -1,6 +1,7 @@
 from xailens.registry.comparison_registry import register_comparison
 from xailens.adapters.comparison.comparison_base import ComparisonAdapter
-from xailens import context, config
+from xailens import config
+from xailens.entities import context
 
 
 @register_comparison("coefficients", "tree_shap")

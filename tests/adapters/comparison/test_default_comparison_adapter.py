@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 from unittest.mock import MagicMock
 
 
-from xailens.context import ComparisonContext
+from xailens.entities.context import ComparisonContext
 from xailens.adapters.comparison.default_comparison_adapter import DefaultComparisonAdapter
 from tests.helpers import make_explanation
 

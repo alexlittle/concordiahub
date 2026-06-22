@@ -6,12 +6,12 @@ import pandas as pd
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from xailens.run import Run
+from xailens.entities.model import Model
 from xailens.schema import DataSchema, ResponseSchema
 
 
 @dataclass
-class RunMetrics:
+class ModelMetrics:
     accuracy: Optional[float] = None
     f1_macro: Optional[float] = None
     f1_weighted: Optional[float] = None
@@ -20,7 +20,7 @@ class RunMetrics:
 
 
 @dataclass
-class RunData:
+class ModelData:
     """
     Dataclass structure for RunData to be passed to runner
     """
@@ -43,13 +43,12 @@ class RunContext:
     model_type: str
     xai_methods: list[str]
     dataset_id: str
-    data: RunData
+    data: ModelData
     model: Optional[Any] = None
     model_subtype: Optional[str] = None
-    run_name: Optional[str] = None
     model_id: Optional[str] = None
     response_schema: Optional[ResponseSchema] = None
-    metrics: Optional[RunMetrics] = None
+    metrics: Optional[ModelMetrics] = None
 
 
 @dataclass
@@ -57,8 +56,8 @@ class ComparisonContext:
     """
     Dataclass structure for passing data to comparison visualisations
     """
-    run_a: Run
-    run_b: Run
+    run_a: Model
+    run_b: Model
     explanation_a: pd.Series
     explanation_b: pd.Series
     axis_range: tuple | None = None

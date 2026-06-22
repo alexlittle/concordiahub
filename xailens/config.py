@@ -4,10 +4,11 @@ Configuration file for XAI-Compare
 
 from typing import Final
 
-from xailens import context, strings
+from xailens import strings
+from xailens.entities import context
 
 # Constants for artifact filename/structure
-RUNS_DIR_NAME: Final[str] = "runs"
+MODEL_DATA_DIR_NAME: Final[str] = "model_data"
 META_INFO_FILENAME: Final[str] = "meta"
 MODEL_FILENAME: Final[str] = "model"
 

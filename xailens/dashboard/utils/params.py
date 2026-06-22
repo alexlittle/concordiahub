@@ -6,7 +6,7 @@ from xailens import strings
 
 def get_runs_from_url_param(query_params):
     explorer = get_explorer()
-    runs_param = query_params.get("runs")
+    runs_param = query_params.get("model_data")
     if not runs_param:
         raise InvalidUrlParamsError(strings.ERR_NO_RUNS)
 

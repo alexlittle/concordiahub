@@ -32,18 +32,18 @@ data_schema = xai.DataSchema(
     target_column="target",
     prediction_column="prediction")
 
-run_data = xai.RunData(
+model_data = xai.ModelData(
     data_schema=data_schema,
     x=X,
     y=y,
     y_pred=y_pred,
     y_exp=y_exp)
 
-ctx = xai.RunContext(
+ctx = xai.ModelContext(
     "llm",
     ["cor"],
     "medsynth",
-    run_data,
+    model_data,
     model_subtype=current_model,
     run_name=f"medsynth_llm_{safe_dirname(current_model)}",
     model_id="Example 5a",

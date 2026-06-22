@@ -7,7 +7,7 @@ def build_filter_pills_html(active: str = "all",
                             current_params: dict[str, str] | None = None) -> str:
 
     if pill_options is None:
-        pill_options = {"all": "All runs"}
+        pill_options = {"all": "All model_data"}
     if active not in pill_options:
         active = "all"
 

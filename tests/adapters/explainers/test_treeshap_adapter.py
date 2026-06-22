@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from unittest.mock import MagicMock, patch
 from xailens.adapters.explainers.treeshap_adapter import TreeSHAPAdapter
-from xailens.context import RunData, DataSchema, RunContext
+from xailens.entities.context import RunData, DataSchema, RunContext
 from xailens.exceptions import MissingDataError
 
 MODULE_UNDER_TEST = "xailens.adapters.explainers.treeshap_adapter"

@@ -144,6 +144,40 @@ section[data-testid="stSidebar"] {
     color: var(--color-link);
 }
 
+
+/*
+    Dataset card elements
+ */
+
+.dataset-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.dataset-card {
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    text-decoration: none;
+    font-size: 14pt;
+    font-weight: 500;
+    text-align: center;
+    padding: 0.75rem;
+    box-sizing: border-box;
+    transition: box-shadow 0.15s ease;
+}
+
+.dataset-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background-color: var(--color-sidebar-bg);
+}
+
+
 /*
     Run card elements
  */

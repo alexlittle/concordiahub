@@ -1,7 +1,7 @@
 import streamlit as st
 import plotly
 
-from xailens.context import ComparisonContext
+from xailens.entities.context import ComparisonContext
 from xailens.exceptions import InvalidConfigurationError, InvalidUrlParamsError
 from xailens.dashboard.utils.layout import apply_layout, display_breadcrumbs
 from xailens.dashboard.utils.params import get_runs_from_url_param

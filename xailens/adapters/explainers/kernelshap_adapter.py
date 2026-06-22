@@ -3,10 +3,10 @@ import pandas as pd
 from typing import Any
 
 from xailens.exceptions import MissingDataError
-from xailens.context import RunContext
+from xailens.entities.context import RunContext
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
-from xailens import config, strings
+from xailens import strings
 
 @register_xai("shap_kernel")
 class KernalSHAPAdapter(XAIMethodAdapter):

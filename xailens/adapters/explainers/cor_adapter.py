@@ -4,12 +4,12 @@ import pandas as pd
 from typing import Any
 from dataclasses import dataclass
 
-from xailens.context import RunContext, ResponseSchema
+from xailens.entities.context import RunContext, ResponseSchema
 from xailens.exceptions import MissingDataError
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config, constants
-from xailens.run import Run
+from xailens.entities.model import Model
 
 
 @dataclass
@@ -53,7 +53,7 @@ class CoRAdapter(XAIMethodAdapter):
     explanation_file_type: str = "json"
 
     @classmethod
-    def load_explanation(cls, run: Run, sample_id: str) -> pd.DataFrame:
+    def load_explanation(cls, run: Model, sample_id: str) -> pd.DataFrame:
         records = run.store.load_json(f"explanations_{cls.key}")
         sample_id_col = run.get(constants.DATA_SCHEMA_ID_COLUMN)
 

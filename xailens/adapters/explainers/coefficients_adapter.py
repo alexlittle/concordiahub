@@ -7,7 +7,7 @@ from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 
 from xailens import strings, config
-from xailens.context import RunContext
+from xailens.entities.context import RunContext
 
 
 @register_xai("coefficients")

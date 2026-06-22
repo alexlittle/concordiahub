@@ -15,17 +15,17 @@ data_schema = xai.DataSchema(
     target_column="target",
     prediction_column="y_pred")
 
-run_data = xai.RunData(
+model_data = xai.ModelData(
     data_schema=data_schema,
     x=X,
     y=y,
     y_pred=y_pred)
 
-ctx = xai.RunContext(
+ctx = xai.ModelContext(
     "logistic_regression",
     ["coefficients"],
     "cleveland-heart-data",
-    run_data,
+    model_data,
     model=model,
     run_name="heart_lr",
     model_id="Example 1")
