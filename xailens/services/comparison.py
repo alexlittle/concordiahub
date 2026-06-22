@@ -35,7 +35,7 @@ def build_comparison_df(modeleval_a: ModelEval,
     label_b = modeleval_b.get("model_display_name")
 
     if modeleval_a.get("model_dir_name") == modeleval_b.get("model_dir_name"):
-        raise InvalidSelectionError(f"Cannot compare models with identical model names: '{modeleval_a.get("model_dir_name")}'")
+        raise InvalidSelectionError(f"Cannot compare models with identical model names: {modeleval_a.get('model_dir_name')}")
 
     y_true_a, y_pred_a = modeleval_a.load_targets()
     _, y_pred_b = modeleval_b.load_targets()
