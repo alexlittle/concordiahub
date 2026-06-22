@@ -29,7 +29,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
         Args:
-            ctx: RunContext object
+            ctx: ModelContext object
             model: Trained model object
 
         Returns:

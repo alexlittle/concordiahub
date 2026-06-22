@@ -35,8 +35,8 @@ ctx = xai.ModelContext(
     "cleveland-heart-data",
     model_data,
     model_subtype=current_model,
-    run_name=f"heart_llm_{safe_dirname(current_model)}",
-    model_id="Example 3a",
+    model_name=f"heart_llm_{safe_dirname(current_model)}",
+    model_display_name="Example 3a",
     response_schema=schema)
 
 xai.run(ctx)

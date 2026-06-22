@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime
 from dataclasses import asdict, fields, is_dataclass
 
-from xailens import RunContext
+from xailens.entities.context import ModelContext
 from xailens import config
 from xailens.storage.store_base import DataStore
 from xailens.storage.filesystem_store import FilesystemStore
@@ -16,22 +16,22 @@ class ArtifactStore:
     """ArtifactStore - handles the data storage
 
      Args:
-        ctx (RunContext): The current run configuration.
+        ctx (ModelContext): The current run configuration.
         store (DataStore): Storage backend. Defaults to FilesystemStore.
     """
 
-    def __init__(self, ctx: RunContext, store: DataStore = None):
+    def __init__(self, ctx: ModelContext, store: DataStore = None):
         self.ctx = ctx
-        self.run_datetime = datetime.now().strftime("%Y%m%d-%H%M%S")
+        self.datetime = datetime.now().strftime("%Y%m%d-%H%M%S")
         dirname = self._resolve_dirname(ctx)
         self.store = store or FilesystemStore(dirname)
 
 
     def _resolve_dirname(self, ctx):
         BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-        if ctx.run_name:
-            return os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME, ctx.run_name)
-        return os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME, self.run_datetime)
+        if ctx.model_name:
+            return os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME, ctx.model_name)
+        return os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME, self.datetime)
 
 
     def write_metadata(self):
@@ -45,7 +45,7 @@ class ArtifactStore:
             value = getattr(self.ctx, f.name)
             obj[f.name] = asdict(value) if is_dataclass(value) else value
 
-        obj['datetime'] = self.run_datetime
+        obj['datetime'] = self.datetime
         obj['model_uuid'] = str(uuid.uuid4())
         obj['data_schema'] = asdict(self.ctx.data.data_schema)
         self.store.save_json(config.META_INFO_FILENAME, obj)

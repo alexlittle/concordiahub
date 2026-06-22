@@ -10,23 +10,23 @@ from xailens.exceptions import InvalidConfigurationError
 PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/pairwise_instance.py"
 
 
-def make_run(model_id="model-a", model_type="xgboost", xai_methods=None):
-    run = MagicMock()
-    run.model_id = model_id
-    run.model_type = model_type
-    run.xai_methods = xai_methods or ["shap_tree"]
-    run.get.side_effect = lambda key, default=None: {
-        "model_id": model_id,
+def make_model(model_display_name="model-a", model_type="xgboost", xai_methods=None):
+    model = MagicMock()
+    model.model_display_name = model_display_name
+    model.model_type = model_type
+    model.xai_methods = xai_methods or ["shap_tree"]
+    model.get.side_effect = lambda key, default=None: {
+        "model_display_name": model_display_name,
         "model_type": model_type,
-        "xai_methods": run.xai_methods,
+        "xai_methods": model.xai_methods,
         constants.DATA_SCHEMA_ID_COLUMN: "id",
     }.get(key, default)
-    return run
+    return model
 
 
 @pytest.fixture
-def mock_runs():
-    return make_run(model_id="model-a"), make_run(model_id="model-b")
+def mock_models():
+    return make_model(model_display_name="model-a"), make_model(model_display_name="model-b")
 
 
 

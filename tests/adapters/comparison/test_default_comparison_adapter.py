@@ -8,10 +8,10 @@ from xailens.entities.context import ComparisonContext
 from xailens.adapters.comparison.default_comparison_adapter import DefaultComparisonAdapter
 from tests.helpers import make_explanation
 
-def make_run(model_id="model-a", model_type="xgboost", model_subtype=None):
+def make_run(model_display_name="model-a", model_type="xgboost", model_subtype=None):
     run = MagicMock()
     run.get = lambda key, default=None: {
-        "model_id": model_id,
+        "model_display_name": model_display_name,
         "model_type": model_type,
         "model_subtype": model_subtype,
     }.get(key, default)

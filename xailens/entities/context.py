@@ -22,7 +22,7 @@ class ModelMetrics:
 @dataclass
 class ModelData:
     """
-    Dataclass structure for RunData to be passed to runner
+    Dataclass structure for ModelData to be passed to runner
     """
     data_schema: DataSchema
     x: Optional[pd.DataFrame] = None
@@ -38,7 +38,7 @@ class ModelData:
 @dataclass
 class ModelContext:
     """
-    Dataclass structure for RunContext to be passed to runner
+    Dataclass structure for ModelContext to be passed to runner
     """
     model_type: str
     xai_methods: list[str]
@@ -46,7 +46,8 @@ class ModelContext:
     data: ModelData
     model: Optional[Any] = None
     model_subtype: Optional[str] = None
-    model_id: Optional[str] = None
+    model_display_name: Optional[str] = None
+    model_name: Optional[str] = None
     response_schema: Optional[ResponseSchema] = None
     metrics: Optional[ModelMetrics] = None
 
@@ -56,8 +57,8 @@ class ComparisonContext:
     """
     Dataclass structure for passing data to comparison visualisations
     """
-    run_a: ModelEval
-    run_b: ModelEval
+    modeleval_a: ModelEval
+    modeleval_b: ModelEval
     explanation_a: pd.Series
     explanation_b: pd.Series
     axis_range: tuple | None = None

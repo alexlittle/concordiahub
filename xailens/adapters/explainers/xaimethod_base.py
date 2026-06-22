@@ -58,7 +58,7 @@ class XAIMethodAdapter(ABC):
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation for the model
         Args:
-            ctx: RunContext object
+            ctx: ModelContext object
             model: Trained model object
 
         Returns:
@@ -73,7 +73,7 @@ class XAIMethodAdapter(ABC):
     def explain_local_json(self, ctx: ModelContext) -> list[dict[str, Any]]:
         """Computes the local explanation for the model
         Args:
-            ctx: RunContext object
+            ctx: ModelContext object
 
         Returns:
             list of dicts - JSON containing local explanations

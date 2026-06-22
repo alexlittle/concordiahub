@@ -19,16 +19,16 @@ def compute_metrics(data):
         pred_data = data.y_pred.set_index(sample_id).squeeze()
         test_data = full_test.set_index(sample_id).loc[pred_data.index].squeeze()
 
-        return RunMetrics(
+        return ModelMetrics(
             n_instances=len(test_data),
             n_failed=len(full_test) - len(test_data),
             accuracy=round(accuracy_score(test_data, pred_data), 4),
             f1_macro=round(f1_score(test_data, pred_data, average='macro'), 4),
             f1_weighted=round(f1_score(test_data, pred_data, average='weighted'), 4))
     else:
-        return RunMetrics()
+        return ModelMetrics()
 
-def run(ctx: RunContext):
+def run(ctx: ModelContext):
     # check ctx provided
     if ctx is None:
         raise InvalidConfigurationError("Context (ctx) is required")

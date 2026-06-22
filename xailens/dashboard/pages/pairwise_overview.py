@@ -4,14 +4,14 @@ import streamlit as st
 from xailens.dashboard.utils.layout import apply_layout, display_breadcrumbs
 from xailens.services.comparison import build_comparison_df
 from xailens.exceptions import  InvalidUrlParamsError
-from xailens.dashboard.utils.params import get_runs_from_url_param
+from xailens.dashboard.utils.params import get_modelevals_from_url_param
 from xailens.dashboard.utils.comparison import generate_comparison_table_html, render_run_summary
 from xailens import strings
 
 def main():
     # Get/load the necessary data for this page
     try:
-        run_a, run_b = get_runs_from_url_param(st.query_params)
+        run_a, run_b = get_modelevals_from_url_param(st.query_params)
     except InvalidUrlParamsError as e:
         st.error(e)
         st.stop()

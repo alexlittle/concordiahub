@@ -22,9 +22,9 @@ def format_model_name(run: ModelEval) -> str:
     Returns:
         String: formatted model name
     """
-    if run.get("model_id"):
+    if run.get("model_display_name"):
         parts = []
-        parts.append(run.get("model_id"))
+        parts.append(run.get("model_display_name"))
         if run.get("model_subtype"):
             parts.append(f"({run.get('model_subtype')})")
         return " ".join(parts)

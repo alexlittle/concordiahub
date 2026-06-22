@@ -6,7 +6,7 @@
     "dataset_id": "medsynth",
     "model_subtype": "gemma3_27b-it-qat",
     "run_name": "medsynth_llm_gemma3_27b-it-qat",
-    "model_id": "Example 5a",
+    "model_display_name": "Example 5a",
     "response_schema": {
         "contributions_field": "key_factors",
         "contribution_key": "phrase"

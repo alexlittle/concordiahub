@@ -20,7 +20,7 @@ class KernalSHAPAdapter(XAIMethodAdapter):
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation using KernelShap method
         Args:
-            ctx: RunContext object
+            ctx: ModelContext object
             model: Trained model object
 
         Returns:

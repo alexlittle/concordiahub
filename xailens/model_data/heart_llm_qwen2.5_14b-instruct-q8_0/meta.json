@@ -6,7 +6,7 @@
     "dataset_id": "cleveland-heart-data",
     "model_subtype": "qwen2.5_14b-instruct-q8_0",
     "run_name": "heart_llm_qwen2.5_14b-instruct-q8_0",
-    "model_id": "Example 3a",
+    "model_display_name": "Example 3a",
     "response_schema": {
         "contributions_field": "feature_contributions",
         "contribution_key": null

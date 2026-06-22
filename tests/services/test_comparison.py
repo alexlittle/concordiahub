@@ -149,7 +149,7 @@ def test_build_comparison_raises_if_same_formatted_name():
     df_pred = pd.DataFrame({"id": [1], "pred": [6]})
 
     metadata = {
-        "model_id": "123",
+        "model_display_name": "123",
         "model_type": "XGBoost",
         "model_subtype": "v1",
         "data_schema": {

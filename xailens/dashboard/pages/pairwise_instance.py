@@ -3,26 +3,27 @@ import plotly
 
 from xailens.entities.context import ComparisonContext
 from xailens.exceptions import InvalidConfigurationError, InvalidUrlParamsError
-from xailens.dashboard.utils.layout import apply_layout, display_breadcrumbs
-from xailens.dashboard.utils.params import get_runs_from_url_param
+from xailens.dashboard.utils.layout import apply_layout
+from xailens.dashboard.utils.render.breadcrumb import display_breadcrumbs
+from xailens.dashboard.utils.params import get_modelevals_from_url_param
 from xailens.registry.comparison_registry import get_comparison_adapter
 from xailens.dashboard.utils.detail_helpers import build_model_panel, render_model_panel, select_comparison_viz
 from xailens import strings, config
 
 def main():
     try:
-        run_a, run_b = get_runs_from_url_param(st.query_params)
+        modeleval_a, modeleval_b = get_modelevals_from_url_param(st.query_params)
     except InvalidUrlParamsError as e:
         st.error(e)
         st.stop()
 
     existing_params = dict(st.query_params)
     sample_id = st.query_params.get("sample_id")
-    method_a = run_a.get("xai_methods")[0]
-    method_b = run_b.get("xai_methods")[0]
+    method_a = modeleval_a.get("xai_methods")[0]
+    method_b = modeleval_b.get("xai_methods")[0]
 
-    panel_a = build_model_panel(run_a, "model_a_viz", st.query_params)
-    panel_b = build_model_panel(run_b, "model_b_viz", st.query_params)
+    panel_a = build_model_panel(modeleval_a, "model_a_viz", st.query_params)
+    panel_b = build_model_panel(modeleval_b, "model_b_viz", st.query_params)
 
     try:
         comparison_class = get_comparison_adapter(method_a, method_b)
@@ -31,7 +32,7 @@ def main():
 
     # Display
     apply_layout(strings.DETAIL_TITLE)
-    st.html(display_breadcrumbs(run_a, run_b, sample_id))
+    st.html(display_breadcrumbs(modeleval_a, modeleval_b, sample_id))
     st.subheader("**Comparison Explanation:**")
 
     try:
@@ -42,8 +43,8 @@ def main():
         ctx = ComparisonContext(
             explanation_a=panel_a.explanation,
             explanation_b=panel_b.explanation,
-            run_a=run_a,
-            run_b=run_b,
+            modeleval_a=modeleval_a,
+            modeleval_b=modeleval_b,
             axis_range = config.DEFAULT_COMPARISON_AXIS_RANGE,
         )
         display_data = comparison.render_comparison(ctx, comp_viz)

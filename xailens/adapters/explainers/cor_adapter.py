@@ -88,7 +88,7 @@ class CoRAdapter(XAIMethodAdapter):
     def explain_local_json(self, ctx: ModelContext) -> list[dict[str, Any]]:
         """Processes the CoR local explanations
         Args:
-            ctx: RunContext object
+            ctx: ModelContext object
 
         Returns:
             list[dict[str, Any]]: list of dicts containing local explanations
@@ -100,7 +100,7 @@ class CoRAdapter(XAIMethodAdapter):
             raise MissingDataError("CoRAdapter requires y_exp and y_pred in RunData")
         if ctx.response_schema is None:
             raise MissingDataError(
-                "CoRAdapter requires a ResponseSchema on RunContext")
+                "CoRAdapter requires a ResponseSchema in ModelContext")
 
         instance_id_col = ctx.data.data_schema.instance_id_column
         prediction_col = ctx.data.data_schema.prediction_column

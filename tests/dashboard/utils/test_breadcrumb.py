@@ -1,6 +1,6 @@
 import pytest
 
-from xailens.dashboard.utils.layout import display_breadcrumbs
+from xailens.dashboard.utils.render.breadcrumb import display_breadcrumbs
 from xailens.entities.modeleval import ModelEval
 
 @pytest.fixture
@@ -11,7 +11,7 @@ def run_a():
         "xai_methods": ["SHAP"],
         "run_name": "run1",
         "datetime": "20240525-143000",
-        "model_id": None
+        "model_display_name": None
     })
 
 @pytest.fixture
@@ -22,7 +22,7 @@ def run_b():
         "xai_methods": ["SHAP"],
         "run_name": "run1",
         "datetime": "20240525-143000",
-        "model_id": None
+        "model_display_name": None
     })
 
 def test_no_params():
