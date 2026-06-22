@@ -60,8 +60,8 @@ def build_model_panel(run, viz_param_key, query_params) -> ModelPanel:
         viz_class = None
 
 
-    sample_id = query_params.get("sample_id")
-    explanation = xai_class.load_explanation(run, sample_id)
+    instance_id = query_params.get("instance_id")
+    explanation = xai_class.load_explanation(run, instance_id)
     return ModelPanel(
         run=run,
         xai_class=xai_class,

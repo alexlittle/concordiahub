@@ -60,16 +60,16 @@ def main():
     adapter_a = get_xai_adapter(method_a)
     adapter_b = get_xai_adapter(method_b)
 
-    df = build_comparison_df(run_a=run_a, run_b=run_b)
+    df = build_comparison_df(modeleval_a=run_a, run_b=run_b)
     print(df.columns.tolist())
     print(len(df))
 
     rows = []
-    for sample_id in df["sample_uuid"]:
-        explanation_a = adapter_a.load_explanation(run_a, sample_id)
-        explanation_b = adapter_b.load_explanation(run_b, sample_id)
+    for instance_id in df["instance_uuid"]:
+        explanation_a = adapter_a.load_explanation(run_a, instance_id)
+        explanation_b = adapter_b.load_explanation(run_b, instance_id)
         result = compute_overall_alignment(explanation_a, explanation_b)
-        result["sample_uuid"] = sample_id
+        result["instance_uuid"] = instance_id
         rows.append(result)
 
     alignment_df = pd.DataFrame(rows)

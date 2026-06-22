@@ -105,7 +105,7 @@ class ComparisonAdapter(ABC):
         return fig
 
     def viz_alignment_summary(self, ctx: ComparisonContext) -> str:
-        """Single dot scale from mean difference - for sample list."""
+        """Single dot scale from mean difference - for instance list."""
         '''
         differences = self._compute_differences(ctx)
         mean_diff = sum(d for _, d in differences) / len(

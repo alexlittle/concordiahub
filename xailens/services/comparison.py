@@ -5,7 +5,7 @@ from xailens.formatting import format_model_name
 from xailens import constants
 from xailens.exceptions import InvalidSelectionError
 
-def ensure_sample_index(df, key="sample_uuid"):
+def ensure_instance_index(df, key="instance_uuid"):
     # already a column so set as index
     if key in df.columns:
         return df.set_index(key)
@@ -28,27 +28,28 @@ def ensure_sample_index(df, key="sample_uuid"):
 
 
 
-def build_comparison_df(run_a,
-                        run_b,
-                        ensure_sample_index_fn=ensure_sample_index):
-    name_a = format_model_name(run_a)
-    name_b = format_model_name(run_b)
+def build_comparison_df(modeleval_a,
+                        modeleval_b,
+                        ensure_instance_index_fn=ensure_instance_index):
+    name_a = format_model_name(modeleval_a)
+    name_b = format_model_name(modeleval_b)
+
 
     if name_a == name_b:
         raise InvalidSelectionError(f"Cannot compare runs with identical model names: '{name_a}'")
 
-    y_true_a, y_pred_a = run_a.load_targets()
-    _, y_pred_b = run_b.load_targets()
+    y_true_a, y_pred_a = modeleval_a.load_targets()
+    _, y_pred_b = modeleval_b.load_targets()
 
-    y_true_a = ensure_sample_index_fn(
-        y_true_a,run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-    y_pred_a = ensure_sample_index_fn(
-        y_pred_a, run_a.get(constants.DATA_SCHEMA_ID_COLUMN))
-    y_pred_b = ensure_sample_index_fn(
-        y_pred_b, run_b.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_true_a = ensure_instance_index_fn(
+        y_true_a,modeleval_a.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_pred_a = ensure_instance_index_fn(
+        y_pred_a, modeleval_a.get(constants.DATA_SCHEMA_ID_COLUMN))
+    y_pred_b = ensure_instance_index_fn(
+        y_pred_b, modeleval_b.get(constants.DATA_SCHEMA_ID_COLUMN))
 
     y_true_a = y_true_a.rename(columns=
-        {run_a.get(constants.DATA_SCHEMA_TARGET_COLUMN): constants.TRUE_VALUE_COLUMN_LABEL})
+        {modeleval_a.get(constants.DATA_SCHEMA_TARGET_COLUMN): constants.TRUE_VALUE_COLUMN_LABEL})
     y_pred_a.columns = [f"{name_a} {constants.PREDICTION_COLUMN_LABEL}"]
     y_pred_b.columns = [f"{name_b} {constants.PREDICTION_COLUMN_LABEL}"]
 

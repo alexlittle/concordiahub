@@ -25,9 +25,9 @@ class LLMResponse:
     contributions: dict[str, ContribScore]
     raw: dict
 
-    def to_dict(self, sample_id_col: str, sample_id: str) -> dict:
+    def to_dict(self, instance_id_col: str, instance_id: str) -> dict:
         return {
-            sample_id_col: sample_id,
+            instance_id_col: instance_id,
             "reasoning": self.reasoning,
             "prediction": self.prediction,
             "confidence": self.confidence,
@@ -53,14 +53,14 @@ class CoRAdapter(XAIMethodAdapter):
     explanation_file_type: str = "json"
 
     @classmethod
-    def load_explanation(cls, run: ModelEval, sample_id: str) -> pd.DataFrame:
+    def load_explanation(cls, run: ModelEval, instance_id: str) -> pd.DataFrame:
         records = run.store.load_json(f"explanations_{cls.key}")
-        sample_id_col = run.get(constants.DATA_SCHEMA_ID_COLUMN)
+        instance_id_col = run.get(constants.DATA_SCHEMA_ID_COLUMN)
 
-        row = next((r for r in records if r[sample_id_col] == sample_id), None)
+        row = next((r for r in records if r[instance_id_col] == instance_id), None)
         if row is None:
             raise ValueError(
-                f"Sample '{sample_id}' not found in explanations for {cls.key}")
+                f"Instance '{instance_id}' not found in explanations for {cls.key}")
 
         scores = [data["score"] for data in row["contributions"].values()]
         abs_sum = sum(abs(s) for s in scores)

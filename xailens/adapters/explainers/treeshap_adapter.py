@@ -22,8 +22,8 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     EXCLUDED_CONTRIBUTION_KEYS = {"class"}
     
     @classmethod
-    def load_explanation(cls, run: ModelEval, sample_id: str) -> pd.DataFrame:
-        df = super().load_explanation(run, sample_id)
+    def load_explanation(cls, run: ModelEval, instance_id: str) -> pd.DataFrame:
+        df = super().load_explanation(run, instance_id)
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:

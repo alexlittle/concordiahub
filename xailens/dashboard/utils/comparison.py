@@ -55,7 +55,7 @@ def render_run_summary(run):
 def generate_comparison_rows_html(df, run_a, run_b):
     rows_html = ""
     for _, row in df.iterrows():
-        sample_id = row[run_a.get(constants.DATA_SCHEMA_ID_COLUMN)]
+        instance_id = row[run_a.get(constants.DATA_SCHEMA_ID_COLUMN)]
 
         if row['True Value'] == row[f"{format_model_name(run_a)} prediction"]:
             run_a_icon = "<span class='tick'>&#10004;</span>"
@@ -69,7 +69,7 @@ def generate_comparison_rows_html(df, run_a, run_b):
 
         rows_html += f"""
         <tr>
-            <td><a href='/detail?runs={run_a.get("model_uuid")},{run_b.get("model_uuid")}&sample_id={sample_id}' target='_self'>{sample_id}</a></td>
+            <td><a href='/detail?runs={run_a.get("model_uuid")},{run_b.get("model_uuid")}&sample_id={instance_id}' target='_self'>{instance_id}</a></td>
             <td>{row['Comparison']}</td>
             <td class="report-table-align">{row['True Value']}</td>
             <td class="report-table-align">

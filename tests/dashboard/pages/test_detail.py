@@ -49,8 +49,8 @@ def test_no_runs_param_shows_error():
         assert any(e.value for e in at.error)
 
 
-def test_no_comparison_available_shows_warning(mock_runs):
-    run_a, run_b = mock_runs
+def test_no_comparison_available_shows_warning(mock_models):
+    modeleval_a, modeleval_b = mock_models
 
     mock_panel_a, mock_panel_b = MagicMock(), MagicMock()
     mock_panel_a.explanation = "mock_explanation_a"
@@ -68,7 +68,7 @@ def test_no_comparison_available_shows_warning(mock_runs):
     mock_comp_class.return_value = mock_comp_instance
 
     mock_explorer = MagicMock()
-    mock_explorer.get_runs_by_uuids.return_value = [run_a, run_b]
+    mock_explorer.get_runs_by_uuids.return_value = [modeleval_a, modeleval_b]
 
     with patch("xailens.dashboard.utils.params.get_explorer", return_value=mock_explorer), \
          patch("xailens.dashboard.utils.detail_helpers.build_model_panel",
@@ -76,16 +76,16 @@ def test_no_comparison_available_shows_warning(mock_runs):
          patch("xailens.dashboard.utils.detail_helpers.render_model_panel"), \
          patch("xailens.dashboard.utils.detail_helpers.select_comparison_viz",
                return_value="<p>viz</p>"), \
-         patch("xailens.dashboard.utils.layout.display_breadcrumbs",
+         patch("xailens.dashboard.utils.render.breadcrumb.display_breadcrumbs",
                return_value="<p>breadcrumb</p>"), \
          patch("xailens.dashboard.utils.layout.apply_layout"), \
          patch("xailens.registry.comparison_registry.get_comparison_adapter",
                return_value=mock_comp_class), \
-         patch("xailens.context.ComparisonContext"):
+         patch("xailens.entities.context.ComparisonContext"):
 
         at = AppTest.from_file(str(PAGE_PATH))
         at.query_params["model_data"] = "uuid1,uuid2"
-        at.query_params["sample_id"] = "some_sample_id"
+        at.query_params["instance_id"] = "some_instance_id"
         at.run()
 
     assert any("No comparison available" in w.value for w in at.warning)

@@ -13,11 +13,11 @@ from xailens.registry.xai_registry import get_xai_adapter
 
 def compute_metrics(data):
     if (data.y_test is not None or data.y is not None) and data.y_pred is not None:
-        sample_id = data.data_schema.instance_id_column
+        instance_id = data.data_schema.instance_id_column
         full_test = data.y_test if data.y_test is not None else data.y
 
-        pred_data = data.y_pred.set_index(sample_id).squeeze()
-        test_data = full_test.set_index(sample_id).loc[pred_data.index].squeeze()
+        pred_data = data.y_pred.set_index(instance_id).squeeze()
+        test_data = full_test.set_index(instance_id).loc[pred_data.index].squeeze()
 
         return ModelMetrics(
             n_instances=len(test_data),

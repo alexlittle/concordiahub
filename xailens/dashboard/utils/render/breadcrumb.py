@@ -3,22 +3,22 @@ from xailens.formatting import format_model_name
 
 
 
-def display_breadcrumbs(run_a: ModelEval=None, run_b: ModelEval=None, sample_id:str = None) -> str:
+def display_breadcrumbs(modeleval_a: ModelEval=None, modeleval_b: ModelEval=None, instance_id:str = None) -> str:
     parts = []
     parts.append("<a href='/' target='_self'>Home</a>")
 
-    if run_a and run_b:
-        if sample_id:
+    if modeleval_a and modeleval_b:
+        if instance_id:
             parts.append(f"""
-            <a href='/overview?runs={run_a.get('model_uuid')},{run_b.get('model_uuid')}' target='_self'>
-            {format_model_name(run_a)} &amp; {format_model_name(run_b)}</a>
+            <a href='/overview?runs={modeleval_a.get('model_uuid')},{modeleval_b.get('model_uuid')}' target='_self'>
+            {format_model_name(modeleval_a)} &amp; {format_model_name(modeleval_b)}</a>
             """)
         else:
             parts.append(f"""
-                        {format_model_name(run_a)} &amp; {format_model_name(run_b)}
+                        {format_model_name(modeleval_a)} &amp; {format_model_name(modeleval_b)}
                         """)
 
-    if sample_id:
-        parts.append(f"{sample_id}")
+    if instance_id:
+        parts.append(f"{instance_id}")
 
     return " &nbsp;&gt;&nbsp; ".join(parts)

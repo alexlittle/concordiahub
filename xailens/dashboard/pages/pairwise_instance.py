@@ -18,7 +18,7 @@ def main():
         st.stop()
 
     existing_params = dict(st.query_params)
-    sample_id = st.query_params.get("sample_id")
+    instance_id = st.query_params.get("instance_id")
     method_a = modeleval_a.get("xai_methods")[0]
     method_b = modeleval_b.get("xai_methods")[0]
 
@@ -32,7 +32,7 @@ def main():
 
     # Display
     apply_layout(strings.DETAIL_TITLE)
-    st.html(display_breadcrumbs(modeleval_a, modeleval_b, sample_id))
+    st.html(display_breadcrumbs(modeleval_a, modeleval_b, instance_id))
     st.subheader("**Comparison Explanation:**")
 
     try:
