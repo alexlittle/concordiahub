@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from xailens.entities.model import ModelEval
+from xailens.entities.modeleval import ModelEval
 
 def format_datetime(dt_str: str) -> str:
     """For string formatting of the datetime

@@ -4,12 +4,12 @@ import pandas as pd
 from typing import Any
 from dataclasses import dataclass
 
-from xailens.entities.context import RunContext, ResponseSchema
+from xailens.entities.context import ModelContext, ResponseSchema
 from xailens.exceptions import MissingDataError
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config, constants
-from xailens.entities.model import ModelEval
+from xailens.entities.modeleval import ModelEval
 
 
 @dataclass
@@ -82,10 +82,10 @@ class CoRAdapter(XAIMethodAdapter):
             for feature, data in row["contributions"].items()
         ])
 
-    def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         raise NotImplementedError
 
-    def explain_local_json(self, ctx: RunContext) -> list[dict[str, Any]]:
+    def explain_local_json(self, ctx: ModelContext) -> list[dict[str, Any]]:
         """Processes the CoR local explanations
         Args:
             ctx: RunContext object

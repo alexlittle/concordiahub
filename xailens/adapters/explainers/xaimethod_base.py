@@ -2,8 +2,8 @@ import pandas as pd
 from abc import ABC, abstractmethod
 from typing import Any, Optional
 
-from xailens.entities.context import RunContext
-from xailens.entities.model import ModelEval
+from xailens.entities.context import ModelContext
+from xailens.entities.modeleval import ModelEval
 from xailens.exceptions import MissingDataError
 from xailens import constants
 
@@ -55,7 +55,7 @@ class XAIMethodAdapter(ABC):
         return self.default_visualisation
 
     @abstractmethod
-    def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation for the model
         Args:
             ctx: RunContext object
@@ -70,7 +70,7 @@ class XAIMethodAdapter(ABC):
         pass
 
     @abstractmethod
-    def explain_local_json(self, ctx: RunContext) -> list[dict[str, Any]]:
+    def explain_local_json(self, ctx: ModelContext) -> list[dict[str, Any]]:
         """Computes the local explanation for the model
         Args:
             ctx: RunContext object

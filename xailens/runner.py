@@ -6,7 +6,7 @@ from xailens import strings
 from xailens.exceptions import InvalidConfigurationError
 from xailens.encoder import XAITextEncoder
 from xailens.artifacts import ArtifactStore
-from xailens.entities.context import RunContext, RunMetrics
+from xailens.entities.context import ModelContext, ModelMetrics
 from xailens.registry.model_registry import get_model_adapter
 from xailens.registry.xai_registry import get_xai_adapter
 

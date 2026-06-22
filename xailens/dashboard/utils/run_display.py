@@ -1,6 +1,6 @@
 import streamlit as st
 
-from xailens.entities.model import ModelEval
+from xailens.entities.modeleval import ModelEval
 from xailens.formatting import format_model_name, format_datetime
 from xailens import strings
 from xailens.dashboard.utils.styles import get_badge_class

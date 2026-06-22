@@ -12,7 +12,7 @@ def get_runs_from_url_param(query_params):
 
     run_ids = runs_param.split(",")
 
-    runs = explorer.get_runs_by_uuids(run_ids)
+    runs = explorer.get_modelevals_by_uuids(run_ids)
 
     if len(runs) != 2:
         raise InvalidUrlParamsError(strings.ERR_NOT_2_RUNS)

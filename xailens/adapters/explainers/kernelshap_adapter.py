@@ -3,7 +3,7 @@ import pandas as pd
 from typing import Any
 
 from xailens.exceptions import MissingDataError
-from xailens.entities.context import RunContext
+from xailens.entities.context import ModelContext
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings
@@ -17,7 +17,7 @@ class KernalSHAPAdapter(XAIMethodAdapter):
     default_visualisation = None
     compatible_visualisations = {}
 
-    def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation using KernelShap method
         Args:
             ctx: RunContext object
@@ -34,5 +34,5 @@ class KernalSHAPAdapter(XAIMethodAdapter):
         explainer = shap.KernelExplainer(model.predict_proba, ctx.data.x_train)
         return explainer.shap_values(ctx.data.x_test)
 
-    def explain_local_json(self, data: RunContext) -> dict[str, Any]:
+    def explain_local_json(self, data: ModelContext) -> dict[str, Any]:
         raise NotImplementedError

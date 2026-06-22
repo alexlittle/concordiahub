@@ -3,11 +3,11 @@ import pandas as pd
 from typing import Any
 
 from xailens.exceptions import MissingDataError, DataProcessingError
-from xailens.entities.context import RunContext
+from xailens.entities.context import ModelContext
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config
-from xailens.entities.model import ModelEval
+from xailens.entities.modeleval import ModelEval
 
 @register_xai("tree_shap")
 class TreeSHAPAdapter(XAIMethodAdapter):
@@ -26,7 +26,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         df = super().load_explanation(run, sample_id)
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
-    def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
         Args:
             ctx: RunContext object
@@ -73,5 +73,5 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         else:
             raise DataProcessingError("The return values from SHAP don't match")
 
-    def explain_local_json(self, ctx: RunContext) -> dict[str, Any]:
+    def explain_local_json(self, ctx: ModelContext) -> dict[str, Any]:
         raise NotImplementedError

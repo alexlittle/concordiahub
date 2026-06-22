@@ -1,7 +1,7 @@
 from unittest.mock import patch, MagicMock
 
 from xailens.dashboard.utils.run_display import render_run_cell
-from xailens.entities.model import ModelEval
+from xailens.entities.modeleval import ModelEval
 
 MODULE_UNDER_TEST = "xailens.dashboard.utils.run_display"
 

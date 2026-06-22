@@ -8,7 +8,7 @@ PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/pairwise_overvi
 
 def test_overview_no_runs():
     with patch("xailens.dashboard.services.get_explorer") as mock_explorer:
-        mock_explorer.return_value.get_runs_by_uuids.return_value = []
+        mock_explorer.return_value.get_modelevals_by_uuids.return_value = []
         at = AppTest.from_file(str(PAGE_PATH))
         at.run()
         assert any("No model_data selected" in e.value for e in at.error)

@@ -1,4 +1,4 @@
-from xailens.entities.model import ModelEval
+from xailens.entities.modeleval import ModelEval
 from xailens.formatting import format_model_name
 
 

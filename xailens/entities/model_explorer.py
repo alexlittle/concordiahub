@@ -6,7 +6,7 @@ from pathlib import Path
 from itertools import combinations
 
 from xailens import config, strings
-from xailens.entities.model import ModelEval
+from xailens.entities.modeleval import ModelEval
 from xailens.formatting import format_model_name
 
 
@@ -15,7 +15,7 @@ class ModelExplorer:
     def __init__(self):
         """Initializes ModelExplorer"""
         BASE_DIR = Path(__file__).resolve().parent.parent
-        self.runs_dir = os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME)
+        self.modelevals_dir = os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME)
         self._metadata_cache = self._load_all_metadata()
         self._uuid_index = {
             model.get("model_uuid"): model for model in self._metadata_cache
@@ -28,8 +28,8 @@ class ModelExplorer:
             set: set of distinct dataset names
         """
         datasets = set()
-        for run in self._metadata_cache:
-            datasets.add(run["dataset_id"])
+        for modeleval in self._metadata_cache:
+            datasets.add(modeleval["dataset_id"])
         return sorted(datasets)
 
     def get_models_for_dataset(self, dataset: str) -> dict:
@@ -40,14 +40,14 @@ class ModelExplorer:
             dict of model names and model_data"""
     
         models = {}
-        for run in self._metadata_cache:
-            if run["dataset_id"] == dataset:
-                run_obj = self.get_run_by_uuid(run["model_uuid"])
-                if run_obj:
-                    models[format_model_name(run_obj)] = run["model_uuid"]
+        for modeleval in self._metadata_cache:
+            if modeleval["dataset_id"] == dataset:
+                modeleval_obj = self.get_modeleval_by_uuid(modeleval["model_uuid"])
+                if modeleval_obj:
+                    models[format_model_name(modeleval_obj)] = modeleval["model_uuid"]
         return dict(sorted(models.items()))
 
-    def get_comparable_runs(self, n: int = 50) -> list[list[dict]]:
+    def get_comparable_modelevals(self, n: int = 50) -> list[list[dict]]:
         """Returns pairs of model_data that share a dataset but have different model types
         Args:
             n: number of comparison groups to return
@@ -55,14 +55,14 @@ class ModelExplorer:
             list of groups, each group is a pair of metadata dicts with same dataset, different models
         """
         datasets = defaultdict(dict)
-        for run_md in self._load_all_metadata():
-            dataset = run_md["dataset_id"]
-            model = run_md["model_type"]
-            if run_md["model_subtype"]:
-                model = f"{model}_{run_md['model_subtype']}"
-            run = self.get_run_by_uuid(run_md["model_uuid"])
+        for modeleval in self._load_all_metadata():
+            dataset = modeleval["dataset_id"]
+            model = modeleval["model_type"]
+            if modeleval["model_subtype"]:
+                model = f"{model}_{modeleval['model_subtype']}"
+            modeleval_obj = self.get_modeleval_by_uuid(modeleval["model_uuid"])
             if model not in datasets[dataset]:
-                datasets[dataset][model] = run
+                datasets[dataset][model] = modeleval_obj
 
         pairs = []
         for models in datasets.values():
@@ -75,16 +75,16 @@ class ModelExplorer:
     def get_dataset_filter_options(self) -> dict[str, str]:
         """Returns dataset filter options based on available datasets in metadata."""
         datasets = sorted({
-            run_md["dataset_id"]
-            for run_md in self._load_all_metadata()
+            modeleval["dataset_id"]
+            for modeleval in self._load_all_metadata()
         })
 
         return {strings.ALL_DATASET_OPTIONS[0]: strings.ALL_DATASET_OPTIONS[1]} | {d: d for d in datasets}
 
     def get_model_filter_options(self) -> dict[str, str]:
         datasets = defaultdict(list)
-        for run_md in self._load_all_metadata():
-            datasets[run_md["dataset_id"]].append(run_md["model_type"])
+        for modeleval in self._load_all_metadata():
+            datasets[modeleval["dataset_id"]].append(modeleval["model_type"])
 
         valid_pairs = set()
         for model_types in datasets.values():
@@ -101,7 +101,7 @@ class ModelExplorer:
 
         return options
 
-    def get_run_by_uuid(self, uuid: str) -> ModelEval | None:
+    def get_modeleval_by_uuid(self, uuid: str) -> ModelEval | None:
         """Gets a Run by its UUID
         Args:
             uuid: Run's UUID
@@ -111,7 +111,7 @@ class ModelExplorer:
         meta = self._uuid_index.get(uuid)
         return ModelEval(path=meta["_path"], metadata=meta) if meta else None
 
-    def get_runs_by_uuids(self, uuids: list[str]) -> list[ModelEval]:
+    def get_modelevals_by_uuids(self, uuids: list[str]) -> list[ModelEval]:
         """Gets a list of Runs by their UUIDs
         Args:
             List[uuid]: Run UUIDs
@@ -135,13 +135,13 @@ class ModelExplorer:
         if hasattr(self, '_metadata_cache'):
             return self._metadata_cache
 
-        root = Path(self.runs_dir)
-        runs = []
+        root = Path(self.modelevals_dir)
+        modelevals = []
         for meta_file in root.glob(f"*/{config.META_INFO_FILENAME}.json"):
             with open(meta_file, "r") as f:
                 meta = json.load(f)
                 meta['_path'] = str(meta_file.parent)
-                runs.append(meta)
+                modelevals.append(meta)
 
-        self._metadata_cache = sorted(runs, key=lambda x: x.get("datetime", ""), reverse=True)
+        self._metadata_cache = sorted(modelevals, key=lambda x: x.get("datetime", ""), reverse=True)
         return self._metadata_cache

@@ -36,14 +36,14 @@ def mock_runs():
 
 def test_no_runs_shows_error():
     with patch("xailens.dashboard.utils.params.get_explorer") as mock_get_explorer:
-        mock_get_explorer.return_value.get_runs_by_uuids.return_value = []
+        mock_get_explorer.return_value.get_modelevals_by_uuids.return_value = []
         at = AppTest.from_file(str(PAGE_PATH))
         at.run()
         assert any("No model_data selected" in e.value for e in at.error)
 
 def test_no_runs_param_shows_error():
     with patch("xailens.dashboard.utils.params.get_explorer") as mock_get_explorer:
-        mock_get_explorer.return_value.get_runs_by_uuids.return_value = []
+        mock_get_explorer.return_value.get_modelevals_by_uuids.return_value = []
         at = AppTest.from_file(str(PAGE_PATH))
         at.run()
         assert any(e.value for e in at.error)

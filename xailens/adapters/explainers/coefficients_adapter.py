@@ -7,7 +7,7 @@ from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 
 from xailens import strings, config
-from xailens.entities.context import RunContext
+from xailens.entities.context import ModelContext
 
 
 @register_xai("coefficients")
@@ -20,7 +20,7 @@ class CoefficientsAdapter(XAIMethodAdapter):
     compatible_visualisations = config.COEFFS_COMPATIBLE_VIZ
 
 
-    def explain_local_df(self, ctx: RunContext, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
         Args:
             ctx: RunContext object
@@ -41,5 +41,5 @@ class CoefficientsAdapter(XAIMethodAdapter):
         local_explanations.insert(0, instance_id, ctx.data.x[instance_id].values)
         return local_explanations
 
-    def explain_local_json(self, ctx: RunContext) -> dict[str, Any]:
+    def explain_local_json(self, ctx: ModelContext) -> dict[str, Any]:
         raise NotImplementedError

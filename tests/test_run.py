@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 from unittest.mock import MagicMock
 
-from xailens.entities.model import ModelEval
+from xailens.entities.modeleval import ModelEval
 
 MODULE_UNDER_TEST = "xailens.run"
 

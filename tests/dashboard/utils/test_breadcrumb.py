@@ -1,7 +1,7 @@
 import pytest
 
 from xailens.dashboard.utils.layout import display_breadcrumbs
-from xailens.entities.model import ModelEval
+from xailens.entities.modeleval import ModelEval
 
 @pytest.fixture
 def run_a():

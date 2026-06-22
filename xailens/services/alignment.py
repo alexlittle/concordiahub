@@ -51,8 +51,8 @@ def compute_overall_alignment(explanation_a, explanation_b) -> dict:
 def main():
 
     explorer = get_explorer()
-    run_a = explorer.get_run_by_uuid("4dd56b8c-d22e-4d1e-9cc3-c9dbb696c105")
-    run_b = explorer.get_run_by_uuid("56eae897-e4fd-43bb-927e-c4c7fd67d526")
+    run_a = explorer.get_modeleval_by_uuid("4dd56b8c-d22e-4d1e-9cc3-c9dbb696c105")
+    run_b = explorer.get_modeleval_by_uuid("56eae897-e4fd-43bb-927e-c4c7fd67d526")
 
     method_a = run_a.metadata.get("xai_methods")[0]
     method_b = run_b.metadata.get("xai_methods")[0]

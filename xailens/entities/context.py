@@ -6,7 +6,7 @@ import pandas as pd
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from xailens.entities.model import ModelEval
+from xailens.entities.modeleval import ModelEval
 from xailens.schema import DataSchema, ResponseSchema
 
 
@@ -36,7 +36,7 @@ class ModelData:
 
 
 @dataclass
-class RunContext:
+class ModelContext:
     """
     Dataclass structure for RunContext to be passed to runner
     """
