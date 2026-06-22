@@ -2,9 +2,9 @@ from pathlib import Path
 from streamlit.testing.v1 import AppTest
 from unittest.mock import patch, MagicMock
 
-MODULE_UNDER_TEST = "xailens.dashboard.pages.overview"
+MODULE_UNDER_TEST = "xailens.dashboard.pages.pairwise_overview"
 
-PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/overview.py"
+PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/pairwise_overview.py"
 
 def test_overview_no_runs():
     with patch("xailens.dashboard.services.get_explorer") as mock_explorer:

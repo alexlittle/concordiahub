@@ -7,7 +7,7 @@ from xailens import constants
 from xailens.context import VizOption
 from xailens.exceptions import InvalidConfigurationError
 
-PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/detail.py"
+PAGE_PATH = Path(__file__).parents[3] / "xailens/dashboard/pages/pairwise_instance.py"
 
 
 def make_run(model_id="model-a", model_type="xgboost", xai_methods=None):
