@@ -4,10 +4,9 @@ from xailens.formatting import format_datetime
 from xailens.dashboard.utils.styles import get_badge_class
 from xailens.entities.modeleval import ModelEval
 
-def render_run_summary(model:ModelEval):
+def render_modeleval_summary(model:ModelEval):
     badge_class = get_badge_class(model.get("model_type"))
     badge_label = model.get("model_type")
-    run_name = model.get("run_name")
     model_display_name = model.get("model_display_name")
     date_str = format_datetime(model.get("datetime"))
     dataset_id = model.get("dataset_id")
@@ -25,10 +24,6 @@ def render_run_summary(model:ModelEval):
         &nbsp;&middot;&nbsp;
         <span class="tag">{dataset_id}</span>
         {methods_html}
-    </p>
-    <p class="model-meta">
-        <em>Run name</em>: {run_name}<br/>
-        <em>Run ID</em>: {model.get("runmodel_uuid_uuid")}
     </p>
     """)
 

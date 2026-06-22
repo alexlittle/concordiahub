@@ -51,23 +51,23 @@ def compute_overall_alignment(explanation_a, explanation_b) -> dict:
 def main():
 
     explorer = get_explorer()
-    run_a = explorer.get_modeleval_by_uuid("4dd56b8c-d22e-4d1e-9cc3-c9dbb696c105")
-    run_b = explorer.get_modeleval_by_uuid("56eae897-e4fd-43bb-927e-c4c7fd67d526")
+    modeleval_a = explorer.get_modeleval_by_uuid("4dd56b8c-d22e-4d1e-9cc3-c9dbb696c105")
+    modeleval_b = explorer.get_modeleval_by_uuid("56eae897-e4fd-43bb-927e-c4c7fd67d526")
 
-    method_a = run_a.metadata.get("xai_methods")[0]
-    method_b = run_b.metadata.get("xai_methods")[0]
+    method_a = modeleval_a.metadata.get("xai_methods")[0]
+    method_b = modeleval_b.metadata.get("xai_methods")[0]
 
     adapter_a = get_xai_adapter(method_a)
     adapter_b = get_xai_adapter(method_b)
 
-    df = build_comparison_df(modeleval_a=run_a, run_b=run_b)
+    df = build_comparison_df(modeleval_a=modeleval_a, run_b=modeleval_b)
     print(df.columns.tolist())
     print(len(df))
 
     rows = []
     for instance_id in df["instance_uuid"]:
-        explanation_a = adapter_a.load_explanation(run_a, instance_id)
-        explanation_b = adapter_b.load_explanation(run_b, instance_id)
+        explanation_a = adapter_a.load_explanation(modeleval_a, instance_id)
+        explanation_b = adapter_b.load_explanation(modeleval_b, instance_id)
         result = compute_overall_alignment(explanation_a, explanation_b)
         result["instance_uuid"] = instance_id
         rows.append(result)

@@ -9,10 +9,11 @@ from xailens.registry.viz_registry import get_viz_adapter
 from xailens import exceptions
 from xailens.dashboard.utils.display_table import render_dataframe
 from xailens.dashboard import settings
+from xailens.entities.modeleval import ModelEval
 
 @dataclass
 class ModelPanel:
-    run: dict
+    modeleval: dict
     xai_class: type
     xai_instance: object
     viz_key: str
@@ -48,8 +49,8 @@ def select_comparison_viz(current: str, options: dict, existing_params: dict) ->
     return " | ".join(option_list)
 
 
-def build_model_panel(run, viz_param_key, query_params) -> ModelPanel:
-    method = run.get("xai_methods")[0]
+def build_model_panel(modeleval: ModelEval, viz_param_key, query_params) -> ModelPanel:
+    method = modeleval.get("xai_methods")[0]
     xai_class = get_xai_adapter(method)
     xai_instance = xai_class()
     viz_name = query_params.get(viz_param_key, xai_instance.get_default_visualisation())
@@ -61,9 +62,9 @@ def build_model_panel(run, viz_param_key, query_params) -> ModelPanel:
 
 
     instance_id = query_params.get("instance_id")
-    explanation = xai_class.load_explanation(run, instance_id)
+    explanation = xai_class.load_explanation(modeleval, instance_id)
     return ModelPanel(
-        run=run,
+        modeleval=modeleval,
         xai_class=xai_class,
         xai_instance=xai_instance,
         viz_key=viz_param_key,
@@ -74,7 +75,7 @@ def build_model_panel(run, viz_param_key, query_params) -> ModelPanel:
 
 
 def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
-    st.subheader(f"**{panel.run.get('model_display_name')} Explanation:**")
+    st.subheader(f"**{panel.modeleval.get('model_display_name')} Explanation:**")
     axis_range = [-1.1, 1.1]
 
     viz_options = panel.xai_instance.get_compatible_visualisations()
@@ -96,4 +97,4 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
                 st.html(viz)
         st.html(panel.xai_instance.display_notes)
     except NotImplementedError:
-        st.warning(f"{panel.viz_name} is not yet implemented for {panel.run.get('model_display_name')}")
+        st.warning(f"{panel.viz_name} is not yet implemented for {panel.modeleval.get('model_display_name')}")

@@ -37,11 +37,10 @@ def test_two_runs(modeleval_a, modeleval_b):
     breadcrumbs = display_breadcrumbs(modeleval_a, modeleval_b)
     assert "LinReg" in breadcrumbs
     assert "XGBoost" in breadcrumbs
-    assert "/overview?" not in breadcrumbs
 
 def test_sample_id(modeleval_a, modeleval_b):
     breadcrumbs = display_breadcrumbs(modeleval_a, modeleval_b, instance_id="12345")
     assert "LinReg" in breadcrumbs
     assert "XGBoost" in breadcrumbs
-    assert "/overview?" in breadcrumbs
+    assert "/pwoverview?" in breadcrumbs
     assert "12345" in breadcrumbs

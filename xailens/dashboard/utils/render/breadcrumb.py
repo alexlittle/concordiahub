@@ -1,5 +1,5 @@
 from xailens.entities.modeleval import ModelEval
-
+from xailens.dashboard import settings
 
 
 def display_breadcrumbs(modeleval_a: ModelEval=None, modeleval_b: ModelEval=None, instance_id:str = None) -> str:
@@ -9,7 +9,7 @@ def display_breadcrumbs(modeleval_a: ModelEval=None, modeleval_b: ModelEval=None
     if modeleval_a and modeleval_b:
         if instance_id:
             parts.append(f"""
-            <a href='/overview?runs={modeleval_a.get('model_uuid')},{modeleval_b.get('model_uuid')}' target='_self'>
+            <a href='/{settings.PW_OVERVIEW_FILENAME}?modelevals={modeleval_a.get('model_uuid')},{modeleval_b.get('model_uuid')}' target='_self'>
             {modeleval_a.get("model_display_name")} &amp; {modeleval_b.get("model_display_name")}</a>
             """)
         else:

@@ -6,7 +6,7 @@ from xailens.dashboard.utils.render.breadcrumb import display_breadcrumbs
 from xailens.services.comparison import build_comparison_df
 from xailens.exceptions import  InvalidUrlParamsError
 from xailens.dashboard.utils.params import get_modelevals_from_url_param
-from xailens.dashboard.utils.comparison import generate_comparison_table_html, render_run_summary
+from xailens.dashboard.utils.comparison import generate_comparison_table_html, render_modeleval_summary
 from xailens import strings
 
 def main():
@@ -27,10 +27,10 @@ def main():
     col1, col2 = st.columns(2, gap="large")
 
     with col1:
-        render_run_summary(modeleval_a)
+        render_modeleval_summary(modeleval_a)
 
     with col2:
-        render_run_summary(modeleval_b)
+        render_modeleval_summary(modeleval_b)
 
     st.markdown("**Test instances available for comparison:**")
     table_html = generate_comparison_table_html(df, modeleval_a, modeleval_b)
