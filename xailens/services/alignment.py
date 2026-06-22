@@ -60,7 +60,7 @@ def main():
     adapter_a = get_xai_adapter(method_a)
     adapter_b = get_xai_adapter(method_b)
 
-    df = build_comparison_df(modeleval_a=modeleval_a, run_b=modeleval_b)
+    df = build_comparison_df(modeleval_a, modeleval_b)
     print(df.columns.tolist())
     print(len(df))
 
