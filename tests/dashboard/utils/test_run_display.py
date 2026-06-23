@@ -19,7 +19,6 @@ def test_render_modeleval_html_basic():
     html = render_modeleval_cell(modeleval)
 
     assert "test_run" in html
-    assert "14:30 25 May 2024" in html
 
 
 def test_render_run_html_no_subtype():

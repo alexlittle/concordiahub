@@ -1,6 +1,5 @@
 import streamlit as st
 from xailens import constants, strings
-from xailens.formatting import format_datetime
 from xailens.dashboard.utils.styles import get_badge_class
 from xailens.entities.modeleval import ModelEval
 
@@ -8,7 +7,6 @@ def render_modeleval_summary(model:ModelEval):
     badge_class = get_badge_class(model.get("model_type"))
     badge_label = model.get("model_type")
     model_display_name = model.get("model_display_name")
-    date_str = format_datetime(model.get("datetime"))
     dataset_id = model.get("dataset_id")
     methods_html = "".join(
         f'<span class="tag">{strings.XAI_METHOD_DISPLAY_NAME[m]}</span> ' for m in (model.get("xai_methods") or [])
@@ -20,8 +18,6 @@ def render_modeleval_summary(model:ModelEval):
         <h3>{model_display_name}</h3>
     </div>
     <p class="model-meta">
-        {date_str}
-        &nbsp;&middot;&nbsp;
         <span class="tag">{dataset_id}</span>
         {methods_html}
     </p>

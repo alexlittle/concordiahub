@@ -1,7 +1,6 @@
 import streamlit as st
 
 from xailens.entities.modeleval import ModelEval
-from xailens.formatting import format_datetime
 from xailens import strings
 from xailens.dashboard.utils.styles import get_badge_class
 from xailens.dashboard import settings
@@ -9,12 +8,11 @@ from xailens.dashboard import settings
 def render_modeleval_cell(modeleval: ModelEval) -> str:
     model_display_name = modeleval.get("model_display_name")
     model_type = modeleval.get("model_type", "")
-    dt         = format_datetime(modeleval.datetime)
-    metrics    = modeleval.get("metrics") or {}
-    acc        = metrics.get("accuracy")
-    f1         = metrics.get("f1_macro")
-    acc_str    = f"accuracy {acc:.2f}" if acc is not None else ""
-    f1_str     = f"F1-macro {f1:.2f}"  if f1  is not None else ""
+    metrics = modeleval.get("metrics") or {}
+    acc = metrics.get("accuracy")
+    f1 = metrics.get("f1_macro")
+    acc_str = f"accuracy {acc:.2f}" if acc is not None else ""
+    f1_str = f"F1-macro {f1:.2f}"  if f1  is not None else ""
     metric_str = " &middot; ".join(filter(None, [acc_str, f1_str]))
 
     return f"""
@@ -25,7 +23,6 @@ def render_modeleval_cell(modeleval: ModelEval) -> str:
         </div>
         <div class="run-cell-meta">
             {metric_str}
-            &nbsp;&middot;&nbsp; {dt}
         </div>
         <div class="run-cell-run-name">{model_display_name}</div>
     </div>
@@ -35,7 +32,7 @@ def render_modeleval_cell(modeleval: ModelEval) -> str:
 def display_comparable_runs(groups: list[list[ModelEval]]):
     if not groups:
         st.info("No comparable models found.")
-        return
+        return ""
 
     rows_html = """
        <div class="run-card-header">

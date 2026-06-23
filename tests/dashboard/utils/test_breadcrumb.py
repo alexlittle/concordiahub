@@ -27,19 +27,19 @@ def modeleval_b():
 
 def test_no_params():
     breadcrumbs = display_breadcrumbs()
-    assert "<a href='/' target='_self'>Home</a>" == breadcrumbs
+    assert "<div class='breadcrumbs'><a href='/' target='_self'>Home</a></div>" == breadcrumbs
 
 def test_one_run(modeleval_a):
-    breadcrumbs = display_breadcrumbs(modeleval_a)
-    assert "<a href='/' target='_self'>Home</a>" == breadcrumbs
+    breadcrumbs = display_breadcrumbs(modeleval_a=modeleval_a)
+    assert "<div class='breadcrumbs'><a href='/' target='_self'>Home</a></div>" == breadcrumbs
 
 def test_two_runs(modeleval_a, modeleval_b):
-    breadcrumbs = display_breadcrumbs(modeleval_a, modeleval_b)
+    breadcrumbs = display_breadcrumbs(modeleval_a=modeleval_a, modeleval_b=modeleval_b)
     assert "LinReg" in breadcrumbs
     assert "XGBoost" in breadcrumbs
 
 def test_sample_id(modeleval_a, modeleval_b):
-    breadcrumbs = display_breadcrumbs(modeleval_a, modeleval_b, instance_id="12345")
+    breadcrumbs = display_breadcrumbs(modeleval_a=modeleval_a, modeleval_b=modeleval_b, instance_id="12345")
     assert "LinReg" in breadcrumbs
     assert "XGBoost" in breadcrumbs
     assert "/pwoverview?" in breadcrumbs
