@@ -23,11 +23,11 @@ def render_modeleval_summary(model:ModelEval):
     </p>
     """)
 
-    metrics = model.get("metrics") or {}
+    metrics = model.get_metrics()
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric("Accuracy", f"{metrics.get('accuracy'):.1%}")
-    col2.metric("Macro F1", f"{metrics.get('f1_macro'):.3f}")
-    col3.metric("Weighted F1", f"{metrics.get('f1_weighted'):.3f}")
+    col1.metric("Accuracy", f"{metrics['accuracy']:.1%}")
+    col2.metric("Macro F1", f"{metrics['f1_macro']:.3f}")
+    col3.metric("Weighted F1", f"{metrics['f1_weighted']:.3f}")
 
     n_failed = metrics['n_failed']
     n_instances = metrics['n_instances']

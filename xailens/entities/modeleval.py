@@ -56,6 +56,9 @@ class ModelEval:
         merged = y_true.merge(y_pred, on=self.get(constants.DATA_SCHEMA_ID_COLUMN), how='inner')
         return (merged[target_cols], merged[pred_cols])
 
+    def get_metrics(self):
+        return self.store.load_series("metrics")
+
 
     def confusion_matrix(self):
         y_true, y_pred = self._get_series()
