@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from dataclasses import fields
 
 from xailens import strings
@@ -23,7 +23,11 @@ def compute_metrics(data):
             "n_failed": len(full_test) - len(test_data),
             "accuracy": round(accuracy_score(test_data, pred_data), 4),
             "f1_macro": round(f1_score(test_data, pred_data, average='macro'), 4),
-            "f1_weighted": round(f1_score(test_data, pred_data, average='weighted'),4)
+            "f1_weighted": round(f1_score(test_data, pred_data, average='weighted'),4),
+            "precision_macro": round(precision_score(test_data, pred_data, average='macro', zero_division=0), 4),
+            "precision_weighted": round(precision_score(test_data, pred_data, average='weighted', zero_division=0), 4),
+            "recall_macro": round(recall_score(test_data, pred_data, average='macro', zero_division=0), 4),
+            "recall_weighted": round(recall_score(test_data, pred_data, average='weighted', zero_division=0), 4),
         })
         series.index.name = 'metric'
         series.name = 'value'

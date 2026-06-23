@@ -8,8 +8,8 @@
     "model_subtype": null,
     "model_dir_name": "heart_xgboost",
     "response_schema": null,
-    "datetime": "20260623-131414",
-    "model_uuid": "ac53c095-2e1d-4406-932a-902c84de8198",
+    "datetime": "20260623-184959",
+    "model_uuid": "5f6652e5-8af8-44d6-b388-9c8100b13d39",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

@@ -11,8 +11,8 @@
         "contributions_field": "feature_contributions",
         "contribution_key": null
     },
-    "datetime": "20260623-131627",
-    "model_uuid": "601a2369-6bc8-4752-ae0a-472dceb87cc4",
+    "datetime": "20260623-185011",
+    "model_uuid": "15df8ec0-396e-40df-bffb-856626fb384a",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
