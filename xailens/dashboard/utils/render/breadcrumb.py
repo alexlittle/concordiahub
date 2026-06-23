@@ -2,9 +2,15 @@ from xailens.entities.modeleval import ModelEval
 from xailens.dashboard import settings
 
 
-def display_breadcrumbs(modeleval_a: ModelEval=None, modeleval_b: ModelEval=None, instance_id:str = None) -> str:
+def display_breadcrumbs(dataset: str = None,
+                        modeleval_a: ModelEval=None,
+                        modeleval_b: ModelEval=None,
+                        instance_id:str = None) -> str:
     parts = []
     parts.append("<a href='/' target='_self'>Home</a>")
+
+    if dataset:
+        parts.append(f"<a href='/{settings.DATASET_FILENAME}?dataset={dataset}' target='_self'>{dataset}</a>")
 
     if modeleval_a and modeleval_b:
         if instance_id:
@@ -19,5 +25,5 @@ def display_breadcrumbs(modeleval_a: ModelEval=None, modeleval_b: ModelEval=None
 
     if instance_id:
         parts.append(f"{instance_id}")
-
-    return " &nbsp;&gt;&nbsp; ".join(parts)
+    
+    return f"<div class='breadcrumbs'>{' &nbsp;&gt;&nbsp; '.join(parts)}</div>"

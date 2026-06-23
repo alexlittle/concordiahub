@@ -46,6 +46,17 @@ class ModelExplorer:
                     models[modeleval_obj.get("model_display_name")] = modeleval["model_uuid"]
         return dict(sorted(models.items()))
 
+    def is_valid_dataset(self, dataset) -> bool:
+        """Checks if dataset is valid
+        Args:
+            dataset str: dataset name
+        Returns:
+        """
+        for modeleval in self._metadata_cache:
+            if modeleval["dataset_id"] == dataset:
+                return True
+        return False
+
     def get_comparable_modelevals(self, n: int = 50) -> list[list[dict]]:
         """Returns pairs of model_data that share a dataset but have different model types
         Args:

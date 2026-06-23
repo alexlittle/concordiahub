@@ -87,6 +87,10 @@ p {
     text-decoration:none;
 }
 
+.breadcrumbs {
+    padding-bottom: 20px;
+}
+
 /*
     Sidebar elements
  */
