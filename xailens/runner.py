@@ -29,17 +29,22 @@ def compute_metrics(data):
         return ModelMetrics()
 
 def run(ctx: ModelContext):
+    print(strings.RUN_STARTING)
+
     # check ctx provided
     if ctx is None:
         raise InvalidConfigurationError("Context (ctx) is required")
 
+    print(strings.RUN_COMPUTING_METRICS)
     ctx.metrics = compute_metrics(ctx.data)
 
+    print(strings.RUN_SAVING_METADATA)
     # store all the raw data
     artifact_store = ArtifactStore(ctx)
     artifact_store.write_metadata()
 
     # save model
+    print(strings.RUN_SAVING_MODEL_DATA)
     artifact_store.write_model()
 
     # save RunData as files
@@ -48,6 +53,7 @@ def run(ctx: ModelContext):
             artifact_store.write_data(field.name, getattr(ctx.data, field.name))
 
     # run the XAI methods
+    print(strings.RUN_RUNNING_XAI_METHODS)
     model_class = get_model_adapter(ctx.model_type)
     model_adapter = model_class(ctx.model)
 
@@ -65,7 +71,11 @@ def run(ctx: ModelContext):
             encoded_features = encoder.encode_feature_names(df)
             artifact_store.write_data("feature_name_embeddings", encoded_features)
 
+        # Run the global explanations
+        print(strings.RUN_GLOBAL_EXPLANATIONS.format(xai_method=xai_method))
+
         # Run the local explanations
+        print(strings.RUN_LOCAL_EXPLANATIONS.format(xai_method=xai_method))
         if xai_adapter.explanation_file_type == "json":
             results = xai_adapter.explain_local_json(ctx)
             artifact_store.write_explanation(f"explanations_{xai_method}", results, type="json")

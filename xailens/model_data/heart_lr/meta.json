@@ -15,8 +15,8 @@
         "n_instances": 303,
         "n_failed": 0
     },
-    "datetime": "20260622-201318",
-    "model_uuid": "c8bdf326-f7dd-4791-8a09-510d76abd59a",
+    "datetime": "20260623-101558",
+    "model_uuid": "928afa68-ee99-4100-9fbc-aa8606797cea",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
