@@ -43,7 +43,7 @@ def test_missing_sample_raises():
 def test_loads_correct_dataframe():
     run = make_run()
     CoefficientsAdapter.load_explanation(run, "sample-1")
-    run.store.load_dataframe.assert_called_once_with(f"explanations_{CoefficientsAdapter.key}")
+    run.store.load_dataframe.assert_called_once_with(f"exp_local_{CoefficientsAdapter.key}")
 
 def test_uses_correct_id_column():
     df = pd.DataFrame({

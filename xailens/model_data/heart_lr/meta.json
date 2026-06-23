@@ -8,15 +8,8 @@
     "model_subtype": null,
     "model_dir_name": "heart_lr",
     "response_schema": null,
-    "metrics": {
-        "accuracy": 0.8449,
-        "f1_macro": 0.8429,
-        "f1_weighted": 0.8444,
-        "n_instances": 303,
-        "n_failed": 0
-    },
-    "datetime": "20260623-101558",
-    "model_uuid": "928afa68-ee99-4100-9fbc-aa8606797cea",
+    "datetime": "20260623-131345",
+    "model_uuid": "6f95bb20-0416-4e48-9fd7-e0d9de994b2b",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

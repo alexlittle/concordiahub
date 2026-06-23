@@ -54,6 +54,9 @@ class ArtifactStore:
         if self.ctx.model:
             self.store.save_model(config.MODEL_FILENAME ,self.ctx.model)
 
+    def write_metrics(self, metrics_series: pd.Series):
+        self.store.save_series("metrics", metrics_series)
+
     def write_data(self, name, data):
         if data is None:
             return

@@ -14,6 +14,9 @@ class DataStore(ABC):
     def save_dataframe(self, filename, data): pass
 
     @abstractmethod
+    def save_series(self, filename, data): pass
+
+    @abstractmethod
     def save_model(self, filename, model): pass
 
     @abstractmethod
@@ -24,3 +27,6 @@ class DataStore(ABC):
 
     @abstractmethod
     def load_json(self, filename) -> pd.DataFrame: pass
+
+    @abstractmethod
+    def load_series(self, filename) -> pd.Series: pass

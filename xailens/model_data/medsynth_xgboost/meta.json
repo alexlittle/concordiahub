@@ -4,19 +4,12 @@
         "tree_shap"
     ],
     "dataset_id": "medsynth",
-    "model_subtype": null,
     "model_display_name": "XGBoost",
+    "model_subtype": null,
     "model_dir_name": "medsynth_xgboost",
     "response_schema": null,
-    "metrics": {
-        "accuracy": 0.5767,
-        "f1_macro": 0.5306,
-        "f1_weighted": 0.5751,
-        "n_instances": 2048,
-        "n_failed": 0
-    },
-    "datetime": "20260622-185037",
-    "model_uuid": "9389837b-0bc5-4ac9-bc7e-7984d778975e",
+    "datetime": "20260623-132116",
+    "model_uuid": "6b8da73c-7382-4611-8506-c7988f351038",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "y_test",

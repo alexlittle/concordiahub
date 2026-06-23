@@ -25,7 +25,7 @@ class XAIMethodAdapter(ABC):
 
     @classmethod
     def load_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
-        df = modeleval.store.load_dataframe(f"explanations_{cls.key}")
+        df = modeleval.store.load_dataframe(f"exp_local_{cls.key}")
         row = df[df[modeleval.get(constants.DATA_SCHEMA_ID_COLUMN)] == instance_id]
         if row.empty:
             raise MissingDataError(f"Instance '{instance_id}' not found in explanations for {cls.key}")

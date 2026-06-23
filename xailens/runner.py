@@ -1,12 +1,12 @@
-
+import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score
 from dataclasses import fields
 
 from xailens import strings
-from xailens.exceptions import InvalidConfigurationError
+from xailens.exceptions import InvalidConfigurationError, MissingDataError
 from xailens.encoder import XAITextEncoder
 from xailens.artifacts import ArtifactStore
-from xailens.entities.context import ModelContext, ModelMetrics
+from xailens.entities.context import ModelContext
 from xailens.registry.model_registry import get_model_adapter
 from xailens.registry.xai_registry import get_xai_adapter
 
@@ -18,15 +18,18 @@ def compute_metrics(data):
 
         pred_data = data.y_pred.set_index(instance_id).squeeze()
         test_data = full_test.set_index(instance_id).loc[pred_data.index].squeeze()
-
-        return ModelMetrics(
-            n_instances=len(test_data),
-            n_failed=len(full_test) - len(test_data),
-            accuracy=round(accuracy_score(test_data, pred_data), 4),
-            f1_macro=round(f1_score(test_data, pred_data, average='macro'), 4),
-            f1_weighted=round(f1_score(test_data, pred_data, average='weighted'), 4))
+        series = pd.Series({
+            "n_instances": len(test_data),
+            "n_failed": len(full_test) - len(test_data),
+            "accuracy": round(accuracy_score(test_data, pred_data), 4),
+            "f1_macro": round(f1_score(test_data, pred_data, average='macro'), 4),
+            "f1_weighted": round(f1_score(test_data, pred_data, average='weighted'),4)
+        })
+        series.index.name = 'metric'
+        series.name = 'value'
+        return series
     else:
-        return ModelMetrics()
+        raise MissingDataError("Cannot compute metrics because y or y_test, and y_pred are required")
 
 def run(ctx: ModelContext):
     print(strings.RUN_STARTING)
@@ -35,12 +38,15 @@ def run(ctx: ModelContext):
     if ctx is None:
         raise InvalidConfigurationError("Context (ctx) is required")
 
-    print(strings.RUN_COMPUTING_METRICS)
-    ctx.metrics = compute_metrics(ctx.data)
-
-    print(strings.RUN_SAVING_METADATA)
-    # store all the raw data
     artifact_store = ArtifactStore(ctx)
+
+    # Compute and store metrics
+    print(strings.RUN_COMPUTING_METRICS)
+    metrics = compute_metrics(ctx.data)
+    artifact_store.write_metrics(metrics)
+
+    # store all the metadata
+    print(strings.RUN_SAVING_METADATA)
     artifact_store.write_metadata()
 
     # save model
@@ -78,9 +84,9 @@ def run(ctx: ModelContext):
         print(strings.RUN_LOCAL_EXPLANATIONS.format(xai_method=xai_method))
         if xai_adapter.explanation_file_type == "json":
             results = xai_adapter.explain_local_json(ctx)
-            artifact_store.write_explanation(f"explanations_{xai_method}", results, type="json")
+            artifact_store.write_explanation(f"exp_local_{xai_method}", results, type="json")
         else:
             results = xai_adapter.explain_local_df(ctx, model_adapter.prepare())
-            artifact_store.write_explanation(f"explanations_{xai_method}", results, type="df")
+            artifact_store.write_explanation(f"exp_local_{xai_method}", results, type="df")
 
     print(strings.RUN_COMPLETE)

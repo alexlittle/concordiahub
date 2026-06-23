@@ -5,7 +5,7 @@ from examples import config
 from examples.helpers import safe_dirname
 from helpers import ICD10_CHAPTERS
 
-current_model = "gemma3_27b-it-qat"
+current_model = "qwen2.5:14b-instruct-q8_0"
 dir_name = f"llm_{safe_dirname(current_model)}"
 X = pd.read_parquet(f"./cache/medsynth/{dir_name}/X.parquet")
 y = pd.read_parquet(f"./cache/medsynth/{dir_name}/y.parquet")
@@ -46,7 +46,7 @@ ctx = xai.ModelContext(
     model_data,
     model_subtype=current_model,
     model_dir_name=f"medsynth_llm_{safe_dirname(current_model)}",
-    model_display_name="Example 5a",
+    model_display_name="Qwen 2.5",
     response_schema=schema)
 
 xai.run(ctx)

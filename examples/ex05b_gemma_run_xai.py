@@ -1,0 +1,52 @@
+import pandas as pd
+import xailens as xai
+
+from examples import config
+from examples.helpers import safe_dirname
+from helpers import ICD10_CHAPTERS
+
+current_model = "gemma3_27b-it-qat"
+dir_name = f"llm_{safe_dirname(current_model)}"
+X = pd.read_parquet(f"./cache/medsynth/{dir_name}/X.parquet")
+y = pd.read_parquet(f"./cache/medsynth/{dir_name}/y.parquet")
+y_pred = pd.read_parquet(f"./cache/medsynth/{dir_name}/y_preds.parquet")
+y_exp = pd.read_parquet(f"./cache/medsynth/{dir_name}/y_exp.parquet")
+
+
+
+y["target"] = y["target"].map(
+    lambda code: f"{code}: {ICD10_CHAPTERS[code]}" if code in ICD10_CHAPTERS else code
+)
+y_pred["prediction"] = y_pred["prediction"].map(
+    lambda code: f"{code}: {ICD10_CHAPTERS[code]}" if code in ICD10_CHAPTERS else code
+)
+
+
+schema = xai.ResponseSchema(
+    contributions_field="key_factors",
+    contribution_key="phrase",
+)
+
+data_schema = xai.DataSchema(
+    instance_id_column=config.INSTANCE_UUID_COL,
+    target_column="target",
+    prediction_column="prediction")
+
+model_data = xai.ModelData(
+    data_schema=data_schema,
+    x=X,
+    y=y,
+    y_pred=y_pred,
+    y_exp=y_exp)
+
+ctx = xai.ModelContext(
+    "llm",
+    ["cor"],
+    "medsynth",
+    model_data,
+    model_subtype=current_model,
+    model_dir_name=f"medsynth_llm_{safe_dirname(current_model)}",
+    model_display_name="Gemma 3",
+    response_schema=schema)
+
+xai.run(ctx)

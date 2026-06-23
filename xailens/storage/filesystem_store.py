@@ -19,9 +19,13 @@ class FilesystemStore(DataStore):
         with open(os.path.join(self.dirname, f"{name}.json"), "w") as f:
             json.dump(data, f, indent=4)
 
-    def save_dataframe(self, name, df):
+    def save_dataframe(self, name, df:pd.DataFrame):
         path = os.path.join(self.dirname, f"{name}.csv")
         df.to_csv(path, index=False)
+
+    def save_series(self, name:str, series: pd.Series):
+        path = os.path.join(self.dirname, f"{name}.csv")
+        series.to_csv(path)
 
     def save_explanation(self, name, data, type="df"):
         if type == "df":
@@ -32,7 +36,6 @@ class FilesystemStore(DataStore):
             with open(os.path.join(self.dirname, f"{name}.json"), "w") as f:
                 json.dump(data, f, indent=4)
 
-
     def save_model(self, name, model):
         joblib.dump(model, os.path.join(self.dirname, f"{name}.joblib"))
 
@@ -42,3 +45,6 @@ class FilesystemStore(DataStore):
     def load_json(self, name:str) -> list:
         with open(os.path.join(self.dirname, f"{name}.json"), 'r') as f:
             return json.load(f)
+
+    def load_series(self, name:str) -> pd.Series:
+        return pd.read_csv(os.path.join(self.dirname, f"{name}.csv"), index_col=0).squeeze()

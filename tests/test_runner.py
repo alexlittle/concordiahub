@@ -1,9 +1,8 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
-
 from xailens import runner
-from xailens.exceptions import InvalidConfigurationError
+from xailens.exceptions import InvalidConfigurationError, MissingDataError
 from xailens.entities.context import ModelContext, ModelData, DataSchema
 
 MODULE_UNDER_TEST = "xailens.runner"
@@ -27,5 +26,5 @@ def test_runner_invalid_model() -> None:
     ctx = ModelContext("unknown", [], "test_dataset", run_data, "model disp name")
     with patch("xailens.runner.ArtifactStore") as mock_store:
         mock_store.return_value = MagicMock()
-        with pytest.raises(InvalidConfigurationError, match="Model adapter"):
+        with pytest.raises(MissingDataError, match="Cannot compute"):
             runner.run(ctx)

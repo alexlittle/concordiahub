@@ -54,7 +54,7 @@ class CoRAdapter(XAIMethodAdapter):
 
     @classmethod
     def load_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
-        records = modeleval.store.load_json(f"explanations_{cls.key}")
+        records = modeleval.store.load_json(f"exp_local_{cls.key}")
         instance_id_col = modeleval.get(constants.DATA_SCHEMA_ID_COLUMN)
 
         row = next((r for r in records if r[instance_id_col] == instance_id), None)

@@ -11,15 +11,6 @@ from xailens.schema import DataSchema, ResponseSchema
 
 
 @dataclass
-class ModelMetrics:
-    accuracy: Optional[float] = None
-    f1_macro: Optional[float] = None
-    f1_weighted: Optional[float] = None
-    n_instances: Optional[int] = None
-    n_failed: Optional[int] = None
-
-
-@dataclass
 class ModelData:
     """
     Dataclass structure for ModelData to be passed to runner
@@ -49,7 +40,6 @@ class ModelContext:
     model_subtype: Optional[str] = None
     model_dir_name: Optional[str] = None
     response_schema: Optional[ResponseSchema] = None
-    metrics: Optional[ModelMetrics] = None
 
 
 @dataclass

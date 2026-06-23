@@ -4,19 +4,12 @@
         "tree_shap"
     ],
     "dataset_id": "cleveland-heart-data",
-    "model_subtype": null,
     "model_display_name": "XGBoost",
+    "model_subtype": null,
     "model_dir_name": "heart_xgboost",
     "response_schema": null,
-    "metrics": {
-        "accuracy": 0.8689,
-        "f1_macro": 0.8688,
-        "f1_weighted": 0.869,
-        "n_instances": 61,
-        "n_failed": 0
-    },
-    "datetime": "20260622-194844",
-    "model_uuid": "9a18e0fb-a587-4c18-b6e0-123ffdb42a0c",
+    "datetime": "20260623-131414",
+    "model_uuid": "ac53c095-2e1d-4406-932a-902c84de8198",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
