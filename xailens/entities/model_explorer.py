@@ -46,6 +46,18 @@ class ModelExplorer:
                     models[modeleval_obj.get("model_display_name")] = modeleval["model_uuid"]
         return dict(sorted(models.items()))
 
+    def get_modelevals_for_dataset(self, dataset: str) -> [ModelEval]:
+        """ Gets all the models for the given dataset name
+        Args:
+            dataset str: dataset name
+        Returns:
+            list of ModelEval"""
+        modelevals = []
+        for modeleval in self._metadata_cache:
+            if modeleval["dataset_id"] == dataset:
+                modelevals.append(self.get_modeleval_by_uuid(modeleval["model_uuid"]))
+        return modelevals
+
     def is_valid_dataset(self, dataset) -> bool:
         """Checks if dataset is valid
         Args:
