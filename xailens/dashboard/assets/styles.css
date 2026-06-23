@@ -159,24 +159,32 @@ section[data-testid="stSidebar"] {
     width: 200px;
     height: 100px;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 0.25rem;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
     text-decoration: none;
-    font-size: 14pt;
-    font-weight: 500;
-    text-align: center;
+    color: inherit;        /* kills the blue link colour on all children */
     padding: 0.75rem;
     box-sizing: border-box;
     transition: box-shadow 0.15s ease;
+}
+.dataset-card-title {
+    font-size: 14pt;
+    font-weight: 500;
+    text-align: center;
+}
+.dataset-card-count {
+    font-size: 12pt;
+    font-weight: 400;
 }
 
 .dataset-card:hover {
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     background-color: var(--color-sidebar-bg);
 }
-
 
 /*
     Run card elements

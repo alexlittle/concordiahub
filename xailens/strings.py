@@ -18,13 +18,17 @@ APP_NAME = "XAI Lens"
 # sidebar
 SIDEBAR_FILTER_TITLE = "Quick Filter:"
 
-# homepage
+# Page titles
 HOMEPAGE_TITLE = "Select a dataset"
 DATASET_TITLE = "Dataset Comparison"
 INSTANCE_TITLE = "Instance Comparison"
 PAIRWISE_TITLE = "Pair-wise Comparison"
 PAIRWISE_INSTANCE_TITLE = "Pair-wise Instance Detail"
 
+# Homepage elements
+HOME_DATASET_NUM_MODELS = "{count} models"
+
+# Unused?
 HOMEPAGE_HELPER = "Select a comparison to explore, or use the filters to narrow down by dataset and/or model type."
 BTN_GO_TO_COMPARISON = "Go to comparison &#10132;"
 OVERVIEW_TITLE = "Comparison Overview"

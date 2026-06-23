@@ -9,11 +9,9 @@ from xailens import strings
 def main():
     explorer = get_explorer()
 
-    all_datasets= explorer.get_datasets()
-
     apply_layout(strings.HOMEPAGE_TITLE)
 
-    st.html(home.render_datasets(all_datasets))
+    st.html(home.render_datasets(explorer))
 
 if __name__ == "__main__":
     main()
