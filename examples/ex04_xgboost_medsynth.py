@@ -1,7 +1,6 @@
 import pandas as pd
 import joblib
 import spacy
-import re
 
 from tqdm import tqdm
 
@@ -9,7 +8,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
 
-from helpers import check_gpu
+from helpers import check_gpu, clean_text, extract_spans_from_doc
 from examples import config
 
 
@@ -23,32 +22,7 @@ try:
 except OSError:
     raise OSError("spaCy model not found. Run: python -m spacy download en_core_web_sm")
 
-def extract_spans_from_doc(doc) -> str:
-    """Extracts noun chunks from a sentence."""
-    spans = (
-            [chunk.text.lower() for chunk in doc.noun_chunks] +
-            [ent.text.lower() for ent in doc.ents]
-    )
-    seen = set()
-    unique_spans = []
-    for s in spans:
-        # strip chars that will break feature name columns
-        s = re.sub(r'[\[\]<>]', '', s).strip()
-        s = s.strip()
-        if s and s not in seen:
-            seen.add(s)
-            unique_spans.append(s)
-    return " | ".join(unique_spans)
 
-
-def clean_text(text: str) -> str:
-    """Strip formatting/punctuation/spaces before processing."""
-    text = re.sub(r'#{1,6}\s*', '', text)
-    text = re.sub(r'\*{1,2}', '', text)
-    text = re.sub(r'^\s*[\*\-]\s+', '', text, flags=re.MULTILINE)
-    text = re.sub(r'^\s*\d+\.\s+', '', text, flags=re.MULTILINE)
-    text = re.sub(r'\s+', ' ', text)
-    return text.strip()
 
 # data to extract from the input file
 df = pd.read_csv(config.MEDSYNTH_FULL_FILE)

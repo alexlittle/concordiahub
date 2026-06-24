@@ -5,7 +5,11 @@ from xailens.dashboard.services import get_explorer
 from xailens.dashboard.utils.run_display import display_comparable_runs
 from xailens.dashboard.utils.filter import apply_dataset_filter
 from xailens.dashboard.utils.render.breadcrumb import display_breadcrumbs
-from xailens.dashboard.utils.render.dataset import render_accuracy_barchart, render_f1_weighted_barchart
+from xailens.dashboard.utils.render.dataset import (
+    render_accuracy_barchart,
+    render_f1_weighted_barchart,
+    render_precision_weighted_barchart,
+    render_recall_weighted_barchart)
 from xailens.entities.dataset import Dataset
 
 def main():
@@ -29,13 +33,20 @@ def main():
     metrics = dataset_obj.get_metrics()
     metrics = metrics.sort_values(by=['model'])
 
-    # overall stat graphs for accuracy etc
+    # overall stat graphs for accuracy /f1
     col1, col2 = st.columns(2, gap="large")
 
     with col1:
         st.plotly_chart(render_accuracy_barchart(metrics))
     with col2:
         st.plotly_chart(render_f1_weighted_barchart(metrics))
+
+    # precision/recall bar charts
+    col3, col4 = st.columns(2, gap="large")
+    with col3:
+        st.plotly_chart(render_precision_weighted_barchart(metrics))
+    with col4:
+        st.plotly_chart(render_recall_weighted_barchart(metrics))
 
     # instance info
 

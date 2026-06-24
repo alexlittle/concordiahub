@@ -6,7 +6,6 @@ from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 
-import xailens as xai
 from examples import config
 
 df = pd.read_csv(config.HEART_INPUT_FILE)

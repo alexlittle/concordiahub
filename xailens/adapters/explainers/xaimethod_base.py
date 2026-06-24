@@ -55,6 +55,21 @@ class XAIMethodAdapter(ABC):
         return self.default_visualisation
 
     @abstractmethod
+    def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+        """Computes the global explanation for the model
+        Args:
+            ctx: ModelContext object
+            model: Trained model object
+
+        Returns:
+            pd.DataFrame: dataframe containing global explanation
+
+        Raises:
+            MissingDataError: if required data is not provided
+        """
+        pass
+
+    @abstractmethod
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation for the model
         Args:
