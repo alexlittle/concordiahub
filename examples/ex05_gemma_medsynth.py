@@ -19,7 +19,7 @@ df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 # as these will be the only ones that appear in the comparison
 xgboost_df = pd.read_parquet('./cache/medsynth/xgboost/y_test.parquet')
 
-df = df[df['sample_uuid'].isin(xgboost_df['sample_uuid'])].reset_index(drop=True)
+df = df[df['instance_uuid'].isin(xgboost_df['instance_uuid'])].reset_index(drop=True)
 
 # -----------------------------
 # Prompt template
@@ -79,11 +79,11 @@ for idx, row in df.iterrows():
     response, valid_json = parse_response(llm_response)
     if valid_json:
         pred_output = {
-            "sample_uuid": row["sample_uuid"],
+            "instance_uuid": row["instance_uuid"],
             "prediction": response["prediction"]
         }
         exp_output = {
-            "sample_uuid": row["sample_uuid"],
+            "instance_uuid": row["instance_uuid"],
             "explanation": json.dumps(response, default=str)
         }
         pred_outputs.append(pred_output)
@@ -93,7 +93,7 @@ for idx, row in df.iterrows():
         print(f"Explanation: {exp_output['explanation']}")
     else:
         exp_output = {
-            "sample_uuid": row["sample_uuid"],
+            "instance_uuid": row["instance_uuid"],
             "explanation": response
         }
         exp_outputs.append(exp_output)
