@@ -16,7 +16,7 @@ device = check_gpu()
 print(f"System check: {device} detected.")
 
 # load the spaCy model
-# uses: https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl
+    # uses: https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl
 try:
     nlp = spacy.load("en_core_web_sm")
 except OSError:
