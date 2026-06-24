@@ -8,6 +8,7 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from examples import config
 from examples.helpers import safe_dirname
 
+MODEL = "qwen2.5:14b-instruct-q8_0"
 # -----------------------------
 # Load input conversations
 # -----------------------------
@@ -40,7 +41,7 @@ def run_llm_request(scenario):
     system_prompt = system_prompt_template.render()
 
     response = ollama.chat(
-        model=config.MEDSYNTH_OLLAMA_MODEL,
+        model=MODEL,
         stream=False,
         format="json",
         messages=[
@@ -104,7 +105,7 @@ y = df[[config.INSTANCE_UUID_COL, "target"]]
 X = df.drop(columns=["target"])
 
 
-dir_name = f"llm_{safe_dirname(config.MEDSYNTH_OLLAMA_MODEL)}"
+dir_name = f"llm_{safe_dirname(MODEL)}"
 os.makedirs(f"./cache/medsynth/{dir_name}/", exist_ok=True)
 
 X.to_parquet(f"./cache/medsynth/{dir_name}/X.parquet")
