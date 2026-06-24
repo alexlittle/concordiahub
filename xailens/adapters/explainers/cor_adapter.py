@@ -82,6 +82,9 @@ class CoRAdapter(XAIMethodAdapter):
             for feature, data in row["contributions"].items()
         ])
 
+    def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+        raise NotImplementedError
+
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         raise NotImplementedError
 

@@ -26,6 +26,9 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         df = super().load_explanation(modeleval, instance_id)
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
+    def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+        raise NotImplementedError
+
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
         Args:
