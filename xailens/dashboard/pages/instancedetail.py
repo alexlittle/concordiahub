@@ -32,7 +32,7 @@ def main():
 
     # Display
     apply_layout(strings.DETAIL_TITLE)
-    st.html(display_breadcrumbs(modeleval_a, modeleval_b, instance_id))
+    st.html(display_breadcrumbs(instance_id=instance_id))
     st.subheader("**Comparison Explanation:**")
 
     try:

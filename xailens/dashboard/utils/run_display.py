@@ -3,7 +3,6 @@ import streamlit as st
 from xailens.entities.modeleval import ModelEval
 from xailens import strings
 from xailens.dashboard.utils.styles import get_badge_class
-from xailens.dashboard import settings
 
 def render_modeleval_cell(modeleval: ModelEval) -> str:
     model_display_name = modeleval.get("model_display_name")

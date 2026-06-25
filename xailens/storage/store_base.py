@@ -1,6 +1,6 @@
-'''
+"""
 Abstract class for storing data and model
-'''
+"""
 
 import pandas as pd
 from abc import ABC, abstractmethod
@@ -20,7 +20,7 @@ class DataStore(ABC):
     def save_model(self, filename, model): pass
 
     @abstractmethod
-    def save_explanation(self, filename, data, type): pass
+    def save_explanation(self, filename, data, data_format): pass
 
     @abstractmethod
     def load_dataframe(self, filename) -> pd.DataFrame: pass

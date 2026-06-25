@@ -1,6 +1,6 @@
-'''
+"""
 Context dataclasses for XAI-Compare
-'''
+"""
 
 import pandas as pd
 from dataclasses import dataclass

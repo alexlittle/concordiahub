@@ -72,8 +72,6 @@ def main():
         result["instance_uuid"] = instance_id
         rows.append(result)
 
-    alignment_df = pd.DataFrame(rows)
-    print(alignment_df)
 
 if __name__ == "__main__":
     main()

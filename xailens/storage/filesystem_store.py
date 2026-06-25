@@ -1,6 +1,6 @@
-'''
+"""
 Implementation of filesystem storage
-'''
+"""
 import os
 
 import joblib
@@ -27,8 +27,8 @@ class FilesystemStore(DataStore):
         path = os.path.join(self.dirname, f"{name}.csv")
         series.to_csv(path)
 
-    def save_explanation(self, name, data, type="df"):
-        if type == "df":
+    def save_explanation(self, name, data, data_format="df"):
+        if data_format == "df":
             path = os.path.join(self.dirname, f"{name}.csv")
             data.columns = data.columns.astype(str)
             data.to_csv(path, index=False)
