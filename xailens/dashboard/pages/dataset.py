@@ -16,7 +16,20 @@ def main():
 
     # get dataset from params
     dataset = st.query_params.get('dataset')
-    apply_layout(f"Dataset: {dataset}")
+    models_param = st.query_params.get("models")
+
+    all_modelevals = explorer.get_modelevals_for_dataset(dataset)
+    all_model_names = [me.get("model_display_name") for me in all_modelevals]
+
+    if models_param:
+        selected_model_names = models_param.split(",")
+    else:
+        selected_model_names = all_model_names
+
+    apply_layout(f"Dataset: {dataset}",
+                 all_model_names=sorted(all_model_names),
+                 selected_model_names=selected_model_names,
+                 dataset_id=dataset)
 
     if not explorer.is_valid_dataset(dataset):
         st.error(f"Dataset {dataset} does not exist")
@@ -26,7 +39,8 @@ def main():
     st.html(display_breadcrumbs(dataset))
 
     # Get all the models for the dataset
-    dataset_obj = Dataset(dataset, explorer.get_modelevals_for_dataset(dataset))
+    selected_modelevals = explorer. get_selected_modelevals_for_dataset(dataset, selected_model_names)
+    dataset_obj = Dataset(dataset, selected_modelevals)
 
     # Performance metrics
     st.html(f"<h2>{strings.PERF_METRICS_TITLE}</h2>")

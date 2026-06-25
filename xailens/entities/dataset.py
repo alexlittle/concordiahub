@@ -21,7 +21,7 @@ class Dataset:
         """Returns instance IDs common to all models."""
         common_ids = None
         for me in self.modelevals:
-            y_true, y_pred = me.load_targets()
+            y_true, _ = me.load_targets()
             ids = set(y_true[me.get(constants.DATA_SCHEMA_ID_COLUMN)].tolist())
             if common_ids is None:
                 common_ids = ids

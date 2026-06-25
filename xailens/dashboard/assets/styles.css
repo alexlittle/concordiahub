@@ -70,6 +70,13 @@ h2 {
     margin: 0;
 }
 
+h3 {
+    font-size: 1.3em !important;
+    font-weight: 500 !important;
+    padding: 0;
+    margin: 0;
+}
+
 p {
     margin: 5px 0 !important;
 }
@@ -109,6 +116,11 @@ section[data-testid="stSidebar"] {
 
 [data-testid="stSidebar"] > div:first-child {
     padding-top: 0;
+}
+
+[data-testid="stSidebar"] span.st-bf {
+    background-color: var(--color-link) !important;
+    border-color: var(--color-link) !important;
 }
 
 /* so hide/show arrow always appears */
@@ -198,6 +210,9 @@ section[data-testid="stSidebar"] {
 
 [data-testid="stMetric"] {
     text-align: center;
+    background-color: var(--color-metric-bg);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
 }
 [data-testid="stMetricLabel"]  {
     justify-content: center;
@@ -359,11 +374,6 @@ a.pill-dataset--active {
 /*
     Overview page elements
  */
-[data-testid="stMetric"] {
-    background-color: var(--color-metric-bg);
-    border-radius: 8px;
-    padding: 1rem 1.25rem;
-}
 
 .model-header {
     display: flex;

@@ -19,7 +19,7 @@ You can now run the dashboard with `xailens-dash` to view the results.
 APP_NAME = "XAI Lens"
 
 # sidebar
-SIDEBAR_FILTER_TITLE = "Quick Filter:"
+SIDEBAR_MODEL_FILTER_TITLE = "Include models:"
 
 # Page titles
 HOMEPAGE_TITLE = "Select a dataset"

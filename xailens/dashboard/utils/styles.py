@@ -1,4 +1,4 @@
-# xailens/dashboard/components/styles.py
+
 
 from pathlib import Path
 import streamlit as st
