@@ -64,8 +64,8 @@ h1.logo {
 }
 
 h2 {
-    font-size: 120% !important;
-    font-weight: normal !important;
+    font-size: 1.6em !important;
+    font-weight: 500 !important;
     padding: 0;
     margin: 0;
 }
@@ -190,6 +190,28 @@ section[data-testid="stSidebar"] {
     background-color: var(--color-sidebar-bg);
 }
 
+
+
+/*
+    Dataset page elements
+ */
+
+[data-testid="stMetric"] {
+    text-align: center;
+}
+[data-testid="stMetricLabel"]  {
+    justify-content: center;
+    display: flex;
+}
+
+[data-testid="stMetricLabel"] p {
+    font-size: 1.0rem !important;
+}
+[data-testid="stMetricValue"] {
+    font-size: 2.5rem !important;
+    justify-content: center;
+    display: flex;
+}
 /*
     Run card elements
  */

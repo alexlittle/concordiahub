@@ -13,8 +13,6 @@ XAI Lens run completed, all the data and explanations have now been stored.
 You can now run the dashboard with `xailens-dash` to view the results.
 """
 
-
-
 # ----------------
 # App/page layout
 # ----------------
@@ -31,6 +29,24 @@ INSTANCE_DETAIL_TITLE = "Instance Detail"
 
 # Homepage elements
 HOME_DATASET_NUM_MODELS = "{count} models"
+
+# Dataset page elements
+# section titles
+PERF_METRICS_TITLE = "Performance Metrics"
+GLOBAL_EXPLANATION_TITLE = "Global Explanations"
+INSTANCE_CONCENSUS_TITLE = "Instance Consensus"
+
+# performance metrics graphs
+PERF_GRAPH_ACC_TITLE = "Accuracy"
+PERF_GRAPH_F1_WEIGHTED_TITLE = "F1 weighted"
+PERF_GRAPH_PRECISION_WEIGHTED_TITLE = "Precision weighted"
+PERF_GRAPH_RECALL_WEIGHTED_TITLE = "Recall weighted"
+
+# instance concensus metrics
+INSTANCES_TOTAL_TITLE = "Total Instances"
+INSTANCES_ALL_CORRECT_TITLE = "All Models Correct"
+INSTANCES_ALL_INCORRECT_TITLE = "All Models Incorrect"
+INSTANCES_DISAGREE_TITLE = "Models Disagree"
 
 # Unused?
 HOMEPAGE_HELPER = "Select a comparison to explore, or use the filters to narrow down by dataset and/or model type."

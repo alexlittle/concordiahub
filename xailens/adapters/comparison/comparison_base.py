@@ -26,7 +26,8 @@ class ComparisonAdapter(ABC):
     def get_default_visualisation(self):
         return self.default_visualisation
 
-    def viz_diff_bar(self, ctx: ComparisonContext):
+    @staticmethod
+    def viz_diff_bar(ctx: ComparisonContext):
         a = ctx.explanation_a.set_index("feature_name")["score_normalised_max"]
         b = ctx.explanation_b.set_index("feature_name")["score_normalised_max"]
         diff = a.sub(b, fill_value=0).sort_values()
@@ -53,7 +54,8 @@ class ComparisonAdapter(ABC):
             xaxis={"range": [-(diff_max + margin), diff_max + margin]})
         return fig
 
-    def viz_dumbbell(self, ctx: ComparisonContext):
+    @staticmethod
+    def viz_dumbbell(ctx: ComparisonContext):
         a = ctx.explanation_a.set_index("feature_name")["score_normalised_max"]
         b = ctx.explanation_b.set_index("feature_name")["score_normalised_max"]
         features = a.index.union(b.index)
@@ -163,7 +165,8 @@ class ComparisonAdapter(ABC):
             f'</div>'
         )
 
-    def absent_section(self, title: str, items: list[tuple[str, str]]) -> str:
+    @staticmethod
+    def absent_section(title: str, items: list[tuple[str, str]]) -> str:
         if not items:
             return ""
         header = (

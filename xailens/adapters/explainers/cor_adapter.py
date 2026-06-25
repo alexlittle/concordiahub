@@ -121,7 +121,8 @@ class CoRAdapter(XAIMethodAdapter):
             output.append(response.to_dict(instance_id_col, instance_id))
         return output
 
-    def _reformat(self, raw: dict, schema: ResponseSchema,
+    @staticmethod
+    def _reformat(raw: dict, schema: ResponseSchema,
                   prediction: str) -> LLMResponse:
         raw_contribs = raw[schema.contributions_field]
         if schema.contribution_key is not None:

@@ -10,6 +10,7 @@ THEME = {
     "axis_tick_color": "#555555",
     "title_font_size": 18,
     "title_color": "#111111",
+    "title_font_weight": "normal",
     "plot_bgcolor": "white",
     "paper_bgcolor": "white",
 }
@@ -19,6 +20,7 @@ def apply_theme(fig: go.Figure) -> go.Figure:
         font_family=THEME["font_family"],
         title_font_size=THEME["title_font_size"],
         title_font_color=THEME["title_color"],
+        title_font_weight=THEME["title_font_weight"],
         plot_bgcolor=THEME["plot_bgcolor"],
         paper_bgcolor=THEME["paper_bgcolor"],
         xaxis={

@@ -1,4 +1,3 @@
-import pandas as pd
 
 from xailens.dashboard.services import get_explorer
 from xailens.services.comparison import build_comparison_df

@@ -9,13 +9,14 @@ from xailens.dashboard.utils.render.dataset import (
     render_precision_weighted_barchart,
     render_recall_weighted_barchart)
 from xailens.entities.dataset import Dataset
+from xailens import strings
 
 def main():
     explorer = get_explorer()
 
     # get dataset from params
     dataset = st.query_params.get('dataset')
-    apply_layout(dataset)
+    apply_layout(f"Dataset: {dataset}")
 
     if not explorer.is_valid_dataset(dataset):
         st.error(f"Dataset {dataset} does not exist")
@@ -27,6 +28,8 @@ def main():
     # Get all the models for the dataset
     dataset_obj = Dataset(dataset, explorer.get_modelevals_for_dataset(dataset))
 
+    # Performance metrics
+    st.html(f"<h2>{strings.PERF_METRICS_TITLE}</h2>")
     # get the metrics
     metrics = dataset_obj.get_metrics()
     metrics = metrics.sort_values(by=['model'])
@@ -47,9 +50,21 @@ def main():
         st.plotly_chart(render_recall_weighted_barchart(metrics))
 
     # Global explanations
+    st.html(f"<h2>{strings.GLOBAL_EXPLANATION_TITLE}</h2>")
+
+
+
 
     # Instance overview
+    st.html(f"<h2>{strings.INSTANCE_CONCENSUS_TITLE}</h2>")
 
+
+    instance_metrics = dataset_obj.get_instance_consensus()
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric(strings.INSTANCES_TOTAL_TITLE, instance_metrics['total'])
+    col2.metric(strings.INSTANCES_ALL_CORRECT_TITLE, instance_metrics['all_correct'])
+    col3.metric(strings.INSTANCES_ALL_INCORRECT_TITLE, instance_metrics['all_incorrect'])
+    col4.metric(strings.INSTANCES_DISAGREE_TITLE, instance_metrics['models_disagree'])
 
 if __name__ == "__main__":
     main()
