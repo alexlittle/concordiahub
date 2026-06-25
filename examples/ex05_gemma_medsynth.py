@@ -88,8 +88,7 @@ for idx, row in df.iterrows():
         }
         pred_outputs.append(pred_output)
         exp_outputs.append(exp_output)
-        print(
-            f"Target: {row["target"]}, Prediction: {pred_output['prediction']}")
+        print(f"Target: {row['target']}, Prediction: {pred_output['prediction']}")
         print(f"Explanation: {exp_output['explanation']}")
     else:
         exp_output = {
