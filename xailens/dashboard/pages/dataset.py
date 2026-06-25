@@ -2,8 +2,6 @@ import streamlit as st
 
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.services import get_explorer
-from xailens.dashboard.utils.run_display import display_comparable_runs
-from xailens.dashboard.utils.filter import apply_dataset_filter
 from xailens.dashboard.utils.render.breadcrumb import display_breadcrumbs
 from xailens.dashboard.utils.render.dataset import (
     render_accuracy_barchart,
@@ -48,13 +46,10 @@ def main():
     with col4:
         st.plotly_chart(render_recall_weighted_barchart(metrics))
 
-    # instance info
+    # Global explanations
 
+    # Instance overview
 
-    # pairwise comparison
-    all_runs = explorer.get_comparable_modelevals()
-    filtered_runs = apply_dataset_filter(all_runs, dataset)
-    st.html(display_comparable_runs(filtered_runs))
 
 if __name__ == "__main__":
     main()

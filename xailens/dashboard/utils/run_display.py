@@ -53,7 +53,7 @@ def display_comparable_runs(groups: list[list[ModelEval]]):
                 <div class="vs-col">vs</div>
                 {render_modeleval_cell(modeleval_b)}
                 <div style="padding-left:12px">
-                    <a href="/{settings.PW_OVERVIEW_FILENAME}?modelevals={modelevals_value}" target="_self" class="button">{strings.BTN_GO_TO_COMPARISON}</a>
+                    <a href="/?modelevals={modelevals_value}" target="_self" class="button">{strings.BTN_GO_TO_COMPARISON}</a>
                 </div>
             </div>
             """

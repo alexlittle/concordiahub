@@ -11,24 +11,17 @@ def render():
     with open(logo_path, "rb") as f:
         svg_base64 = base64.b64encode(f.read()).decode()
 
-    parts = []
-    parts.append(f"""
+    return f"""
         <a href="/" style="text-decoration: none;" target="_self">
             <div class="logo-container">
                 <img src="data:image/svg+xml;base64,{svg_base64}">
             </div>
             <h1 class="logo">{strings.APP_NAME}</h1>
         </a>
-        """)
-
-    parts.append(f"""
-                <div class="sidebar-footer">
-                    XAI Lens v{__version__}<br/>
-                    <a href="https://github.com/alexlittle/xailens">Source Code (GitHub)</a> 
-                    &middot; 
-                    Documentation
-
-                </div>
-                """)
-
-    return "\n".join(parts)
+        <div class="sidebar-footer">
+            XAI Lens v{__version__}<br/>
+            <a href="https://github.com/alexlittle/xailens">Source Code (GitHub)</a> 
+            &middot; 
+            Documentation
+        </div>
+    """

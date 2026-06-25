@@ -28,10 +28,10 @@ class ArtifactStore:
 
 
     def _resolve_dirname(self, ctx):
-        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        base_dir = os.path.dirname(os.path.abspath(__file__))
         if ctx.model_dir_name:
-            return os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME, ctx.model_dir_name)
-        return os.path.join(BASE_DIR, config.MODEL_DATA_DIR_NAME, self.datetime)
+            return os.path.join(base_dir, config.MODEL_DATA_DIR_NAME, ctx.model_dir_name)
+        return os.path.join(base_dir, config.MODEL_DATA_DIR_NAME, self.datetime)
 
 
     def write_metadata(self):

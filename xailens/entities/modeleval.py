@@ -1,7 +1,7 @@
 import pandas as pd
 import dataclasses
 
-from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+from sklearn.metrics import confusion_matrix, classification_report
 from xailens.storage.filesystem_store import FilesystemStore
 from xailens import constants
 from xailens.schema import DataSchema
@@ -54,7 +54,7 @@ class ModelEval:
             y_true = self.store.load_dataframe("y")[target_cols]
         y_pred = self.store.load_dataframe("y_pred")[pred_cols]
         merged = y_true.merge(y_pred, on=self.get(constants.DATA_SCHEMA_ID_COLUMN), how='inner')
-        return (merged[target_cols], merged[pred_cols])
+        return merged[target_cols], merged[pred_cols]
 
     def get_metrics(self):
         return self.store.load_series("metrics")

@@ -13,7 +13,7 @@ def ensure_instance_index(df, key="instance_uuid"):
     if df.index.name == key:
         return df
 
-    # index exists but unnamed so assume it's instance_uuid
+    # index exists but unnamed so assume its instance_uuid
     if df.index.name is None:
         df = df.copy()
         df.index.name = key

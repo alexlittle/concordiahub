@@ -4,11 +4,9 @@ from streamlit.testing.v1 import AppTest
 from unittest.mock import patch, MagicMock
 
 from xailens import constants
-from xailens.entities.context import VizOption
-from xailens.exceptions import InvalidConfigurationError
 from xailens.dashboard import settings
 
-PAGE_PATH = Path(__file__).parents[3] / f"xailens/dashboard/pages/{settings.PW_INSTANCE_FILENAME}.py"
+PAGE_PATH = Path(__file__).parents[3] / f"xailens/dashboard/pages/{settings.INSTANCE_DETAIL_FILENAME}.py"
 
 
 def make_model(model_display_name="model-a", model_type="xgboost", xai_methods=None):

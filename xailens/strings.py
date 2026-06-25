@@ -27,8 +27,7 @@ SIDEBAR_FILTER_TITLE = "Quick Filter:"
 HOMEPAGE_TITLE = "Select a dataset"
 DATASET_TITLE = "Dataset Comparison"
 INSTANCE_TITLE = "Instance Comparison"
-PAIRWISE_TITLE = "Pair-wise Comparison"
-PAIRWISE_INSTANCE_TITLE = "Pair-wise Instance Detail"
+INSTANCE_DETAIL_TITLE = "Instance Detail"
 
 # Homepage elements
 HOME_DATASET_NUM_MODELS = "{count} models"

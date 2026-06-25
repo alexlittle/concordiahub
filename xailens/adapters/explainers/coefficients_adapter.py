@@ -41,7 +41,7 @@ class CoefficientsAdapter(XAIMethodAdapter):
         local_explanations.insert(0, instance_id, ctx.data.x[instance_id].values)
         return local_explanations
 
-    def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+    def explain_global_df(self, ctx: ModelContext, model) -> pd.DataFrame:
         coef = model.coef_[0]
         feature_names = ctx.data.x.drop(columns=ctx.data.data_schema.instance_id_column).columns
         importance = pd.DataFrame({

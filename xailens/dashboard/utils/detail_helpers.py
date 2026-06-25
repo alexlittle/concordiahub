@@ -31,7 +31,7 @@ def select_individual_viz(viz_id: str, current: str, options: dict, existing_par
             query_string = "&".join(
                 f"{pk}={pv}" for pk, pv in link_params.items())
             option_list.append(
-                f'<a href="{settings.PW_INSTANCE_FILENAME}?{query_string}" target="_self">{v.display_name}</a>'
+                f'<a href="{settings.INSTANCE_DETAIL_FILENAME}?{query_string}" target="_self">{v.display_name}</a>'
             )
     return " | ".join(option_list)
 
@@ -44,7 +44,7 @@ def select_comparison_viz(current: str, options: dict, existing_params: dict) ->
             link_params = {**existing_params, "comp_viz": k}
             query_string = "&".join(f"{pk}={pv}" for pk, pv in link_params.items())
             option_list.append(
-                f'<a href="{settings.PW_INSTANCE_FILENAME}?{query_string}" target="_self">{v.display_name}</a>'
+                f'<a href="{settings.INSTANCE_DETAIL_FILENAME}?{query_string}" target="_self">{v.display_name}</a>'
             )
     return " | ".join(option_list)
 

@@ -7,9 +7,8 @@ from xailens import strings
 def render_datasets(explorer: ModelExplorer):
     datasets = explorer.get_datasets()
 
-    parts = []
+    parts = ["<div class='dataset-grid'>"]
 
-    parts.append("<div class='dataset-grid'>")
     for dataset in datasets:
         num_models = len(explorer.get_models_for_dataset(dataset))
         num_text = strings.HOME_DATASET_NUM_MODELS.format(count=num_models)
