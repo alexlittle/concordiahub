@@ -4,8 +4,8 @@ from xailens.entities.modeleval import ModelEval
 
 class Dataset:
 
-    def __init__(self, dataset: str,  modelevals: [ModelEval]):
-        self.dataset = dataset
+    def __init__(self, dataset_id: str,  modelevals: [ModelEval]):
+        self.dataset_id = dataset_id
         self.modelevals = modelevals
 
     def get_metrics(self) -> pd.DataFrame:

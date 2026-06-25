@@ -21,21 +21,21 @@ def apply_theme(fig: go.Figure) -> go.Figure:
         title_font_color=THEME["title_color"],
         plot_bgcolor=THEME["plot_bgcolor"],
         paper_bgcolor=THEME["paper_bgcolor"],
-        xaxis=dict(
-            showgrid=False,
-            title_font=dict(size=THEME["axis_title_font_size"],
-                            color=THEME["axis_title_color"]),
-            tickfont=dict(size=THEME["axis_tick_font_size"],
-                          color=THEME["axis_tick_color"]),
-        ),
-        yaxis=dict(
-            range=[0, 1],
-            gridcolor="#eeeeee",
-            title_font=dict(size=THEME["axis_title_font_size"],
-                            color=THEME["axis_title_color"]),
-            tickfont=dict(size=THEME["axis_tick_font_size"],
-                          color=THEME["axis_tick_color"]),
-        ),
+        xaxis={
+            "showgrid": False,
+            "title_font": {"size": THEME["axis_title_font_size"],
+                           "color":THEME["axis_title_color"]},
+            "tickfont": {"size": THEME["axis_tick_font_size"],
+                         "color": THEME["axis_tick_color"]}
+        },
+        yaxis= {
+            "range": [0, 1],
+            "gridcolor": "#eeeeee",
+            "title_font": {"size": THEME["axis_title_font_size"],
+                           "color": THEME["axis_title_color"]},
+            "tickfont": {"size": THEME["axis_tick_font_size"],
+                         "color": THEME["axis_tick_color"]}
+        }
     )
     fig.update_layout(showlegend=False)
     return fig
