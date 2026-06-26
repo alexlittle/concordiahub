@@ -24,7 +24,7 @@ SIDEBAR_MODEL_FILTER_TITLE = "Include models:"
 # Page titles
 HOMEPAGE_TITLE = "Select a dataset"
 DATASET_TITLE = "Model Comparison for {dataset}"
-INSTANCE_TITLE = "Instance Comparison"
+INSTANCE_TITLE = "Instance Comparison for {dataset}"
 INSTANCE_DETAIL_TITLE = "Instance Detail"
 
 # Homepage elements
@@ -33,7 +33,7 @@ HOME_DATASET_NUM_MODELS = "{count} models"
 # Dataset page elements
 # section titles
 PERF_METRICS_TITLE = "Performance Metrics"
-GLOBAL_EXPLANATION_TITLE = "Global Explanations"
+GLOBAL_EXPLANATION_TITLE = "Global Feature Importance"
 INSTANCE_CONCENSUS_TITLE = "Instance Consensus"
 
 # performance metrics graphs

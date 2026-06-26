@@ -26,7 +26,7 @@ def make_run(instance_id_column="id", dataframe=None):
 
 def test_returns_correct_row():
     run = make_run()
-    result = CoefficientsAdapter.load_explanation(run, "sample-1")
+    result = CoefficientsAdapter.load_local_explanation(run, "sample-1")
     row = result[result["feature_name"] == "feat1"].iloc[0]
     assert row["score"] == 0.5
 
