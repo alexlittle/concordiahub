@@ -28,8 +28,8 @@ class Dataset:
             df = adapter.load_global_explanation(modeleval)
 
             schema = modeleval.get_data_schema()
-            if schema.hide_zero_threshold is not None:
-                filtered_df = df[df["score_normalised_max"] > schema.hide_zero_threshold]
+            if schema.hide_zero_global_threshold is not None:
+                filtered_df = df[df["score_normalised_max"] > schema.hide_zero_global_threshold]
             else:
                 filtered_df = df
 

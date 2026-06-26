@@ -10,7 +10,9 @@ class DataSchema:
     class_names: Optional[list] = None
     # for models with very large feature space, set a threshold to ignore any
     # normalised absolute values below this value (eg 0.01)
-    hide_zero_threshold: float | None = None
+    # can be set separately for global and local usage
+    hide_zero_global_threshold: float | None = None
+    hide_zero_local_threshold: float | None = None
 
 @dataclass
 class ResponseSchema:

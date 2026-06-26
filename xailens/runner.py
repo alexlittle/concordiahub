@@ -2,16 +2,18 @@ import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from dataclasses import fields
 
+from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
+from xailens.adapters.models.model_base import ModelAdapter
 from xailens import strings
 from xailens.exceptions import InvalidConfigurationError, MissingDataError
 from xailens.encoder import XAITextEncoder
 from xailens.artifacts import ArtifactStore
-from xailens.entities.context import ModelContext
+from xailens.entities.context import ModelContext, ModelData
 from xailens.registry.model_registry import get_model_adapter
 from xailens.registry.xai_registry import get_xai_adapter
 
 
-def compute_metrics(data):
+def compute_metrics(data: ModelData):
     if (data.y_test is not None or data.y is not None) and data.y_pred is not None:
         instance_id = data.data_schema.instance_id_column
         full_test = data.y_test if data.y_test is not None else data.y
@@ -34,6 +36,45 @@ def compute_metrics(data):
         return series
     else:
         raise MissingDataError("Cannot compute metrics because y or y_test, and y_pred are required")
+
+
+def write_encodings(ctx: ModelContext, artifact_store: ArtifactStore):
+    encoder = XAITextEncoder()
+    if ctx.data.x is not None:
+        df = ctx.data.x
+    elif ctx.data.x_train is not None:
+        df = ctx.data.x_train
+    encoded_features = encoder.encode_feature_names(df)
+    artifact_store.write_data("feature_name_embeddings", encoded_features)
+
+
+def write_global_explanations(xai_method: str,
+                              xai_adapter: XAIMethodAdapter,
+                              ctx: ModelContext,
+                              model_adapter: ModelAdapter,
+                              artifact_store: ArtifactStore):
+    print(strings.RUN_GLOBAL_EXPLANATIONS.format(xai_method=xai_method))
+    if xai_adapter.explanation_file_type == "json":
+        results = xai_adapter.explain_global_json(ctx)
+        artifact_store.write_explanation(f"exp_local_{xai_method}", results, data_format="json")
+    else:
+        results = xai_adapter.explain_global_df(ctx, model_adapter.prepare())
+        artifact_store.write_explanation(f"exp_global_{xai_method}", results, data_format="df")
+
+
+def write_local_explanations(xai_method: str,
+                              xai_adapter: XAIMethodAdapter,
+                              ctx: ModelContext,
+                              model_adapter: ModelAdapter,
+                              artifact_store: ArtifactStore):
+    print(strings.RUN_LOCAL_EXPLANATIONS.format(xai_method=xai_method))
+    if xai_adapter.explanation_file_type == "json":
+        results = xai_adapter.explain_local_json(ctx)
+        artifact_store.write_explanation(f"exp_local_{xai_method}", results, data_format="json")
+    else:
+        results = xai_adapter.explain_local_df(ctx, model_adapter.prepare())
+        artifact_store.write_explanation(f"exp_local_{xai_method}", results, data_format="df")
+
 
 def run(ctx: ModelContext):
     print(strings.RUN_STARTING)
@@ -73,30 +114,12 @@ def run(ctx: ModelContext):
 
         # process feature names if necessary
         if xai_adapter.requires_encoded_features:
-            encoder = XAITextEncoder()
-            if ctx.data.x is not None:
-                df = ctx.data.x
-            elif ctx.data.x_train is not None:
-                df = ctx.data.x_train
-            encoded_features = encoder.encode_feature_names(df)
-            artifact_store.write_data("feature_name_embeddings", encoded_features)
+            write_encodings(ctx, artifact_store)
 
         # Run the global explanations
-        print(strings.RUN_GLOBAL_EXPLANATIONS.format(xai_method=xai_method))
-        if xai_adapter.explanation_file_type == "json":
-            results = xai_adapter.explain_global_json(ctx)
-            artifact_store.write_explanation(f"exp_local_{xai_method}", results, data_format="json")
-        else:
-            results = xai_adapter.explain_global_df(ctx, model_adapter.prepare())
-            artifact_store.write_explanation(f"exp_global_{xai_method}", results, data_format="df")
+        write_global_explanations(xai_method, xai_adapter, ctx, model_adapter, artifact_store)
 
         # Run the local explanations
-        print(strings.RUN_LOCAL_EXPLANATIONS.format(xai_method=xai_method))
-        if xai_adapter.explanation_file_type == "json":
-            results = xai_adapter.explain_local_json(ctx)
-            artifact_store.write_explanation(f"exp_local_{xai_method}", results, data_format="json")
-        else:
-            results = xai_adapter.explain_local_df(ctx, model_adapter.prepare())
-            artifact_store.write_explanation(f"exp_local_{xai_method}", results, data_format="df")
+        write_local_explanations(xai_method, xai_adapter, ctx, model_adapter, artifact_store)
 
     print(strings.RUN_COMPLETE)

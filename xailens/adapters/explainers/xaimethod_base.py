@@ -48,8 +48,8 @@ class XAIMethodAdapter(ABC):
 
         # filter out near-zero valued features if a threshold is set
         schema = modeleval.get_data_schema()
-        if schema.hide_zero_threshold is not None:
-            explanation = explanation[explanation.abs() > schema.hide_zero_threshold]
+        if schema.hide_zero_local_threshold is not None:
+            explanation = explanation[explanation.abs() > schema.hide_zero_local_threshold]
 
         abs_sum = explanation.abs().sum()
         abs_max = explanation.abs().max()
