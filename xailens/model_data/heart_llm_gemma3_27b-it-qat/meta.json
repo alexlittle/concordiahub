@@ -1,7 +1,7 @@
 {
     "model_type": "llm",
     "xai_methods": [
-        "cor"
+        "llm_reasoning"
     ],
     "dataset_id": "cleveland-heart-data",
     "model_display_name": "Gemma 3",
@@ -11,8 +11,8 @@
         "contributions_field": "feature_contributions",
         "contribution_key": null
     },
-    "datetime": "20260623-185011",
-    "model_uuid": "15df8ec0-396e-40df-bffb-856626fb384a",
+    "datetime": "20260626-111506",
+    "model_uuid": "b29eb08c-3665-481d-93bd-a93fe393d549",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
