@@ -20,19 +20,27 @@ class Dataset:
 
     def get_global_explanations(self) -> pd.DataFrame:
         explanations = {}
-        all_features = set()
+        keep_features = set()
 
         for modeleval in self.modelevals:
             method = modeleval.get("xai_methods")[0]
             adapter = get_xai_adapter(method)
             df = adapter.load_global_explanation(modeleval)
+
+            schema = modeleval.get_data_schema()
+            if schema.hide_zero_threshold is not None:
+                filtered_df = df[df["score_normalised_max"] > schema.hide_zero_threshold]
+            else:
+                filtered_df = df
+
+            keep_features.update(filtered_df["feature_name"].tolist())
             explanations[modeleval.get("model_display_name")] = df[
                 ["feature_name", "score_normalised_max"]].rename(
-                columns={"score_normalised_max": modeleval.get("model_display_name")}
+                columns={
+                    "score_normalised_max": modeleval.get("model_display_name")}
             )
-            all_features.update(df["feature_name"].tolist())
 
-        all_features_df = pd.DataFrame({"feature_name": sorted(all_features)})
+        all_features_df = pd.DataFrame({"feature_name": sorted(keep_features)})
 
         result = all_features_df
         for model_id, df in explanations.items():

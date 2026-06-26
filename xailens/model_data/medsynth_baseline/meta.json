@@ -8,14 +8,14 @@
     "model_subtype": null,
     "model_dir_name": "medsynth_baseline",
     "response_schema": null,
-    "datetime": "20260626-102654",
-    "model_uuid": "fdfc4a0a-8a5f-4815-8bb2-fca47f331c8a",
+    "datetime": "20260626-142652",
+    "model_uuid": "b3161ea9-222e-4ccb-bfd2-7e3cd2130e4f",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "y_test",
         "prediction_column": "y_pred",
         "feature_columns": null,
         "class_names": null,
-        "hide_zero_threshold": 0.1
+        "hide_zero_threshold": 0.4
     }
 }

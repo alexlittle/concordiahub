@@ -27,13 +27,15 @@ class XAIMethodAdapter(ABC):
     def load_global_explanation(cls, modeleval: ModelEval) -> pd.DataFrame:
         df = modeleval.store.load_dataframe(f"exp_global_{cls.key}")
         explanation = df.groupby("feature")["importance"].mean()
+
+        explanation_abs = explanation.abs()
         abs_sum = explanation.abs().sum()
         abs_max = explanation.abs().max()
         return pd.DataFrame({
             "feature_name": explanation.index,
             "score": explanation.values,
-            "score_normalised_sum": explanation.values / abs_sum if abs_sum != 0 else explanation.values,
-            "score_normalised_max": explanation.values / abs_max if abs_max != 0 else explanation.values,
+            "score_normalised_sum": explanation_abs.values / abs_sum if abs_sum != 0 else explanation_abs.values,
+            "score_normalised_max": explanation_abs.values / abs_max if abs_max != 0 else explanation_abs.values,
         })
 
     @classmethod
