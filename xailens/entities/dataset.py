@@ -1,5 +1,6 @@
 import pandas as pd
 
+from xailens.exceptions import InvalidSelectionError
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.entities.modeleval import ModelEval
 from xailens import constants
@@ -40,11 +41,16 @@ class Dataset:
                     "score_normalised_max": modeleval.get("model_display_name")}
             )
 
+        # if no features to show (ie all LLMs) then raise error
+        if not keep_features:
+            raise InvalidSelectionError()
+
         all_features_df = pd.DataFrame({"feature_name": sorted(keep_features)})
 
         result = all_features_df
         for model_id, df in explanations.items():
             result = result.merge(df, on="feature_name", how="left")
+
 
         # order by the mean so most important features are at top
         model_cols = [col for col in result.columns if col != "feature_name"]

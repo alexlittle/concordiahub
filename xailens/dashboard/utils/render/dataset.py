@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 
 from xailens.dashboard.utils.render import plotly_theme
 from xailens import strings
+from xailens.exceptions import InvalidSelectionError
 
 def render_accuracy_barchart(metrics: pd.DataFrame):
     fig = px.bar(
@@ -65,13 +66,19 @@ def render_global_features_heatmap(df_global_exp: pd.DataFrame):
     llm_cols = [col for col in model_cols if df_global_exp[col].isna().all()]
     data_cols = [col for col in model_cols if col not in llm_cols]
 
+    x_labels = data_cols + [f"{col} *" for col in llm_cols]
+
     fig = go.Figure()
 
     # main heatmap for models with data
     if data_cols:
+        z_main = [
+            [row[col] for col in data_cols] + [None] * len(llm_cols)
+            for _, row in df_global_exp.iterrows()
+        ]
         fig.add_trace(go.Heatmap(
-            z=df_global_exp[data_cols].values,
-            x=data_cols,
+            z=z_main,
+            x=x_labels,
             y=df_global_exp["feature_name"].tolist(),
             colorscale="Blues",
             zmin=0,
@@ -83,10 +90,13 @@ def render_global_features_heatmap(df_global_exp: pd.DataFrame):
 
     # grey overlay for LLM columns
     if llm_cols:
-        grey_z = [[0.5] * len(llm_cols)] * len(df_global_exp)
+        z_grey = [
+            [None] * len(data_cols) + [0.5] * len(llm_cols)
+            for _ in range(len(df_global_exp))
+        ]
         fig.add_trace(go.Heatmap(
-            z=grey_z,
-            x=[f"{col} *" for col in llm_cols],
+            z=z_grey,
+            x=x_labels,
             y=df_global_exp["feature_name"].tolist(),
             colorscale=[[0, "lightgrey"], [1, "lightgrey"]],
             showscale=False,

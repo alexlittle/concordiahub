@@ -1,5 +1,6 @@
 import streamlit as st
 
+from xailens.exceptions import InvalidSelectionError
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.services import get_explorer
 from xailens.dashboard.utils.render.breadcrumb import display_breadcrumbs
@@ -66,14 +67,13 @@ def main():
 
     # Global explanations
     st.html(f"<h2>{strings.GLOBAL_EXPLANATION_TITLE}</h2>")
-    df_global_exp = dataset_obj.get_global_explanations()
+    try:
+        df_global_exp = dataset_obj.get_global_explanations()
+        st.plotly_chart(render_global_features_heatmap(df_global_exp), width='content')
+        st.html("* Global feature importance is not available for LLMs.")
+    except InvalidSelectionError:
+        st.html("Global feature importance is not displayed when only LLMs are selected.")
 
-    st.write(df_global_exp.columns.tolist())
-    st.dataframe(df_global_exp)
-
-
-    st.plotly_chart(render_global_features_heatmap(df_global_exp), width='content')
-    st.html("* Global feature importance is not available for LLMs.")
 
     # Instance overview
     st.html(f"<h2>{strings.INSTANCE_CONCENSUS_TITLE}</h2>")
