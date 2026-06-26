@@ -33,7 +33,7 @@ def main():
     # Display
     apply_layout(strings.DETAIL_TITLE)
     st.html(display_breadcrumbs(instance_id=instance_id))
-    st.subheader("**Comparison Explanation:**")
+    st.html("<h2>Comparison Explanation:</h2>")
 
     try:
         comparison = comparison_class()

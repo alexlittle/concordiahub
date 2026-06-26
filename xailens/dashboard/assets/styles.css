@@ -118,7 +118,8 @@ section[data-testid="stSidebar"] {
     padding-top: 0;
 }
 
-[data-testid="stSidebar"] span.st-bf {
+[data-testid="stSidebar"] span.st-bg {
+    accent-color: var(--color-link) !important;
     background-color: var(--color-link) !important;
     border-color: var(--color-link) !important;
 }

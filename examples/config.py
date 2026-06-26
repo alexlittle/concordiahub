@@ -8,9 +8,7 @@ LLM_TEMPLATE_DIR = Path("./prompt_templates")
 # Config for cleveland heart data
 
 HEART_INPUT_FILE = "./data/cleveland-heart-data.csv"
-# HEART_OLLAMA_MODEL = "tinyllama:latest"
 # HEART_OLLAMA_MODEL = "llama3.1:8b"
-
 # HEART_OLLAMA_MODEL = "qwen2.5:14b-instruct-q8_0"
 HEART_OLLAMA_MODEL = "gemma3:27b-it-qat"
 

@@ -32,18 +32,18 @@ class CoefficientsAdapter(XAIMethodAdapter):
         Raises:
             MissingDataError: if data.x is not provided
         """
-        if ctx.data.x is None:
+        if ctx.data.x_test is None:
             raise MissingDataError("CoefficientsAdapter requires x in ModelData")
         coef = model.coef_[0]
         instance_id = ctx.data.data_schema.instance_id_column
-        x = ctx.data.x.drop(columns=instance_id)
-        local_explanations = x * coef
-        local_explanations.insert(0, instance_id, ctx.data.x[instance_id].values)
+        x_test = ctx.data.x_test.drop(columns=instance_id)
+        local_explanations = x_test * coef
+        local_explanations.insert(0, instance_id, ctx.data.x_test[instance_id].values)
         return local_explanations
 
     def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         coef = model.coef_[0]
-        feature_names = ctx.data.x.drop(columns=ctx.data.data_schema.instance_id_column).columns
+        feature_names = ctx.data.x_test.drop(columns=ctx.data.data_schema.instance_id_column).columns
         importance = pd.DataFrame({
             "coefficient": coef,
             "importance": pd.Series(coef).abs()

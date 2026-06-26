@@ -6,7 +6,7 @@ import streamlit as st
 def load_css():
     css_path = Path(__file__).parent.parent / "assets" / "styles.css"
     with open(css_path) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+        st.html(f"<style>{f.read()}</style>")
 
 
 def get_badge_class(model_type: str) -> str:

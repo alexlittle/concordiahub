@@ -87,18 +87,18 @@ exp_outputs = []
 for idx, row in df.iterrows():
     print(f"Running LLM on conversation {idx + 1}/{len(df)} ")
     row_dict = row.to_dict()
-    row_dict.pop("sample_uuid")
+    row_dict.pop("instance_uuid")
     row_dict.pop("target")
 
     llm_response = run_llm_request(row_dict, config.HEART_OLLAMA_MODEL)
     resp, valid_json = parse_response(llm_response)
     if valid_json:
         pred_output = {
-            "sample_uuid": row["sample_uuid"],
+            "instance_uuid": row["instance_uuid"],
             "prediction": resp["prediction"]
         }
         exp_output = {
-            "sample_uuid": row["sample_uuid"],
+            "instance_uuid": row["instance_uuid"],
             "explanation": json.dumps(resp, default=str)
         }
         pred_outputs.append(pred_output)
@@ -107,7 +107,7 @@ for idx, row in df.iterrows():
         print(f"Explanation: {exp_output['explanation']}")
     else:
         exp_output = {
-            "sample_uuid": row["sample_uuid"],
+            "instance_uuid": row["instance_uuid"],
             "explanation": resp
         }
         exp_outputs.append(exp_output)
