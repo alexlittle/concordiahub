@@ -67,7 +67,7 @@ def main():
     st.html(f"<h2>{strings.GLOBAL_EXPLANATION_TITLE}</h2>")
 
     df_global_exp = dataset_obj.get_global_explanations()
-    responded: st.st.dataframe(df_global_exp)
+    st.dataframe(df_global_exp)
 
 
 

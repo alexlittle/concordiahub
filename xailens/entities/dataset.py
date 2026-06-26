@@ -26,9 +26,9 @@ class Dataset:
             method = modeleval.get("xai_methods")[0]
             adapter = get_xai_adapter(method)
             df = adapter.load_global_explanation(modeleval)
-            explanations[modeleval.model_id] = df[
+            explanations[modeleval.get("model_display_name")] = df[
                 ["feature_name", "score_normalised_max"]].rename(
-                columns={"score_normalised_max": modeleval.model_id}
+                columns={"score_normalised_max": modeleval.get("model_display_name")}
             )
             all_features.update(df["feature_name"].tolist())
 
