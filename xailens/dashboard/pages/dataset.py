@@ -7,7 +7,8 @@ from xailens.dashboard.utils.render.dataset import (
     render_accuracy_barchart,
     render_f1_weighted_barchart,
     render_precision_weighted_barchart,
-    render_recall_weighted_barchart)
+    render_recall_weighted_barchart,
+    render_global_features_heatmap)
 from xailens.entities.dataset import Dataset
 from xailens import strings
 
@@ -65,11 +66,9 @@ def main():
 
     # Global explanations
     st.html(f"<h2>{strings.GLOBAL_EXPLANATION_TITLE}</h2>")
-
     df_global_exp = dataset_obj.get_global_explanations()
-    st.dataframe(df_global_exp)
-
-
+    st.plotly_chart(render_global_features_heatmap(df_global_exp), width='content')
+    st.html("* Global feature importance is not available for LLMs.")
 
     # Instance overview
     st.html(f"<h2>{strings.INSTANCE_CONCENSUS_TITLE}</h2>")

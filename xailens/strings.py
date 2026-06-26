@@ -33,7 +33,7 @@ HOME_DATASET_NUM_MODELS = "{count} models"
 # Dataset page elements
 # section titles
 PERF_METRICS_TITLE = "Performance Metrics"
-GLOBAL_EXPLANATION_TITLE = "Global Feature Importance"
+GLOBAL_EXPLANATION_TITLE = "Global Feature Importance Heatmap"
 INSTANCE_CONCENSUS_TITLE = "Instance Consensus"
 
 # performance metrics graphs

@@ -46,7 +46,12 @@ class Dataset:
         for model_id, df in explanations.items():
             result = result.merge(df, on="feature_name", how="left")
 
-        return result
+        # order by the mean so most important features are at top
+        model_cols = [col for col in result.columns if col != "feature_name"]
+        result["_mean"] = result[model_cols].mean(axis=1, skipna=True)
+        result = result.sort_values("_mean", ascending=False).drop(columns="_mean").reset_index(drop=True)
+
+        return result[:25].reset_index(drop=True)
 
     def get_instance_consensus_ids(self) -> pd.Index:
         """Returns instance IDs common to all models."""

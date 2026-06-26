@@ -31,8 +31,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
             raise MissingDataError("TreeSHAPAdapter requires x_test in ModelData")
         instance_id = ctx.data.data_schema.instance_id_column
         data = ctx.data.x_test.copy()
-        data = data.drop(columns=[instance_id]).select_dtypes(
-            include=['number'])
+        data = data.drop(columns=[instance_id]).select_dtypes(include=['number'])
         explainer = shap.TreeExplainer(model)
         shap_values = explainer.shap_values(data)
 
@@ -45,8 +44,6 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         elif shap_values.ndim == 3:
             n_classes = shap_values.shape[2]
             dfs = []
-            keys = ctx.data.data_schema.class_names if ctx.data.data_schema.class_names is not None else range(
-                n_classes)
             for i in range(n_classes):
                 importance = pd.DataFrame(shap_values[:, :, i], columns=data.columns).abs().mean(axis=0)
                 df = importance.reset_index()
