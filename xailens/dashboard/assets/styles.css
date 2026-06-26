@@ -209,25 +209,32 @@ section[data-testid="stSidebar"] {
     Dataset page elements
  */
 
-[data-testid="stMetric"] {
-    text-align: center;
+.xl-metric-card {
+    border: 1px solid rgba(128,128,128,0.2);
     background-color: var(--color-metric-bg);
     border-radius: 8px;
-    padding: 1rem 1.25rem;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+    text-align: center;
 }
-[data-testid="stMetricLabel"]  {
-    justify-content: center;
-    display: flex;
+.xl-metric-card:hover {
+    border-color: rgba(128, 128, 128, 0.5);
+}
+.xl-metric-card a {
+    text-decoration: none;
+    color: inherit;
+}
+.xl-metric-label {
+    font-size: 1rem;
+    color: var(--model-name-colour);
+}
+.xl-metric-value {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--model-name-colour);
 }
 
-[data-testid="stMetricLabel"] p {
-    font-size: 1.0rem !important;
-}
-[data-testid="stMetricValue"] {
-    font-size: 2.5rem !important;
-    justify-content: center;
-    display: flex;
-}
 /*
     Run card elements
  */

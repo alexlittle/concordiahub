@@ -26,7 +26,7 @@ def apply_theme(fig: go.Figure) -> go.Figure:
 
     fig.update_layout(
         title={"text": updated_title},
-        margin=dict(t=40, b=10, l=10, r=10),
+        margin={"t": 40, "b": 10, "l": 10, "r":10},
         font_family=THEME["font_family"],
         title_font={
             "size": THEME["title_font_size"],

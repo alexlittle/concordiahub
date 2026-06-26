@@ -3,7 +3,7 @@ import streamlit as st
 from xailens.exceptions import InvalidSelectionError
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.services import get_explorer
-from xailens.dashboard.utils.render.breadcrumb import display_breadcrumbs
+from xailens.dashboard.utils.render.common import display_breadcrumbs, render_metric_card
 from xailens.dashboard.utils.render.dataset import (
     render_accuracy_barchart,
     render_f1_weighted_barchart,
@@ -12,6 +12,7 @@ from xailens.dashboard.utils.render.dataset import (
     render_global_features_heatmap)
 from xailens.entities.dataset import Dataset
 from xailens import strings
+from xailens.dashboard import settings
 
 def main():
     explorer = get_explorer()
@@ -53,17 +54,13 @@ def main():
     # overall stat graphs for accuracy /f1
     col1, col2 = st.columns(2, gap="large")
 
-    with col1:
-        st.plotly_chart(render_accuracy_barchart(metrics))
-    with col2:
-        st.plotly_chart(render_f1_weighted_barchart(metrics))
+    col1.plotly_chart(render_accuracy_barchart(metrics))
+    col2.plotly_chart(render_f1_weighted_barchart(metrics))
 
     # precision/recall bar charts
     col3, col4 = st.columns(2, gap="large")
-    with col3:
-        st.plotly_chart(render_precision_weighted_barchart(metrics))
-    with col4:
-        st.plotly_chart(render_recall_weighted_barchart(metrics))
+    col3.plotly_chart(render_precision_weighted_barchart(metrics))
+    col4.plotly_chart(render_recall_weighted_barchart(metrics))
 
     # Global explanations
     st.html(f"<h2>{strings.GLOBAL_EXPLANATION_TITLE}</h2>")
@@ -81,10 +78,21 @@ def main():
 
     instance_metrics = dataset_obj.get_instance_consensus()
     col1, col2, col3, col4 = st.columns(4)
-    col1.metric(strings.INSTANCES_TOTAL_TITLE, instance_metrics['total'])
-    col2.metric(strings.INSTANCES_ALL_CORRECT_TITLE, instance_metrics['all_correct'])
-    col3.metric(strings.INSTANCES_ALL_INCORRECT_TITLE, instance_metrics['all_incorrect'])
-    col4.metric(strings.INSTANCES_DISAGREE_TITLE, instance_metrics['models_disagree'])
+    params = st.query_params.to_dict()
+    query_string = "&".join(f"{k}={v}" for k, v in params.items())
+
+    col1.html(render_metric_card(strings.INSTANCES_TOTAL_TITLE,
+                                 instance_metrics['total'],
+                                 f"{settings.INSTANCES_FILENAME}?{query_string}&instances=all"))
+    col2.html(render_metric_card(strings.INSTANCES_ALL_CORRECT_TITLE,
+                                 instance_metrics['all_correct'],
+                                 f"{settings.INSTANCES_FILENAME}?{query_string}&instances=allcorrect"))
+    col3.html(render_metric_card(strings.INSTANCES_ALL_INCORRECT_TITLE,
+                                 instance_metrics['all_incorrect'],
+                                 f"{settings.INSTANCES_FILENAME}?{query_string}&instances=allincorrect"))
+    col4.html(render_metric_card(strings.INSTANCES_DISAGREE_TITLE,
+                                 instance_metrics['models_disagree'],
+                                 f"{settings.INSTANCES_FILENAME}?{query_string}&instances=disagree"))
 
 if __name__ == "__main__":
     main()

@@ -23,8 +23,8 @@ SIDEBAR_MODEL_FILTER_TITLE = "Include models:"
 
 # Page titles
 HOMEPAGE_TITLE = "Select a dataset"
-DATASET_TITLE = "Model Comparison for {dataset}"
-INSTANCE_TITLE = "Instance Comparison for {dataset}"
+DATASET_TITLE = "Model Comparison for {dataset} Dataset"
+INSTANCE_TITLE = "Instance Comparison for {dataset} Dataset"
 INSTANCE_DETAIL_TITLE = "Instance Detail"
 
 # Homepage elements
@@ -42,7 +42,7 @@ PERF_GRAPH_F1_WEIGHTED_TITLE = "F1 weighted"
 PERF_GRAPH_PRECISION_WEIGHTED_TITLE = "Precision weighted"
 PERF_GRAPH_RECALL_WEIGHTED_TITLE = "Recall weighted"
 
-# instance concensus metrics
+# instance consensus metrics
 INSTANCES_TOTAL_TITLE = "Total Instances"
 INSTANCES_ALL_CORRECT_TITLE = "All Models Correct"
 INSTANCES_ALL_INCORRECT_TITLE = "All Models Incorrect"

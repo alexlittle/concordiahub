@@ -4,7 +4,7 @@ import plotly.graph_objects as go
 
 from xailens.dashboard.utils.render import plotly_theme
 from xailens import strings
-from xailens.exceptions import InvalidSelectionError
+
 
 def render_accuracy_barchart(metrics: pd.DataFrame):
     fig = px.bar(
@@ -47,6 +47,7 @@ def render_precision_weighted_barchart(metrics: pd.DataFrame):
     fig.update_xaxes(title_text="Model")
     return plotly_theme.apply_theme(fig)
 
+
 def render_recall_weighted_barchart(metrics: pd.DataFrame):
     fig = px.bar(
         metrics,
@@ -83,7 +84,7 @@ def render_global_features_heatmap(df_global_exp: pd.DataFrame):
             colorscale="Blues",
             zmin=0,
             zmax=1,
-            colorbar=dict(title="Importance"),
+            colorbar={"title": "Importance"},
             hovertemplate="<b>%{x}</b><br>%{y}<br>Importance: %{z:.4f}<extra></extra>",
             hoverongaps=False,
         ))
@@ -107,8 +108,8 @@ def render_global_features_heatmap(df_global_exp: pd.DataFrame):
     fig = plotly_theme.apply_theme(fig)
     fig.update_layout(
         title="",
-        xaxis=dict(side="top"),
-        yaxis=dict(autorange="reversed", range=None),
+        xaxis={"side": "top"},
+        yaxis={"autorange":"reversed", "range": None},
         height=max(400, len(df_global_exp) * 30),
         width=max(400, len(model_cols) * 200),
         hovermode="closest",
