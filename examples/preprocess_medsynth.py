@@ -4,10 +4,15 @@ Includes an UUID and the ICD-Chapter
 
 '''
 
+import sys
 import uuid
 from helpers import process_medsynth
 from examples import config
 
+response = input("Warning: This will reset the unique identifiers. Do you want to continue? (y/N): ").strip()
+if response.lower() != 'y':
+    print("Stopping.")
+    sys.exit(0)
 
 df = process_medsynth()
 

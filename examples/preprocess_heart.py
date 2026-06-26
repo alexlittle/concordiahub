@@ -1,5 +1,7 @@
-
-# Processes the  Cleveland heart data to add the column names & uuid
+"""
+Processes the  Cleveland heart data to add the column names & uuid
+"""
+import sys
 import pandas as pd
 import uuid
 
@@ -20,6 +22,12 @@ from examples import config
 13. thal      – thalassemia
 14. num       – diagnosis of heart disease (target)
 '''
+
+
+response = input("Warning: This will reset the unique identifiers. Do you want to continue? (y/N): ").strip()
+if response.lower() != 'y':
+    print("Stopping.")
+    sys.exit(0)
 
 columns = [
     "age", "sex", "chest pain type", "resting blood pressure", "serum cholesterol", "fasting blood sugar", "resting ECG",
