@@ -65,6 +65,7 @@ ALL_COMP_OPTIONS = ("all", "All model types")
 ERR_NO_MODELS = "No model_data selected"
 ERR_NOT_2_MODELS = "You need exactly 2 models to compare"
 
+WARNING_GLOBAL_NOT_AVAILABLE = "Global explanations are not available for {adapter}"
 # ----------------
 # MODEL_TYPES
 # ----------------
@@ -84,11 +85,11 @@ MODEL_DISPLAY_NAME = DisplayNameDict({
 XAI_METHOD_DISPLAY_NAME = DisplayNameDict({
     "coefficients": "Coefficients",
     "tree_shap": "Tree SHAP",
-    "cor": "Chain of Reasoning",
+    "llm_reasoning": "LLM Reasoning",
 })
 
 COEFFICIENTS_DISPLAY_NAME = "Coefficients"
-COR_DISPLAY_NAME = "Chain of Reasoning"
+COR_DISPLAY_NAME = "LLM Reasoning"
 KERNEL_SHAP_DISPLAY_NAME = "Kernel Shap"
 TREE_SHAP_DISPLAY_NAME = "Tree Shap"
 
@@ -97,7 +98,7 @@ COEFFICIENTS_NOTES = """
     feature's contribution to the model's decision.
     """
 COR_NOTES = """
-    Chain of Reasoning explanations may be post-rationalised by the model, and so may not 
+    LLM Reasoning explanations may be post-rationalised by the model, and so may not 
     truly reflect the decision process the model used to arrive at the explanation.
     """
 TREE_SHAP_NOTES = """

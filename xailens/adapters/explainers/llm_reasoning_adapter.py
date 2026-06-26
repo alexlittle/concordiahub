@@ -4,6 +4,7 @@ import pandas as pd
 from typing import Any
 from dataclasses import dataclass
 
+from tests import adapters
 from xailens.entities.context import ModelContext, ResponseSchema
 from xailens.exceptions import MissingDataError
 from xailens.registry.xai_registry import register_xai
@@ -37,14 +38,14 @@ class LLMResponse:
             }
         }
 
-@register_xai("cor")
-class CoRAdapter(XAIMethodAdapter):
-    """For chain-of-reasoning/chain-of-thought explanations"""
+@register_xai("llm_reasoning")
+class LLMReasoningAdapter(XAIMethodAdapter):
+    """"""
 
     display_name = strings.COR_DISPLAY_NAME
     display_notes = strings.COR_NOTES
-    default_visualisation = config.COR_DEFAULT_VIZ
-    compatible_visualisations = config.COR_COMPATIBLE_VIZ
+    default_visualisation = config.LLM_REASONING_DEFAULT_VIZ
+    compatible_visualisations = config.LLM_REASONING_COMPATIBLE_VIZ
 
     # no features as such so will process the explanations in this adapter
     requires_encoded_features: bool = False
@@ -82,6 +83,9 @@ class CoRAdapter(XAIMethodAdapter):
             for feature, data in row["contributions"].items()
         ])
 
+    def explain_global_json(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+        print(strings.WARNING_GLOBAL_NOT_AVAILABLE.format(adapter=self.key))
+
     def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         raise NotImplementedError
 
@@ -89,7 +93,7 @@ class CoRAdapter(XAIMethodAdapter):
         raise NotImplementedError
 
     def explain_local_json(self, ctx: ModelContext) -> list[dict[str, Any]]:
-        """Processes the CoR local explanations
+        """Processes the local explanations
         Args:
             ctx: ModelContext object
 
@@ -100,10 +104,10 @@ class CoRAdapter(XAIMethodAdapter):
             MissingDataError: if data.x is not provided
         """
         if ctx.data.y_exp is None or ctx.data.y_pred is None:
-            raise MissingDataError("CoRAdapter requires y_exp and y_pred in ModelData")
+            raise MissingDataError("LLMReasoningAdapter requires y_exp and y_pred in ModelData")
         if ctx.response_schema is None:
             raise MissingDataError(
-                "CoRAdapter requires a ResponseSchema in ModelContext")
+                "LLMReasoningAdapter requires a ResponseSchema in ModelContext")
 
         instance_id_col = ctx.data.data_schema.instance_id_column
         prediction_col = ctx.data.data_schema.prediction_column

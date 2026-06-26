@@ -1,7 +1,7 @@
 {
     "model_type": "llm",
     "xai_methods": [
-        "cor"
+        "llm_reasoning"
     ],
     "dataset_id": "medsynth",
     "model_display_name": "Gemma 3",
@@ -11,8 +11,8 @@
         "contributions_field": "key_factors",
         "contribution_key": "phrase"
     },
-    "datetime": "20260623-190949",
-    "model_uuid": "80457ff4-dfbe-4e31-b1fc-bde41a89d907",
+    "datetime": "20260626-093239",
+    "model_uuid": "21451e29-b15b-4b96-9c26-fb2bb1168728",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

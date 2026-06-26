@@ -1,10 +1,10 @@
 import pytest
-from xailens.adapters.explainers.cor_adapter import CoRAdapter, ResponseSchema, LLMResponse, ContribScore
+from xailens.adapters.explainers.llm_reasoning_adapter import LLMReasoningAdapter, ResponseSchema, LLMResponse, ContribScore
 
 
 @pytest.fixture
 def adapter():
-    return CoRAdapter()
+    return LLMReasoningAdapter()
 
 
 # --- list-of-dicts format (contribution_key set) ---

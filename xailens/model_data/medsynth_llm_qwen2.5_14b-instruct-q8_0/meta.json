@@ -1,7 +1,7 @@
 {
     "model_type": "llm",
     "xai_methods": [
-        "cor"
+        "llm_reasoning"
     ],
     "dataset_id": "medsynth",
     "model_display_name": "Qwen 2.5",
@@ -11,8 +11,8 @@
         "contributions_field": "key_factors",
         "contribution_key": "phrase"
     },
-    "datetime": "20260623-190959",
-    "model_uuid": "28c32c63-f9ec-4e97-8b6e-48840744cfe0",
+    "datetime": "20260626-093943",
+    "model_uuid": "304d5ad2-8964-4f29-a7d6-86c9479b3889",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

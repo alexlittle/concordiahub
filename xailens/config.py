@@ -31,8 +31,8 @@ TREE_SHAP_COMPATIBLE_VIZ = {
         "waterfall": context.VizOption(display_name=strings.WATERFALL_DISPLAY_NAME),
     }
 
-COR_DEFAULT_VIZ = "barchart"
-COR_COMPATIBLE_VIZ = {
+LLM_REASONING_DEFAULT_VIZ = "barchart"
+LLM_REASONING_COMPATIBLE_VIZ = {
         "barchart": context.VizOption(display_name=strings.BARCHART_DISPLAY_NAME),
         "tabular": context.VizOption(display_name=strings.TABULAR_DISPLAY_NAME),
     }
@@ -41,8 +41,8 @@ COR_COMPATIBLE_VIZ = {
 # Visualisation compatibility with XAI methods
 #------------------------
 BARCHART_COMPATIBLE_XAI = ["tree_shap", "coefficients"]
-WATERFALL_COMPATIBLE_XAI = ["tree_shap", "coefficients", "cor"]
-TABULAR_COMPATIBLE_XAI = ["cor"]
+WATERFALL_COMPATIBLE_XAI = ["tree_shap", "coefficients", "llm_reasoning"]
+TABULAR_COMPATIBLE_XAI = ["llm_reasoning"]
 
 #------------------------
 # Comparison Visualisation compatibility combinations & configuration
