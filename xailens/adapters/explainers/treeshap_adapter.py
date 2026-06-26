@@ -27,7 +27,37 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
     def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
-        raise NotImplementedError
+        if not hasattr(ctx.data, "x_test") or ctx.data.x_test is None:
+            raise MissingDataError("TreeSHAPAdapter requires x_test in ModelData")
+        instance_id = ctx.data.data_schema.instance_id_column
+        data = ctx.data.x_test.copy()
+        data = data.drop(columns=[instance_id]).select_dtypes(
+            include=['number'])
+        explainer = shap.TreeExplainer(model)
+        shap_values = explainer.shap_values(data)
+
+        if shap_values.ndim == 2:
+            importance = pd.DataFrame(shap_values, columns=data.columns).abs().mean(axis=0)
+            result = importance.reset_index()
+            result.columns = ['feature', 'importance']
+            result['class'] = 0
+            return result
+
+        elif shap_values.ndim == 3:
+            n_classes = shap_values.shape[2]
+            dfs = []
+            keys = ctx.data.data_schema.class_names if ctx.data.data_schema.class_names is not None else range(
+                n_classes)
+            for i in range(n_classes):
+                importance = pd.DataFrame(shap_values[:, :, i], columns=data.columns).abs().mean(axis=0)
+                df = importance.reset_index()
+                df.columns = ['feature', 'importance']
+                df['class'] = keys[i]
+                dfs.append(df)
+            return pd.concat(dfs, ignore_index=True)
+
+        else:
+            raise DataProcessingError("The return values from SHAP don't match")
 
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model

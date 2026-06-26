@@ -1,0 +1,49 @@
+import joblib
+import pandas as pd
+
+import xailens as xai
+from examples import config
+from helpers import ICD10_CHAPTERS
+X_train = pd.read_parquet('./cache/medsynth/baseline/X_train.parquet')
+X_test = pd.read_parquet('./cache/medsynth/baseline/X_test.parquet')
+y_train = pd.read_parquet('./cache/medsynth/baseline/y_train.parquet')
+y_test = pd.read_parquet('./cache/medsynth/baseline/y_test.parquet')
+y_pred = pd.read_parquet('./cache/medsynth/baseline/y_pred.parquet')
+model = joblib.load('./cache/medsynth/baseline/model.joblib')
+
+
+y_train["y_train"] = y_train["y_train"].map(
+    lambda code: f"{code}: {ICD10_CHAPTERS[code]}" if code in ICD10_CHAPTERS else code
+)
+y_test["y_test"] = y_test["y_test"].map(
+    lambda code: f"{code}: {ICD10_CHAPTERS[code]}" if code in ICD10_CHAPTERS else code
+)
+y_pred["y_pred"] = y_pred["y_pred"].map(
+    lambda code: f"{code}: {ICD10_CHAPTERS[code]}" if code in ICD10_CHAPTERS else code
+)
+
+
+data_schema = xai.DataSchema(
+    instance_id_column=config.INSTANCE_UUID_COL,
+    target_column="y_test",
+    prediction_column="y_pred",
+    hide_zero_threshold=0.1)
+
+model_data = xai.ModelData(
+    data_schema=data_schema,
+    x_train=X_train,
+    x_test=X_test,
+    y_train=y_train,
+    y_test=y_test,
+    y_pred=y_pred)
+
+ctx = xai.ModelContext(
+    "logistic_regression",
+    ["coefficients"],
+    "medsynth",
+    model_data,
+    model=model,
+    model_dir_name="medsynth_baseline",
+    model_display_name="Logistic Regression")
+
+xai.run(ctx)

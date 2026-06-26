@@ -45,11 +45,10 @@ class CoefficientsAdapter(XAIMethodAdapter):
         coef = model.coef_[0]
         feature_names = ctx.data.x_test.drop(columns=ctx.data.data_schema.instance_id_column).columns
         importance = pd.DataFrame({
+            "feature": feature_names,
             "coefficient": coef,
-            "importance": pd.Series(coef).abs()
-        }, index=feature_names)
-        importance.index.name = "feature"
-        return importance.sort_values(ascending=False)
+        })
+        return importance
 
 
     def explain_local_json(self, ctx: ModelContext) -> dict[str, Any]:

@@ -1,0 +1,21 @@
+{
+    "model_type": "logistic_regression",
+    "xai_methods": [
+        "coefficients"
+    ],
+    "dataset_id": "medsynth",
+    "model_display_name": "Logistic Regression",
+    "model_subtype": null,
+    "model_dir_name": "medsynth_baseline",
+    "response_schema": null,
+    "datetime": "20260626-082933",
+    "model_uuid": "4f983af4-51b1-410f-8e39-d10d5461f73e",
+    "data_schema": {
+        "instance_id_column": "instance_uuid",
+        "target_column": "y_test",
+        "prediction_column": "y_pred",
+        "feature_columns": null,
+        "class_names": null,
+        "hide_zero_threshold": 0.1
+    }
+}
