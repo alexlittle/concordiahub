@@ -23,7 +23,7 @@ SIDEBAR_MODEL_FILTER_TITLE = "Include models:"
 
 # Page titles
 HOMEPAGE_TITLE = "Select a dataset"
-DATASET_TITLE = "Dataset Comparison"
+DATASET_TITLE = "Model Comparison for {dataset}"
 INSTANCE_TITLE = "Instance Comparison"
 INSTANCE_DETAIL_TITLE = "Instance Detail"
 

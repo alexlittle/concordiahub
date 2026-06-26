@@ -54,7 +54,12 @@ class LLMReasoningAdapter(XAIMethodAdapter):
     explanation_file_type: str = "json"
 
     @classmethod
-    def load_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
+    def load_global_explanation(cls, modeleval: ModelEval) -> pd.DataFrame:
+        return pd.DataFrame(
+            columns=["feature_name", "score", "score_normalised_sum", "score_normalised_max"])
+
+    @classmethod
+    def load_local_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
         records = modeleval.store.load_json(f"exp_local_{cls.key}")
         instance_id_col = modeleval.get(constants.DATA_SCHEMA_ID_COLUMN)
 

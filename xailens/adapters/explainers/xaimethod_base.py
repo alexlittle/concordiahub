@@ -24,7 +24,20 @@ class XAIMethodAdapter(ABC):
     explanation_file_type: str = "df"
 
     @classmethod
-    def load_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
+    def load_global_explanation(cls, modeleval: ModelEval) -> pd.DataFrame:
+        df = modeleval.store.load_dataframe(f"exp_global_{cls.key}")
+        explanation = df.groupby("feature")["importance"].mean()
+        abs_sum = explanation.abs().sum()
+        abs_max = explanation.abs().max()
+        return pd.DataFrame({
+            "feature_name": explanation.index,
+            "score": explanation.values,
+            "score_normalised_sum": explanation.values / abs_sum if abs_sum != 0 else explanation.values,
+            "score_normalised_max": explanation.values / abs_max if abs_max != 0 else explanation.values,
+        })
+
+    @classmethod
+    def load_local_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
         df = modeleval.store.load_dataframe(f"exp_local_{cls.key}")
         row = df[df[modeleval.get(constants.DATA_SCHEMA_ID_COLUMN)] == instance_id]
         if row.empty:

@@ -26,7 +26,7 @@ def main():
     else:
         selected_model_names = all_model_names
 
-    apply_layout(f"Dataset: {dataset}",
+    apply_layout(strings.DATASET_TITLE.format(dataset=dataset),
                  all_model_names=sorted(all_model_names),
                  selected_model_names=selected_model_names,
                  dataset_id=dataset)
@@ -66,6 +66,8 @@ def main():
     # Global explanations
     st.html(f"<h2>{strings.GLOBAL_EXPLANATION_TITLE}</h2>")
 
+    df_global_exp = dataset_obj.get_global_explanations()
+    responded: st.st.dataframe(df_global_exp)
 
 
 

@@ -32,17 +32,17 @@ def test_returns_correct_row():
 
 def test_returns_dataframe():
     run = make_run()
-    result = CoefficientsAdapter.load_explanation(run, "sample-1")
+    result = CoefficientsAdapter.load_local_explanation(run, "sample-1")
     assert isinstance(result, pd.DataFrame)
 
 def test_missing_sample_raises():
     run = make_run()
     with pytest.raises(MissingDataError):
-        CoefficientsAdapter.load_explanation(run, "nonexistent")
+        CoefficientsAdapter.load_local_explanation(run, "nonexistent")
 
 def test_loads_correct_dataframe():
     run = make_run()
-    CoefficientsAdapter.load_explanation(run, "sample-1")
+    CoefficientsAdapter.load_local_explanation(run, "sample-1")
     run.store.load_dataframe.assert_called_once_with(f"exp_local_{CoefficientsAdapter.key}")
 
 def test_uses_correct_id_column():
@@ -51,6 +51,6 @@ def test_uses_correct_id_column():
         "feat1": [0.5],
     })
     run = make_run(dataframe=df)
-    result = CoefficientsAdapter.load_explanation(run, "sample-1")
+    result = CoefficientsAdapter.load_local_explanation(run, "sample-1")
     row = result[result["feature_name"] == "feat1"].iloc[0]
     assert row["score"] == 0.5

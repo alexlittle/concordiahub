@@ -22,7 +22,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     EXCLUDED_CONTRIBUTION_KEYS = {"class"}
     
     @classmethod
-    def load_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
+    def load_local_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
         df = super().load_explanation(modeleval, instance_id)
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
@@ -40,7 +40,6 @@ class TreeSHAPAdapter(XAIMethodAdapter):
             importance = pd.DataFrame(shap_values, columns=data.columns).abs().mean(axis=0)
             result = importance.reset_index()
             result.columns = ['feature', 'importance']
-            result['class'] = 0
             return result
 
         elif shap_values.ndim == 3:
@@ -52,7 +51,6 @@ class TreeSHAPAdapter(XAIMethodAdapter):
                 importance = pd.DataFrame(shap_values[:, :, i], columns=data.columns).abs().mean(axis=0)
                 df = importance.reset_index()
                 df.columns = ['feature', 'importance']
-                df['class'] = keys[i]
                 dfs.append(df)
             return pd.concat(dfs, ignore_index=True)
 

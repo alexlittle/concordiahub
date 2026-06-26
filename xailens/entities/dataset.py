@@ -1,5 +1,6 @@
 import pandas as pd
 
+from xailens.registry.xai_registry import get_xai_adapter
 from xailens.entities.modeleval import ModelEval
 from xailens import constants
 
@@ -16,6 +17,28 @@ class Dataset:
         df.index.name = "model"
         df.columns.name = None
         return df
+
+    def get_global_explanations(self) -> pd.DataFrame:
+        explanations = {}
+        all_features = set()
+
+        for modeleval in self.modelevals:
+            method = modeleval.get("xai_methods")[0]
+            adapter = get_xai_adapter(method)
+            df = adapter.load_global_explanation(modeleval)
+            explanations[modeleval.model_id] = df[
+                ["feature_name", "score_normalised_max"]].rename(
+                columns={"score_normalised_max": modeleval.model_id}
+            )
+            all_features.update(df["feature_name"].tolist())
+
+        all_features_df = pd.DataFrame({"feature_name": sorted(all_features)})
+
+        result = all_features_df
+        for model_id, df in explanations.items():
+            result = result.merge(df, on="feature_name", how="left")
+
+        return result
 
     def get_instance_consensus_ids(self) -> pd.Index:
         """Returns instance IDs common to all models."""

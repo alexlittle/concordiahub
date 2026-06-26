@@ -46,7 +46,7 @@ class CoefficientsAdapter(XAIMethodAdapter):
         feature_names = ctx.data.x_test.drop(columns=ctx.data.data_schema.instance_id_column).columns
         importance = pd.DataFrame({
             "feature": feature_names,
-            "coefficient": coef,
+            "importance": coef,
         })
         return importance
 
