@@ -1,7 +1,7 @@
 {
     "model_type": "llm",
     "xai_methods": [
-        "cor"
+        "llm_reasoning"
     ],
     "dataset_id": "cleveland-heart-data",
     "model_display_name": "Llama 3.1",
@@ -11,14 +11,15 @@
         "contributions_field": "feature_contributions",
         "contribution_key": null
     },
-    "datetime": "20260623-185021",
-    "model_uuid": "81086b24-950b-4944-bd4f-ca129b0db378",
+    "datetime": "20260626-162530",
+    "model_uuid": "be404efd-25d1-4aa1-8894-dfd7771cc927",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
         "prediction_column": "prediction",
         "feature_columns": null,
         "class_names": null,
-        "hide_zero_threshold": null
+        "hide_zero_global_threshold": null,
+        "hide_zero_local_threshold": null
     }
 }

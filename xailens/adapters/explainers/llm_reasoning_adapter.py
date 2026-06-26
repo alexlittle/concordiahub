@@ -88,7 +88,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             for feature, data in row["contributions"].items()
         ])
 
-    def explain_global_json(self, _, __) -> pd.DataFrame:
+    def explain_global_json(self, _, model=None) -> pd.DataFrame:
         print(strings.WARNING_GLOBAL_NOT_AVAILABLE.format(adapter=self.key))
 
     def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
@@ -131,8 +131,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         return output
 
     @staticmethod
-    def _reformat(raw: dict, schema: ResponseSchema,
-                  prediction: str) -> LLMResponse:
+    def _reformat(raw: dict, schema: ResponseSchema, prediction: str) -> LLMResponse:
         raw_contribs = raw[schema.contributions_field]
         if schema.contribution_key is not None:
             contributions = {
@@ -146,7 +145,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             contributions = {
                 feature: ContribScore(
                     score=values["score"],
-                    reasoning=values["reasoning"],
+                    reasoning=values.get("reasoning", ""),
                 )
                 for feature, values in raw_contribs.items()
             }

@@ -8,14 +8,15 @@
     "model_subtype": null,
     "model_dir_name": "heart_lr",
     "response_schema": null,
-    "datetime": "20260625-222457",
-    "model_uuid": "8d1041cb-76be-447d-9b84-cf85535f4ba3",
+    "datetime": "20260626-162456",
+    "model_uuid": "515525df-1927-41c6-85a2-cd6a59ad26ef",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
         "prediction_column": "y_pred",
         "feature_columns": null,
         "class_names": null,
-        "hide_zero_threshold": null
+        "hide_zero_global_threshold": null,
+        "hide_zero_local_threshold": null
     }
 }
