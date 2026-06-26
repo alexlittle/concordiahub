@@ -31,7 +31,7 @@ model_data = xai.ModelData(
 
 ctx = xai.ModelContext(
     "llm",
-    ["cor"],
+    ["llm_reasoning"],
     "cleveland-heart-data",
     model_data,
     model_subtype=current_model,

@@ -42,8 +42,8 @@ class LLMResponse:
 class LLMReasoningAdapter(XAIMethodAdapter):
     """"""
 
-    display_name = strings.COR_DISPLAY_NAME
-    display_notes = strings.COR_NOTES
+    display_name = strings.LLM_REASONING_DISPLAY_NAME
+    display_notes = strings.LLM_REASONING_NOTES
     default_visualisation = config.LLM_REASONING_DEFAULT_VIZ
     compatible_visualisations = config.LLM_REASONING_COMPATIBLE_VIZ
 

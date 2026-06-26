@@ -89,7 +89,7 @@ XAI_METHOD_DISPLAY_NAME = DisplayNameDict({
 })
 
 COEFFICIENTS_DISPLAY_NAME = "Coefficients"
-COR_DISPLAY_NAME = "LLM Reasoning"
+LLM_REASONING_DISPLAY_NAME = "LLM Reasoning"
 KERNEL_SHAP_DISPLAY_NAME = "Kernel Shap"
 TREE_SHAP_DISPLAY_NAME = "Tree Shap"
 
@@ -97,7 +97,7 @@ COEFFICIENTS_NOTES = """
     Coefficients are considered inherently interpretable for linear models, meaning the values directly reflect each 
     feature's contribution to the model's decision.
     """
-COR_NOTES = """
+LLM_REASONING_NOTES = """
     LLM Reasoning explanations may be post-rationalised by the model, and so may not 
     truly reflect the decision process the model used to arrive at the explanation.
     """
