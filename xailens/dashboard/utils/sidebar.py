@@ -6,7 +6,7 @@ from xailens._version import __version__
 from xailens import strings
 
 def render_header():
-    logo_path = Path(__file__).parents[2] / "assets" / "xai-lens-logo.svg"
+    logo_path = Path(__file__).parent.parent / "assets" / "xai-lens-logo.svg"
 
     with open(logo_path, "rb") as f:
         svg_base64 = base64.b64encode(f.read()).decode()

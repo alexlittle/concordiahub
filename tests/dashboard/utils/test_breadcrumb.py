@@ -1,5 +1,5 @@
 
-from xailens.dashboard.utils.render.common import display_breadcrumbs
+from xailens.dashboard.utils.common import display_breadcrumbs
 
 def test_no_params():
     breadcrumbs = display_breadcrumbs()

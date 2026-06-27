@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.registry.viz_registry import get_viz_adapter
 from xailens import exceptions
-from xailens.dashboard.utils.render.display_table import render_dataframe
+from xailens.dashboard.utils.display_table import render_dataframe
 from xailens.dashboard import settings
 from xailens.entities.modeleval import ModelEval
 
@@ -34,20 +34,6 @@ def select_individual_viz(viz_id: str, current: str, options: dict, existing_par
                 f'<a href="{settings.INSTANCE_DETAIL_FILENAME}?{query_string}" target="_self">{v.display_name}</a>'
             )
     return " | ".join(option_list)
-
-def select_comparison_viz(current: str, options: dict, existing_params: dict) -> str:
-    option_list =[]
-    for k,v in options.items():
-        if k == current:
-            option_list.append(f"<strong>{v.display_name}</strong>")
-        else:
-            link_params = {**existing_params, "comp_viz": k}
-            query_string = "&".join(f"{pk}={pv}" for pk, pv in link_params.items())
-            option_list.append(
-                f'<a href="{settings.INSTANCE_DETAIL_FILENAME}?{query_string}" target="_self">{v.display_name}</a>'
-            )
-    return " | ".join(option_list)
-
 
 def build_model_panel(modeleval: ModelEval, viz_param_key, query_params) -> ModelPanel:
     method = modeleval.get("xai_methods")[0]

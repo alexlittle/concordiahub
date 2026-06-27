@@ -2,7 +2,7 @@ import streamlit as st
 
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.services import get_explorer
-from xailens.dashboard.utils.render import home
+from xailens.dashboard.utils import home
 
 from xailens import strings
 

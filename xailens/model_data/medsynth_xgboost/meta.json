@@ -8,15 +8,13 @@
     "model_subtype": null,
     "model_dir_name": "medsynth_xgboost",
     "response_schema": null,
-    "datetime": "20260626-144326",
-    "model_uuid": "83853bba-4e94-4504-b741-89aefab0a4c8",
+    "datetime": "20260627-144312",
+    "model_uuid": "f68a647a-08ee-4413-b006-898710c8e993",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "y_test",
         "prediction_column": "y_pred",
         "feature_columns": null,
-        "class_names": null,
-        "hide_zero_global_threshold": 0.25,
-        "hide_zero_local_threshold": 0.1
+        "class_names": null
     }
 }

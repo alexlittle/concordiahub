@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-from xailens.dashboard.utils.render import plotly_theme
+from xailens.dashboard.utils import plotly_theme
 from xailens import strings
 
 

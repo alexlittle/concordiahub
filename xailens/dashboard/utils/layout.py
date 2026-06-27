@@ -3,7 +3,7 @@ import streamlit as st
 
 from xailens.dashboard.utils.styles import load_css
 from xailens import strings
-from xailens.dashboard.utils.render import sidebar
+from xailens.dashboard.utils import sidebar
 
 
 def apply_layout(title: str,
