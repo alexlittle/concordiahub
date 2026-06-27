@@ -28,13 +28,7 @@ class Dataset:
             adapter = get_xai_adapter(method)
             df = adapter.load_global_explanation(modeleval)
 
-            schema = modeleval.get_data_schema()
-            if schema.hide_zero_global_threshold is not None:
-                filtered_df = df[df["score_normalised_max"] > schema.hide_zero_global_threshold]
-            else:
-                filtered_df = df
-
-            keep_features.update(filtered_df["feature_name"].tolist())
+            keep_features.update(df["feature_name"].tolist())
             explanations[modeleval.get("model_display_name")] = df[
                 ["feature_name", "score_normalised_max"]].rename(
                 columns={

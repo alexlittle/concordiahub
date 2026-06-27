@@ -6,7 +6,6 @@ from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens.adapters.models.model_base import ModelAdapter
 from xailens import strings
 from xailens.exceptions import InvalidConfigurationError, MissingDataError
-from xailens.encoder import XAITextEncoder
 from xailens.artifacts import ArtifactStore
 from xailens.entities.context import ModelContext, ModelData
 from xailens.registry.model_registry import get_model_adapter
@@ -36,16 +35,6 @@ def compute_metrics(data: ModelData):
         return series
     else:
         raise MissingDataError("Cannot compute metrics because y or y_test, and y_pred are required")
-
-
-def write_encodings(ctx: ModelContext, artifact_store: ArtifactStore):
-    encoder = XAITextEncoder()
-    if ctx.data.x is not None:
-        df = ctx.data.x
-    elif ctx.data.x_train is not None:
-        df = ctx.data.x_train
-    encoded_features = encoder.encode_feature_names(df)
-    artifact_store.write_data("feature_name_embeddings", encoded_features)
 
 
 def write_global_explanations(xai_method: str,
@@ -111,10 +100,6 @@ def run(ctx: ModelContext):
     for xai_method in ctx.xai_methods:
         xai_class = get_xai_adapter(xai_method)
         xai_adapter = xai_class()
-
-        # process feature names if necessary
-        if xai_adapter.requires_encoded_features:
-            write_encodings(ctx, artifact_store)
 
         # Run the global explanations
         write_global_explanations(xai_method, xai_adapter, ctx, model_adapter, artifact_store)

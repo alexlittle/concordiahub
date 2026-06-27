@@ -47,9 +47,6 @@ class LLMReasoningAdapter(XAIMethodAdapter):
     default_visualisation = config.LLM_REASONING_DEFAULT_VIZ
     compatible_visualisations = config.LLM_REASONING_COMPATIBLE_VIZ
 
-    # no features as such so will process the explanations in this adapter
-    requires_encoded_features: bool = False
-
     # uses a json file for explanation storage
     explanation_file_type: str = "json"
 

@@ -17,9 +17,6 @@ class XAIMethodAdapter(ABC):
     default_visualisation: Optional[str]
     compatible_visualisations: Optional[dict]
 
-    # default to true for most explanation adapters
-    requires_encoded_features: bool = True
-
     # type of explanation storage - df or JSON, default to df
     explanation_file_type: str = "df"
 
@@ -45,11 +42,6 @@ class XAIMethodAdapter(ABC):
         if row.empty:
             raise MissingDataError(f"Instance '{instance_id}' not found in explanations for {cls.key}")
         explanation = row.iloc[0].drop(modeleval.get(constants.DATA_SCHEMA_ID_COLUMN), errors='coerce')
-
-        # filter out near-zero valued features if a threshold is set
-        schema = modeleval.get_data_schema()
-        if schema.hide_zero_local_threshold is not None:
-            explanation = explanation[explanation.abs() > schema.hide_zero_local_threshold]
 
         abs_sum = explanation.abs().sum()
         abs_max = explanation.abs().max()

@@ -26,9 +26,7 @@ y_pred["y_pred"] = y_pred["y_pred"].map(
 data_schema = xai.DataSchema(
     instance_id_column=config.INSTANCE_UUID_COL,
     target_column="y_test",
-    prediction_column="y_pred",
-    hide_zero_local_threshold=0.4,
-    hide_zero_global_threshold=0.4)
+    prediction_column="y_pred")
 
 model_data = xai.ModelData(
     data_schema=data_schema,
