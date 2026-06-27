@@ -27,19 +27,23 @@ def main():
     apply_layout(strings.INSTANCE_TITLE.format(dataset=dataset),
                  all_model_names=all_model_names,
                  selected_model_names=selected_model_names,
-                 dataset_id=dataset)
+                 dataset_id=dataset,
+                 selected_instance_group=instance_group,)
+
+    # Get the selected models for the dataset and matching instances
+    selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset,
+                                                                       selected_model_names)
+    dataset_obj = Dataset(dataset, selected_modelevals)
+    df_instances = dataset_obj.get_all_instances()
+    if instance_group != "all":
+        df_instances = df_instances[df_instances['agreement'] == instance_group]
 
     # breadcrumb
     st.html(display_breadcrumbs(dataset, instance_group=instance_group))
 
-    st.html(f"<h2>{constants.INSTANCE_GROUPS[instance_group]}</h2>")
+    st.html(f"<h2>{constants.INSTANCE_GROUPS[instance_group]} ({len(df_instances)})</h2>")
 
-    # Get the selected models for the dataset and matching instances
-    selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset, selected_model_names)
-    dataset_obj = Dataset(dataset, selected_modelevals)
-    df_instances = dataset_obj.get_all_instances()
-    if instance_group != "all":
-        df_instances = df_instances[df_instances['agreement']==instance_group]
+
 
     # Display matching instances
     # remove agreement column so doesn't display

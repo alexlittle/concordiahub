@@ -7,3 +7,6 @@ fastReruns = true
 [client]
 showSidebarNavigation = false
 toolbarMode = "minimal"
+
+[theme]
+primaryColor = "#1A6B6B"

@@ -20,6 +20,7 @@ APP_NAME = "XAI Lens"
 
 # sidebar
 SIDEBAR_MODEL_FILTER_TITLE = "Include models:"
+SIDEBAR_INSTANCE_GROUP_FILTER_TITLE = "Instances:"
 
 # Page titles
 HOMEPAGE_TITLE = "Select a dataset"

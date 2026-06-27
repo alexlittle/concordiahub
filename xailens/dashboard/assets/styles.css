@@ -4,20 +4,6 @@
     --sidebar-width: 300px;
     --model-name-colour: #0d4f4f;
 
-    --pill-model-border: #b2cece;
-    --pill-model-text: #1A6B6B;
-    --pill-model-hover-bg: #e6f3f3;
-    --pill-model-hover-border: #1A6B6B;
-    --pill-model-hover-text: #0d4f4f;
-    --pill-model-active-bg: #1A6B6B;
-
-    --pill-dataset-border: #b2bece;
-    --pill-dataset-text: #2a5278;
-    --pill-dataset-hover-bg: #e8eef5;
-    --pill-dataset-hover-border: #2a5278;
-    --pill-dataset-hover-text: #1a3a5c;
-    --pill-dataset-active-bg: #2a5278;
-
     --color-metric-bg: #D4E4E4AA;
 }
 
@@ -118,10 +104,23 @@ section[data-testid="stSidebar"] {
     padding-top: 0;
 }
 
-[data-testid="stSidebar"] span.st-bg {
-    accent-color: var(--color-link) !important;
-    background-color: var(--color-link) !important;
-    border-color: var(--color-link) !important;
+div[data-testid="stRadio"] > label [data-testid="stMarkdownContainer"] p {
+    font-size: 1.3rem !important;
+    font-weight: 500 !important;
+    padding: 0;
+    margin: 0;
+}
+
+div[data-testid="stCheckbox"] {
+    margin-bottom: -0.8rem;
+}
+
+div[data-testid="stRadio"] label[data-testid="stWidgetLabel"] + div label {
+    align-items: center !important;
+}
+
+div[data-testid="stCheckbox"] label {
+    align-items: center !important;
 }
 
 /* so hide/show arrow always appears */
@@ -247,194 +246,9 @@ section[data-testid="stSidebar"] {
     color: #721c24 !important;
 }
 
-
-/*
-    Run card elements
- */
-
-.run-card-row {
-    display: grid;
-    grid-template-columns: 180px 1fr 48px 1fr 180px;
-    align-items: center;
-    padding: 14px 0;
-    border-bottom: 0.5px solid rgba(0,0,0,0.1);
-    gap: 0;
-}
-
-.run-cell {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 0 12px;
-}
-
-.run-cell-model {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex-wrap: wrap;
-}
-
-.run-cell-model-name {
-    font-size: 16px;
-    font-weight: 500;
-    color: var(--model-name-colour);
-}
-
-.run-cell-meta {
-    font-size: 14px;
-    color: #666;
-    margin-top: 2px;
-}
-
-.run-cell-run-name {
-    font-size: 13px;
-    color: #999;
-    margin-top: 1px;
-}
-
-.badge {
-    font-size: 13px;
-    font-weight: 500;
-    padding: 2px 7px;
-    border-radius: 4px;
-    white-space: nowrap;
-}
-
-.badge-llm  { background: #E1F5EE; color: #0F6E56; }
-.badge-xgb  { background: #E6F1FB; color: #185FA5; }
-.badge-lr   { background: #EEEDFE; color: #534AB7; }
-.badge-other{ background: #F1EFE8; color: #5F5E5A; }
-
-.vs-col {
-    text-align: center;
-    font-size: 14px;
-    font-weight: 500;
-    color: #999;
-}
-
-.dataset-col {
-    font-size: 16px;
-    color: #444;
-    padding-right: 8px;
-}
-
-.acc-pill {
-    font-size: 13px;
-    color: #888;
-}
-
-.run-card-header {
-    display: grid;
-    grid-template-columns: 180px 1fr 48px 1fr 180px;
-    padding: 0 0 8px 0;
-    border-bottom: 1px solid rgba(0,0,0,0.15);
-    margin-bottom: 4px;
-}
-
-.run-card-header span {
-    font-size: 14px;
-    font-weight: 500;
-    color: #666;
-    padding: 0 12px;
-}
-
-/*
- homepage filter/pill display
- */
-
-.pill-bar {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    padding: 0 0 3px 0; }
-
-a.pill-model, a.pill-dataset {
-    font-size: 12px;
-    padding: 5px 14px;
-    border-radius: 20px;
-    background: #ffffff;
-    text-decoration: none;
-    transition: background 0.15s, border-color 0.15s;
-}
-
-a.pill-model {
-    border: 1px solid var(--pill-model-border);
-    color: var(--pill-model-text);
-}
-a.pill-model:hover {
-    background: var(--pill-model-hover-bg);
-    border-color: var(--pill-model-hover-border);
-    color: var(--pill-model-hover-text);
-}
-a.pill-model--active {
-    background: var(--pill-model-active-bg);
-    border-color: var(--pill-model-active-bg);
-    color: #ffffff;
-    font-weight: 500;
-}
-
-a.pill-dataset {
-    border: 1px solid var(--pill-dataset-border);
-    color: var(--pill-dataset-text);
-}
-a.pill-dataset:hover {
-    background: var(--pill-dataset-hover-bg);
-    border-color: var(--pill-dataset-hover-border);
-    color: var(--pill-dataset-hover-text);
-}
-a.pill-dataset--active {
-    background: var(--pill-dataset-active-bg);
-    border-color: var(--pill-dataset-active-bg);
-    color: #ffffff;
-    font-weight: 500;
-}
-
-
-
-/*
-    Overview page elements
- */
-
-.model-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 6px;
-}
-.model-header h3 {
-    margin: 0;
-    font-weight: 500;
-}
-.model-meta {
-    font-size: 14px;
-    color: gray;
-}
-
-.tag {
-    display: inline-block;
-    font-size: 12px;
-    font-weight: 500;
-    padding: 5px 7px;
-    border-radius: 4px;
-    white-space: nowrap;
-    background: #F1EFE8;
-    color: #5F5E5A;
-    margin: 0 5px;
-}
-
 /*
     Overview table elements
  */
-.run-cell table, .run-cell td, .run-cell tr {
-        border: none !important;
-        border-top: none !important;
-    }
-.run-cell table { font-size: 0.85rem; border-collapse: collapse; border: none; width: 100%; }
-.run-cell td, .run-cell tr { border: none !important; border-top: none !important; }
-.run-cell td.label { color: grey; padding: 2px 8px 2px 0; white-space: nowrap; width: 100px }
-.run-cell td.model { font-size:110%;  padding: 2px 8px 2px 0; white-space: nowrap; }
-
 .report-table {
     border-collapse: collapse;
     width: 100%;
@@ -461,12 +275,4 @@ a.pill-dataset--active {
 
 .report-table a:hover {
     text-decoration: underline;
-}
-
-.tick {
-    color: #22c55e;
-}
-
-.cross {
-    color: #ef4444;
 }
