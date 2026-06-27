@@ -3,8 +3,10 @@ import streamlit as st
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.services import get_explorer
 from xailens.dashboard.utils.render.common import display_breadcrumbs
+from xailens.dashboard.utils.render.display_instances_df import render_instances_df
 from xailens import strings, constants
 from xailens.entities.dataset import Dataset
+
 
 
 def main():
@@ -31,17 +33,21 @@ def main():
     st.html(display_breadcrumbs(dataset, instance_group=instance_group))
 
     st.html(f"<h2>{constants.INSTANCE_GROUPS[instance_group]}</h2>")
-    # get matching instances
-    # Get the selected models for the dataset
+
+    # Get the selected models for the dataset and matching instances
     selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_modelevals)
     df_instances = dataset_obj.get_all_instances()
     if instance_group != "all":
         df_instances = df_instances[df_instances['agreement']==instance_group]
 
-    st.dataframe(df_instances)
+    # Display matching instances
+    # remove agreement column so doesn't display
+    df_instances = df_instances.drop(columns="agreement")
+    df_instances = df_instances.rename(columns=constants.DISPLAY_NAMES)
+    query_params = dict(st.query_params)
+    st.html(render_instances_df(df_instances, query_params, true_label_col=constants.DISPLAY_NAMES[constants.COL_TRUE_LABEL]))
 
-    # display matching instances
 
 
 if __name__ == "__main__":

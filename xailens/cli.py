@@ -1,10 +1,23 @@
 import os
 import subprocess
+import argparse
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--no-browser",
+        action="store_true",
+        help="Run Streamlit without opening a browser"
+    )
+    args = parser.parse_args()
+
     base_dir = os.path.dirname(os.path.abspath(__file__))
     app_path = os.path.join(base_dir, "dashboard", "app.py")
-    subprocess.run(["streamlit", "run", app_path])
+    cmd = ["streamlit", "run", app_path]
+    if args.no_browser:
+        cmd += ["--server.headless", "true"]
+
+    subprocess.run(cmd)
 
 if __name__ == "__main__":
     main()

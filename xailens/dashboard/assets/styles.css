@@ -235,6 +235,19 @@ section[data-testid="stSidebar"] {
     color: var(--model-name-colour);
 }
 
+
+
+
+.pred-correct  {
+    background-color: #d4edda;
+    color: #155724 !important;
+}
+.pred-incorrect {
+    background-color: #f8d7da;
+    color: #721c24 !important;
+}
+
+
 /*
     Run card elements
  */
@@ -425,7 +438,7 @@ a.pill-dataset--active {
 .report-table {
     border-collapse: collapse;
     width: 100%;
-    font-size: 0.9rem;
+    font-size: 1rem;
 }
 
 .report-table th,
@@ -443,10 +456,6 @@ a.pill-dataset--active {
 
 .report-table-align {
     text-align: center;
-}
-
-.report-table tr:hover td {
-    background-color: #f9f9f9;
 }
 
 

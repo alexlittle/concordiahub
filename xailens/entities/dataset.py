@@ -160,7 +160,15 @@ class Dataset:
         result = pd.concat([result, pred_df], axis=1)
         result["agreement"] = correct_df.apply(self._agreement, axis=1)
 
-        return result
+        # sort by true_label
+        result = result.sort_values(by=["true_label"], ascending=True)
+        result = result.reset_index(names="instance_uuid")
+        cols = ["instance_uuid", "true_label"] \
+               + [c for c in result.columns if c not in ("instance_uuid",
+                                                            "true_label",
+                                                            "agreement")] + [
+                   "agreement"]
+        return result[cols]
 
     # Private helper functions
     def _agreement(self, row: pd.Series) -> str:
