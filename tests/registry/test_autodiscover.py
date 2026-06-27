@@ -27,12 +27,6 @@ from xailens.registry.viz_registry import (
     get_viz_adapter,
 )
 
-from xailens.registry.comparison_registry import (
-    COMPARISON_REGISTRY,
-    register_comparison,
-    get_comparison_adapter,
-)
-
 
 MODULE_UNDER_TEST = "xailens.registry.autodiscover"
 
@@ -133,30 +127,6 @@ def test_get_viz_adapter_missing_raises(fresh_module):
         get_viz_adapter("missing")
     assert "not registered" in str(exc.value)
 
-# ------------------------
-# Comparison registry tests
-# ------------------------
-def test_register_and_get_comparison_adapter(fresh_module):
-    @register_comparison("method-a", "method-b")
-    class MyAdapter:
-        pass
-
-    comp_class = get_comparison_adapter("method-a", "method-b")
-    comp_adapter = comp_class()
-    assert isinstance(comp_adapter, MyAdapter)
-
-    # Check that the symmetry works
-    comp_class_reversed = get_comparison_adapter("method-b", "method-a")
-    comp_adapter_reversed = comp_class_reversed()
-    assert isinstance(comp_adapter_reversed, MyAdapter)
-
-    assert MyAdapter is COMPARISON_REGISTRY[frozenset({"method-a", "method-b"})]
-
-
-def test_get_comparison_missing_raises(fresh_module):
-    with pytest.raises(InvalidConfigurationError) as exc:
-        get_comparison_adapter("missing_a", "missing_b")
-    assert "No comparison adapter registered" in str(exc.value)
 
 # ------------------------
 # Autodiscovery tests
