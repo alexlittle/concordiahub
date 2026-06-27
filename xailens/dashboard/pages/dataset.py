@@ -41,8 +41,8 @@ def main():
     # show breadcrumb
     st.html(display_breadcrumbs(dataset))
 
-    # Get all the models for the dataset
-    selected_modelevals = explorer. get_selected_modelevals_for_dataset(dataset, selected_model_names)
+    # Get the selected models for the dataset
+    selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_modelevals)
 
     # Performance metrics

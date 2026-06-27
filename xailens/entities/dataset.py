@@ -112,3 +112,60 @@ class Dataset:
             "models_disagree": models_disagree,
         }
 
+    def get_all_instances(self) -> pd.DataFrame:
+        """ Gets a dataframe of all the instances for all the modelevals.
+        The dataframe includes columns:
+        - instance_uuid
+        - true_label (ground truth)
+        - prediction column for each dataset
+        - agreement column (either: allcorrect, allincorrect, disagree)
+
+        Returns:
+            pd.DataFrame
+        """
+
+        common_ids = self.get_instance_consensus_ids()
+
+        model_preds = {}
+        y_true_common = None
+        target_col_common = None
+
+        for me in self.modelevals:
+            y_true, y_pred = me.load_targets()
+            id_col = me.get(constants.DATA_SCHEMA_ID_COLUMN)
+            pred_col = me.get(constants.DATA_SCHEMA_PREDICTION_COLUMN)
+            target_col = me.get(constants.DATA_SCHEMA_TARGET_COLUMN)
+
+            y_pred_filtered = y_pred[y_pred[id_col].isin(common_ids)]
+            y_true_filtered = y_true[y_true[id_col].isin(common_ids)]
+
+            model_preds[me.get("model_display_name")] = {
+                "preds": y_pred_filtered.set_index(id_col),
+                "pred_col": pred_col,
+            }
+            if y_true_common is None:
+                y_true_common = y_true_filtered.set_index(id_col)
+                target_col_common = target_col
+
+        correct_df = pd.DataFrame({
+                model_id: (data["preds"][data["pred_col"]].values == y_true_common[target_col_common].values
+                ) for model_id, data in model_preds.items()
+            }, index=y_true_common.index)
+
+        pred_df = pd.DataFrame({
+                model_id: data["preds"][data["pred_col"]].values for model_id, data in model_preds.items()
+            }, index=y_true_common.index)
+
+        result = pd.DataFrame({"true_label": y_true_common[target_col_common]})
+        result = pd.concat([result, pred_df], axis=1)
+        result["agreement"] = correct_df.apply(self._agreement, axis=1)
+
+        return result
+
+    # Private helper functions
+    def _agreement(self, row: pd.Series) -> str:
+        if row.all():
+            return "allcorrect"
+        if (~row).all():
+            return "allincorrect"
+        return "disagree"

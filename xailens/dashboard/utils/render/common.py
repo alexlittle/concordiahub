@@ -1,3 +1,5 @@
+import streamlit as st
+
 from xailens.dashboard import settings
 from xailens import constants
 
@@ -8,7 +10,12 @@ def display_breadcrumbs(dataset: str = None,
     parts = ["<a href='/' target='_self'>Home</a>"]
 
     if dataset:
-        parts.append(f"<a href='/{settings.DATASET_FILENAME}?dataset={dataset}' target='_self'>{dataset}</a>")
+        models = st.query_params.get('models')
+        if models:
+            param = f"&models={models}"
+        else:
+            param = ""
+        parts.append(f"<a href='/{settings.DATASET_FILENAME}?dataset={dataset}{param}' target='_self'>{dataset}</a>")
 
     if instance_group:
         parts.append(constants.INSTANCE_GROUPS[instance_group])

@@ -88,7 +88,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             for feature, data in row["contributions"].items()
         ])
 
-    def explain_global_json(self, _, model=None) -> pd.DataFrame:
+    def explain_global_json(self, _, _model=None) -> pd.DataFrame:
         print(strings.WARNING_GLOBAL_NOT_AVAILABLE.format(adapter=self.key))
 
     def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:

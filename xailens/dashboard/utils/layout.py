@@ -23,7 +23,7 @@ def apply_layout(title: str,
         if all_model_names:
             st.html(f"<h3>{strings.SIDEBAR_MODEL_FILTER_TITLE}</h3>")
             selected = []
-            for name in all_model_names:
+            for name in sorted(all_model_names):
                 if st.checkbox(name, value=name in selected_model_names, key=f"chk_{dataset_id}_{name}"):
                     selected.append(name)
 
