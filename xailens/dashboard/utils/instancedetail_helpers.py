@@ -47,8 +47,8 @@ def build_model_panel(modeleval: ModelEval, viz_param_key, query_params) -> Mode
         viz_class = None
 
 
-    instance_id = query_params.get("instance_id")
-    explanation = xai_class.load_explanation(modeleval, instance_id)
+    instance_uuid = query_params.get("instance_uuid")
+    explanation = xai_class.load_local_explanation(modeleval, instance_uuid)
     return ModelPanel(
         modeleval=modeleval,
         xai_class=xai_class,

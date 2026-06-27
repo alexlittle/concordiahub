@@ -16,6 +16,9 @@ class BarChartVizAdapter(VizAdapter):
 
     def render_local(self, explanation: pd.DataFrame, axis_range=None) -> list[Any]:
 
+        # filter to show only the largest contributors, not all
+        explanation = self._top_features(explanation)
+
         explanation = explanation.sort_values("score_normalised_max", ascending=True)
         colors = [config.PLOT_LEFT_COLOR if v < 0 else config.PLOT_RIGHT_COLOR
                   for v in explanation["score_normalised_max"]]
@@ -31,7 +34,7 @@ class BarChartVizAdapter(VizAdapter):
             marker_color=colors,
         ))
         fig.update_layout(
-            height=max(400, n_features * 25),
+            height=max(400, n_features * config.PLOT_PER_ROW_MULTIPLIER),
             title=strings.BARCHART_TITLE,
             xaxis_title=strings.BARCHART_X_AXIS,
             xaxis=config.PLOT_ZERO_LINE,

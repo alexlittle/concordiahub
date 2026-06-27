@@ -4,7 +4,7 @@ import os
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 
 import streamlit as st
-from xailens.dashboard.services import get_explorer
+from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard import settings
 from xailens import strings
 

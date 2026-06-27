@@ -2,7 +2,7 @@ import streamlit as st
 
 from xailens.exceptions import InvalidSelectionError
 from xailens.dashboard.utils.layout import apply_layout
-from xailens.dashboard.services import get_explorer
+from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard.utils.common import display_breadcrumbs, render_metric_card
 from xailens.dashboard.utils.dataset import (
     render_accuracy_barchart,

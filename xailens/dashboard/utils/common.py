@@ -6,22 +6,29 @@ from xailens import constants
 
 def display_breadcrumbs(dataset: str = None,
                         instance_group: str = None,
-                        instance_id:str = None) -> str:
+                        instance_uuid:str = None) -> str:
     parts = ["<a href='/' target='_self'>Home</a>"]
 
+    models = st.query_params.get('models')
+    if models:
+        model_param = f"&models={models}"
+    else:
+        model_param = ""
+
     if dataset:
-        models = st.query_params.get('models')
-        if models:
-            param = f"&models={models}"
+        if instance_group:
+            parts.append(f"<a href='/{settings.DATASET_FILENAME}?dataset={dataset}{model_param}' target='_self'>{dataset}</a>")
         else:
-            param = ""
-        parts.append(f"<a href='/{settings.DATASET_FILENAME}?dataset={dataset}{param}' target='_self'>{dataset}</a>")
+            parts.append(f"{dataset}")
 
     if instance_group:
-        parts.append(constants.INSTANCE_GROUPS[instance_group])
+        if instance_uuid:
+            parts.append(f"<a href='/{settings.INSTANCES_FILENAME}?dataset={dataset}{model_param}&instances={instance_group}' target='_self'>{constants.INSTANCE_GROUPS[instance_group]}</a>")
+        else:
+            parts.append(constants.INSTANCE_GROUPS[instance_group])
 
-    if instance_id:
-        parts.append(f"{instance_id}")
+    if instance_uuid:
+        parts.append(f"{instance_uuid}")
     
     return f"<div class='breadcrumbs'>{' &nbsp;&gt;&nbsp; '.join(parts)}</div>"
 

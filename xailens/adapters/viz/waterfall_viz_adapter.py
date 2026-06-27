@@ -12,6 +12,10 @@ class WaterfallVizAdapter(VizAdapter):
     compatible_explanations = config.WATERFALL_COMPATIBLE_XAI
 
     def render_local(self, explanation, axis_range=None) -> list[Any]:
+
+        # filter to show only the largest contributors, not all
+        explanation = self._top_features(explanation)
+
         explanation.sort_values("score_normalised_max", inplace=True, ascending=True)
 
         feature_names = explanation["feature_name"].tolist()
@@ -28,7 +32,7 @@ class WaterfallVizAdapter(VizAdapter):
             decreasing={"marker": {"color": config.PLOT_LEFT_COLOR}},
         ))
         fig.update_layout(
-            height=max(400, n_features * 25),
+            height=max(400, n_features * config.PLOT_PER_ROW_MULTIPLIER),
             title=strings.WATERFALL_TITLE,
             xaxis_title=strings.WATERFALL_X_AXIS,
             yaxis={

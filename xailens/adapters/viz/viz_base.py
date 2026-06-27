@@ -3,6 +3,7 @@ import pandas as pd
 from typing import Any
 from abc import ABC, abstractmethod
 
+from xailens import config
 
 class VizAdapter(ABC):
 
@@ -16,3 +17,7 @@ class VizAdapter(ABC):
     @abstractmethod
     def render_global(self, explanations) -> Any:
         raise NotImplementedError
+
+    # filter to show only the largest contributors, not all
+    def _top_features(self, explanation: pd.DataFrame, n: int = config.PLOT_MAX_FEATURES) -> pd.DataFrame:
+        return explanation.reindex(explanation["score_normalised_max"].astype(float).abs().nlargest(n).index)

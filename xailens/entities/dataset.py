@@ -3,7 +3,7 @@ import pandas as pd
 from xailens.exceptions import InvalidSelectionError
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.entities.modeleval import ModelEval
-from xailens import constants
+from xailens import constants, config
 
 
 class Dataset:
@@ -51,7 +51,7 @@ class Dataset:
         result["_mean"] = result[model_cols].mean(axis=1, skipna=True)
         result = result.sort_values("_mean", ascending=False).drop(columns="_mean").reset_index(drop=True)
 
-        return result[:25].reset_index(drop=True)
+        return result[:config.PLOT_MAX_FEATURES].reset_index(drop=True)
 
     def get_instance_consensus_ids(self) -> pd.Index:
         """Returns instance IDs common to all models."""

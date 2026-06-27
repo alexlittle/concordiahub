@@ -29,7 +29,7 @@ def apply_layout(title: str,
 
             selected_ig = None
             if selected_instance_group:
-                options = [k for k in constants.INSTANCE_GROUPS]
+                options = list(constants.INSTANCE_GROUPS)
                 selected_ig = st.radio(
                     label=f"{strings.SIDEBAR_INSTANCE_GROUP_FILTER_TITLE}",
                     options=options,

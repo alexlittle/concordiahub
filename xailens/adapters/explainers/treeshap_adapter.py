@@ -23,7 +23,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     
     @classmethod
     def load_local_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
-        df = super().load_explanation(modeleval, instance_id)
+        df = super().load_local_explanation(modeleval, instance_id)
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
     def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
@@ -82,7 +82,6 @@ class TreeSHAPAdapter(XAIMethodAdapter):
             result = pd.DataFrame(shap_values, columns=data.columns)
             result.insert(0, instance_id, uuids)
             result['class'] = 0
-            return result
 
         # SHAP returns (n_instances, n_features, n_classes) for multiclass tree models
         # slice last axis per class to get (n_instances, n_features) per DataFrame
@@ -96,10 +95,14 @@ class TreeSHAPAdapter(XAIMethodAdapter):
                 df.insert(0, instance_id, uuids)
                 df['class'] = keys[i]
                 dfs.append(df)
-            return pd.concat(dfs, ignore_index=True)
+            result = pd.concat(dfs, ignore_index=True)
 
         else:
             raise DataProcessingError("The return values from SHAP don't match")
+
+        # filter by abs value
+        return result
+
 
     def explain_local_json(self, ctx: ModelContext) -> dict[str, Any]:
         raise NotImplementedError

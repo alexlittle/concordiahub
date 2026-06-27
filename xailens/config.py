@@ -13,9 +13,6 @@ META_INFO_FILENAME: Final[str] = "meta"
 MODEL_FILENAME: Final[str] = "model"
 
 
-# Configuration & Constants for NLP tasks
-EMBEDDING_ENCODER: Final[str] ="all-MiniLM-L6-v2"
-
 #------------------------
 # XAI Method default visualisations & defaults
 #------------------------
@@ -45,25 +42,13 @@ WATERFALL_COMPATIBLE_XAI = ["tree_shap", "coefficients", "llm_reasoning"]
 TABULAR_COMPATIBLE_XAI = ["llm_reasoning"]
 
 #------------------------
-# Comparison Visualisation compatibility combinations & configuration
+# Display config
 #------------------------
+# maximum no features to show - esp for TF-IDF based models
+PLOT_MAX_FEATURES = 25
 
-DEFAULT_COMPARISON_AXIS_RANGE = [-1.1, 1.1]
-
-DEFAULT_COMPARISON_VISUALISATION = "alignment_scale"
-DEFAULT_COMPARISON_VISUALISATION_OPTIONS = {
-        "alignment_scale": context.VizOption(display_name="Alignment Scale", method="viz_alignment_scale"),
-        "diff_bar": context.VizOption(display_name="Difference (bar)", method="viz_diff_bar"),
-        "dumbbell": context.VizOption(display_name="Dumbbell", method="viz_dumbbell")
-    }
-
-ALIGNMENT_SCALE_COMPARISON_VISUALISATION = "alignment_scale"
-ALIGNMENT_SCALE_COMPARISON_VISUALISATION_OPTIONS = {
-        "alignment_scale": context.VizOption(display_name="Alignment Scale", method="viz_alignment_scale")
-    }
-ALIGNMENT_THRESHOLDS = [0.25, 0.5, 0.75, 1.0]
-
-
+# how many pixels to add for each row on a plot (so doesn't get squashed)
+PLOT_PER_ROW_MULTIPLIER = 25
 
 #------------------------
 # Graph/Plot colour scheme

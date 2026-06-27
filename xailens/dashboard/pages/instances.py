@@ -1,7 +1,7 @@
 import streamlit as st
 
 from xailens.dashboard.utils.layout import apply_layout
-from xailens.dashboard.services import get_explorer
+from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard.utils.common import display_breadcrumbs
 from xailens.dashboard.utils.display_instances_df import render_instances_df
 from xailens import strings, constants
