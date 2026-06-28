@@ -40,7 +40,7 @@ class Dataset:
         for df in explanations.values():
             result = result.merge(df, on="feature_name", how="left")
         model_cols = [col for col in result.columns if col != "feature_name"]
-        result["_mean"] = result[model_cols].mean(axis=1, skipna=True)
+        result["_mean"] = result[model_cols].abs().mean(axis=1, skipna=True)
         result = (result.sort_values("_mean", ascending=False).drop(columns="_mean").reset_index(drop=True))
         return result[: config.PLOT_MAX_FEATURES].reset_index(drop=True)
 
@@ -48,7 +48,10 @@ class Dataset:
         return self._get_explanations()
 
     def get_local_explanations(self, instance_uuid: str) -> pd.DataFrame:
-        return self._get_explanations(instance_uuid)
+        result = self._get_explanations(instance_uuid)
+        model_cols = [col for col in result.columns if col != "feature_name"]
+        result[model_cols] = result[model_cols].abs()
+        return result
 
     def get_instance_consensus_ids(self) -> pd.Index:
         """Returns instance IDs common to all models."""
