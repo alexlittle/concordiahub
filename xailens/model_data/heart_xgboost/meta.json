@@ -8,15 +8,13 @@
     "model_subtype": null,
     "model_dir_name": "heart_xgboost",
     "response_schema": null,
-    "datetime": "20260626-184534",
-    "model_uuid": "747ab9da-06ec-4320-9070-5c4f78c8c24b",
+    "datetime": "20260628-100423",
+    "model_uuid": "e6fd9bc9-db99-4b10-86fd-6499fbb69b81",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
         "prediction_column": "y_pred",
         "feature_columns": null,
-        "class_names": null,
-        "hide_zero_global_threshold": null,
-        "hide_zero_local_threshold": null
+        "class_names": null
     }
 }

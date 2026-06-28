@@ -1,7 +1,7 @@
 import streamlit as st
 
 from xailens.dashboard import settings
-from xailens import config
+from xailens import strings
 
 
 def display_breadcrumbs(dataset: str = None,
@@ -23,9 +23,9 @@ def display_breadcrumbs(dataset: str = None,
 
     if instance_group:
         if instance_uuid:
-            parts.append(f"<a href='/{settings.INSTANCES_FILENAME}?dataset={dataset}{model_param}&instances={instance_group}' target='_self'>{config.INSTANCE_GROUPS[instance_group]}</a>")
+            parts.append(f"<a href='/{settings.INSTANCES_FILENAME}?dataset={dataset}{model_param}&instances={instance_group}' target='_self'>{strings.INSTANCE_GROUPS[instance_group]}</a>")
         else:
-            parts.append(config.INSTANCE_GROUPS[instance_group])
+            parts.append(strings.INSTANCE_GROUPS[instance_group])
 
     if instance_uuid:
         parts.append(f"{instance_uuid}")

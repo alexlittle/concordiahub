@@ -29,11 +29,11 @@ def apply_layout(title: str,
 
             selected_ig = None
             if selected_instance_group:
-                options = list(config.INSTANCE_GROUPS)
+                options = list(strings.INSTANCE_GROUPS)
                 selected_ig = st.radio(
                     label=f"{strings.SIDEBAR_INSTANCE_GROUP_FILTER_TITLE}",
                     options=options,
-                    format_func=lambda k: config.INSTANCE_GROUPS[k],
+                    format_func=lambda k: strings.INSTANCE_GROUPS[k],
                     index=options.index(selected_instance_group) if selected_instance_group in options else 0,
                     key=f"radio_{dataset_id}_instance_group"
                 )
