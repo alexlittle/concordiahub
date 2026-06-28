@@ -62,7 +62,7 @@ def build_model_panel(modeleval: ModelEval, viz_param_key, query_params) -> Mode
 
 
 def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
-    st.html(f"<h2>{panel.modeleval.get('model_display_name')} Explanation:</h2>")
+    st.html(f"<h3>{panel.modeleval.get('model_display_name')}</h3>")
     axis_range = [-1.1, 1.1]
 
     viz_options = panel.xai_instance.get_compatible_visualisations()

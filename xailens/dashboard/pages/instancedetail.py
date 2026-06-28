@@ -43,13 +43,16 @@ def main():
     # display the original data
 
     # Panels for each model explanation
-    for me in selected_modelevals:
-        key = me.get("model_uuid")
-        panel = build_model_panel(me, f"model-viz-{key}", st.query_params)
-        render_model_panel(panel, st.query_params, plot_key=f"explanation_{key}")
-
-
-
+    for i in range(0, len(selected_modelevals), 2):
+        cols = st.columns(2, gap="xlarge")
+        for j, col in enumerate(cols):
+            idx = i + j
+            if idx < len(selected_modelevals):
+                me = selected_modelevals[idx]
+                with col:
+                    key = me.get("model_uuid")
+                    panel = build_model_panel(me, f"model-viz-{key}", st.query_params)
+                    render_model_panel(panel, st.query_params, plot_key=f"explanation_{key}")
 
 if __name__ == "__main__":
     main()
