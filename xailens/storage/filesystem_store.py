@@ -11,12 +11,12 @@ import streamlit as st
 from xailens.storage.store_base import DataStore
 
 
-@st.cache_data
+@st.cache_resource
 def _cached_load_csv(path: str) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
-@st.cache_data
+@st.cache_resource
 def _cached_load_json(path: str) -> list:
     with open(path, 'r') as f:
         return json.load(f)
