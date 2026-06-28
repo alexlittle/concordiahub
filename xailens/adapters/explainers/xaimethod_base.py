@@ -5,7 +5,7 @@ from typing import Any, Optional
 from xailens.entities.context import ModelContext
 from xailens.entities.modeleval import ModelEval
 from xailens.exceptions import MissingDataError
-from xailens import constants
+from xailens import config
 
 
 class XAIMethodAdapter(ABC):
@@ -38,10 +38,10 @@ class XAIMethodAdapter(ABC):
     @classmethod
     def load_local_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
         df = modeleval.store.load_dataframe(f"exp_local_{cls.key}")
-        row = df[df[modeleval.get(constants.DATA_SCHEMA_ID_COLUMN)] == instance_id]
+        row = df[df[modeleval.get(config.DATA_SCHEMA_ID_COLUMN)] == instance_id]
         if row.empty:
             raise MissingDataError(f"Instance '{instance_id}' not found in explanations for {cls.key}")
-        explanation = row.iloc[0].drop(modeleval.get(constants.DATA_SCHEMA_ID_COLUMN), errors='coerce')
+        explanation = row.iloc[0].drop(modeleval.get(config.DATA_SCHEMA_ID_COLUMN), errors='coerce')
 
         abs_sum = explanation.abs().sum()
         abs_max = explanation.abs().max()

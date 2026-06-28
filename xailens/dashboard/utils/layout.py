@@ -2,7 +2,7 @@
 import streamlit as st
 
 from xailens.dashboard.utils.styles import load_css
-from xailens import strings, constants
+from xailens import strings, config
 from xailens.dashboard.utils import sidebar
 
 
@@ -29,11 +29,11 @@ def apply_layout(title: str,
 
             selected_ig = None
             if selected_instance_group:
-                options = list(constants.INSTANCE_GROUPS)
+                options = list(config.INSTANCE_GROUPS)
                 selected_ig = st.radio(
                     label=f"{strings.SIDEBAR_INSTANCE_GROUP_FILTER_TITLE}",
                     options=options,
-                    format_func=lambda k: constants.INSTANCE_GROUPS[k],
+                    format_func=lambda k: config.INSTANCE_GROUPS[k],
                     index=options.index(selected_instance_group) if selected_instance_group in options else 0,
                     key=f"radio_{dataset_id}_instance_group"
                 )

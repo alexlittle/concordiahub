@@ -1,3 +1,4 @@
+
 # ---------------------
 # Runner messages
 # ---------------------
@@ -19,6 +20,7 @@ You can now run the dashboard with `xailens-dash` to view the results.
 APP_NAME = "XAI Lens"
 
 # sidebar
+#------------------------
 SIDEBAR_MODEL_FILTER_TITLE = "Include models:"
 SIDEBAR_INSTANCE_GROUP_FILTER_TITLE = "Instances:"
 
@@ -29,9 +31,14 @@ INSTANCE_TITLE = "Instance Comparison for {dataset} Dataset"
 INSTANCE_DETAIL_TITLE = "Instance Detail"
 
 # Homepage elements
+#-------------------------------
 HOME_DATASET_NUM_MODELS = "{count} models"
 
 # Dataset page elements
+#-------------------------------
+
+
+
 # section titles
 PERF_METRICS_TITLE = "Performance Metrics"
 GLOBAL_EXPLANATION_TITLE = "Global Feature Importance Heatmap"
@@ -49,24 +56,33 @@ INSTANCES_ALL_CORRECT_TITLE = "All Models Correct"
 INSTANCES_ALL_INCORRECT_TITLE = "All Models Incorrect"
 INSTANCES_DISAGREE_TITLE = "Models Disagree"
 
-# Unused?
-HOMEPAGE_HELPER = "Select a comparison to explore, or use the filters to narrow down by dataset and/or model type."
-BTN_GO_TO_COMPARISON = "Go to comparison &#10132;"
-OVERVIEW_TITLE = "Comparison Overview"
-DETAIL_TITLE = "Comparison Detail"
+# Instance groups page
+#-------------------------------
 
-# Filtering/search defaults
-ALL_DATASET_OPTIONS = ("all", "All datasets")
-ALL_COMP_OPTIONS = ("all", "All model types")
+INSTANCE_GROUPS = {
+    "all": "All Instances",
+    "allcorrect": "All Correct Instances",
+    "allincorrect": "All Incorrect Instances",
+    "disagree": "Models Disagree"
+}
+
+DISPLAY_NAMES = {
+    "instance_uuid": "Instance ID",
+    "true_label": "Ground Truth",
+}
+
+
+# Instance detail page
+#-------------------------------
+INSTANCE_DETAIL_HEATMAP_TITLE = "Instance Feature Importance Heatmap"
 
 
 # ----------------
 # Error/Warning messages
 # ----------------
-ERR_NO_MODELS = "No model_data selected"
-ERR_NOT_2_MODELS = "You need exactly 2 models to compare"
 
 WARNING_GLOBAL_NOT_AVAILABLE = "Global explanations are not available for {adapter}"
+
 # ----------------
 # MODEL_TYPES
 # ----------------
@@ -91,7 +107,6 @@ XAI_METHOD_DISPLAY_NAME = DisplayNameDict({
 
 COEFFICIENTS_DISPLAY_NAME = "Coefficients"
 LLM_REASONING_DISPLAY_NAME = "LLM Reasoning"
-KERNEL_SHAP_DISPLAY_NAME = "Kernel Shap"
 TREE_SHAP_DISPLAY_NAME = "Tree Shap"
 
 COEFFICIENTS_NOTES = """

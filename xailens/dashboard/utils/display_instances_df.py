@@ -1,6 +1,6 @@
 import pandas as pd
 
-from xailens import constants
+from xailens import config
 from xailens.dashboard import settings
 
 def generate_rows_html(df: pd.DataFrame,
@@ -9,7 +9,7 @@ def generate_rows_html(df: pd.DataFrame,
                        id_col:str = None,
                        skip_cols:str = None):
     skip_cols = skip_cols or []
-    id_display_col = id_col or constants.DISPLAY_NAMES[constants.COL_INSTANCE_UUID]
+    id_display_col = id_col or config.DISPLAY_NAMES[config.COL_INSTANCE_UUID]
     pred_cols = [c for c in df.columns if c not in [true_label_col, id_display_col] + skip_cols]
     rows = []
     for idx, row in df.iterrows():

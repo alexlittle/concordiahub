@@ -3,7 +3,7 @@ import dataclasses
 
 from sklearn.metrics import confusion_matrix, classification_report
 from xailens.storage.filesystem_store import FilesystemStore
-from xailens import constants
+import xailens.config as config
 from xailens.schema import DataSchema
 
 class ModelEval:
@@ -42,18 +42,18 @@ class ModelEval:
 
     def _get_series(self):
         y_true, y_pred = self.load_targets()
-        return (y_true[self.get(constants.DATA_SCHEMA_TARGET_COLUMN)],
-                y_pred[self.get(constants.DATA_SCHEMA_PREDICTION_COLUMN)])
+        return (y_true[self.get(config.DATA_SCHEMA_TARGET_COLUMN)],
+                y_pred[self.get(config.DATA_SCHEMA_PREDICTION_COLUMN)])
 
     def load_targets(self):
-        target_cols = [self.get(constants.DATA_SCHEMA_ID_COLUMN), self.get(constants.DATA_SCHEMA_TARGET_COLUMN)]
-        pred_cols = [self.get(constants.DATA_SCHEMA_ID_COLUMN), self.get(constants.DATA_SCHEMA_PREDICTION_COLUMN)]
+        target_cols = [self.get(config.DATA_SCHEMA_ID_COLUMN), self.get(config.DATA_SCHEMA_TARGET_COLUMN)]
+        pred_cols = [self.get(config.DATA_SCHEMA_ID_COLUMN), self.get(config.DATA_SCHEMA_PREDICTION_COLUMN)]
         try:
             y_true = self.store.load_dataframe("y_test")[target_cols]
         except FileNotFoundError:
             y_true = self.store.load_dataframe("y")[target_cols]
         y_pred = self.store.load_dataframe("y_pred")[pred_cols]
-        merged = y_true.merge(y_pred, on=self.get(constants.DATA_SCHEMA_ID_COLUMN), how='inner')
+        merged = y_true.merge(y_pred, on=self.get(config.DATA_SCHEMA_ID_COLUMN), how='inner')
         return merged[target_cols], merged[pred_cols]
 
     def get_metrics(self):

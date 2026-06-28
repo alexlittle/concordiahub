@@ -4,12 +4,11 @@ import pandas as pd
 from typing import Any
 from dataclasses import dataclass
 
-from tests import adapters
 from xailens.entities.context import ModelContext, ResponseSchema
 from xailens.exceptions import MissingDataError
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
-from xailens import strings, config, constants
+from xailens import strings, config
 from xailens.entities.modeleval import ModelEval
 
 
@@ -58,7 +57,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
     @classmethod
     def load_local_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
         records = modeleval.store.load_json(f"exp_local_{cls.key}")
-        instance_id_col = modeleval.get(constants.DATA_SCHEMA_ID_COLUMN)
+        instance_id_col = modeleval.get(config.DATA_SCHEMA_ID_COLUMN)
 
         row = next((r for r in records if r[instance_id_col] == instance_id), None)
         if row is None:

@@ -4,7 +4,7 @@ from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard.utils.common import display_breadcrumbs
 from xailens.dashboard.utils.display_instances_df import render_instances_df
-from xailens import strings, constants
+from xailens import strings, config
 from xailens.entities.dataset import Dataset
 
 
@@ -41,16 +41,16 @@ def main():
     # breadcrumb
     st.html(display_breadcrumbs(dataset, instance_group=instance_group))
 
-    st.html(f"<h2>{constants.INSTANCE_GROUPS[instance_group]} ({len(df_instances)})</h2>")
+    st.html(f"<h2>{config.INSTANCE_GROUPS[instance_group]} ({len(df_instances)})</h2>")
 
 
 
     # Display matching instances
     # remove agreement column so doesn't display
     df_instances = df_instances.drop(columns="agreement")
-    df_instances = df_instances.rename(columns=constants.DISPLAY_NAMES)
+    df_instances = df_instances.rename(columns=config.DISPLAY_NAMES)
     query_params = dict(st.query_params)
-    st.html(render_instances_df(df_instances, query_params, true_label_col=constants.DISPLAY_NAMES[constants.COL_TRUE_LABEL]))
+    st.html(render_instances_df(df_instances, query_params, true_label_col=config.DISPLAY_NAMES[config.COL_TRUE_LABEL]))
 
 
 

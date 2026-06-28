@@ -7,8 +7,7 @@ from dataclasses import dataclass
 from typing import Any, Optional
 
 from xailens.entities.modeleval import ModelEval
-from xailens.schema import DataSchema, ResponseSchema
-
+from xailens.schema import ResponseSchema, DataSchema
 
 @dataclass
 class ModelData:
@@ -41,20 +40,3 @@ class ModelContext:
     model_dir_name: Optional[str] = None
     response_schema: Optional[ResponseSchema] = None
 
-
-@dataclass
-class ComparisonContext:
-    """
-    Dataclass structure for passing data to comparison visualisations
-    """
-    modeleval_a: ModelEval
-    modeleval_b: ModelEval
-    explanation_a: pd.Series
-    explanation_b: pd.Series
-    axis_range: tuple | None = None
-
-
-@dataclass
-class VizOption:
-    display_name: str
-    method: str | None = None
