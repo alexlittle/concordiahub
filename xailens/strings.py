@@ -75,7 +75,7 @@ DISPLAY_NAMES = {
 # Instance detail page
 #-------------------------------
 INSTANCE_DETAIL_HEATMAP_TITLE = "Instance Feature Importance Heatmap"
-
+INSTANCE_DETAIL_DATA_TITLE = "Instance Data"
 
 # ----------------
 # Error/Warning messages

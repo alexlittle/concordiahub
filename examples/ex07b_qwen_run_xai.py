@@ -7,6 +7,7 @@ from helpers import ICD10_CHAPTERS
 
 current_model = "qwen2.5:14b-instruct-q8_0"
 dir_name = f"llm_{safe_dirname(current_model)}"
+raw = pd.read_parquet(f'./cache/medsynth/{dir_name}/raw_instances.parquet')
 X = pd.read_parquet(f"./cache/medsynth/{dir_name}/X.parquet")
 y = pd.read_parquet(f"./cache/medsynth/{dir_name}/y.parquet")
 y_pred = pd.read_parquet(f"./cache/medsynth/{dir_name}/y_preds.parquet")
@@ -34,6 +35,7 @@ data_schema = xai.DataSchema(
 
 model_data = xai.ModelData(
     data_schema=data_schema,
+    raw_instances=raw,
     x=X,
     y=y,
     y_pred=y_pred,

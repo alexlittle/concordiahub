@@ -70,6 +70,7 @@ model = XGBClassifier(
     tree_method='hist',
     device="cpu"
 )
+
 model.fit(X_train, y_train, verbose=10)
 
 # keep raw array for sklearn metrics, wrap as DataFrame for framework
@@ -81,6 +82,8 @@ y_train = y_train.to_frame(name='y_train').replace(category_map)
 y_test = y_test.to_frame(name='y_test').replace(category_map)
 
 # save to files for loading to XAI later
+raw_instances = df.set_index(config.INSTANCE_UUID_COL)[['scenario']].loc[X_test.index]
+raw_instances.reset_index().to_parquet('./cache/medsynth/xgboost/raw_instances.parquet')
 X_train.reset_index().to_parquet('./cache/medsynth/xgboost/X_train.parquet')
 X_test.reset_index().to_parquet('./cache/medsynth/xgboost/X_test.parquet')
 y_train.reset_index().to_parquet('./cache/medsynth/xgboost/y_train.parquet')

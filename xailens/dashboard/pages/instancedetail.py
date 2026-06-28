@@ -36,9 +36,15 @@ def main():
     dataset_obj = Dataset(dataset, selected_modelevals)
 
     # display the local feature heatmap
-    st.html(f"<h2>{strings.INSTANCE_DETAIL_HEATMAP_TITLE}</h2>")
-    df_local_exp = dataset_obj.get_local_explanations(instance_uuid)
-    st.plotly_chart(render_features_heatmap(df_local_exp), width='content')
+    col1, col2 = st.columns(2, gap="xlarge")
+
+    with col1:
+        st.html(f"<h2>{strings.INSTANCE_DETAIL_HEATMAP_TITLE}</h2>")
+        df_local_exp = dataset_obj.get_local_explanations(instance_uuid)
+        st.plotly_chart(render_features_heatmap(df_local_exp), width='content')
+
+    with col2:
+        st.html(f"<h2>{strings.INSTANCE_DETAIL_DATA_TITLE}</h2>")
 
     # display the original data
 

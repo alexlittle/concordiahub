@@ -55,13 +55,17 @@ model = LogisticRegression(
 )
 model.fit(X_train, y_train)
 
+
 y_pred_array = model.predict(X_test)
 category_map = dict(enumerate(df['target'].astype('category').cat.categories))
 y_pred = pd.DataFrame({'y_pred': y_pred_array}, index=X_test.index).replace(category_map)
 y_train = y_train.to_frame(name='y_train').replace(category_map)
 y_test = y_test.to_frame(name='y_test').replace(category_map)
 
+
 # save to files for loading to XAI later
+raw_instances = df.set_index(config.INSTANCE_UUID_COL)[['scenario']].loc[X_test.index]
+raw_instances.reset_index().to_parquet('./cache/medsynth/baseline/raw_instances.parquet')
 X_train.reset_index().to_parquet('./cache/medsynth/baseline/X_train.parquet')
 X_test.reset_index().to_parquet('./cache/medsynth/baseline/X_test.parquet')
 y_train.reset_index().to_parquet('./cache/medsynth/baseline/y_train.parquet')

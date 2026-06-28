@@ -4,6 +4,9 @@ import pandas as pd
 import xailens as xai
 from examples import config
 from helpers import ICD10_CHAPTERS
+
+
+raw = pd.read_parquet('./cache/medsynth/baseline/raw_instances.parquet')
 X_train = pd.read_parquet('./cache/medsynth/baseline/X_train.parquet')
 X_test = pd.read_parquet('./cache/medsynth/baseline/X_test.parquet')
 y_train = pd.read_parquet('./cache/medsynth/baseline/y_train.parquet')
@@ -30,6 +33,7 @@ data_schema = xai.DataSchema(
 
 model_data = xai.ModelData(
     data_schema=data_schema,
+    raw_instances=raw,
     x_train=X_train,
     x_test=X_test,
     y_train=y_train,

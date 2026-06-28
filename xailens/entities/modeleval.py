@@ -59,6 +59,11 @@ class ModelEval:
     def get_metrics(self):
         return self.store.load_series("metrics")
 
+    def get_instance_data(self, instance_uuid):
+        x_test = self.store.load_dataframe("x_test")[instance_uuid]
+
+
+
 
     def confusion_matrix(self):
         y_true, y_pred = self._get_series()

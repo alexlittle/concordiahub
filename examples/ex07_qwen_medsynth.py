@@ -107,6 +107,8 @@ X = df.drop(columns=["target"])
 dir_name = f"llm_{safe_dirname(MODEL)}"
 os.makedirs(f"./cache/medsynth/{dir_name}/", exist_ok=True)
 
+raw_instances = df.set_index(config.INSTANCE_UUID_COL)[['scenario']]
+raw_instances.reset_index().to_parquet(f'./cache/medsynth/{dir_name}/raw_instances.parquet')
 X.to_parquet(f"./cache/medsynth/{dir_name}/X.parquet")
 y.to_parquet(f"./cache/medsynth/{dir_name}/y.parquet")
 pred_outputs_df.to_parquet(f"./cache/medsynth/{dir_name}/y_preds.parquet")

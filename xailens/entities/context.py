@@ -15,6 +15,7 @@ class ModelData:
     Dataclass structure for ModelData to be passed to runner
     """
     data_schema: DataSchema
+    raw_instances: Optional[pd.DataFrame] = None
     x: Optional[pd.DataFrame] = None
     y: Optional[pd.DataFrame] = None
     x_train: Optional[pd.DataFrame] = None
