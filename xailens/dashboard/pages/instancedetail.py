@@ -1,10 +1,12 @@
 import streamlit as st
-import plotly
+
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
-from xailens import strings, constants
+from xailens import strings
 from xailens.dashboard.utils.common import display_breadcrumbs
 from xailens.dashboard.utils.instancedetail_helpers import build_model_panel, render_model_panel
+from xailens.entities.dataset import Dataset
+from xailens.dashboard.utils.heatmap import render_features_heatmap
 
 def main():
     explorer = get_explorer()
@@ -29,9 +31,13 @@ def main():
 
     st.html(display_breadcrumbs(dataset, instance_group=instance_group, instance_uuid=instance_uuid))
 
+
     selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset, selected_model_names)
+    dataset_obj = Dataset(dataset, selected_modelevals)
 
     # display the local feature heatmap
+    df_local_exp = dataset_obj.get_local_explanations(instance_uuid)
+    st.plotly_chart(render_features_heatmap(df_local_exp), width='content')
 
     # display the original data
 

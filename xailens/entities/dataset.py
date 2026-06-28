@@ -53,6 +53,41 @@ class Dataset:
 
         return result[:config.PLOT_MAX_FEATURES].reset_index(drop=True)
 
+    def get_local_explanations(self, instance_uuid: str) -> pd.DataFrame:
+        explanations = {}
+        keep_features = set()
+
+        for modeleval in self.modelevals:
+            method = modeleval.get("xai_methods")[0]
+            adapter = get_xai_adapter(method)
+            df = adapter.load_local_explanation(modeleval, instance_uuid)
+
+            keep_features.update(df["feature_name"].tolist())
+            explanations[modeleval.get("model_display_name")] = df[
+                ["feature_name", "score_normalised_max"]].rename(
+                columns={
+                    "score_normalised_max": modeleval.get("model_display_name")}
+            )
+
+        # if no features to show (ie all LLMs) then raise error
+        if not keep_features:
+            raise InvalidSelectionError()
+
+        all_features_df = pd.DataFrame({"feature_name": sorted(keep_features)})
+
+        result = all_features_df
+        for model_id, df in explanations.items():
+            result = result.merge(df, on="feature_name", how="left")
+
+        # order by the mean so most important features are at top
+        model_cols = [col for col in result.columns if col != "feature_name"]
+        result["_mean"] = result[model_cols].mean(axis=1, skipna=True)
+        result = result.sort_values("_mean", ascending=False).drop(
+            columns="_mean").reset_index(drop=True)
+
+        return result[:config.PLOT_MAX_FEATURES].reset_index(drop=True)
+
+
     def get_instance_consensus_ids(self) -> pd.Index:
         """Returns instance IDs common to all models."""
         common_ids = None

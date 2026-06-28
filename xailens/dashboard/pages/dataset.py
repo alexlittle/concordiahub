@@ -8,8 +8,8 @@ from xailens.dashboard.utils.dataset import (
     render_accuracy_barchart,
     render_f1_weighted_barchart,
     render_precision_weighted_barchart,
-    render_recall_weighted_barchart,
-    render_global_features_heatmap)
+    render_recall_weighted_barchart)
+from xailens.dashboard.utils.heatmap import render_features_heatmap
 from xailens.entities.dataset import Dataset
 from xailens import strings
 from xailens.dashboard import settings
@@ -66,7 +66,7 @@ def main():
     st.html(f"<h2>{strings.GLOBAL_EXPLANATION_TITLE}</h2>")
     try:
         df_global_exp = dataset_obj.get_global_explanations()
-        st.plotly_chart(render_global_features_heatmap(df_global_exp), width='content')
+        st.plotly_chart(render_features_heatmap(df_global_exp), width='content')
         st.html("* Global feature importance is not available for LLMs.")
     except InvalidSelectionError:
         st.html("Global feature importance is not displayed when only LLMs are selected.")
