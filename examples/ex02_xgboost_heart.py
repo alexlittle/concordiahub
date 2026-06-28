@@ -53,6 +53,10 @@ print(classification_report(y_test, y_pred_vals))
 y_train_df = pd.DataFrame({config.INSTANCE_UUID_COL: X_train[config.INSTANCE_UUID_COL].values, 'target': y_train.values})
 y_test_df = pd.DataFrame({config.INSTANCE_UUID_COL: X_test[config.INSTANCE_UUID_COL].values, 'target': y_test.values})
 
+raw_instances = df.set_index(config.INSTANCE_UUID_COL).drop(columns=['target']).loc[
+    X_test[config.INSTANCE_UUID_COL].values
+]
+raw_instances.reset_index().to_parquet('./cache/heart/xgboost/raw_instances.parquet')
 X_train.to_parquet('./cache/heart/xgboost/X_train.parquet', index=False)
 X_test.to_parquet('./cache/heart/xgboost/X_test.parquet', index=False)
 y_train_df.to_parquet('./cache/heart/xgboost/y_train.parquet', index=False)

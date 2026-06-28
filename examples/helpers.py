@@ -33,6 +33,17 @@ ICD10_CODES = {
 }
 
 
+HEART_COLUMN_MAPPINGS = {
+    'sex': { 0: 'Female', 1: 'Male'},
+    'chest pain type': { 1: 'typical angina', 2: 'atypical angina', 3: 'non-anginal pain', 4: 'asymptomatic'},
+    'fasting blood sugar': { 0: 'false', 1: 'true'},
+    'resting ECG': { 0: 'normal', 1: 'ST-T wave abnormality', 2: 'left ventricular hypertrophy'},
+    'exercise induced angina': { 0: 'no', 1: 'yes'},
+    'slope of peak exercise': { 1: 'upsloping', 2: 'flat', 3: 'downsloping'},
+    'thalassemia': { 3: 'normal', 6: 'fixed defect', 7: 'reversible defect'}
+}
+
+
 ICD10_CHAPTERS = {
     "A": "Certain infectious and parasitic diseases",
     "B": "Certain infectious and parasitic diseases",

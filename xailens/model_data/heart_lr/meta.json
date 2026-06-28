@@ -8,8 +8,8 @@
     "model_subtype": null,
     "model_dir_name": "heart_lr",
     "response_schema": null,
-    "datetime": "20260628-100411",
-    "model_uuid": "73ce0cef-11a5-4735-a34d-629430ca92a2",
+    "datetime": "20260628-141803",
+    "model_uuid": "aac83493-2ea7-4af9-9835-24cfece82b13",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",

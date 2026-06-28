@@ -11,15 +11,13 @@
         "contributions_field": "feature_contributions",
         "contribution_key": null
     },
-    "datetime": "20260626-163305",
-    "model_uuid": "302a1bcd-36da-402b-a89c-dea181049ce2",
+    "datetime": "20260628-141939",
+    "model_uuid": "40d1a86e-04f4-470b-b4ce-5f6e62819478",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "target",
         "prediction_column": "prediction",
         "feature_columns": null,
-        "class_names": null,
-        "hide_zero_global_threshold": null,
-        "hide_zero_local_threshold": null
+        "class_names": null
     }
 }

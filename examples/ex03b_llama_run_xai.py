@@ -7,6 +7,8 @@ from examples.helpers import safe_dirname
 
 current_model = "llama3.1:8b"
 dir_name = f"llm_{safe_dirname(current_model)}"
+
+raw = pd.read_parquet(f"./cache/heart/{dir_name}/raw_instances.parquet")
 X = pd.read_parquet(f"./cache/heart/{dir_name}/X.parquet")
 y = pd.read_parquet(f"./cache/heart/{dir_name}/y.parquet")
 y_preds = pd.read_parquet(f"./cache/heart/{dir_name}/y_preds.parquet")
@@ -24,6 +26,7 @@ data_schema = xai.DataSchema(
 
 model_data = xai.ModelData(
     data_schema=data_schema,
+    raw_instances=raw,
     x=X,
     y=y,
     y_pred=y_preds,

@@ -6,23 +6,11 @@ from jinja2 import Environment, FileSystemLoader, StrictUndefined
 
 from examples import config
 from examples.helpers import safe_dirname
-
-#----------------------------
-# Set up
-#----------------------------
-COLUMN_MAPPINGS = {
-    'sex': { 0: 'Female', 1: 'Male'},
-    'chest pain type': { 1: 'typical angina', 2: 'atypical angina', 3: 'non-anginal pain', 4: 'asymptomatic'},
-    'fasting blood sugar': { 0: 'false', 1: 'true'},
-    'resting ECG': { 0: 'normal', 1: 'ST-T wave abnormality', 2: 'left ventricular hypertrophy'},
-    'exercise induced angina': { 0: 'no', 1: 'yes'},
-    'slope of the peak exercise': { 1: 'upsloping', 2: 'flat', 3: 'downsloping'},
-    'thalassemia': { 3: 'normal', 6: 'fixed defect', 7: 'reversible defect'}
-}
+from examples.helpers import HEART_COLUMN_MAPPINGS
 
 df = pd.read_csv(config.HEART_INPUT_FILE)
 
-for col, mapping in COLUMN_MAPPINGS.items():
+for col, mapping in HEART_COLUMN_MAPPINGS.items():
     df[col] = df[col].map(mapping)
 
 print(df.head())
@@ -124,6 +112,10 @@ X = df.drop(columns=["target"])
 dir_name = f"llm_{safe_dirname(config.HEART_OLLAMA_MODEL)}"
 os.makedirs(f"./cache/heart/{dir_name}/", exist_ok=True)
 
+raw_instances = df.set_index(config.INSTANCE_UUID_COL).drop(columns=['target']).loc[
+    X[config.INSTANCE_UUID_COL].values
+]
+raw_instances.reset_index().to_parquet(f'./cache/heart/{dir_name}/raw_instances.parquet')
 X.to_parquet(f"./cache/heart/{dir_name}/X.parquet")
 y.to_parquet(f"./cache/heart/{dir_name}/y.parquet")
 pred_outputs_df.to_parquet(f"./cache/heart/{dir_name}/y_preds.parquet")
