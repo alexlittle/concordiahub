@@ -42,14 +42,9 @@ class BarChartVizAdapter(VizAdapter):
             yaxis={
                 "tickmode": "array",
                 "tickvals": list(range(len(feature_names))),
-                "ticktext": feature_names
+                "ticktext": feature_names,
             }
         )
         if axis_range:
-            fig.update_layout(xaxis={"range": axis_range})
-
+            fig.update_xaxes(range=axis_range)
         return [fig]
-
-    def render_global(self, explanations):
-        # Placeholder function
-        return

@@ -35,7 +35,3 @@ class TabularAdapter(VizAdapter):
 
 
         return [overall_text, explanation.sort_values("Score (1 to -1)", ascending=False)]
-
-    def render_global(self, explanations):
-        # Placeholder function
-        return

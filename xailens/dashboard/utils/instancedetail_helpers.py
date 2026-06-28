@@ -10,6 +10,7 @@ from xailens import exceptions
 from xailens.dashboard.utils.display_table import render_dataframe
 from xailens.dashboard import settings
 from xailens.entities.modeleval import ModelEval
+from xailens.dashboard.utils.plotly_theme import apply_horizontal_bar_theme
 
 @dataclass
 class ModelPanel:
@@ -76,6 +77,7 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
         viz_list = panel.viz_class().render_local(panel.explanation, axis_range=axis_range)
         for viz in viz_list:
             if isinstance(viz, plotly.graph_objs.Figure):
+                viz = apply_horizontal_bar_theme(viz)
                 st.plotly_chart(viz, key=plot_key)
             elif isinstance(viz, pd.DataFrame):
                 st.html(render_dataframe(viz))

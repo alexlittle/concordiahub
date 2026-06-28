@@ -42,7 +42,3 @@ class WaterfallVizAdapter(VizAdapter):
             }
         )
         return [fig]
-
-    def render_global(self, explanations):
-        # Placeholder function
-        return
