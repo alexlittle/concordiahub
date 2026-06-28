@@ -48,10 +48,7 @@ class ModelEval:
     def load_targets(self):
         target_cols = [self.get(config.DATA_SCHEMA_ID_COLUMN), self.get(config.DATA_SCHEMA_TARGET_COLUMN)]
         pred_cols = [self.get(config.DATA_SCHEMA_ID_COLUMN), self.get(config.DATA_SCHEMA_PREDICTION_COLUMN)]
-        try:
-            y_true = self.store.load_dataframe("y_test")[target_cols]
-        except FileNotFoundError:
-            y_true = self.store.load_dataframe("y")[target_cols]
+        y_true = self.store.load_dataframe("y_test")[target_cols]
         y_pred = self.store.load_dataframe("y_pred")[pred_cols]
         merged = y_true.merge(y_pred, on=self.get(config.DATA_SCHEMA_ID_COLUMN), how='inner')
         return merged[target_cols], merged[pred_cols]
@@ -60,7 +57,10 @@ class ModelEval:
         return self.store.load_series("metrics")
 
     def get_instance_data(self, instance_uuid):
+
         x_test = self.store.load_dataframe("x_test")[instance_uuid]
+        y_test = self.store.load_dataframe("y_test")[instance_uuid]
+
 
 
 

@@ -25,9 +25,7 @@ data_schema = xai.DataSchema(
 model_data = xai.ModelData(
     data_schema=data_schema,
     raw_instances=raw,
-    x_train=X_train,
     x_test=X_test,
-    y_train=y_train,
     y_pred=y_pred,
     y_test=y_test)
 

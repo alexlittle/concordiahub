@@ -8,8 +8,8 @@
     "model_subtype": null,
     "model_dir_name": "medsynth_xgboost",
     "response_schema": null,
-    "datetime": "20260628-115931",
-    "model_uuid": "0edb8de0-ea6a-451c-9183-0398c9cc8e9a",
+    "datetime": "20260628-144718",
+    "model_uuid": "4aee6825-9784-4a5b-ab72-603ab1157d9f",
     "data_schema": {
         "instance_id_column": "instance_uuid",
         "target_column": "y_test",
