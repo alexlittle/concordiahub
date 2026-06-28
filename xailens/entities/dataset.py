@@ -18,6 +18,10 @@ class Dataset:
         df.columns.name = None
         return df
 
+    def get_instance_data(self, instance_uuid: str) -> tuple[pd.Series, str]:
+        # only needs the data from the first modeleval - as will be same for all
+        return self.modelevals[0].get_instance_data(instance_uuid)
+
     def _get_explanations(self, instance_uuid: str | None = None) -> pd.DataFrame:
         explanations = {}
         keep_features = set()
@@ -28,7 +32,12 @@ class Dataset:
                 df = adapter.load_local_explanation(modeleval, instance_uuid)
             else:
                 df = adapter.load_global_explanation(modeleval)
+
+            # remove and leading/trailing whitespace
+            df["feature_name"] = df["feature_name"].str.strip()
+
             keep_features.update(df["feature_name"].tolist())
+
             model_name = modeleval.get("model_display_name")
             explanations[model_name] = (
                 df[["feature_name", "score_normalised_max"]]
@@ -40,7 +49,7 @@ class Dataset:
         for df in explanations.values():
             result = result.merge(df, on="feature_name", how="left")
         model_cols = [col for col in result.columns if col != "feature_name"]
-        result["_mean"] = result[model_cols].abs().mean(axis=1, skipna=True)
+        result["_mean"] = result[model_cols].abs().fillna(0).mean(axis=1)
         result = (result.sort_values("_mean", ascending=False).drop(columns="_mean").reset_index(drop=True))
         return result[: config.PLOT_MAX_FEATURES].reset_index(drop=True)
 

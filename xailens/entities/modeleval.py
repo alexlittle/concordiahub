@@ -56,14 +56,17 @@ class ModelEval:
     def get_metrics(self):
         return self.store.load_series("metrics")
 
-    def get_instance_data(self, instance_uuid):
+    def get_instance_data(self, instance_uuid) -> tuple[pd.Series, str]:
+        uuid_col = self.get(config.DATA_SCHEMA_ID_COLUMN)
+        target_col = self.get(config.DATA_SCHEMA_TARGET_COLUMN)
 
-        x_test = self.store.load_dataframe("x_test")[instance_uuid]
-        y_test = self.store.load_dataframe("y_test")[instance_uuid]
+        raw = self.store.load_dataframe("raw_instances")
+        row = raw[raw[uuid_col] == instance_uuid].squeeze()
 
+        y_test = self.store.load_dataframe("y_test")
+        label = y_test[y_test[uuid_col] == instance_uuid][target_col].squeeze()
 
-
-
+        return row.drop(labels=[uuid_col]), label
 
     def confusion_matrix(self):
         y_true, y_pred = self._get_series()
