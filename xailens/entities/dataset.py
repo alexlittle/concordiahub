@@ -36,15 +36,21 @@ class Dataset:
             # remove and leading/trailing whitespace
             df["feature_name"] = df["feature_name"].str.strip()
 
-            keep_features.update(df["feature_name"].tolist())
+            # make sure the values are properly numeric
+            df["score_normalised_max"] = pd.to_numeric(df["score_normalised_max"], errors="coerce")
 
             model_name = modeleval.get("model_display_name")
-            explanations[model_name] = (
+            top_df = (
                 df[["feature_name", "score_normalised_max"]]
+                .nlargest(config.KEEP_NUM_FEATURES, "score_normalised_max")
                 .rename(columns={"score_normalised_max": model_name})
             )
+            keep_features.update(top_df["feature_name"].tolist())
+            explanations[model_name] = top_df
+
         if not keep_features:
             raise InvalidSelectionError()
+
         result = pd.DataFrame({"feature_name": sorted(keep_features)})
         for df in explanations.values():
             result = result.merge(df, on="feature_name", how="left")

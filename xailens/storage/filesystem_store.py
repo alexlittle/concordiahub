@@ -6,8 +6,20 @@ import os
 import joblib
 import json
 import pandas as pd
+import streamlit as st
 
 from xailens.storage.store_base import DataStore
+
+
+@st.cache_data
+def _cached_load_csv(path: str) -> pd.DataFrame:
+    return pd.read_csv(path)
+
+
+@st.cache_data
+def _cached_load_json(path: str) -> list:
+    with open(path, 'r') as f:
+        return json.load(f)
 
 class FilesystemStore(DataStore):
 
@@ -40,11 +52,10 @@ class FilesystemStore(DataStore):
         joblib.dump(model, os.path.join(self.dirname, f"{name}.joblib"))
 
     def load_dataframe(self, name:str) -> pd.DataFrame:
-        return pd.read_csv(os.path.join(self.dirname, f"{name}.csv"))
+        return _cached_load_csv(os.path.join(self.dirname, f"{name}.csv"))
 
     def load_json(self, name:str) -> list:
-        with open(os.path.join(self.dirname, f"{name}.json"), 'r') as f:
-            return json.load(f)
+        return _cached_load_json(os.path.join(self.dirname, f"{name}.json"))
 
     def load_series(self, name:str) -> pd.Series:
         return pd.read_csv(os.path.join(self.dirname, f"{name}.csv"), index_col=0).squeeze()
