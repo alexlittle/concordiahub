@@ -58,18 +58,4 @@ def y_pred():
 # Tests
 
 
-# Confusion matrix
-def test_get_confusion_matrix_falls_back_to_y(y_test, y_pred, store_with_fallback):
-    store, metadata = store_with_fallback
-    run = ModelEval(store=store, metadata=metadata)
-    cm = run.confusion_matrix()
-    assert cm.shape == (2, 2)
-
-# Classification report
-def test_get_classification_report_falls_back_to_y(y_test, y_pred, store_with_fallback):
-    store, metadata = store_with_fallback
-    run = ModelEval(store=store, metadata=metadata)
-    report = run.classification_report()
-    assert "precision" in report
-    assert "recall" in report
 

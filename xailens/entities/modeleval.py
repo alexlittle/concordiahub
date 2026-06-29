@@ -1,9 +1,8 @@
 import pandas as pd
 import dataclasses
 
-from sklearn.metrics import confusion_matrix, classification_report
-from xailens.storage.filesystem_store import FilesystemStore
 import xailens.config as config
+from xailens.storage.filesystem_store import FilesystemStore
 from xailens.schema import DataSchema
 
 class ModelEval:
@@ -68,12 +67,11 @@ class ModelEval:
 
         return row.drop(labels=[uuid_col]), label
 
-    def confusion_matrix(self):
-        y_true, y_pred = self._get_series()
-        return confusion_matrix(y_true, y_pred)
+    def get_instance_prediction(self, instance_uuid) -> str:
+        uuid_col = self.get(config.DATA_SCHEMA_ID_COLUMN)
+        pred_col = self.get(config.DATA_SCHEMA_PREDICTION_COLUMN)
+        y_pred = self.store.load_dataframe("y_pred")
+        label = y_pred[y_pred[uuid_col] == instance_uuid][pred_col].squeeze()
+        return label
 
-    def classification_report(self):
-        y_true, y_pred = self._get_series()
-        report = classification_report(y_true, y_pred, output_dict=True, zero_division=0)
-        return pd.DataFrame(report).transpose()
 

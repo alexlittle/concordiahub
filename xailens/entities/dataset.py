@@ -68,7 +68,7 @@ class Dataset:
         result[model_cols] = result[model_cols].abs()
         return result
 
-    def get_instance_consensus_ids(self) -> pd.Index:
+    def get_instance_consensus_ids(self) -> set:
         """Returns instance IDs common to all models."""
         common_ids = None
         for me in self.modelevals:
@@ -82,32 +82,31 @@ class Dataset:
 
     def get_instance_consensus(self) -> dict:
         common_ids = self.get_instance_consensus_ids()
-
-        # For each model, get predictions for the common instance IDs
         model_preds = {}
         y_true_common = None
+
         for me in self.modelevals:
             y_true, y_pred = me.load_targets()
             id_col = me.get(config.DATA_SCHEMA_ID_COLUMN)
             pred_col = me.get(config.DATA_SCHEMA_PREDICTION_COLUMN)
             target_col = me.get(config.DATA_SCHEMA_TARGET_COLUMN)
 
-            y_pred_filtered = y_pred[y_pred[id_col].isin(common_ids)]
-            y_true_filtered = y_true[y_true[id_col].isin(common_ids)]
+            y_pred_filtered = (
+                y_pred[y_pred[id_col].isin(common_ids)]
+                .set_index(id_col)[pred_col]
+                .rename(me.get("model_display_name"))
+            )
+            y_true_filtered = (
+                y_true[y_true[id_col].isin(common_ids)]
+                .set_index(id_col)[target_col]
+            )
 
-            model_preds[me.get("model_display_name")] = {
-                "preds": y_pred_filtered.set_index(id_col),
-                "pred_col": pred_col,
-                "target_col": target_col,
-            }
+            model_preds[me.get("model_display_name")] = y_pred_filtered
+
             if y_true_common is None:
-                y_true_common = y_true_filtered.set_index(id_col)
-                target_col_common = target_col
+                y_true_common = y_true_filtered
 
-        correct_df = pd.DataFrame({
-            model_id: (data["preds"][data["pred_col"]].values == y_true_common[target_col_common].values)
-            for model_id, data in model_preds.items()
-        }, index=y_true_common.index)
+        correct_df = pd.DataFrame(model_preds).eq(y_true_common, axis=0)
 
         total = len(common_ids)
         all_correct = int(correct_df.all(axis=1).sum())
@@ -134,10 +133,8 @@ class Dataset:
         """
 
         common_ids = self.get_instance_consensus_ids()
-
         model_preds = {}
         y_true_common = None
-        target_col_common = None
 
         for me in self.modelevals:
             y_true, y_pred = me.load_targets()
@@ -145,38 +142,38 @@ class Dataset:
             pred_col = me.get(config.DATA_SCHEMA_PREDICTION_COLUMN)
             target_col = me.get(config.DATA_SCHEMA_TARGET_COLUMN)
 
-            y_pred_filtered = y_pred[y_pred[id_col].isin(common_ids)]
-            y_true_filtered = y_true[y_true[id_col].isin(common_ids)]
+            y_pred_filtered = (
+                y_pred[y_pred[id_col].isin(common_ids)]
+                .set_index(id_col)[pred_col]
+                .rename(me.get("model_display_name"))
+            )
+            y_true_filtered = (
+                y_true[y_true[id_col].isin(common_ids)]
+                .set_index(id_col)[target_col]
+            )
 
-            model_preds[me.get("model_display_name")] = {
-                "preds": y_pred_filtered.set_index(id_col),
-                "pred_col": pred_col,
-            }
+            model_preds[me.get("model_display_name")] = y_pred_filtered
+
             if y_true_common is None:
-                y_true_common = y_true_filtered.set_index(id_col)
-                target_col_common = target_col
+                y_true_common = y_true_filtered
 
-        correct_df = pd.DataFrame({
-                model_id: (data["preds"][data["pred_col"]].values == y_true_common[target_col_common].values
-                ) for model_id, data in model_preds.items()
-            }, index=y_true_common.index)
+        pred_df = pd.DataFrame(model_preds)
+        correct_df = pred_df.eq(y_true_common, axis=0)
 
-        pred_df = pd.DataFrame({
-                model_id: data["preds"][data["pred_col"]].values for model_id, data in model_preds.items()
-            }, index=y_true_common.index)
-
-        result = pd.DataFrame({"true_label": y_true_common[target_col_common]})
+        result = pd.DataFrame({"true_label": y_true_common})
         result = pd.concat([result, pred_df], axis=1)
         result["agreement"] = correct_df.apply(self._agreement, axis=1)
 
         # sort by true_label
         result = result.sort_values(by=["true_label"], ascending=True)
         result = result.reset_index(names="instance_uuid")
-        cols = ["instance_uuid", "true_label"] \
-               + [c for c in result.columns if c not in ("instance_uuid",
-                                                            "true_label",
-                                                            "agreement")] + [
-                   "agreement"]
+
+        cols = (
+                ["instance_uuid", "true_label"]
+                + [c for c in result.columns if
+                   c not in ("instance_uuid", "true_label", "agreement")]
+                + ["agreement"]
+        )
         return result[cols]
 
     # Private helper functions

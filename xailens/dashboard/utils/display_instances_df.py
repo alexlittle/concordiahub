@@ -1,6 +1,6 @@
 import pandas as pd
 
-from xailens import config, strings
+from xailens import strings
 from xailens.dashboard import settings
 
 def generate_rows_html(df: pd.DataFrame,

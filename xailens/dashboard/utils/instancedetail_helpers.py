@@ -1,3 +1,5 @@
+import uuid
+
 import streamlit as st
 import plotly
 import pandas as pd
@@ -14,13 +16,15 @@ from xailens.dashboard.utils.plotly_theme import apply_horizontal_bar_theme
 
 @dataclass
 class ModelPanel:
-    modeleval: dict
+    modeleval: ModelEval
     xai_class: type
     xai_instance: object
     viz_key: str
     viz_name: str
     viz_class: type
     explanation: object
+    instance_uuid: uuid.UUID
+
 
 def select_individual_viz(viz_id: str, current: str, options: dict, existing_params: dict) -> str:
     option_list = []
@@ -47,9 +51,10 @@ def build_model_panel(modeleval: ModelEval, viz_param_key, query_params) -> Mode
     except (KeyError, exceptions.InvalidConfigurationError):
         viz_class = None
 
-
     instance_uuid = query_params.get("instance_uuid")
     explanation = xai_class.load_local_explanation(modeleval, instance_uuid)
+
+
     return ModelPanel(
         modeleval=modeleval,
         xai_class=xai_class,
@@ -57,7 +62,8 @@ def build_model_panel(modeleval: ModelEval, viz_param_key, query_params) -> Mode
         viz_key=viz_param_key,
         viz_name=viz_name,
         viz_class=viz_class,
-        explanation=explanation
+        explanation=explanation,
+        instance_uuid=instance_uuid
     )
 
 
@@ -65,6 +71,8 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
     with st.container():
         st.html(settings.MODEL_PANEL_MARKER)
         st.html(f"<h3>{panel.modeleval.get('model_display_name')}</h3>")
+        st.html(f"<strong>Prediction</strong>: {panel.modeleval.get_instance_prediction(panel.instance_uuid)}")
+
         axis_range = [-1.1, 1.1]
 
         viz_options = panel.xai_instance.get_compatible_visualisations()
