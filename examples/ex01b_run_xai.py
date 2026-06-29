@@ -8,8 +8,6 @@ from examples.helpers import HEART_COLUMN_MAPPINGS
 
 raw = pd.read_parquet('./cache/heart/baseline/raw_instances.parquet')
 X_test = pd.read_parquet('./cache/heart/baseline/X_test.parquet')
-X_train = pd.read_parquet('./cache/heart/baseline/X_train.parquet')
-y_train = pd.read_parquet('./cache/heart/baseline/y_train.parquet')
 y_pred = pd.read_parquet('./cache/heart/baseline/y_pred.parquet')
 y_test = pd.read_parquet('./cache/heart/baseline/y_test.parquet')
 model = joblib.load('./cache/heart/baseline/model.joblib')

@@ -66,9 +66,7 @@ y_test = y_test.to_frame(name='y_test').replace(category_map)
 # save to files for loading to XAI later
 raw_instances = df.set_index(config.INSTANCE_UUID_COL)[['scenario']].loc[X_test.index]
 raw_instances.reset_index().to_parquet('./cache/medsynth/baseline/raw_instances.parquet')
-X_train.reset_index().to_parquet('./cache/medsynth/baseline/X_train.parquet')
 X_test.reset_index().to_parquet('./cache/medsynth/baseline/X_test.parquet')
-y_train.reset_index().to_parquet('./cache/medsynth/baseline/y_train.parquet')
 y_test.reset_index().to_parquet('./cache/medsynth/baseline/y_test.parquet')
 y_pred.reset_index().to_parquet('./cache/medsynth/baseline/y_pred.parquet')
 joblib.dump(model, './cache/medsynth/baseline/model.joblib')

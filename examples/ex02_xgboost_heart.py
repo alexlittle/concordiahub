@@ -57,9 +57,7 @@ raw_instances = df.set_index(config.INSTANCE_UUID_COL).drop(columns=['target']).
     X_test[config.INSTANCE_UUID_COL].values
 ]
 raw_instances.reset_index().to_parquet('./cache/heart/xgboost/raw_instances.parquet')
-X_train.to_parquet('./cache/heart/xgboost/X_train.parquet', index=False)
 X_test.to_parquet('./cache/heart/xgboost/X_test.parquet', index=False)
-y_train_df.to_parquet('./cache/heart/xgboost/y_train.parquet', index=False)
 y_test_df.to_parquet('./cache/heart/xgboost/y_test.parquet', index=False)
 y_pred.to_parquet('./cache/heart/xgboost/y_pred.parquet', index=False)
 joblib.dump(model, './cache/heart/xgboost/model.joblib')

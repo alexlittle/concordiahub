@@ -33,9 +33,7 @@ raw_instances = df.set_index(config.INSTANCE_UUID_COL).drop(columns=['target']).
     X_test[config.INSTANCE_UUID_COL].values
 ]
 raw_instances.reset_index().to_parquet('./cache/heart/baseline/raw_instances.parquet')
-X_train.to_parquet('./cache/heart/baseline/X_train.parquet', index=False)
 X_test.to_parquet('./cache/heart/baseline/X_test.parquet', index=False)
-y_train.to_parquet('./cache/heart/baseline/y_train.parquet', index=False)
 y_test.to_parquet('./cache/heart/baseline/y_test.parquet', index=False)
 y_pred.to_parquet('./cache/heart/baseline/y_pred.parquet', index=False)
 
