@@ -5,6 +5,7 @@
     --model-name-colour: #0d4f4f;
     --color-metric-bg: #D4E4E4AA;
     --text-color: rgb(49, 51, 63);
+    --border-color: #D4E4E4;
 }
 
 
@@ -268,3 +269,16 @@ div[data-testid="stCheckbox"] label {
 .report-table a:hover {
     text-decoration: underline;
 }
+
+/*
+    Model panel elements
+ */
+
+div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] > div[data-testid="stHtml"] > span.model-panel-marker) {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+

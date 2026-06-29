@@ -31,8 +31,7 @@ def main():
                  selected_instance_group=instance_group,)
 
     # Get the selected models for the dataset and matching instances
-    selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset,
-                                                                       selected_model_names)
+    selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_modelevals)
     df_instances = dataset_obj.get_all_instances()
     if instance_group != "all":

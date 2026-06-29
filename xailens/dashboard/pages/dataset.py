@@ -4,7 +4,7 @@ from xailens.exceptions import InvalidSelectionError
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard.utils.common import display_breadcrumbs, render_metric_card
-from xailens.dashboard.utils.dataset import (
+from xailens.dashboard.utils.dataset_helpers import (
     render_accuracy_barchart,
     render_f1_weighted_barchart,
     render_precision_weighted_barchart,
@@ -53,14 +53,25 @@ def main():
 
     # overall stat graphs for accuracy /f1
     col1, col2 = st.columns(2, gap="large")
-
-    col1.plotly_chart(render_accuracy_barchart(metrics))
-    col2.plotly_chart(render_f1_weighted_barchart(metrics))
+    with col1:
+        with st.container():
+            st.html(settings.MODEL_PANEL_MARKER)
+            st.plotly_chart(render_accuracy_barchart(metrics))
+    with col2:
+        with st.container():
+            st.html(settings.MODEL_PANEL_MARKER)
+            st.plotly_chart(render_f1_weighted_barchart(metrics))
 
     # precision/recall bar charts
     col3, col4 = st.columns(2, gap="large")
-    col3.plotly_chart(render_precision_weighted_barchart(metrics))
-    col4.plotly_chart(render_recall_weighted_barchart(metrics))
+    with col3:
+        with st.container():
+            st.html(settings.MODEL_PANEL_MARKER)
+            st.plotly_chart(render_precision_weighted_barchart(metrics))
+    with col4:
+        with st.container():
+            st.html(settings.MODEL_PANEL_MARKER)
+            st.plotly_chart(render_recall_weighted_barchart(metrics))
 
     # Global explanations
     st.html(f"<h2>{strings.GLOBAL_EXPLANATION_TITLE}</h2>")

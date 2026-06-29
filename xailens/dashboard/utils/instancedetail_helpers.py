@@ -62,27 +62,30 @@ def build_model_panel(modeleval: ModelEval, viz_param_key, query_params) -> Mode
 
 
 def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
-    st.html(f"<h3>{panel.modeleval.get('model_display_name')}</h3>")
-    axis_range = [-1.1, 1.1]
+    with st.container():
+        st.html(settings.MODEL_PANEL_MARKER)
+        st.html(f"<h3>{panel.modeleval.get('model_display_name')}</h3>")
+        axis_range = [-1.1, 1.1]
 
-    viz_options = panel.xai_instance.get_compatible_visualisations()
-    select_text = select_individual_viz(panel.viz_key, panel.viz_name, viz_options, existing_params)
-    st.html(select_text)
+        viz_options = panel.xai_instance.get_compatible_visualisations()
+        select_text = select_individual_viz(panel.viz_key, panel.viz_name, viz_options, existing_params)
+        st.html(f"View as: {select_text}")
 
-    if panel.viz_class is None:
-        st.warning(f"{panel.viz_name} is not a registered visualisation")
-        return
+        if panel.viz_class is None:
+            st.warning(f"{panel.viz_name} is not a registered visualisation")
+            st.html("</div>")
+            return
 
-    try:
-        viz_list = panel.viz_class().render_local(panel.explanation, axis_range=axis_range)
-        for viz in viz_list:
-            if isinstance(viz, plotly.graph_objs.Figure):
-                viz = apply_horizontal_bar_theme(viz)
-                st.plotly_chart(viz, key=plot_key)
-            elif isinstance(viz, pd.DataFrame):
-                st.html(render_dataframe(viz))
-            else:
-                st.html(viz)
-        st.html(panel.xai_instance.display_notes)
-    except NotImplementedError:
-        st.warning(f"{panel.viz_name} is not yet implemented for {panel.modeleval.get('model_display_name')}")
+        try:
+            viz_list = panel.viz_class().render_local(panel.explanation, axis_range=axis_range)
+            for viz in viz_list:
+                if isinstance(viz, plotly.graph_objs.Figure):
+                    viz = apply_horizontal_bar_theme(viz)
+                    st.plotly_chart(viz, key=plot_key)
+                elif isinstance(viz, pd.DataFrame):
+                    st.html(render_dataframe(viz))
+                else:
+                    st.html(viz)
+            st.html(panel.xai_instance.display_notes)
+        except NotImplementedError:
+            st.warning(f"{panel.viz_name} is not yet implemented for {panel.modeleval.get('model_display_name')}")

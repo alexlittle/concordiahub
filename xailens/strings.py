@@ -68,7 +68,7 @@ INSTANCE_GROUPS = {
 
 DISPLAY_NAMES = {
     "instance_uuid": "Instance ID",
-    "true_label": "Ground Truth",
+    "true_label": "True Value",
 }
 
 

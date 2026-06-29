@@ -36,7 +36,7 @@ def main():
     selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_modelevals)
 
-    col1, col2 = st.columns(2, gap="xlarge")
+    col1, col2 = st.columns(2, gap="large")
 
     with col1:
         # display the local feature heatmap
@@ -50,12 +50,12 @@ def main():
         # display the original data
         x_test, ground_truth = dataset_obj.get_instance_data(instance_uuid)
 
-        st.html(f"<strong>Ground truth</strong>: {ground_truth}")
+        st.html(f"<strong>True Value</strong>: {ground_truth}")
         st.html(render_series(x_test))
 
     # Panels for each model explanation
     for i in range(0, len(selected_modelevals), 2):
-        cols = st.columns(2, gap="xlarge")
+        cols = st.columns(2, gap="large")
         for j, col in enumerate(cols):
             idx = i + j
             if idx < len(selected_modelevals):

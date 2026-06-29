@@ -16,8 +16,7 @@ THEME = {
 }
 
 def apply_base_theme(fig: go.Figure) -> go.Figure:
-    """Applies universal typography and background styling only.
-    Chart-specific axis config (range, grid, orientation) stays in the render function."""
+    """Apply common viz display"""
     current_title = fig.layout.title.text
     if current_title and not current_title.startswith("<span"):
         updated_title = f"<span style='font-weight: normal;'>{current_title}</span>"

@@ -5,8 +5,6 @@ Context dataclasses for XAI-Compare
 import pandas as pd
 from dataclasses import dataclass
 from typing import Any, Optional
-
-from xailens.entities.modeleval import ModelEval
 from xailens.schema import ResponseSchema, DataSchema
 
 @dataclass
