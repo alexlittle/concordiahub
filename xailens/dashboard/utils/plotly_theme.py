@@ -13,6 +13,10 @@ THEME = {
     "title_font_weight": "normal",
     "plot_bgcolor": "white",
     "paper_bgcolor": "white",
+    "hover_font_size": 14,
+    "hover_font_color": "#333333",
+    "hover_bgcolor": "white",
+    "hover_bordercolor": "#cccccc",
 }
 
 def apply_base_theme(fig: go.Figure) -> go.Figure:
@@ -48,6 +52,13 @@ def apply_base_theme(fig: go.Figure) -> go.Figure:
 def apply_theme(fig: go.Figure) -> go.Figure:
     fig = apply_base_theme(fig)
     fig.update_layout(
+        hoverlabel=dict(
+            font_family=THEME["font_family"],
+            font_size=14,
+            font_color=THEME["hover_font_color"],
+            bgcolor="white",
+            bordercolor="#cccccc",
+        ),
         xaxis={"showgrid": False},
         yaxis={"range": [0, 1], "gridcolor": "#eeeeee"},
     )
@@ -57,6 +68,13 @@ def apply_theme(fig: go.Figure) -> go.Figure:
 def apply_horizontal_bar_theme(fig: go.Figure, xaxis_title: str = "") -> go.Figure:
     fig = apply_base_theme(fig)
     fig.update_layout(
+        hoverlabel=dict(
+            font_family=THEME["font_family"],
+            font_size=14,
+            font_color=THEME["hover_font_color"],
+            bgcolor="white",
+            bordercolor="#cccccc",
+        ),
         xaxis={
             "title": xaxis_title,
             "showgrid": True,
@@ -66,5 +84,8 @@ def apply_horizontal_bar_theme(fig: go.Figure, xaxis_title: str = "") -> go.Figu
             "zerolinecolor": "black",
         },
         yaxis={"showgrid": False},
+    )
+    fig.update_traces(
+        hovertemplate="<b>%{y}</b>: %{x:.4f}<extra></extra>"
     )
     return fig
