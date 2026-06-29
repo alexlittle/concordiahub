@@ -1,10 +1,10 @@
 :root {
     --color-sidebar-bg: #D4E4E477;
-    --color-link: #1A6B6B;
+    --color-link: #0d4f4f;
     --sidebar-width: 300px;
     --model-name-colour: #0d4f4f;
-
     --color-metric-bg: #D4E4E4AA;
+    --text-color: rgb(49, 51, 63);
 }
 
 
@@ -22,7 +22,7 @@ hr {
 }
 
 a, a:visited {
-    text-decoration: none;
+    text-decoration: underline;
     color: var(--color-link);
 }
 
@@ -145,20 +145,11 @@ div[data-testid="stCheckbox"] label {
     width: var(--sidebar-width, 244px);
     left: 0;
     font-size: 14px;
-    color: gray;
+    color: #101010 !important;
     text-align: center;
     margin: 0 auto;
 }
 
-.sidebar-footer > a, a:visited {
-    text-decoration: none;
-    color: var(--color-link);
-}
-
-.sidebar-footer > a:hover, a:active {
-    text-decoration: underline;
-    color: var(--color-link);
-}
 
 
 /*

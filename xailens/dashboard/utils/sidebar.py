@@ -14,7 +14,7 @@ def render_header():
     return f"""
         <a href="/" style="text-decoration: none;" target="_self">
             <div class="logo-container">
-                <img src="data:image/svg+xml;base64,{svg_base64}">
+                <img src="data:image/svg+xml;base64,{svg_base64}" alt="XAI Lens Logo"/>
             </div>
             <h1 class="logo">{strings.APP_NAME}</h1>
         </a>
