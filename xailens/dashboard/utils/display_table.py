@@ -1,5 +1,5 @@
 import pandas as pd
-
+from markdown import markdown
 
 def generate_rows_html(df: pd.DataFrame) -> str:
     rows = []
@@ -27,7 +27,7 @@ def render_dataframe(df: pd.DataFrame) -> str:
 
 def render_series(series: pd.Series) -> str:
     rows = [
-        f"<tr><td>{name}</td><td>{value}</td></tr>" for name, value in series.items()
+        f"<tr><td>{name}</td><td>{markdown(str(value))}</td></tr>" for name, value in series.items()
     ]
     rows_html = "\n".join(rows)
     return f"""

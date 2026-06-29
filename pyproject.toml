@@ -17,9 +17,7 @@ dependencies = [
     "pandas==3.0.2",
     "scikit-learn==1.8.0",
     "numpy==2.4.4",
-    "seaborn==0.13.2",
     "shap==0.51.0",
-    "matplotlib==3.10.9",
     "joblib==1.5.3",
     "pyarrow==24.0.0",
     "streamlit==1.57.0",
@@ -28,7 +26,8 @@ dependencies = [
     "sentence-transformers==5.5.0",
     "torchvision==0.27.0",
     "spacy==3.8.14",
-    "plotly==6.7.0"
+    "plotly==6.7.0",
+    "markdown==3.10.2"
 
 ]
 
@@ -60,9 +59,7 @@ dev = [
     "build==1.4.0",
     "wheel==0.46.3",
     "pytest-cov==7.1.0",
-    "pandas-stubs==3.0.3.260530"
-]
-docs = [
+    "pandas-stubs==3.0.3.260530",
     "Sphinx==9.1.0",
     "sphinx_rtd_theme==3.1.0",
 ]

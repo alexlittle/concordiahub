@@ -251,6 +251,7 @@ div[data-testid="stCheckbox"] label {
     padding: 10px 16px;
     border: 1px solid #e0e0e0;
     color: #333;
+    vertical-align: top;
 }
 
 .report-table th {
