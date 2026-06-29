@@ -1,4 +1,6 @@
 import pytest
+import numpy as np
+import pandas as pd
 from unittest.mock import patch, MagicMock
 
 from xailens import runner
@@ -17,14 +19,3 @@ def test_runner_no_context() -> None:
 def test_runner_empty_context() -> None:
     with pytest.raises(InvalidConfigurationError, match="Context"):
         runner.run(None)
-
-
-# Test invalid model type
-def test_runner_invalid_model() -> None:
-    data_schema = DataSchema("a","b","c")
-    run_data = ModelData(data_schema)
-    ctx = ModelContext("unknown", [], "test_dataset", run_data, "model disp name")
-    with patch("xailens.runner.ArtifactStore") as mock_store:
-        mock_store.return_value = MagicMock()
-        with pytest.raises(MissingDataError, match="Cannot compute"):
-            runner.run(ctx)

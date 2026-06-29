@@ -17,13 +17,11 @@ def mock_store():
 @pytest.fixture
 def ctx_with_model_dir_name():
     data_schema = DataSchema("sample_uuid", "target", "prediction")
-    model_data = ModelData(
-                data_schema,
-                x_train=pd.DataFrame({"a": [1, 2]}),
-                y_train = pd.Series([0, 1]),
-                x_test = pd.DataFrame({"a": [3]}),
-                y_test = pd.Series([0]),
-                y_pred = np.array([0]))
+    model_data = ModelData(data_schema,
+                        raw_instances=pd.DataFrame({"a": [3]}),
+                        x_test = pd.DataFrame({"a": [3]}),
+                        y_test = pd.Series([0]),
+                        y_pred = np.array([0]))
 
     ctx = ModelContext("xgboost", [], "test_dataset", model_data, "model disp name")
     ctx.model_dir_name = "my_model_name"
@@ -35,7 +33,12 @@ def ctx_with_model_dir_name():
 @pytest.fixture
 def ctx_without_model_dir_name():
     data_schema = DataSchema("sample_uuid", "target", "prediction")
-    model_data = ModelData(data_schema)
+    model_data = ModelData(data_schema,
+                        raw_instances=pd.DataFrame({"a": [3]}),
+                        x_test = pd.DataFrame({"a": [3]}),
+                        y_test = pd.Series([0]),
+                        y_pred = np.array([0]))
+
     ctx = ModelContext("xgboost", [], "test_dataset", model_data, "model disp name")
     ctx.model_dir_name = None
     ctx.model = None
@@ -90,8 +93,8 @@ def test_write_model_without_model(ctx_without_model_dir_name, mock_store):
 # write_data
 def test_write_data_dataframe(ctx_with_model_dir_name, mock_store):
     artifact_store = make_artifact_store(ctx_with_model_dir_name, mock_store)
-    artifact_store.write_data("x_train", ctx_with_model_dir_name.data.x_train)
-    mock_store.save_dataframe.assert_called_once_with("x_train", ctx_with_model_dir_name.data.x_train)
+    artifact_store.write_data("x_test", ctx_with_model_dir_name.data.x_test)
+    mock_store.save_dataframe.assert_called_once_with("x_test", ctx_with_model_dir_name.data.x_test)
 
 
 def test_write_data_missing_attribute(ctx_with_model_dir_name, mock_store):
