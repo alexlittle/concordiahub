@@ -26,20 +26,6 @@ class ModelPanel:
     instance_uuid: uuid.UUID
 
 
-def select_individual_viz(viz_id: str, current: str, options: dict, existing_params: dict) -> str:
-    option_list = []
-    for k, v in options.items():
-        if k == current:
-            option_list.append(f"<strong>{v.display_name}</strong>")
-        else:
-            link_params = {**existing_params, viz_id: k}
-            query_string = "&".join(
-                f"{pk}={pv}" for pk, pv in link_params.items())
-            option_list.append(
-                f'<a href="{settings.INSTANCE_DETAIL_FILENAME}?{query_string}" target="_self">{v.display_name}</a>'
-            )
-    return " | ".join(option_list)
-
 def build_model_panel(modeleval: ModelEval, viz_param_key, viz_params, instance_uuid) -> ModelPanel:
     method = modeleval.get("xai_methods")[0]
     xai_class = get_xai_adapter(method)
@@ -65,8 +51,8 @@ def build_model_panel(modeleval: ModelEval, viz_param_key, viz_params, instance_
     )
 
 
-def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
-    with st.expander(panel.modeleval.get('model_display_name'), expanded=False):
+def render_model_panel(panel: ModelPanel, plot_key: str):
+    with st.expander(f"{panel.modeleval.get('model_display_name')} Explanation", expanded=False):
 
         axis_range = [-1.1, 1.1]
 

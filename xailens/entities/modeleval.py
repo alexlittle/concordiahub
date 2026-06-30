@@ -7,21 +7,12 @@ from xailens.schema import DataSchema
 
 class ModelEval:
 
-    def __init__(self, path: str = None, store=None, metadata: dict = None):
+    def __init__(self, path: str, metadata: dict = None):
         self.path = path
-        if store:
-            self.store = store
-        elif path:
-            self.store = FilesystemStore(path)
-        else:
-            self.store = None
+        self.store = FilesystemStore(path)
         self.metadata = metadata or {}
 
-    @property
-    def datetime(self):
-        return self.metadata.get("datetime")
-
-    def get(self, key, default=None):
+    def get(self, key:str, default=None):
         parts = key.split(".")
         value = self.metadata
 
@@ -52,20 +43,21 @@ class ModelEval:
         merged = y_true.merge(y_pred, on=self.get(config.DATA_SCHEMA_ID_COLUMN), how='inner')
         return merged[target_cols], merged[pred_cols]
 
-    def get_metrics(self):
+    def get_metrics(self) -> pd.Series:
+        """
+
+        """
         return self.store.load_series("metrics")
 
     def get_instance_data(self, instance_uuid) -> tuple[pd.Series, str]:
-        uuid_col = self.get(config.DATA_SCHEMA_ID_COLUMN)
-        target_col = self.get(config.DATA_SCHEMA_TARGET_COLUMN)
+        """
 
+        """
+        uuid_col = self.get(config.DATA_SCHEMA_ID_COLUMN)
         raw = self.store.load_dataframe("raw_instances")
         row = raw[raw[uuid_col] == instance_uuid].squeeze()
 
-        y_test = self.store.load_dataframe("y_test")
-        label = y_test[y_test[uuid_col] == instance_uuid][target_col].squeeze()
-
-        return row.drop(labels=[uuid_col]), label
+        return row.drop(labels=[uuid_col])
 
     def get_instance_prediction(self, instance_uuid) -> str:
         uuid_col = self.get(config.DATA_SCHEMA_ID_COLUMN)

@@ -64,7 +64,10 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             raise ValueError(
                 f"Instance '{instance_id}' not found in explanations for {cls.key}")
 
-        scores = [data["score"] for data in row["contributions"].values()]
+        # make sure data[score] treaded as a proper float value
+        contributions = list(row["contributions"].items())
+        scores = [float(data["score"]) for _, data in contributions]
+
         abs_sum = sum(abs(s) for s in scores)
         abs_max = max(abs(s) for s in scores)
 
@@ -74,14 +77,14 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         return pd.DataFrame([
             {
                 "feature_name": feature,
-                "score": data["score"],
-                "score_normalised_sum": data["score"] / abs_sum if abs_sum != 0 else data["score"],
-                "score_normalised_max": data["score"] / abs_max if abs_max != 0 else data["score"],
+                "score": score,
+                "score_normalised_sum": score / abs_sum if abs_sum != 0 else score,
+                "score_normalised_max": score / abs_max if abs_max != 0 else score,
                 "reasoning": data["reasoning"],
                 "overall_reasoning": overall_reasoning,
                 "overall_confidence": overall_confidence
             }
-            for feature, data in row["contributions"].items()
+            for (feature, data), score in zip(contributions, scores)
         ])
 
     def explain_global_json(self, _, _model=None) -> pd.DataFrame:

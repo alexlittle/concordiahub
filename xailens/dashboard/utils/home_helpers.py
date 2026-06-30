@@ -1,5 +1,3 @@
-
-
 from xailens.entities.model_explorer import ModelExplorer
 from xailens import strings
 

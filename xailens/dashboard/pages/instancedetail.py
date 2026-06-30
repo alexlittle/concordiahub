@@ -65,9 +65,9 @@ def main():
         st.html(f"<h2>{strings.INSTANCE_DETAIL_DATA_TITLE}</h2>")
 
         # display the original data
-        x_test, ground_truth = dataset_obj.get_instance_data(instance_uuid)
+        instance_data = dataset_obj.get_instance_data(instance_uuid)
 
-        st.html(render_series(x_test))
+        st.html(render_series(instance_data))
 
     # Panels for each model explanation
     st.html(f"<h2>{strings.INSTANCE_DETAIL_MODEL_EXPLANATIONS}</h2>")
@@ -81,7 +81,7 @@ def main():
                     key = me.get("model_uuid")
                     viz_state_key = f"model-viz-{key}"
                     panel = build_model_panel(me, viz_state_key, st.session_state, instance_uuid)
-                    render_model_panel(panel, st.query_params, plot_key=f"explanation_{key}")
+                    render_model_panel(panel, f"explanation_{key}")
 
 if __name__ == "__main__":
     main()
