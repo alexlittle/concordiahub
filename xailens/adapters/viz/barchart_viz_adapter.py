@@ -14,10 +14,10 @@ class BarChartVizAdapter(VizAdapter):
     display_name = strings.BARCHART_DISPLAY_NAME
     compatible_explanations = config.BARCHART_COMPATIBLE_XAI
 
-    def render(self, data: pd.DataFrame, axis_range=None) -> list[Any]:
+    def render(self, explanation: pd.DataFrame, axis_range=None) -> list[Any]:
 
         # filter to show only the largest contributors, not all
-        explanation = self._top_features(data)
+        explanation = self._top_features(explanation)
 
         explanation = explanation.sort_values("score_normalised_max", ascending=True)
         colors = [config.PLOT_LEFT_COLOR if v < 0 else config.PLOT_RIGHT_COLOR

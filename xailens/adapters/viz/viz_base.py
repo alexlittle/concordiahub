@@ -11,9 +11,9 @@ class VizAdapter(ABC):
     compatible_explanations: list[str] = []
 
     @abstractmethod
-    def render(self, data: pd.DataFrame,  axis_range=None) -> list[Any]:
+    def render(self, explanation: pd.DataFrame,  axis_range=None) -> list[Any]:
         raise NotImplementedError
 
     # filter to show only the largest contributors, not all
-    def _top_features(self, data: pd.DataFrame, n: int = config.PLOT_MAX_FEATURES) -> pd.DataFrame:
-        return data.reindex(data["score_normalised_max"].astype(float).abs().nlargest(n).index)
+    def _top_features(self, explanation: pd.DataFrame, n: int = config.PLOT_MAX_FEATURES) -> pd.DataFrame:
+        return explanation.reindex(explanation["score_normalised_max"].astype(float).abs().nlargest(n).index)

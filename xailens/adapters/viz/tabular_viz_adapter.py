@@ -1,3 +1,4 @@
+import pandas as pd
 from typing import Any
 
 from xailens.adapters.viz.viz_base import VizAdapter
@@ -10,28 +11,43 @@ class TabularAdapter(VizAdapter):
     display_name = strings.TABULAR_DISPLAY_NAME
     compatible_explanations = config.TABULAR_COMPATIBLE_XAI
 
-    def render(self, explanation, axis_range=None) -> list[Any]:
+    def render(self, explanation: pd.DataFrame, axis_range=None) -> list[Any]:
 
-        # get the high level explanation
-        overall_reasoning = explanation["overall_reasoning"].iloc[0]
-        overall_confidence = explanation["overall_confidence"].iloc[0]
+        explanation = self._top_features(explanation)
+        explanation = explanation.sort_values("score_normalised_max", ascending=True)
+        parts = []
 
-        overall_text = f"""
-                <em>Overall Reasoning</em>: {overall_reasoning} <br/>
-                <em>Overall Confidence</em>: {overall_confidence} <br/>"""
+        # get the high level explanation if available
+        if "overall_reasoning" in explanation.columns:
+            overall_reasoning = explanation["overall_reasoning"].iloc[0]
+            overall_confidence = explanation["overall_confidence"].iloc[0]
 
-        # drop unnecessary columns
-        explanation = explanation.drop(columns=["score",
-                                                "score_normalised_sum",
-                                                "overall_reasoning",
-                                                "overall_confidence"])
+            overall_text = f"""
+                    <em>Overall Reasoning</em>: {overall_reasoning} <br/>
+                    <em>Overall Confidence</em>: {overall_confidence} <br/>"""
+            parts.append(overall_text)
+
+            final_columns = {"feature_name": "Feature",
+                     "score_normalised_max": "Score (1 to -1)",
+                     "reasoning": "Reasoning"}
+            # drop unnecessary columns
+            explanation = explanation.drop(columns=["score",
+                                                    "score_normalised_sum",
+                                                    "overall_reasoning",
+                                                    "overall_confidence"])
+        else:
+            final_columns = {"feature_name": "Feature",
+                             "score_normalised_max": "Score (1 to -1)"}
+            # drop unnecessary columns
+            explanation = explanation.drop(columns=["score",
+                                                    "score_normalised_sum",
+                                                    "reasoning"])
+
+
 
         # rename for display
-        explanation = explanation.rename(
-            columns={"feature_name": "Feature",
-                     "score_normalised_max": "Score (1 to -1)",
-                     "reasoning": "Reasoning"})
+        explanation = explanation.rename(columns=final_columns)
+        parts.append(explanation.sort_values("Score (1 to -1)", ascending=False))
 
 
-
-        return [overall_text, explanation.sort_values("Score (1 to -1)", ascending=False)]
+        return parts

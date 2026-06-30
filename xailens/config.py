@@ -28,12 +28,14 @@ KEEP_NUM_FEATURES = 500
 COEFFS_DEFAULT_VIZ = "barchart"
 COEFFS_COMPATIBLE_VIZ = {
         "barchart": VizOption(display_name=strings.BARCHART_DISPLAY_NAME),
+        "tabular": VizOption(display_name=strings.TABULAR_DISPLAY_NAME),
 }
 
 
 TREE_SHAP_DEFAULT_VIZ = "barchart"
 TREE_SHAP_COMPATIBLE_VIZ = {
         "barchart": VizOption(display_name=strings.BARCHART_DISPLAY_NAME),
+        "tabular": VizOption(display_name=strings.TABULAR_DISPLAY_NAME),
     }
 
 LLM_REASONING_DEFAULT_VIZ = "barchart"
@@ -46,7 +48,7 @@ LLM_REASONING_COMPATIBLE_VIZ = {
 # Visualisation compatibility with XAI methods
 #------------------------
 BARCHART_COMPATIBLE_XAI = ["tree_shap", "coefficients"]
-TABULAR_COMPATIBLE_XAI = ["llm_reasoning"]
+TABULAR_COMPATIBLE_XAI = ["llm_reasoning", "tree_shap", "coefficients"]
 
 #------------------------
 # Display config
