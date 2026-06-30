@@ -18,8 +18,8 @@ def render_features_heatmap(df_exp: pd.DataFrame):
             [row[col] if pd.notna(row[col]) else None for col in data_cols] + [None] * len(llm_cols)
             for _, row in df_exp.iterrows()
         ]
-        z_grey_cells = [
-            [0.5 if pd.isna(row[col]) else None for col in data_cols] + [None] * len(llm_cols)
+        missing_mask = [
+            [pd.isna(row[col]) for col in data_cols] + [False] * len(llm_cols)
             for _, row in df_exp.iterrows()
         ]
         fig.add_trace(go.Heatmap(
@@ -34,7 +34,11 @@ def render_features_heatmap(df_exp: pd.DataFrame):
             hoverongaps=False,
         ))
         # grey overlay for individual NaN cells within data columns
-        if any(v == 0.5 for row in z_grey_cells for v in row if v is not None):
+        if any(any(row_mask) for row_mask in missing_mask):
+            z_grey_cells = [
+                [1 if is_missing else None for is_missing in row_mask]
+                for row_mask in missing_mask
+            ]
             fig.add_trace(go.Heatmap(
                 z=z_grey_cells,
                 x=x_labels,
@@ -48,7 +52,7 @@ def render_features_heatmap(df_exp: pd.DataFrame):
     # grey overlay for LLM columns (entirely NaN)
     if llm_cols:
         z_llm_grey = [
-            [None] * len(data_cols) + [0.5] * len(llm_cols)
+            [None] * len(data_cols) + [1] * len(llm_cols)
             for _ in range(len(df_exp))
         ]
         fig.add_trace(go.Heatmap(

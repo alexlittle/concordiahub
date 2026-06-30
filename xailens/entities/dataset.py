@@ -82,37 +82,12 @@ class Dataset:
 
     def get_instance_consensus(self) -> dict:
         common_ids = self.get_instance_consensus_ids()
-        model_preds = {}
-        y_true_common = None
-
-        for me in self.modelevals:
-            y_true, y_pred = me.load_targets()
-            id_col = me.get(config.DATA_SCHEMA_ID_COLUMN)
-            pred_col = me.get(config.DATA_SCHEMA_PREDICTION_COLUMN)
-            target_col = me.get(config.DATA_SCHEMA_TARGET_COLUMN)
-
-            y_pred_filtered = (
-                y_pred[y_pred[id_col].isin(common_ids)]
-                .set_index(id_col)[pred_col]
-                .rename(me.get("model_display_name"))
-            )
-            y_true_filtered = (
-                y_true[y_true[id_col].isin(common_ids)]
-                .set_index(id_col)[target_col]
-            )
-
-            model_preds[me.get("model_display_name")] = y_pred_filtered
-
-            if y_true_common is None:
-                y_true_common = y_true_filtered
-
-        correct_df = pd.DataFrame(model_preds).eq(y_true_common, axis=0)
-
+        pred_df, y_true_common = self._get_common_predictions(common_ids)
+        correct_df = pred_df.eq(y_true_common, axis=0)
         total = len(common_ids)
         all_correct = int(correct_df.all(axis=1).sum())
         all_incorrect = int((~correct_df).all(axis=1).sum())
         models_disagree = total - all_correct - all_incorrect
-
         return {
             "total": total,
             "all_correct": all_correct,
@@ -127,47 +102,18 @@ class Dataset:
         - true_label (ground truth)
         - prediction column for each dataset
         - agreement column (either: allcorrect, allincorrect, disagree)
-
         Returns:
             pd.DataFrame
         """
-
         common_ids = self.get_instance_consensus_ids()
-        model_preds = {}
-        y_true_common = None
-
-        for me in self.modelevals:
-            y_true, y_pred = me.load_targets()
-            id_col = me.get(config.DATA_SCHEMA_ID_COLUMN)
-            pred_col = me.get(config.DATA_SCHEMA_PREDICTION_COLUMN)
-            target_col = me.get(config.DATA_SCHEMA_TARGET_COLUMN)
-
-            y_pred_filtered = (
-                y_pred[y_pred[id_col].isin(common_ids)]
-                .set_index(id_col)[pred_col]
-                .rename(me.get("model_display_name"))
-            )
-            y_true_filtered = (
-                y_true[y_true[id_col].isin(common_ids)]
-                .set_index(id_col)[target_col]
-            )
-
-            model_preds[me.get("model_display_name")] = y_pred_filtered
-
-            if y_true_common is None:
-                y_true_common = y_true_filtered
-
-        pred_df = pd.DataFrame(model_preds)
+        pred_df, y_true_common = self._get_common_predictions(common_ids)
         correct_df = pred_df.eq(y_true_common, axis=0)
-
         result = pd.DataFrame({"true_label": y_true_common})
         result = pd.concat([result, pred_df], axis=1)
         result["agreement"] = correct_df.apply(self._agreement, axis=1)
-
         # sort by true_label
         result = result.sort_values(by=["true_label"], ascending=True)
         result = result.reset_index(names="instance_uuid")
-
         cols = (
                 ["instance_uuid", "true_label"]
                 + [c for c in result.columns if
@@ -177,6 +123,39 @@ class Dataset:
         return result[cols]
 
     # Private helper functions
+
+    def _get_common_predictions(self, common_ids) -> tuple[
+        pd.DataFrame, pd.Series]:
+        """Builds aligned prediction and ground-truth series for all modelevals,
+        filtered to the given common_ids.
+
+        Returns:
+            tuple of (pred_df, y_true_common):
+                pred_df: DataFrame, one column per model, indexed by instance id
+                y_true_common: Series of ground truth, indexed by instance id
+        """
+        model_preds = {}
+        y_true_common = None
+        for me in self.modelevals:
+            y_true, y_pred = me.load_targets()
+            id_col = me.get(config.DATA_SCHEMA_ID_COLUMN)
+            pred_col = me.get(config.DATA_SCHEMA_PREDICTION_COLUMN)
+            target_col = me.get(config.DATA_SCHEMA_TARGET_COLUMN)
+            y_pred_filtered = (
+                y_pred[y_pred[id_col].isin(common_ids)]
+                .set_index(id_col)[pred_col]
+                .rename(me.get("model_display_name"))
+            )
+            y_true_filtered = (
+                y_true[y_true[id_col].isin(common_ids)]
+                .set_index(id_col)[target_col]
+            )
+            model_preds[me.get("model_display_name")] = y_pred_filtered
+            if y_true_common is None:
+                y_true_common = y_true_filtered
+        return pd.DataFrame(model_preds), y_true_common
+
+
     def _agreement(self, row: pd.Series) -> str:
         if row.all():
             return "allcorrect"

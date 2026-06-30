@@ -21,29 +21,10 @@ def apply_layout(title: str,
     with st.sidebar:
         st.html(sidebar.render_header())
         if all_model_names:
-            st.html(f"<h3>{strings.SIDEBAR_MODEL_FILTER_TITLE}</h3>")
-            selected_ds = []
-            for name in sorted(all_model_names):
-                if st.checkbox(name, value=name in selected_model_names, key=f"chk_{dataset_id}_{name}"):
-                    selected_ds.append(name)
-
-            selected_ig = None
-            if selected_instance_group:
-                options = list(strings.INSTANCE_GROUPS)
-                selected_ig = st.radio(
-                    label=f"{strings.SIDEBAR_INSTANCE_GROUP_FILTER_TITLE}",
-                    options=options,
-                    format_func=lambda k: strings.INSTANCE_GROUPS[k],
-                    index=options.index(selected_instance_group) if selected_instance_group in options else 0,
-                    key=f"radio_{dataset_id}_instance_group"
-                )
-
-            if st.button("Apply selection"):
-                st.query_params["dataset"] = dataset_id
-                st.query_params["models"] = ",".join(selected_ds)
-                if selected_ig:
-                    st.query_params["instances"] = selected_ig
-                st.rerun()
+            render_sidebar_options(all_model_names,
+                                   selected_model_names,
+                                   dataset_id,
+                                   selected_instance_group)
 
         st.html(sidebar.render_footer())
 
@@ -51,4 +32,31 @@ def apply_layout(title: str,
     st.html(f"<h1 class='header'>{title}</h1>")
 
 
+def render_sidebar_options(all_model_names,
+                           selected_model_names,
+                           dataset_id: str = None,
+                           selected_instance_group=None,):
+    st.html(f"<h3>{strings.SIDEBAR_MODEL_FILTER_TITLE}</h3>")
+    selected_ds = []
+    for name in sorted(all_model_names):
+        if st.checkbox(name, value=name in selected_model_names, key=f"chk_{dataset_id}_{name}"):
+            selected_ds.append(name)
+
+    selected_ig = None
+    if selected_instance_group:
+        options = list(strings.INSTANCE_GROUPS)
+        selected_ig = st.radio(
+            label=f"{strings.SIDEBAR_INSTANCE_GROUP_FILTER_TITLE}",
+            options=options,
+            format_func=lambda k: strings.INSTANCE_GROUPS[k],
+            index=options.index(selected_instance_group) if selected_instance_group in options else 0,
+            key=f"radio_{dataset_id}_instance_group"
+        )
+
+    if st.button("Apply selection"):
+        st.query_params["dataset"] = dataset_id
+        st.query_params["models"] = ",".join(selected_ds)
+        if selected_ig:
+            st.query_params["instances"] = selected_ig
+        st.rerun()
 

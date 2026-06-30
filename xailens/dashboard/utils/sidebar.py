@@ -29,3 +29,4 @@ def render_footer():
             Documentation
         </div>
     """
+

@@ -19,7 +19,7 @@ DATA_SCHEMA_PREDICTION_COLUMN: Final[str] = 'data_schema.prediction_column'
 # a cut-off of number of features to keep when generating heatmap, if there are
 # 1000's of features (for models using TF-IDF), this cut-off prevents the page
 # being very slow to load
-KEEP_NUM_FEATURES = 100
+KEEP_NUM_FEATURES = 500
 
 
 #------------------------
@@ -53,10 +53,11 @@ TABULAR_COMPATIBLE_XAI = ["llm_reasoning"]
 #------------------------
 # Display config
 #------------------------
-# maximum no features to show - esp for TF-IDF based models
+# maximum num features to show - esp for TF-IDF based models
 PLOT_MAX_FEATURES = 25
 
-# how many pixels to add for each row on a plot (so doesn't get squashed)
+# how many pixels to add for each row on a plot
+# so doesn't get squashed and hide axis labels
 PLOT_PER_ROW_MULTIPLIER = 25
 
 #------------------------
