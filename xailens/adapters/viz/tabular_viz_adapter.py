@@ -28,7 +28,7 @@ class TabularAdapter(VizAdapter):
             parts.append(overall_text)
 
             final_columns = {"feature_name": "Feature",
-                     "score_normalised_max": "Score (1 to -1)",
+                     "score_normalised_max": strings.TABULAR_SCORE_TITLE,
                      "reasoning": "Reasoning"}
             # drop unnecessary columns
             explanation = explanation.drop(columns=["score",
@@ -37,7 +37,7 @@ class TabularAdapter(VizAdapter):
                                                     "overall_confidence"])
         else:
             final_columns = {"feature_name": "Feature",
-                             "score_normalised_max": "Score (1 to -1)"}
+                             "score_normalised_max": strings.TABULAR_SCORE_TITLE}
             # drop unnecessary columns
             explanation = explanation.drop(columns=["score",
                                                     "score_normalised_sum",
@@ -47,7 +47,7 @@ class TabularAdapter(VizAdapter):
 
         # rename for display
         explanation = explanation.rename(columns=final_columns)
-        parts.append(explanation.sort_values("Score (1 to -1)", ascending=False))
+        parts.append(explanation.sort_values(strings.TABULAR_SCORE_TITLE, ascending=False))
 
 
         return parts

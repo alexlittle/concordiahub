@@ -74,8 +74,10 @@ DISPLAY_NAMES = {
 
 # Instance detail page
 #-------------------------------
-INSTANCE_DETAIL_HEATMAP_TITLE = "Instance Feature Importance Heatmap"
+INSTANCE_DETAIL_PREDICTIONS_TITLE = "Model Predictions"
+INSTANCE_DETAIL_HEATMAP_TITLE = "Local Feature Importance Heatmap"
 INSTANCE_DETAIL_DATA_TITLE = "Instance Data"
+INSTANCE_DETAIL_MODEL_EXPLANATIONS = "Model Explanations"
 
 # ----------------
 # Error/Warning messages
@@ -145,3 +147,4 @@ WATERFALL_X_AXIS = "Contribution"
 
 # Tabular Visualisation
 TABULAR_DISPLAY_NAME = "Tabular (text)"
+TABULAR_SCORE_TITLE = "Score (1 to -1)"

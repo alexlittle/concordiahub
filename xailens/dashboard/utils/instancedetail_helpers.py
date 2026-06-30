@@ -40,20 +40,18 @@ def select_individual_viz(viz_id: str, current: str, options: dict, existing_par
             )
     return " | ".join(option_list)
 
-def build_model_panel(modeleval: ModelEval, viz_param_key, query_params) -> ModelPanel:
+def build_model_panel(modeleval: ModelEval, viz_param_key, viz_params, instance_uuid) -> ModelPanel:
     method = modeleval.get("xai_methods")[0]
     xai_class = get_xai_adapter(method)
     xai_instance = xai_class()
-    viz_name = query_params.get(viz_param_key, xai_instance.get_default_visualisation())
+    viz_name = viz_params.get(viz_param_key, xai_instance.get_default_visualisation())
 
     try:
         viz_class = get_viz_adapter(viz_name)
     except (KeyError, exceptions.InvalidConfigurationError):
         viz_class = None
 
-    instance_uuid = query_params.get("instance_uuid")
     explanation = xai_class.load_local_explanation(modeleval, instance_uuid)
-
 
     return ModelPanel(
         modeleval=modeleval,
@@ -68,16 +66,21 @@ def build_model_panel(modeleval: ModelEval, viz_param_key, query_params) -> Mode
 
 
 def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
-    with st.container():
-        st.html(settings.MODEL_PANEL_MARKER)
-        st.html(f"<h3>{panel.modeleval.get('model_display_name')}</h3>")
-        st.html(f"<strong>Prediction</strong>: {panel.modeleval.get_instance_prediction(panel.instance_uuid)}")
+    with st.expander(panel.modeleval.get('model_display_name'), expanded=False):
 
         axis_range = [-1.1, 1.1]
 
         viz_options = panel.xai_instance.get_compatible_visualisations()
-        select_text = select_individual_viz(panel.viz_key, panel.viz_name, viz_options, existing_params)
-        st.html(f"View as: {select_text}")
+        viz_names = list(viz_options.keys()) if isinstance(viz_options, dict) else list(viz_options)
+        if panel.viz_key not in st.session_state or st.session_state[panel.viz_key] not in viz_names:
+            st.session_state[panel.viz_key] = viz_names[0]
+        if len(viz_names) > 1:
+            st.radio("View as:",
+                     options=viz_names,
+                     format_func=lambda k: viz_options[k].display_name if isinstance(viz_options, dict) else k,
+                     horizontal=True,
+                     key=panel.viz_key,
+                     label_visibility="collapsed")
 
         if panel.viz_class is None:
             st.warning(f"{panel.viz_name} is not a registered visualisation")

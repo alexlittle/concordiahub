@@ -47,7 +47,13 @@ def main():
     # Display matching instances
     # remove agreement column so doesn't display
     df_instances = df_instances.drop(columns="agreement")
-    df_instances = df_instances.rename(columns=strings.DISPLAY_NAMES)
+
+    rename_map = {
+        col: strings.DISPLAY_NAMES.get(col, f"{col} Prediction")
+        for col in df_instances.columns
+    }
+
+    df_instances = df_instances.rename(columns=rename_map)
     query_params = dict(st.query_params)
     st.html(render_instances_df(df_instances, query_params, true_label_col=strings.DISPLAY_NAMES["true_label"]))
 

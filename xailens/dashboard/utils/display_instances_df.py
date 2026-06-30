@@ -3,6 +3,12 @@ import pandas as pd
 from xailens import strings
 from xailens.dashboard import settings
 
+def _display_value(val) -> str:
+    if val in (0, 1, True, False) and not isinstance(val, float):
+        return str(bool(val))
+    return str(val)
+
+
 def generate_rows_html(df: pd.DataFrame,
                        query_params:dict,
                        true_label_col:str = "true_label",
@@ -21,14 +27,14 @@ def generate_rows_html(df: pd.DataFrame,
                 cells.append(f'<td><a href="{settings.INSTANCE_DETAIL_FILENAME}?{query_string}&instance_uuid={val}">{val}</a></td>')
             elif col in pred_cols:
                 css_class = "pred-correct" if val == row[true_label_col] else "pred-incorrect"
-                cells.append(f'<td class="{css_class}">{val}</td>')
+                cells.append(f'<td class="{css_class}">{_display_value(val)}</td>')
             else:
-                cells.append(f"<td>{val}</td>")
+                cells.append(f"<td>{_display_value(val)}</td>")
         rows.append(f"<tr>{''.join(cells)}</tr>")
     return "\n".join(rows)
 
 def render_instances_df(df:pd.DataFrame,
-                        query_params:dict,
+                        query_params:dict = None,
                         true_label_col:str = "true_label",
                         id_col:str = None,
                         skip_cols:str = None):
