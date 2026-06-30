@@ -10,7 +10,7 @@ class TabularAdapter(VizAdapter):
     display_name = strings.TABULAR_DISPLAY_NAME
     compatible_explanations = config.TABULAR_COMPATIBLE_XAI
 
-    def render_local(self, explanation, axis_range=None) -> list[Any]:
+    def render(self, explanation, axis_range=None) -> list[Any]:
 
         # get the high level explanation
         overall_reasoning = explanation["overall_reasoning"].iloc[0]

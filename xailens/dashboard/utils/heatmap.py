@@ -4,12 +4,13 @@ import pandas as pd
 from xailens.dashboard.utils import plotly_theme
 
 
-
 def render_features_heatmap(df_exp: pd.DataFrame):
     model_cols = [col for col in df_exp.columns if col != "feature_name"]
     llm_cols = [col for col in model_cols if df_exp[col].isna().all()]
     data_cols = [col for col in model_cols if col not in llm_cols]
+
     x_labels = data_cols + [f"{col} *" for col in llm_cols]
+    y_labels = df_exp["feature_name"].tolist()
 
     fig = go.Figure()
 
@@ -25,7 +26,7 @@ def render_features_heatmap(df_exp: pd.DataFrame):
         fig.add_trace(go.Heatmap(
             z=z_main,
             x=x_labels,
-            y=df_exp["feature_name"].tolist(),
+            y=y_labels,
             colorscale="Blues",
             zmin=0,
             zmax=1,
@@ -42,7 +43,7 @@ def render_features_heatmap(df_exp: pd.DataFrame):
             fig.add_trace(go.Heatmap(
                 z=z_grey_cells,
                 x=x_labels,
-                y=df_exp["feature_name"].tolist(),
+                y=y_labels,
                 colorscale=[[0, "lightgrey"], [1, "lightgrey"]],
                 showscale=False,
                 hovertemplate="<b>%{x}</b><br>%{y}<br>No data<extra></extra>",

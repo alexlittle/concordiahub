@@ -28,13 +28,12 @@ KEEP_NUM_FEATURES = 500
 COEFFS_DEFAULT_VIZ = "barchart"
 COEFFS_COMPATIBLE_VIZ = {
         "barchart": VizOption(display_name=strings.BARCHART_DISPLAY_NAME),
-        "waterfall": VizOption(display_name=strings.WATERFALL_DISPLAY_NAME),}
+}
 
 
 TREE_SHAP_DEFAULT_VIZ = "barchart"
 TREE_SHAP_COMPATIBLE_VIZ = {
         "barchart": VizOption(display_name=strings.BARCHART_DISPLAY_NAME),
-        "waterfall": VizOption(display_name=strings.WATERFALL_DISPLAY_NAME),
     }
 
 LLM_REASONING_DEFAULT_VIZ = "barchart"
@@ -47,14 +46,13 @@ LLM_REASONING_COMPATIBLE_VIZ = {
 # Visualisation compatibility with XAI methods
 #------------------------
 BARCHART_COMPATIBLE_XAI = ["tree_shap", "coefficients"]
-WATERFALL_COMPATIBLE_XAI = ["tree_shap", "coefficients", "llm_reasoning"]
 TABULAR_COMPATIBLE_XAI = ["llm_reasoning"]
 
 #------------------------
 # Display config
 #------------------------
 # maximum num features to show - esp for TF-IDF based models
-PLOT_MAX_FEATURES = 25
+PLOT_MAX_FEATURES = 20
 
 # how many pixels to add for each row on a plot
 # so doesn't get squashed and hide axis labels

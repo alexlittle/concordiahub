@@ -85,7 +85,7 @@ def render_model_panel(panel: ModelPanel, existing_params: dict, plot_key: str):
             return
 
         try:
-            viz_list = panel.viz_class().render_local(panel.explanation, axis_range=axis_range)
+            viz_list = panel.viz_class().render(panel.explanation, axis_range=axis_range)
             for viz in viz_list:
                 if isinstance(viz, plotly.graph_objs.Figure):
                     viz = apply_horizontal_bar_theme(viz)
