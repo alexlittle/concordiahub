@@ -4,14 +4,10 @@ from xailens.exceptions import InvalidSelectionError
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard.utils.common import display_breadcrumbs, render_metric_card
-from xailens.dashboard.utils.dataset_helpers import (
-    render_accuracy_barchart,
-    render_f1_weighted_barchart,
-    render_precision_weighted_barchart,
-    render_recall_weighted_barchart)
+from xailens.dashboard.utils.dataset_helpers import render_metric_barchart
 from xailens.dashboard.utils.heatmap import render_features_heatmap
 from xailens.entities.dataset import Dataset
-from xailens import strings
+from xailens import strings, config
 from xailens.dashboard import settings
 
 def main():
@@ -45,6 +41,19 @@ def main():
     selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_modelevals)
 
+    with st.container():
+        st.html(settings.MODEL_PANEL_MARKER)
+        recommended_models = dataset_obj.get_recommended_models()
+
+        if len(recommended_models) == 1:
+            st.html(f"<h3>{strings.RECOMMENDED_MODEL_TITLE}: {recommended_models[0]}</h3>")
+        else:
+            st.html(f"<h3>{strings.RECOMMENDED_MODELS_TITLE}: {', '.join(recommended_models)}</h3>")
+
+        basis_text = strings.RECOMMENDED_MODEL_EXPLANATION.format(
+            metric=strings.METRICS_NAMES[config.BEST_MODEL_METRIC])
+        st.html(f"<p>{basis_text}</p>")
+
     # Performance metrics
     st.html(f"<h2>{strings.PERF_METRICS_TITLE}</h2>")
     # get the metrics
@@ -56,22 +65,24 @@ def main():
     with col1:
         with st.container():
             st.html(settings.MODEL_PANEL_MARKER)
-            st.plotly_chart(render_accuracy_barchart(metrics))
+            st.plotly_chart(render_metric_barchart(metrics, "f1_weighted"))
     with col2:
         with st.container():
             st.html(settings.MODEL_PANEL_MARKER)
-            st.plotly_chart(render_f1_weighted_barchart(metrics))
+            st.plotly_chart(render_metric_barchart(metrics, "accuracy"))
+
 
     # precision/recall bar charts
     col3, col4 = st.columns(2, gap="large")
     with col3:
         with st.container():
             st.html(settings.MODEL_PANEL_MARKER)
-            st.plotly_chart(render_precision_weighted_barchart(metrics))
+            st.plotly_chart(render_metric_barchart(metrics, "precision_weighted"))
     with col4:
         with st.container():
             st.html(settings.MODEL_PANEL_MARKER)
-            st.plotly_chart(render_recall_weighted_barchart(metrics))
+            st.plotly_chart(
+                render_metric_barchart(metrics, "recall_weighted"))
 
     # Global explanations
     st.html(f"<h2>{strings.GLOBAL_EXPLANATION_TITLE}</h2>")

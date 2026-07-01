@@ -8,8 +8,33 @@ from xailens import config
 class Dataset:
 
     def __init__(self, dataset_id: str,  modelevals: list[ModelEval]):
+        """
+        Initialises the Dataset object, with the specified dataset and the
+        models to include
+
+        :param dataset_id: Dataset ID
+        :param modelevals: List of ModelEval objects
+        """
         self.dataset_id = dataset_id
         self.modelevals = modelevals
+
+
+    def get_recommended_models(self) -> list[str]:
+        """
+        Returns a list of recommended model names, based on the metric specified
+        in the configuration (defaults to f1 weighted)
+
+        Returns a list in case there is a tie between models
+
+        Returns:
+            list(str): recommended model names
+        """
+        df = self.get_metrics()
+        s = df[config.BEST_MODEL_METRIC]
+        max_val = s.max()
+        best_models = s[s == max_val].index.tolist()
+
+        return best_models
 
     def get_metrics(self) -> pd.DataFrame:
         rows = {me.get("model_display_name"): me.get_metrics() for me in self.modelevals}
@@ -18,7 +43,16 @@ class Dataset:
         df.columns.name = None
         return df
 
-    def get_instance_data(self, instance_uuid: str) -> tuple[pd.Series, str]:
+    def get_instance_data(self, instance_uuid: str) -> pd.Series:
+        """
+        Gets the instance data for the specified instance uuid
+
+        :param instance_uuid: Instance UUID
+
+        Returns:
+            pd.Series: instance data
+        """
+
         # only needs the data from the first modeleval - as will be same for all
         return self.modelevals[0].get_instance_data(instance_uuid)
 
@@ -122,10 +156,10 @@ class Dataset:
         )
         return result[cols]
 
+    #------------------------------
     # Private helper functions
-
-    def _get_common_predictions(self, common_ids) -> tuple[
-        pd.DataFrame, pd.Series]:
+    #-------------------------------
+    def _get_common_predictions(self, common_ids) -> tuple[pd.DataFrame, pd.Series]:
         """Builds aligned prediction and ground-truth series for all modelevals,
         filtered to the given common_ids.
 

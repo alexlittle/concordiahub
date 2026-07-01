@@ -16,6 +16,10 @@ DATA_SCHEMA_ID_COLUMN: Final[str] = 'data_schema.instance_id_column'
 DATA_SCHEMA_TARGET_COLUMN: Final[str] = 'data_schema.target_column'
 DATA_SCHEMA_PREDICTION_COLUMN: Final[str] = 'data_schema.prediction_column'
 
+# Which metric to base the best model on
+BEST_MODEL_METRIC = "f1_weighted"
+
+
 # a cut-off of number of features to keep when generating heatmap, if there are
 # 1000's of features (for models using TF-IDF), this cut-off prevents the page
 # being very slow to load
