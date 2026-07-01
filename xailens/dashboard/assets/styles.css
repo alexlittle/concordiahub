@@ -8,6 +8,9 @@
     --border-color: #D4E4E4;
 }
 
+.body {
+    line-height: 1 !important;
+}
 
 .block-container {
     padding-top: 1rem;

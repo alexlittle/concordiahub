@@ -68,7 +68,7 @@ PLOT_PER_ROW_MULTIPLIER = 25
 # Graph/Plot colour scheme
 #------------------------
 
-PLOT_LEFT_COLOR = "brown"
-PLOT_RIGHT_COLOR = "teal"
+PLOT_SECONDARY_COLOR = "#FE6100"
+PLOT_PRIMARY_COLOR = "teal"
 
 PLOT_ZERO_LINE= {"zeroline": True, "zerolinewidth": 2, "zerolinecolor": "black"}

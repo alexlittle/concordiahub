@@ -10,7 +10,6 @@ from xailens.registry.xai_registry import get_xai_adapter
 from xailens.registry.viz_registry import get_viz_adapter
 from xailens import exceptions
 from xailens.dashboard.utils.display_table import render_dataframe
-from xailens.dashboard import settings
 from xailens.entities.modeleval import ModelEval
 from xailens.dashboard.utils.plotly_theme import apply_horizontal_bar_theme
 

@@ -44,7 +44,8 @@ RECOMMENDED_MODEL_TITLE = "Recommended Model"
 RECOMMENDED_MODELS_TITLE = "Recommended Models"
 RECOMMENDED_MODEL_EXPLANATION = "Based on the highest {metric} score"
 
-PERF_METRICS_TITLE = "Performance Metrics"
+PERF_FI_WEIGHTED_TITLE = "F1 weighted"
+PERF_METRICS_TITLE = "Accuracy, Precision & Recall Metrics"
 GLOBAL_EXPLANATION_TITLE = "Global Feature Importance Heatmap"
 INSTANCE_CONCENSUS_TITLE = "Instance Consensus"
 
@@ -56,10 +57,6 @@ METRICS_NAMES = {
     'recall_weighted': "Recall weighted",
 }
 
-PERF_GRAPH_ACC_TITLE = "Accuracy"
-PERF_GRAPH_F1_WEIGHTED_TITLE = "F1 weighted"
-PERF_GRAPH_PRECISION_WEIGHTED_TITLE = "Precision weighted"
-PERF_GRAPH_RECALL_WEIGHTED_TITLE = "Recall weighted"
 
 # instance consensus metrics
 INSTANCES_TOTAL_TITLE = "Total Instances"
