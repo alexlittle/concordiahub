@@ -5,7 +5,7 @@ import xailens.config as config
 from xailens.storage.filesystem_store import FilesystemStore
 from xailens.schema import DataSchema
 
-class ModelEval:
+class Model:
 
     def __init__(self, path: str, metadata: dict = None):
         self.path = path

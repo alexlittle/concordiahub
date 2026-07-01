@@ -17,8 +17,8 @@ def main():
     dataset = st.query_params.get('dataset')
     models_param = st.query_params.get("models")
 
-    all_modelevals = explorer.get_modelevals_for_dataset(dataset)
-    all_model_names = [me.get("model_display_name") for me in all_modelevals]
+    all_models = explorer.get_models_for_dataset(dataset)
+    all_model_names = [me.get("model_display_name") for me in all_models]
 
     if models_param:
         selected_model_names = models_param.split(",")
@@ -38,8 +38,8 @@ def main():
     st.html(display_breadcrumbs(dataset))
 
     # Get the selected models for the dataset
-    selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset, selected_model_names)
-    dataset_obj = Dataset(dataset, selected_modelevals)
+    selected_models = explorer.get_selected_models_for_dataset(dataset, selected_model_names)
+    dataset_obj = Dataset(dataset, selected_models)
 
     with st.container(border=True):
         recommended_models = dataset_obj.get_recommended_models()

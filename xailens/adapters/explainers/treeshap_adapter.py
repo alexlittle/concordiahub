@@ -7,7 +7,7 @@ from xailens.entities.context import ModelContext
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config
-from xailens.entities.modeleval import ModelEval
+from xailens.entities.model import Model
 
 @register_xai("tree_shap")
 class TreeSHAPAdapter(XAIMethodAdapter):
@@ -22,8 +22,8 @@ class TreeSHAPAdapter(XAIMethodAdapter):
     EXCLUDED_CONTRIBUTION_KEYS = {"class"}
     
     @classmethod
-    def load_local_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
-        df = super().load_local_explanation(modeleval, instance_id)
+    def load_local_explanation(cls, model: Model, instance_id: str) -> pd.DataFrame:
+        df = super().load_local_explanation(model, instance_id)
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
     def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:

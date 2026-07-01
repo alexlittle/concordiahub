@@ -18,8 +18,8 @@ def main():
     instance_group = st.query_params.get("instances")
     instance_uuid = st.query_params.get("instance_uuid")
 
-    all_modelevals = explorer.get_modelevals_for_dataset(dataset)
-    all_model_names = [me.get("model_display_name") for me in all_modelevals]
+    all_models = explorer.get_models_for_dataset(dataset)
+    all_model_names = [model.get("model_display_name") for model in all_models]
 
     if models_param:
         selected_model_names = sorted(models_param.split(","))
@@ -34,8 +34,8 @@ def main():
     st.html(display_breadcrumbs(dataset, instance_group=instance_group, instance_uuid=instance_uuid))
 
 
-    selected_modelevals = explorer.get_selected_modelevals_for_dataset(dataset, selected_model_names)
-    dataset_obj = Dataset(dataset, selected_modelevals)
+    selected_models = explorer.get_selected_models_for_dataset(dataset, selected_model_names)
+    dataset_obj = Dataset(dataset, selected_models)
 
     # Overall predictions
     st.html(f"<h2>{strings.INSTANCE_DETAIL_PREDICTIONS_TITLE}</h2>")
@@ -71,12 +71,12 @@ def main():
 
     # Panels for each model explanation
     st.html(f"<h2>{strings.INSTANCE_DETAIL_MODEL_EXPLANATIONS}</h2>")
-    for i in range(0, len(selected_modelevals), 2):
+    for i in range(0, len(selected_models), 2):
         cols = st.columns(2, gap="large")
         for j, col in enumerate(cols):
             idx = i + j
-            if idx < len(selected_modelevals):
-                me = selected_modelevals[idx]
+            if idx < len(selected_models):
+                me = selected_models[idx]
                 with col:
                     key = me.get("model_uuid")
                     viz_state_key = f"model-viz-{key}"

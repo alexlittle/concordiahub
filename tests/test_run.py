@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 from unittest.mock import MagicMock
 
-from xailens.entities.modeleval import ModelEval
+from xailens.entities.model import Model
 
 MODULE_UNDER_TEST = "xailens.run"
 
@@ -40,7 +40,7 @@ def mock_store():
 
 @pytest.fixture
 def explorer(mock_store):
-    return ModelEval(store=mock_store, metadata=mock_metadata)
+    return Model(store=mock_store, metadata=mock_metadata)
 
 @pytest.fixture
 def y_test():

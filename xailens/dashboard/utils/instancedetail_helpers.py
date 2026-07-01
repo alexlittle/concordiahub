@@ -10,12 +10,12 @@ from xailens.registry.xai_registry import get_xai_adapter
 from xailens.registry.viz_registry import get_viz_adapter
 from xailens import exceptions
 from xailens.dashboard.utils.display_table import render_dataframe
-from xailens.entities.modeleval import ModelEval
+from xailens.entities.model import Model
 from xailens.dashboard.utils.plotly_theme import apply_horizontal_bar_theme
 
 @dataclass
 class ModelPanel:
-    modeleval: ModelEval
+    model: Model
     xai_class: type
     xai_instance: object
     viz_key: str
@@ -25,8 +25,8 @@ class ModelPanel:
     instance_uuid: uuid.UUID
 
 
-def build_model_panel(modeleval: ModelEval, viz_param_key, viz_params, instance_uuid) -> ModelPanel:
-    method = modeleval.get("xai_methods")[0]
+def build_model_panel(model: Model, viz_param_key, viz_params, instance_uuid) -> ModelPanel:
+    method = model.get("xai_methods")[0]
     xai_class = get_xai_adapter(method)
     xai_instance = xai_class()
     viz_name = viz_params.get(viz_param_key, xai_instance.get_default_visualisation())
@@ -36,10 +36,10 @@ def build_model_panel(modeleval: ModelEval, viz_param_key, viz_params, instance_
     except (KeyError, exceptions.InvalidConfigurationError):
         viz_class = None
 
-    explanation = xai_class.load_local_explanation(modeleval, instance_uuid)
+    explanation = xai_class.load_local_explanation(model, instance_uuid)
 
     return ModelPanel(
-        modeleval=modeleval,
+        model=model,
         xai_class=xai_class,
         xai_instance=xai_instance,
         viz_key=viz_param_key,
@@ -51,7 +51,7 @@ def build_model_panel(modeleval: ModelEval, viz_param_key, viz_params, instance_
 
 
 def render_model_panel(panel: ModelPanel, plot_key: str):
-    with st.expander(f"{panel.modeleval.get('model_display_name')} Explanation", expanded=False):
+    with st.expander(f"{panel.model.get('model_display_name')} Explanation", expanded=False):
 
         axis_range = [-1.1, 1.1]
 
@@ -84,4 +84,4 @@ def render_model_panel(panel: ModelPanel, plot_key: str):
                     st.html(viz)
             st.html(panel.xai_instance.display_notes)
         except NotImplementedError:
-            st.warning(f"{panel.viz_name} is not yet implemented for {panel.modeleval.get('model_display_name')}")
+            st.warning(f"{panel.viz_name} is not yet implemented for {panel.model.get('model_display_name')}")

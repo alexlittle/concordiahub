@@ -9,7 +9,7 @@ from xailens.exceptions import MissingDataError
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config
-from xailens.entities.modeleval import ModelEval
+from xailens.entities.model import Model
 
 
 @dataclass
@@ -50,14 +50,14 @@ class LLMReasoningAdapter(XAIMethodAdapter):
     explanation_file_type: str = "json"
 
     @classmethod
-    def load_global_explanation(cls, modeleval: ModelEval) -> pd.DataFrame:
+    def load_global_explanation(cls, model: Model) -> pd.DataFrame:
         return pd.DataFrame(
             columns=["feature_name", "score", "score_normalised_sum", "score_normalised_max"])
 
     @classmethod
-    def load_local_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
-        records = modeleval.store.load_json(f"exp_local_{cls.key}")
-        instance_id_col = modeleval.get(config.DATA_SCHEMA_ID_COLUMN)
+    def load_local_explanation(cls, model: Model, instance_id: str) -> pd.DataFrame:
+        records = model.store.load_json(f"exp_local_{cls.key}")
+        instance_id_col = model.get(config.DATA_SCHEMA_ID_COLUMN)
 
         row = next((r for r in records if r[instance_id_col] == instance_id), None)
         if row is None:

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Optional
 
 from xailens.entities.context import ModelContext
-from xailens.entities.modeleval import ModelEval
+from xailens.entities.model import Model
 from xailens.exceptions import MissingDataError
 from xailens import config
 
@@ -21,8 +21,8 @@ class XAIMethodAdapter(ABC):
     explanation_file_type: str = "df"
 
     @classmethod
-    def load_global_explanation(cls, modeleval: ModelEval) -> pd.DataFrame:
-        df = modeleval.store.load_dataframe(f"exp_global_{cls.key}")
+    def load_global_explanation(cls, model: Model) -> pd.DataFrame:
+        df = model.store.load_dataframe(f"exp_global_{cls.key}")
         explanation = df.groupby("feature")["importance"].mean()
 
         explanation_abs = explanation.abs()
@@ -36,12 +36,12 @@ class XAIMethodAdapter(ABC):
         })
 
     @classmethod
-    def load_local_explanation(cls, modeleval: ModelEval, instance_id: str) -> pd.DataFrame:
-        df = modeleval.store.load_dataframe(f"exp_local_{cls.key}")
-        row = df[df[modeleval.get(config.DATA_SCHEMA_ID_COLUMN)] == instance_id]
+    def load_local_explanation(cls, model: Model, instance_id: str) -> pd.DataFrame:
+        df = model.store.load_dataframe(f"exp_local_{cls.key}")
+        row = df[df[model.get(config.DATA_SCHEMA_ID_COLUMN)] == instance_id]
         if row.empty:
             raise MissingDataError(f"Instance '{instance_id}' not found in explanations for {cls.key}")
-        explanation = row.iloc[0].drop(modeleval.get(config.DATA_SCHEMA_ID_COLUMN), errors='coerce')
+        explanation = row.iloc[0].drop(model.get(config.DATA_SCHEMA_ID_COLUMN), errors='coerce')
 
         abs_sum = explanation.abs().sum()
         abs_max = explanation.abs().max()

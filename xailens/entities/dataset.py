@@ -2,21 +2,21 @@ import pandas as pd
 
 from xailens.exceptions import InvalidSelectionError
 from xailens.registry.xai_registry import get_xai_adapter
-from xailens.entities.modeleval import ModelEval
+from xailens.entities.model import Model
 from xailens import config
 
 class Dataset:
 
-    def __init__(self, dataset_id: str,  modelevals: list[ModelEval]):
+    def __init__(self, dataset_id: str, models: list[Model]):
         """
         Initialises the Dataset object, with the specified dataset and the
         models to include
 
         :param dataset_id: Dataset ID
-        :param modelevals: List of ModelEval objects
+        :param models: List of Model objects
         """
         self.dataset_id = dataset_id
-        self.modelevals = modelevals
+        self.models = models
 
 
     def get_recommended_models(self) -> list[str]:
@@ -37,7 +37,7 @@ class Dataset:
         return best_models
 
     def get_metrics(self) -> pd.DataFrame:
-        rows = {me.get("model_display_name"): me.get_metrics() for me in self.modelevals}
+        rows = {me.get("model_display_name"): me.get_metrics() for me in self.models}
         df = pd.DataFrame(rows).T
         df.index.name = "model"
         df.columns.name = None
@@ -53,19 +53,19 @@ class Dataset:
             pd.Series: instance data
         """
 
-        # only needs the data from the first modeleval - as will be same for all
-        return self.modelevals[0].get_instance_data(instance_uuid)
+        # only needs the data from the first model - as will be same for all
+        return self.models[0].get_instance_data(instance_uuid)
 
     def _get_explanations(self, instance_uuid: str | None = None) -> pd.DataFrame:
         explanations = {}
         keep_features = set()
-        for modeleval in self.modelevals:
-            method = modeleval.get("xai_methods")[0]
+        for model in self.models:
+            method = model.get("xai_methods")[0]
             adapter = get_xai_adapter(method)
             if instance_uuid is not None:
-                df = adapter.load_local_explanation(modeleval, instance_uuid)
+                df = adapter.load_local_explanation(model, instance_uuid)
             else:
-                df = adapter.load_global_explanation(modeleval)
+                df = adapter.load_global_explanation(model)
 
             # remove and leading/trailing whitespace
             df["feature_name"] = df["feature_name"].str.strip()
@@ -73,7 +73,7 @@ class Dataset:
             # make sure the values are properly numeric
             df["score_normalised_max"] = pd.to_numeric(df["score_normalised_max"], errors="coerce")
 
-            model_name = modeleval.get("model_display_name")
+            model_name = model.get("model_display_name")
             top_df = (
                 df[["feature_name", "score_normalised_max"]]
                 .nlargest(config.KEEP_NUM_FEATURES, "score_normalised_max")
@@ -105,9 +105,9 @@ class Dataset:
     def get_instance_consensus_ids(self) -> set:
         """Returns instance IDs common to all models."""
         common_ids = None
-        for me in self.modelevals:
-            y_true, _ = me.load_targets()
-            ids = set(y_true[me.get(config.DATA_SCHEMA_ID_COLUMN)].tolist())
+        for model in self.models:
+            y_true, _ = model.load_targets()
+            ids = set(y_true[model.get(config.DATA_SCHEMA_ID_COLUMN)].tolist())
             if common_ids is None:
                 common_ids = ids
             else:
@@ -130,7 +130,7 @@ class Dataset:
         }
 
     def get_all_instances(self) -> pd.DataFrame:
-        """ Gets a dataframe of all the instances for all the modelevals.
+        """ Gets a dataframe of all the instances for all the models.
         The dataframe includes columns:
         - instance_uuid
         - true_label (ground truth)
@@ -160,7 +160,7 @@ class Dataset:
     # Private helper functions
     #-------------------------------
     def _get_common_predictions(self, common_ids) -> tuple[pd.DataFrame, pd.Series]:
-        """Builds aligned prediction and ground-truth series for all modelevals,
+        """Builds aligned prediction and ground-truth series for all models,
         filtered to the given common_ids.
 
         Returns:
@@ -170,21 +170,21 @@ class Dataset:
         """
         model_preds = {}
         y_true_common = None
-        for me in self.modelevals:
-            y_true, y_pred = me.load_targets()
-            id_col = me.get(config.DATA_SCHEMA_ID_COLUMN)
-            pred_col = me.get(config.DATA_SCHEMA_PREDICTION_COLUMN)
-            target_col = me.get(config.DATA_SCHEMA_TARGET_COLUMN)
+        for model in self.models:
+            y_true, y_pred = model.load_targets()
+            id_col = model.get(config.DATA_SCHEMA_ID_COLUMN)
+            pred_col = model.get(config.DATA_SCHEMA_PREDICTION_COLUMN)
+            target_col = model.get(config.DATA_SCHEMA_TARGET_COLUMN)
             y_pred_filtered = (
                 y_pred[y_pred[id_col].isin(common_ids)]
                 .set_index(id_col)[pred_col]
-                .rename(me.get("model_display_name"))
+                .rename(model.get("model_display_name"))
             )
             y_true_filtered = (
                 y_true[y_true[id_col].isin(common_ids)]
                 .set_index(id_col)[target_col]
             )
-            model_preds[me.get("model_display_name")] = y_pred_filtered
+            model_preds[model.get("model_display_name")] = y_pred_filtered
             if y_true_common is None:
                 y_true_common = y_true_filtered
         return pd.DataFrame(model_preds), y_true_common

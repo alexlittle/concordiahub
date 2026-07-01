@@ -6,7 +6,7 @@ from pathlib import Path
 from itertools import combinations
 
 from xailens import config, strings
-from xailens.entities.modeleval import ModelEval
+from xailens.entities.model import Model
 
 
 class ModelExplorer:
@@ -14,7 +14,7 @@ class ModelExplorer:
     def __init__(self):
         """Initializes ModelExplorer"""
         base_dir = Path(__file__).resolve().parent.parent
-        self.modelevals_dir = os.path.join(base_dir, config.MODEL_DATA_DIR_NAME)
+        self.models_dir = os.path.join(base_dir, config.MODEL_DATA_DIR_NAME)
         self._metadata_cache = self._load_all_metadata()
         self._uuid_index = {
             model.get("model_uuid"): model for model in self._metadata_cache
@@ -27,8 +27,8 @@ class ModelExplorer:
             set: set of distinct dataset names
         """
         datasets = set()
-        for modeleval in self._metadata_cache:
-            datasets.add(modeleval["dataset_id"])
+        for model in self._metadata_cache:
+            datasets.add(model["dataset_id"])
         return sorted(datasets)
 
     def get_models_for_dataset(self, dataset: str) -> dict:
@@ -39,36 +39,36 @@ class ModelExplorer:
             dict of model names and model_data"""
     
         models = {}
-        for modeleval in self._metadata_cache:
-            if modeleval["dataset_id"] == dataset:
-                modeleval_obj = self.get_modeleval_by_uuid(modeleval["model_uuid"])
-                if modeleval_obj:
-                    models[modeleval_obj.get("model_display_name")] = modeleval["model_uuid"]
+        for model in self._metadata_cache:
+            if model["dataset_id"] == dataset:
+                model_obj = self.get_model_by_uuid(model["model_uuid"])
+                if model_obj:
+                    models[model_obj.get("model_display_name")] = model["model_uuid"]
         return dict(sorted(models.items()))
 
-    def get_selected_modelevals_for_dataset(self, dataset: str, model_names: list[str]) -> [ModelEval]:
+    def get_selected_models_for_dataset(self, dataset: str, model_names: list[str]) -> [Model]:
         """ Gets all the models for the given dataset name
         Args:
             dataset str: dataset name
         Returns:
-            list of ModelEval (sorted by model_display_name)"""
-        modelevals = []
-        for modeleval in self._metadata_cache:
-            if modeleval["dataset_id"] == dataset and modeleval["model_display_name"] in model_names:
-                modelevals.append(self.get_modeleval_by_uuid(modeleval["model_uuid"]))
-        return sorted(modelevals, key=lambda m: m.get("model_display_name"))
+            list of Model (sorted by model_display_name)"""
+        models = []
+        for model in self._metadata_cache:
+            if model["dataset_id"] == dataset and model["model_display_name"] in model_names:
+                models.append(self.get_model_by_uuid(model["model_uuid"]))
+        return sorted(models, key=lambda m: m.get("model_display_name"))
 
-    def get_modelevals_for_dataset(self, dataset: str) -> [ModelEval]:
+    def get_models_for_dataset(self, dataset: str) -> [Model]:
         """ Gets all the models for the given dataset name
         Args:
             dataset str: dataset name
         Returns:
-            list of ModelEval"""
-        modelevals = []
-        for modeleval in self._metadata_cache:
-            if modeleval["dataset_id"] == dataset:
-                modelevals.append(self.get_modeleval_by_uuid(modeleval["model_uuid"]))
-        return modelevals
+            list of Model"""
+        models = []
+        for model in self._metadata_cache:
+            if model["dataset_id"] == dataset:
+                models.append(self.get_model_by_uuid(model["model_uuid"]))
+        return models
 
     def is_valid_dataset(self, dataset) -> bool:
         """Checks if dataset is valid
@@ -76,13 +76,13 @@ class ModelExplorer:
             dataset str: dataset name
         Returns:
         """
-        for modeleval in self._metadata_cache:
-            if modeleval["dataset_id"] == dataset:
+        for model in self._metadata_cache:
+            if model["dataset_id"] == dataset:
                 return True
         return False
 
 
-    def get_modeleval_by_uuid(self, uuid: str) -> ModelEval | None:
+    def get_model_by_uuid(self, uuid: str) -> Model | None:
         """Gets a Run by its UUID
         Args:
             uuid: Run's UUID
@@ -90,9 +90,9 @@ class ModelExplorer:
         Returns:
             Run or None"""
         meta = self._uuid_index.get(uuid)
-        return ModelEval(path=meta["_path"], metadata=meta) if meta else None
+        return Model(path=meta["_path"], metadata=meta) if meta else None
 
-    def get_modelevals_by_uuids(self, uuids: list[str]) -> list[ModelEval]:
+    def get_models_by_uuids(self, uuids: list[str]) -> list[Model]:
         """Gets a list of Runs by their UUIDs
         Args:
             List[uuid]: Run UUIDs
@@ -100,13 +100,13 @@ class ModelExplorer:
         Returns:
             List[Run] or None"""
 
-        modelevals = []
+        models = []
         for u in uuids:
             meta = self._uuid_index.get(u)
             if not meta:
                 continue
-            modelevals.append(ModelEval(path=meta["_path"], metadata=meta))
-        return modelevals
+            models.append(Model(path=meta["_path"], metadata=meta))
+        return models
 
     #---------------------------
     # Private helper functions
@@ -116,13 +116,13 @@ class ModelExplorer:
         if hasattr(self, '_metadata_cache'):
             return self._metadata_cache
 
-        root = Path(self.modelevals_dir)
-        modelevals = []
+        root = Path(self.models_dir)
+        models = []
         for meta_file in root.glob(f"*/{config.META_INFO_FILENAME}.json"):
             with open(meta_file, "r") as f:
                 meta = json.load(f)
                 meta['_path'] = str(meta_file.parent)
-                modelevals.append(meta)
+                models.append(meta)
 
-        self._metadata_cache = sorted(modelevals, key=lambda x: x.get("datetime", ""), reverse=True)
+        self._metadata_cache = sorted(models, key=lambda x: x.get("datetime", ""), reverse=True)
         return self._metadata_cache
