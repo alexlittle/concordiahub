@@ -11,6 +11,7 @@ def apply_layout(title: str,
                  all_model_names: list = None,
                  selected_model_names: list = None,
                  selected_instance_group: str = None,):
+
     # Page title
     st.set_page_config(page_title=f"{strings.APP_NAME} - {title}", layout="wide")
 
