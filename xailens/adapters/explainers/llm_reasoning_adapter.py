@@ -87,8 +87,52 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             for (feature, data), score in zip(contributions, scores)
         ])
 
-    def explain_global_json(self, _, _model=None) -> pd.DataFrame:
-        print(strings.WARNING_GLOBAL_NOT_AVAILABLE.format(adapter=self.key))
+    def explain_global_json(self, ctx: ModelContext, _model=None) -> pd.DataFrame:
+        """Generates the global explanations
+        Uses the total number of instances of a mentioned feature divided by the
+        total number of instances
+
+        Args:
+            ctx: ModelContext object
+
+        Returns:
+            pd.DataFrame: dataframe containing global explanations
+
+        Raises:
+            MissingDataError: if data.y_exp is not provided
+        """
+        if ctx.data.y_exp is None:
+            raise MissingDataError("LLMReasoningAdapter requires y_exp in ModelData")
+        if ctx.response_schema is None:
+            raise MissingDataError("LLMReasoningAdapter requires a ResponseSchema in ModelContext")
+
+        results = {}
+        n_instances = 0
+
+        for _, row in ctx.data.y_exp.iterrows():
+            raw = json.loads(row["explanation"])
+            n_instances += 1
+
+            response = self._reformat(raw, ctx.response_schema, prediction=None)
+
+            for feature, contrib in response.contributions.items():
+                if feature not in results:
+                    results[feature] = {"sum_abs_score": 0, "occurrence_count": 0}
+                results[feature]["sum_abs_score"] += abs(float(contrib.score))
+                results[feature]["occurrence_count"] += 1
+
+        rows = []
+        for feature, vals in results.items():
+            rows.append({
+                "feature": feature,
+                "importance_raw": vals["sum_abs_score"] / n_instances,
+                "occurrence_count": vals["occurrence_count"],
+                "occurrence_rate": vals["occurrence_count"] / n_instances,
+                "n_instances": n_instances,
+            })
+
+        return pd.DataFrame(rows)
+
 
     def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         raise NotImplementedError
@@ -130,7 +174,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         return output
 
     @staticmethod
-    def _reformat(raw: dict, schema: ResponseSchema, prediction: str) -> LLMResponse:
+    def _reformat(raw: dict, schema: ResponseSchema, prediction: str | None) -> LLMResponse:
         raw_contribs = raw[schema.contributions_field]
         if schema.contribution_key is not None:
             contributions = {

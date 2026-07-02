@@ -7,17 +7,6 @@
     --text-color: rgb(49, 51, 63);
     --border-color: #D4E4E4;
 }
-div[data-testid="stHeader"] {
-    display: none !important;
-}
-div[data-testid="stSidebarCollapseButton"] {
-    display: none !important;
-}
-
-/* 3. Stretch the sidebar to the top of the screen */
-section[data-testid="stSidebar"] {
-    top: 0 !important;
-}
 
 .body {
     line-height: 1 !important;
@@ -103,7 +92,16 @@ p {
 /*
     Sidebar elements
  */
+
+div[data-testid="stHeader"] {
+    display: none !important;
+}
+div[data-testid="stSidebarCollapseButton"] {
+    display: none !important;
+}
+
 section[data-testid="stSidebar"] {
+    top: 0 !important;
     background-color: var(--color-sidebar-bg);
 }
 

@@ -44,7 +44,7 @@ RECOMMENDED_MODEL_TITLE = "Recommended Model"
 RECOMMENDED_MODELS_TITLE = "Recommended Models"
 RECOMMENDED_MODEL_EXPLANATION = "Based on the highest {metric} score"
 
-PERF_FI_WEIGHTED_TITLE = "F1 weighted"
+PERF_F1_WEIGHTED_TITLE = "F1 Weighted Score"
 PERF_METRICS_TITLE = "Accuracy, Precision & Recall Metrics"
 GLOBAL_EXPLANATION_TITLE = "Global Feature Importance Heatmap"
 INSTANCE_CONCENSUS_TITLE = "Instance Consensus"

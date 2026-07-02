@@ -45,7 +45,7 @@ def write_global_explanations(xai_method: str,
     print(strings.RUN_GLOBAL_EXPLANATIONS.format(xai_method=xai_method))
     if xai_adapter.explanation_file_type == "json":
         results = xai_adapter.explain_global_json(ctx)
-        artifact_store.write_explanation(f"exp_local_{xai_method}", results, data_format="json")
+        artifact_store.write_explanation(f"exp_global_{xai_method}", results,data_format="df")
     else:
         results = xai_adapter.explain_global_df(ctx, model_adapter.prepare())
         artifact_store.write_explanation(f"exp_global_{xai_method}", results, data_format="df")

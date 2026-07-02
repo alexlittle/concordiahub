@@ -3,66 +3,46 @@ import pandas as pd
 
 from xailens.dashboard.utils import plotly_theme
 
-
 def render_features_heatmap(df_exp: pd.DataFrame):
-    model_cols = [col for col in df_exp.columns if col != "feature_name"]
-    llm_cols = [col for col in model_cols if df_exp[col].isna().all()]
-    data_cols = [col for col in model_cols if col not in llm_cols]
-
-    x_labels = data_cols + [f"{col} *" for col in llm_cols]
+    model_cols = sorted(col for col in df_exp.columns if col != "feature_name")
+    llm_cols = {col for col in model_cols if df_exp[col].isna().all()}
+    x_labels = [f"{col} *" if col in llm_cols else col for col in model_cols]
     y_labels = df_exp["feature_name"].tolist()
 
-    fig = go.Figure()
+    z_main = [
+        [row[col] if pd.notna(row[col]) else None for col in model_cols]
+        for _, row in df_exp.iterrows()
+    ]
+    missing_mask = [
+        [pd.isna(row[col]) for col in model_cols]
+        for _, row in df_exp.iterrows()
+    ]
 
-    if data_cols:
-        z_main = [
-            [row[col] if pd.notna(row[col]) else None for col in data_cols] + [None] * len(llm_cols)
-            for _, row in df_exp.iterrows()
-        ]
-        missing_mask = [
-            [pd.isna(row[col]) for col in data_cols] + [False] * len(llm_cols)
-            for _, row in df_exp.iterrows()
+    fig = go.Figure()
+    fig.add_trace(go.Heatmap(
+        z=z_main,
+        x=x_labels,
+        y=y_labels,
+        colorscale="Blues",
+        zmin=0,
+        zmax=1,
+        colorbar={"title": "Importance"},
+        hovertemplate="<b>%{x}</b><br>%{y}<br>Importance: %{z:.4f}<extra></extra>",
+        hoverongaps=False,
+    ))
+
+    if any(any(row_mask) for row_mask in missing_mask):
+        z_grey = [
+            [1 if is_missing else None for is_missing in row_mask]
+            for row_mask in missing_mask
         ]
         fig.add_trace(go.Heatmap(
-            z=z_main,
+            z=z_grey,
             x=x_labels,
             y=y_labels,
-            colorscale="Blues",
-            zmin=0,
-            zmax=1,
-            colorbar={"title": "Importance"},
-            hovertemplate="<b>%{x}</b><br>%{y}<br>Importance: %{z:.4f}<extra></extra>",
-            hoverongaps=False,
-        ))
-        # grey overlay for individual NaN cells within data columns
-        if any(any(row_mask) for row_mask in missing_mask):
-            z_grey_cells = [
-                [1 if is_missing else None for is_missing in row_mask]
-                for row_mask in missing_mask
-            ]
-            fig.add_trace(go.Heatmap(
-                z=z_grey_cells,
-                x=x_labels,
-                y=y_labels,
-                colorscale=[[0, "lightgrey"], [1, "lightgrey"]],
-                showscale=False,
-                hovertemplate="<b>%{x}</b><br>%{y}<br>No data<extra></extra>",
-                hoverongaps=False,
-            ))
-
-    # grey overlay for LLM columns (entirely NaN)
-    if llm_cols:
-        z_llm_grey = [
-            [None] * len(data_cols) + [1] * len(llm_cols)
-            for _ in range(len(df_exp))
-        ]
-        fig.add_trace(go.Heatmap(
-            z=z_llm_grey,
-            x=x_labels,
-            y=df_exp["feature_name"].tolist(),
             colorscale=[[0, "lightgrey"], [1, "lightgrey"]],
             showscale=False,
-            hovertemplate="<b>%{x}</b><br>%{y}<br>Explanation not available<extra></extra>",
+            hovertemplate="<b>%{x}</b><br>%{y}<br>No data<extra></extra>",
             hoverongaps=False,
         ))
 

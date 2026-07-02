@@ -9,6 +9,9 @@ As this is a proof of concept framework, not all model, XAI method or visualisat
 the architecture (adapter pattern) allows new model types, XAI methods and visualisations to be added without large 
 changes to the codebase.
 
+## Live Demo
+
+A demo is available at: https://xai.alexlittle.net/ 
 
 ## Install
 
