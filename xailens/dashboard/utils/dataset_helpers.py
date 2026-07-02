@@ -37,5 +37,13 @@ def render_metric_barchart(metrics: pd.DataFrame, metric_name: str, show_title: 
     return plotly_theme.apply_theme(fig, show_title=show_title)
 
 
-
+def render_metric_card(title, value, link):
+    return f"""
+    <div class="xl-metric-card">
+        <a href="{link}" target="_self">
+            <div class="xl-metric-label">{title}</div>
+            <div class="xl-metric-value">{value}</div>
+        </a>
+    </div>
+"""
 

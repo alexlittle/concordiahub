@@ -1,13 +1,12 @@
 import streamlit as st
 
-from xailens.exceptions import InvalidSelectionError
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
-from xailens.dashboard.utils.common import display_breadcrumbs, render_metric_card
-from xailens.dashboard.utils.dataset_helpers import render_metric_barchart
+from xailens.dashboard.utils.common import display_breadcrumbs
+from xailens.dashboard.utils.dataset_helpers import render_metric_barchart, render_metric_card
 from xailens.dashboard.utils.heatmap import render_features_heatmap
 from xailens.entities.dataset import Dataset
-from xailens import strings, config
+from xailens import strings
 from xailens.dashboard import settings
 
 def main():
@@ -55,26 +54,19 @@ def main():
 
     col1, col2, col3 = st.columns([2, 2, 1])
     with col1:
+        # F1 weighted score
         with st.container(border=True):
-            # F1 weighted score
             st.html(f"<h3>{strings.PERF_F1_WEIGHTED_TITLE}</h3>")
             st.plotly_chart(render_metric_barchart(metrics, "f1_weighted", show_title=False))
     with col2:
+        # Global explanations
         with st.container(border=True):
-            # Global explanations
             st.html(f"<h3>{strings.GLOBAL_EXPLANATION_TITLE}</h3>")
-            try:
-                df_global_exp = dataset_obj.get_global_explanations()
-                st.plotly_chart(render_features_heatmap(df_global_exp),
-                                width='content')
-                st.html(
-                    "* Global feature importance is not available for LLMs.")
-            except InvalidSelectionError:
-                st.html(
-                    "Global feature importance is not displayed when only LLMs are selected.")
+            df_global_exp = dataset_obj.get_global_explanations()
+            st.plotly_chart(render_features_heatmap(df_global_exp), width='content')
     with col3:
+        # Instance consensus overview
         with st.container(border=True):
-            # Instance overview
             st.html(f"<h3>{strings.INSTANCE_CONCENSUS_TITLE}</h3>")
 
             instance_metrics = dataset_obj.get_instance_consensus()

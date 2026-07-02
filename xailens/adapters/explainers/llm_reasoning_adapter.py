@@ -51,8 +51,16 @@ class LLMReasoningAdapter(XAIMethodAdapter):
 
     @classmethod
     def load_global_explanation(cls, model: Model) -> pd.DataFrame:
-        return pd.DataFrame(
-            columns=["feature_name", "score", "score_normalised_sum", "score_normalised_max"])
+        df = model.store.load_dataframe(f"exp_global_{cls.key}")
+        abs_importance = df["importance"].abs()
+        abs_sum = abs_importance.sum()
+        abs_max = abs_importance.max()
+        return pd.DataFrame({
+            "feature_name": df["feature"],
+            "score": df["importance"],
+            "score_normalised_sum": abs_importance / abs_sum if abs_sum != 0 else abs_importance,
+            "score_normalised_max": abs_importance / abs_max if abs_max != 0 else abs_importance,
+        })
 
     @classmethod
     def load_local_explanation(cls, model: Model, instance_id: str) -> pd.DataFrame:
@@ -125,7 +133,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         for feature, vals in results.items():
             rows.append({
                 "feature": feature,
-                "importance_raw": vals["sum_abs_score"] / n_instances,
+                "importance": vals["sum_abs_score"] / n_instances,
                 "occurrence_count": vals["occurrence_count"],
                 "occurrence_rate": vals["occurrence_count"] / n_instances,
                 "n_instances": n_instances,
