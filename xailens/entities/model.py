@@ -6,6 +6,9 @@ from xailens.storage.filesystem_store import FilesystemStore
 from xailens.schema import DataSchema
 
 class Model:
+    """
+    Model class
+    """
 
     def __init__(self, path: str, metadata: dict = None):
         self.path = path
@@ -13,6 +16,16 @@ class Model:
         self.metadata = metadata or {}
 
     def get(self, key:str, default=None):
+        """
+        Gets a value by its key, will also look in component dicts,
+        (eg) dataschema.target_column
+        Args:
+            key (): the key to look for
+            default (): a default value to return if key is not found
+
+        Returns:
+
+        """
         parts = key.split(".")
         value = self.metadata
 
@@ -24,6 +37,11 @@ class Model:
         return value
 
     def get_data_schema(self) -> DataSchema:
+        """
+        Returns the DataSchema dataclass for the model
+        Returns:
+            DataSchema dataclass instance
+        """
         kwargs = {}
         for field in dataclasses.fields(DataSchema):
             value = self.get(f"data_schema.{field.name}", field.default)
@@ -31,6 +49,11 @@ class Model:
         return DataSchema(**kwargs)
 
     def _get_series(self):
+        """
+
+        Returns:
+
+        """
         y_true, y_pred = self.load_targets()
         return (y_true[self.get(config.DATA_SCHEMA_TARGET_COLUMN)],
                 y_pred[self.get(config.DATA_SCHEMA_PREDICTION_COLUMN)])
@@ -46,11 +69,18 @@ class Model:
     def get_metrics(self) -> pd.Series:
         """
 
+        Returns:
+
         """
         return self.store.load_series("metrics")
 
-    def get_instance_data(self, instance_uuid) -> tuple[pd.Series, str]:
+    def get_instance_data(self, instance_uuid) -> pd.Series:
         """
+
+        Args:
+            instance_uuid ():
+
+        Returns:
 
         """
         uuid_col = self.get(config.DATA_SCHEMA_ID_COLUMN)
@@ -60,6 +90,14 @@ class Model:
         return row.drop(labels=[uuid_col])
 
     def get_instance_prediction(self, instance_uuid) -> str:
+        """
+
+        Args:
+            instance_uuid ():
+
+        Returns:
+
+        """
         uuid_col = self.get(config.DATA_SCHEMA_ID_COLUMN)
         pred_col = self.get(config.DATA_SCHEMA_PREDICTION_COLUMN)
         y_pred = self.store.load_dataframe("y_pred")

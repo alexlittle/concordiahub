@@ -1,11 +1,9 @@
 import os
 import json
 
-from collections import defaultdict
 from pathlib import Path
-from itertools import combinations
 
-from xailens import config, strings
+from xailens import config
 from xailens.entities.model import Model
 
 

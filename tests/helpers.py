@@ -1,5 +1,7 @@
 import pandas as pd
 
+from xailens.entities.model import Model
+
 def make_explanation(scores: dict) -> pd.DataFrame:
     values = list(scores.values())
     abs_sum = sum(abs(v) for v in values)
@@ -14,3 +16,7 @@ def make_explanation(scores: dict) -> pd.DataFrame:
         }
         for k, v in scores.items()
     ])
+
+
+def make_model() -> Model:
+    return Model()
