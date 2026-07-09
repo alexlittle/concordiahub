@@ -14,8 +14,10 @@ from xailens.entities.model import Model
 # -------------------
 
 def _build_metadata(id_column, target_column, prediction_column,
-                     feature_columns=None, class_names=None):
+                    feature_columns=None, class_names=None,
+                    model_display_name=None):
     return {
+        "model_display_name": model_display_name,
         "data_schema": {
             "instance_id_column": id_column,
             "target_column": target_column,
@@ -53,26 +55,26 @@ def _build_mock_store(y_test, y_pred, metrics, raw_instances):
 
 
 def _make_model(path, metadata, y_test, y_pred, metrics, raw_instances):
+
     with patch("xailens.entities.model.FilesystemStore"):
         model = Model(path=path, metadata=metadata)
     model.store = _build_mock_store(y_test, y_pred, metrics, raw_instances)
     return model
 
 
-# ---------------------
-# Logistic Regression
 # ----------------------
+# Logistic Regression
+# -----------------------
 
 @pytest.fixture
 def lr_model_factory():
     """
-    Factory for a Logistic Regression Model on Cleveland-style heart
-    disease data. Call with overrides as needed, e.g.:
-
-        lr_model_factory(n_instances=10, metrics={"f1_weighted": 0.5})
+    Factory for a Logistic Regression Model
     """
+
     def _factory(path="fake/lr_model", n_instances=5,
                  feature_columns=None, class_names=None,
+                 model_display_name="Logistic Regression",
                  y_test=None, y_pred=None, metrics=None, raw_instances=None):
         id_col, target_col, pred_col = "instance_id", "target", "prediction"
         feature_columns = feature_columns or [
@@ -107,29 +109,32 @@ def lr_model_factory():
             })
 
         metadata = _build_metadata(id_col, target_col, pred_col,
-                                    feature_columns, class_names)
-        return _make_model(path, metadata, y_test, y_pred, metrics, raw_instances)
+                                   feature_columns, class_names,
+                                   model_display_name)
+        return _make_model(path, metadata, y_test, y_pred, metrics,
+                           raw_instances)
 
     return _factory
 
 
 @pytest.fixture
 def lr_model(lr_model_factory):
-    """Ready-to-use Logistic Regression Model with default fake data."""
     return lr_model_factory()
 
 
-# --------------------
+# -------------
 # XGBoost
-# --------------------
+# -------------
 
 @pytest.fixture
 def xgboost_model_factory():
     """
-    Factory for an XGBoost Model over Cleveland-style heart disease data.
+    Factory for an XGBoost Model
     """
+
     def _factory(path="fake/xgboost_model", n_instances=5,
                  feature_columns=None, class_names=None,
+                 model_display_name="XGBoost",
                  y_test=None, y_pred=None, metrics=None, raw_instances=None):
         id_col, target_col, pred_col = "instance_id", "target", "prediction"
         feature_columns = feature_columns or [
@@ -145,8 +150,6 @@ def xgboost_model_factory():
                 target_col: [i % 2 for i in range(n_instances)],
             })
         if y_pred is None:
-            # XGBoost gets one more instance right than the LR fixture,
-            # useful for testing agreement/disagreement logic
             y_pred = pd.DataFrame({
                 id_col: ids,
                 pred_col: [i % 2 for i in range(n_instances)],
@@ -166,27 +169,32 @@ def xgboost_model_factory():
             })
 
         metadata = _build_metadata(id_col, target_col, pred_col,
-                                    feature_columns, class_names)
-        return _make_model(path, metadata, y_test, y_pred, metrics, raw_instances)
+                                   feature_columns, class_names,
+                                   model_display_name)
+        return _make_model(path, metadata, y_test, y_pred, metrics,
+                           raw_instances)
 
     return _factory
 
 
 @pytest.fixture
 def xgboost_model(xgboost_model_factory):
-    """Ready-to-use XGBoost Model with default fake data."""
     return xgboost_model_factory()
 
 
-# ---------------------------------------------------------------------------
+# --------------
 # LLM
-# ---------------------------------------------------------------------------
+# ---------------
 
 @pytest.fixture
 def llm_model_factory():
+    """
+    Factory for an LLM
+    """
 
     def _factory(path="fake/llm_model", n_instances=5,
                  feature_columns=None, class_names=None,
+                 model_display_name="LLM (CoT)",
                  y_test=None, y_pred=None, metrics=None, raw_instances=None):
         id_col, target_col, pred_col = "instance_id", "target", "prediction"
         feature_columns = feature_columns or [
@@ -222,13 +230,14 @@ def llm_model_factory():
             })
 
         metadata = _build_metadata(id_col, target_col, pred_col,
-                                    feature_columns, class_names)
-        return _make_model(path, metadata, y_test, y_pred, metrics, raw_instances)
+                                   feature_columns, class_names,
+                                   model_display_name)
+        return _make_model(path, metadata, y_test, y_pred, metrics,
+                           raw_instances)
 
     return _factory
 
 
 @pytest.fixture
 def llm_model(llm_model_factory):
-    """Ready-to-use LLM Model with default fake data."""
     return llm_model_factory()
