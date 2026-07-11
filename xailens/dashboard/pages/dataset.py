@@ -40,7 +40,7 @@ def main():
     selected_models = explorer.get_selected_models_for_dataset(dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_models)
 
-    with st.container(border=True):
+    with st.container(border=True, key="recommended-models"):
         recommended_models = dataset_obj.get_recommended_models()
 
         if len(recommended_models) == 1:
@@ -52,7 +52,7 @@ def main():
     metrics = dataset_obj.get_metrics()
     metrics = metrics.sort_values(by=['model'])
 
-    col1, col2, col3 = st.columns([2, 2, 1])
+    col1, col2= st.columns([2, 2])
     with col1:
         # F1 weighted score
         with st.container(border=True):
@@ -64,27 +64,6 @@ def main():
             st.html(f"<h3>{strings.GLOBAL_EXPLANATION_TITLE}</h3>")
             df_global_exp = dataset_obj.get_global_explanations()
             st.plotly_chart(render_features_heatmap(df_global_exp), width='content')
-    with col3:
-        # Instance consensus overview
-        with st.container(border=True):
-            st.html(f"<h3>{strings.INSTANCE_CONCENSUS_TITLE}</h3>")
-
-            instance_metrics = dataset_obj.get_instance_consensus()
-            params = st.query_params.to_dict()
-            query_string = "&".join(f"{k}={v}" for k, v in params.items())
-            st.html(render_metric_card(strings.INSTANCES_TOTAL_TITLE,
-                                         instance_metrics['total'],
-                                         f"{settings.INSTANCES_FILENAME}?{query_string}&instances=all"))
-            st.html(render_metric_card(strings.INSTANCES_ALL_CORRECT_TITLE,
-                                         instance_metrics['all_correct'],
-                                         f"{settings.INSTANCES_FILENAME}?{query_string}&instances=allcorrect"))
-            st.html(render_metric_card(strings.INSTANCES_ALL_INCORRECT_TITLE,
-                                         instance_metrics['all_incorrect'],
-                                         f"{settings.INSTANCES_FILENAME}?{query_string}&instances=allincorrect"))
-            st.html(render_metric_card(strings.INSTANCES_DISAGREE_TITLE,
-                                         instance_metrics['models_disagree'],
-                                         f"{settings.INSTANCES_FILENAME}?{query_string}&instances=disagree"))
-
 
     # accuracy/precision/recall bar charts
     with st.expander(f"{strings.PERF_METRICS_TITLE}", expanded=False):
@@ -94,10 +73,37 @@ def main():
                 st.plotly_chart(render_metric_barchart(metrics, "accuracy"))
         with col5:
             with st.container(border=True):
-                st.plotly_chart(render_metric_barchart(metrics, "precision_weighted"))
+                st.plotly_chart(
+                    render_metric_barchart(metrics, "precision_weighted"))
         with col6:
             with st.container(border=True):
-                st.plotly_chart(render_metric_barchart(metrics, "recall_weighted"))
+                st.plotly_chart(
+                    render_metric_barchart(metrics, "recall_weighted"))
+
+    # Instance consensus overview
+    with st.container(border=True):
+        st.html(f"<h3>{strings.INSTANCE_CONCENSUS_TITLE}</h3>")
+
+        instance_metrics = dataset_obj.get_instance_consensus()
+        params = st.query_params.to_dict()
+        query_string = "&".join(f"{k}={v}" for k, v in params.items())
+        col7, col8, col9, col10 = st.columns(4)
+
+        col7.html(render_metric_card(strings.INSTANCES_TOTAL_TITLE,
+                                     instance_metrics['total'],
+                                     f"{settings.INSTANCES_FILENAME}?{query_string}&instances=all"))
+        col8.html(render_metric_card(strings.INSTANCES_ALL_CORRECT_TITLE,
+                                     instance_metrics['all_correct'],
+                                     f"{settings.INSTANCES_FILENAME}?{query_string}&instances=allcorrect"))
+        col9.html(render_metric_card(strings.INSTANCES_ALL_INCORRECT_TITLE,
+                                     instance_metrics['all_incorrect'],
+                                     f"{settings.INSTANCES_FILENAME}?{query_string}&instances=allincorrect"))
+        col10.html(render_metric_card(strings.INSTANCES_DISAGREE_TITLE,
+                                     instance_metrics['models_disagree'],
+                                     f"{settings.INSTANCES_FILENAME}?{query_string}&instances=disagree"))
+
+
+
 
 
 if __name__ == "__main__":

@@ -6,6 +6,8 @@
     --color-metric-bg: #D4E4E4AA;
     --text-color: rgb(49, 51, 63);
     --border-color: #D4E4E4;
+    --highlight-border-color: #A8D5B5;
+    --highlight-bg-color: #E6F4EA;
 }
 
 .body {
@@ -212,6 +214,14 @@ div[data-testid="stCheckbox"] label {
 /*
     Dataset page elements
  */
+
+.st-key-recommended-models {
+    background-color: var(--highlight-bg-color);
+    border: 1px solid var(--highlight-border-color);
+    border-radius: 8px;
+    padding: 16px;
+}
+
 
 .xl-metric-card {
     border: 1px solid rgba(128,128,128,0.2);
