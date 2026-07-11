@@ -10,6 +10,10 @@
     --highlight-bg-color: #E6F4EA;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 .body {
     line-height: 1 !important;
 }
@@ -89,6 +93,22 @@ p {
 
 .breadcrumbs {
     padding-bottom: 20px;
+}
+
+.st-key-page-nav-row {
+    display: flex;
+    align-items: center;
+    padding: 4px 0 12px 0;
+    border-bottom: 1px solid #E5E7EB;
+    margin-bottom: 10px;
+}
+
+.page-nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
 }
 
 /*
@@ -222,6 +242,12 @@ div[data-testid="stCheckbox"] label {
     padding: 16px;
 }
 
+.st-key-perf-metrics-expander summary p {
+    font-size: 1.3em !important;
+    font-weight: 500 !important;
+    text-decoration: underline;
+    color: var(--color-link);
+}
 
 .xl-metric-card {
     border: 1px solid rgba(128,128,128,0.2);

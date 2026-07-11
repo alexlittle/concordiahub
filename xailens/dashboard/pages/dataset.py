@@ -12,6 +12,7 @@ from xailens.dashboard import settings
 def main():
     explorer = get_explorer()
 
+
     # get dataset from params
     dataset = st.query_params.get('dataset')
     models_param = st.query_params.get("models")
@@ -33,13 +34,27 @@ def main():
         st.error(f"Dataset {dataset} does not exist")
         st.stop()
 
-    # show breadcrumb
-    st.html(display_breadcrumbs(dataset))
+    # show breadcrumb and anchor links
+    with st.container(key="page-nav-row"):
+        col_breadcrumb, col_nav = st.columns([1, 1])
+
+        col_breadcrumb.html(display_breadcrumbs(dataset))
+
+        col_nav.html(f"""
+                    <div class="page-nav">
+                        <span class="page-nav-label">On this page:</span>
+                        <a href="#overview">Overview</a>
+                        <a href="#more-metrics">More Metrics</a>
+                        <a href="#instance-consensus">{strings.INSTANCE_CONCENSUS_TITLE}</a>
+                        
+                    </div>
+                """)
 
     # Get the selected models for the dataset
     selected_models = explorer.get_selected_models_for_dataset(dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_models)
 
+    st.html('<div id="overview"></div>')
     with st.container(border=True, key="recommended-models"):
         recommended_models = dataset_obj.get_recommended_models()
 
@@ -66,7 +81,8 @@ def main():
             st.plotly_chart(render_features_heatmap(df_global_exp), width='content')
 
     # accuracy/precision/recall bar charts
-    with st.expander(f"{strings.PERF_METRICS_TITLE}", expanded=False):
+    st.html('<div id="more-metrics"></div>')
+    with st.expander(f"{strings.PERF_METRICS_TITLE}", expanded=False, key="perf-metrics-expander"):
         col4, col5, col6 = st.columns(3)
         with col4:
             with st.container(border=True):
@@ -82,7 +98,7 @@ def main():
 
     # Instance consensus overview
     with st.container(border=True):
-        st.html(f"<h3>{strings.INSTANCE_CONCENSUS_TITLE}</h3>")
+        st.html(f"<h3 id='instance-consensus'>{strings.INSTANCE_CONCENSUS_TITLE}</h3>")
 
         instance_metrics = dataset_obj.get_instance_consensus()
         params = st.query_params.to_dict()
