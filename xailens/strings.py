@@ -36,9 +36,6 @@ HOME_DATASET_NUM_MODELS = "{count} models"
 
 # Dataset page elements
 #-------------------------------
-
-
-
 # section titles
 RECOMMENDED_MODEL_TITLE = "Recommended Model"
 RECOMMENDED_MODELS_TITLE = "Recommended Models"
@@ -51,6 +48,13 @@ INSTANCE_CONCENSUS_TITLE = "Instance Consensus"
 
 # performance metrics graphs
 METRICS_NAMES = {
+    'accuracy': 'Accuracy',
+    'f1_weighted': "F1 weighted",
+    'precision_weighted': "Precision weighted",
+    'recall_weighted': "Recall weighted",
+}
+
+METRICS_EXPLANATIONS = {
     'accuracy': 'Accuracy',
     'f1_weighted': "F1 weighted",
     'precision_weighted': "Precision weighted",

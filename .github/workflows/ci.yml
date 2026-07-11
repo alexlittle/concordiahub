@@ -49,10 +49,10 @@ jobs:
           pytest --cov=xailens --cov-report=xml --cov-report=term
 
       # -------------------------
-      # Upload coverage as artifact (optional)
+      # Upload coverage as artifact
       # -------------------------
       - name: Upload coverage
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: coverage
           path: coverage.xml
