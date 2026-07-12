@@ -139,6 +139,23 @@ p {
 }
 
 /*
+    Tab style
+ */
+button[data-baseweb="tab"] p {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--color-link);
+}
+
+button[data-baseweb="tab"][aria-selected="true"] p {
+    color: var(--color-link);
+}
+
+div[data-baseweb="tab-list"] {
+    gap: 24px;
+}
+
+/*
     Sidebar elements
  */
 
