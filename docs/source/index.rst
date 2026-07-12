@@ -1,25 +1,16 @@
-.. xaicompare documentation master file, created by
+.. xailens documentation master file, created by
    sphinx-quickstart on Tue Feb  3 21:45:49 2026.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-XAICompare Documentation
+XAI Lens
 ========================
 
-Documentation for the XAICompare dashboard I'm building as my MSc Project
+XAI Lens is a proof-of-concept framework and dashboard for model developers to compare models, not only comparing raw
+performance metrics, but also global and local explainable AI methods.
 
-Proposed Structure:
+XAI Lens supports classical machine learning models as well as LLMs.
 
-* Overview
-* QuickStart
-* Examples
-* Development
-   * Model Adapter
-   * Method Adapter
-   * DataStore structure
-   * Visualisation Adapter
-   * Dashboard
-* API docs
 
 
 .. toctree::
@@ -31,6 +22,3 @@ Proposed Structure:
    examples/index
    api/index
 
-To run the dashboard:
-
-``xaicompare-dash``

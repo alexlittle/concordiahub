@@ -1,15 +1,15 @@
 QuickStart
 --------------
 
+Install the package:
 
+``pip install xailens``
 
-Install the package
-
-
-Add at the end of your model run:
+Add at the end of your model model code:
 
 
 
 
 Start the dashboard:
 
+``xailens-dash``

@@ -1,7 +1,7 @@
 Runner
 =========
 
-.. automodule:: xaicompare.runner
+.. automodule:: xailens.runner
    :members:
    :undoc-members:
    :show-inheritance:

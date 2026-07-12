@@ -17,7 +17,7 @@ version = ".".join(__version__.split(".")[:2])
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'xaicompare'
+project = 'xailens'
 copyright = '2026, Alex Little'
 author = 'Alex Little'
 

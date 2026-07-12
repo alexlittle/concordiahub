@@ -1,7 +1,7 @@
 Explainer Base
 ===============
 
-.. automodule:: xaicompare.adapters.explainers.explainer_base
+.. automodule:: xailens.adapters.explainers.xaimethod_base
    :members:
    :undoc-members:
    :show-inheritance:

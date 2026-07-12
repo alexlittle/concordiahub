@@ -13,7 +13,6 @@ XAICompare API Documentation
     :caption: Explainers:
 
     adapters/explainers/base
-    adapters/explainers/shap_tree
 
 ..  toctree::
     :maxdepth: 2
