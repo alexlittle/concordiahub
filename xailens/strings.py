@@ -160,3 +160,27 @@ WATERFALL_X_AXIS = "Contribution"
 # Tabular Visualisation
 TABULAR_DISPLAY_NAME = "Tabular (text)"
 TABULAR_SCORE_TITLE = "Score (1 to -1)"
+
+# ----------------
+# HELP TEXT
+# ----------------
+
+HELP_RECOMMENDED_MODEL = """
+    The recommended model is the model with highest F1 weighted score,
+    out of the models specified in the sidebar"""
+
+HELP_METRICS = {
+    'accuracy': "Proportion of all predictions the model got right.",
+    'f1_weighted': "Harmonic mean of precision and recall, averaged across classes weighted by class size.",
+    'precision_weighted': "Of the predictions made for each class, the proportion that were correct, averaged and weighted by class size.",
+    'recall_weighted': "Of the actual instances of each class, the proportion the model correctly identified, averaged and weighted by class size.",
+}
+
+HELP_GLOBAL_EXPLANATION = """
+    The normalised importance each model assigned to each feature in the dataset. Ordered by the average across all models in descending order.
+"""
+
+HELP_INSTANCES = """
+    Shows where models agree and disagree on individual predictions.
+"""
+

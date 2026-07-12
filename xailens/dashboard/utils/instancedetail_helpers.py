@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.registry.viz_registry import get_viz_adapter
-from xailens import exceptions
+from xailens import exceptions, config
 from xailens.dashboard.utils.display_table import render_dataframe
 from xailens.entities.model import Model
 from xailens.dashboard.utils.plotly_theme import apply_horizontal_bar_theme
@@ -77,7 +77,7 @@ def render_model_panel(panel: ModelPanel, plot_key: str):
             for viz in viz_list:
                 if isinstance(viz, plotly.graph_objs.Figure):
                     viz = apply_horizontal_bar_theme(viz)
-                    st.plotly_chart(viz, key=plot_key)
+                    st.plotly_chart(viz, key=plot_key, config=config.PLOTLY_CONFIG)
                 elif isinstance(viz, pd.DataFrame):
                     st.html(render_dataframe(viz))
                 else:

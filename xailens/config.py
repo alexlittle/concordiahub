@@ -57,6 +57,9 @@ TABULAR_COMPATIBLE_XAI = ["llm_reasoning", "tree_shap", "coefficients"]
 #------------------------
 # Display config
 #------------------------
+
+PLOTLY_CONFIG = {"displayModeBar": False}
+
 # maximum num features to show - esp for TF-IDF based models
 PLOT_MAX_FEATURES = 20
 

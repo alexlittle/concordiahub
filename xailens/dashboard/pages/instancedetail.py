@@ -2,7 +2,7 @@ import streamlit as st
 
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
-from xailens import strings
+from xailens import strings, config
 from xailens.dashboard.utils.common import display_breadcrumbs
 from xailens.dashboard.utils.instancedetail_helpers import build_model_panel, render_model_panel
 from xailens.dashboard.utils.display_table import render_series
@@ -59,7 +59,7 @@ def main():
     # display the local feature heatmap
         st.html(f"<h2>{strings.INSTANCE_DETAIL_HEATMAP_TITLE}</h2>")
         df_local_exp = dataset_obj.get_local_explanations(instance_uuid)
-        st.plotly_chart(render_features_heatmap(df_local_exp), width='content')
+        st.plotly_chart(render_features_heatmap(df_local_exp), width='content', config=config.PLOTLY_CONFIG)
 
     with col2:
         st.html(f"<h2>{strings.INSTANCE_DETAIL_DATA_TITLE}</h2>")

@@ -2,11 +2,11 @@ import streamlit as st
 
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
-from xailens.dashboard.utils.common import display_breadcrumbs
+from xailens.dashboard.utils.common import display_breadcrumbs, title_with_help_icon
 from xailens.dashboard.utils.dataset_helpers import render_metric_barchart, render_metric_card
 from xailens.dashboard.utils.heatmap import render_features_heatmap
 from xailens.entities.dataset import Dataset
-from xailens import strings
+from xailens import strings, config
 from xailens.dashboard import settings
 
 def main():
@@ -45,8 +45,7 @@ def main():
                         <span class="page-nav-label">On this page:</span>
                         <a href="#overview">Overview</a>
                         <a href="#more-metrics">More Metrics</a>
-                        <a href="#instance-consensus">{strings.INSTANCE_CONCENSUS_TITLE}</a>
-                        
+                        <a href="#instance-consensus">{strings.INSTANCE_CONCENSUS_TITLE}</a> 
                     </div>
                 """)
 
@@ -57,11 +56,16 @@ def main():
     st.html('<div id="overview"></div>')
     with st.container(border=True, key="recommended-models"):
         recommended_models = dataset_obj.get_recommended_models()
-
         if len(recommended_models) == 1:
-            st.html(f"<h3>{strings.RECOMMENDED_MODEL_TITLE}: {recommended_models[0]}</h3>")
+            title = f"""
+                <span class='recommended-title'>{strings.RECOMMENDED_MODEL_TITLE}</span>: 
+                <span class='recommended-model'>{recommended_models[0]}"""
         else:
-            st.html(f"<h3>{strings.RECOMMENDED_MODELS_TITLE}: {', '.join(recommended_models)}</h3>")
+            title = f"""
+                    <span class='recommended-title'>{strings.RECOMMENDED_MODELS_TITLE}</span>: 
+                    <span class='recommended-model'>{', '.join(recommended_models)}</span>"""
+
+        st.html(title_with_help_icon(title, strings.HELP_RECOMMENDED_MODEL))
 
     # Get performance metrics
     metrics = dataset_obj.get_metrics()
@@ -71,34 +75,41 @@ def main():
     with col1:
         # F1 weighted score
         with st.container(border=True):
-            st.html(f"<h3>{strings.PERF_F1_WEIGHTED_TITLE}</h3>")
-            st.plotly_chart(render_metric_barchart(metrics, "f1_weighted", show_title=False))
+            st.html(title_with_help_icon(strings.METRICS_NAMES["f1_weighted"],
+                                         strings.HELP_METRICS["f1_weighted"]))
+            st.plotly_chart(render_metric_barchart(metrics, "f1_weighted", show_title=False), config=config.PLOTLY_CONFIG)
     with col2:
         # Global explanations
         with st.container(border=True):
-            st.html(f"<h3>{strings.GLOBAL_EXPLANATION_TITLE}</h3>")
+            st.html(title_with_help_icon(strings.GLOBAL_EXPLANATION_TITLE, strings.HELP_GLOBAL_EXPLANATION))
             df_global_exp = dataset_obj.get_global_explanations()
-            st.plotly_chart(render_features_heatmap(df_global_exp), width='content')
+            st.plotly_chart(render_features_heatmap(df_global_exp), width='content', config=config.PLOTLY_CONFIG)
 
     # accuracy/precision/recall bar charts
     st.html('<div id="more-metrics"></div>')
-    with st.expander(f"{strings.PERF_METRICS_TITLE}", expanded=False, key="perf-metrics-expander"):
+    with st.expander(f"{strings.PERF_METRICS_TITLE}", expanded=True, key="perf-metrics-expander"):
         col4, col5, col6 = st.columns(3)
         with col4:
             with st.container(border=True):
-                st.plotly_chart(render_metric_barchart(metrics, "accuracy"))
+                st.html(title_with_help_icon(strings.METRICS_NAMES["accuracy"],
+                                             strings.HELP_METRICS["accuracy"]))
+                st.plotly_chart(render_metric_barchart(metrics, "accuracy", show_title=False), config=config.PLOTLY_CONFIG)
         with col5:
             with st.container(border=True):
-                st.plotly_chart(
-                    render_metric_barchart(metrics, "precision_weighted"))
+                st.html(title_with_help_icon(strings.METRICS_NAMES["precision_weighted"],
+                                             strings.HELP_METRICS["precision_weighted"]))
+                st.plotly_chart(render_metric_barchart(metrics, "precision_weighted", show_title=False), config=config.PLOTLY_CONFIG)
         with col6:
             with st.container(border=True):
+                st.html(title_with_help_icon(strings.METRICS_NAMES["recall_weighted"],
+                                             strings.HELP_METRICS["recall_weighted"]))
                 st.plotly_chart(
-                    render_metric_barchart(metrics, "recall_weighted"))
+                    render_metric_barchart(metrics, "recall_weighted", show_title=False), config=config.PLOTLY_CONFIG)
 
     # Instance consensus overview
+    st.html('<div id="instance-consensus"></div>')
     with st.container(border=True):
-        st.html(f"<h3 id='instance-consensus'>{strings.INSTANCE_CONCENSUS_TITLE}</h3>")
+        st.html(title_with_help_icon(strings.INSTANCE_CONCENSUS_TITLE, strings.HELP_INSTANCES))
 
         instance_metrics = dataset_obj.get_instance_consensus()
         params = st.query_params.to_dict()

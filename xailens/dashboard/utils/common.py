@@ -2,6 +2,7 @@ import streamlit as st
 
 from xailens.dashboard import settings
 from xailens import strings
+from xailens.dashboard.assets.icons import help_icon
 
 
 def display_breadcrumbs(dataset: str = None,
@@ -33,5 +34,10 @@ def display_breadcrumbs(dataset: str = None,
     return f"<div class='breadcrumbs'>{' &nbsp;&gt;&nbsp; '.join(parts)}</div>"
 
 
-
-
+def title_with_help_icon(title: str, help_text:str) -> str:
+    return f"""
+            <div class="card-header-row">
+                <h3>{title}</h3>
+                {help_icon(help_text)}
+            </div>
+        """
