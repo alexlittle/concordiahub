@@ -17,11 +17,20 @@ class XAIMethodAdapter(ABC):
     default_visualisation: Optional[str]
     compatible_visualisations: Optional[dict]
 
-    # type of explanation storage - df or JSON, default to df
+    # type of explanation storage - df or json, default to df
     explanation_file_type: str = "df"
 
     @classmethod
     def load_global_explanation(cls, model: Model) -> pd.DataFrame:
+        """
+        Loads the global explanation for the instantiated class
+
+        Args:
+            model: Model object
+
+        Returns:
+            pd.DataFrame: dataframe containing global explanation
+        """
         df = model.store.load_dataframe(f"exp_global_{cls.key}")
         explanation = df.groupby("feature")["importance"].mean()
 
@@ -64,6 +73,7 @@ class XAIMethodAdapter(ABC):
     @abstractmethod
     def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the global explanation for the model
+
         Args:
             ctx: ModelContext object
             model: Trained model object
@@ -79,6 +89,7 @@ class XAIMethodAdapter(ABC):
     @abstractmethod
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
         """Computes the local explanation for the model
+
         Args:
             ctx: ModelContext object
             model: Trained model object
@@ -94,6 +105,7 @@ class XAIMethodAdapter(ABC):
     @abstractmethod
     def explain_local_json(self, ctx: ModelContext) -> list[dict[str, Any]]:
         """Computes the local explanation for the model
+
         Args:
             ctx: ModelContext object
 

@@ -75,3 +75,6 @@ PLOT_SECONDARY_COLOR = "#FE6100"
 PLOT_PRIMARY_COLOR = "teal"
 
 PLOT_ZERO_LINE= {"zeroline": True, "zerolinewidth": 2, "zerolinecolor": "black"}
+
+PLOT_UPSET_CORRECT_COLOR = "#4C8C8C"
+PLOT_UPSET_INCORRECT_COLOR = "#D97B3F"

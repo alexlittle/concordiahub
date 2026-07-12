@@ -5,7 +5,7 @@ Setup
 --------
 To run these examples some extra packages will need to be installed. To install all the additional packages, run:
 
-``pip install "xaicompare[examples]"``
+``pip install "xailens[examples]"``
 
 
 Example 1: XGBoost Model on MedSynth

@@ -1,8 +1,6 @@
 import plotly.express as px
 import plotly.graph_objects as go
 
-from xailens import config
-
 
 THEME = {
     "color_sequence": px.colors.qualitative.Safe,
@@ -126,14 +124,16 @@ def apply_upset_theme(fig: go.Figure, show_title: bool = False) -> go.Figure:
     fig.update_xaxes(showgrid=False, row=2, col=2)
     fig.update_yaxes(showgrid=False, row=2, col=2)
 
-    # Legend styling for the Correct/Incorrect dot legend
+    # for the Correct/Incorrect dot legend
     fig.update_layout(
-        legend=dict(
-            orientation="h",
-            yanchor="bottom", y=1.02,
-            xanchor="right", x=1,
-            font={"size": THEME["axis_tick_font_size"], "color": THEME["axis_tick_color"]},
-        )
+        legend={
+            "orientation": "h",
+            "yanchor": "bottom",
+            "y": 1.02,
+            "xanchor": "right",
+            "x": 1,
+            "font": {"size": THEME["axis_tick_font_size"], "color": THEME["axis_tick_color"]},
+        }
     )
 
     return fig

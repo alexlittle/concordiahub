@@ -1,15 +1,15 @@
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import pandas as pd
+import plotly.graph_objects as go
+
+from plotly.subplots import make_subplots
+
+from xailens.config import PLOT_UPSET_CORRECT_COLOR, PLOT_UPSET_INCORRECT_COLOR
 
 
-def build_upset_figure(
-    combo_df: pd.DataFrame,
-    set_sizes: pd.Series,
-    max_combos: int = 25,
-    correct_colour: str = "#4C8C8C",
-    incorrect_colour: str = "#D97B3F",
-) -> go.Figure:
+def build_upset_figure(combo_df: pd.DataFrame,
+                       set_sizes: pd.Series,
+                       max_combos: int = 25) -> go.Figure:
+
     model_cols = list(set_sizes.index)
     combo_df = combo_df.head(max_combos).reset_index(drop=True)
     n_combos = len(combo_df)
@@ -32,7 +32,7 @@ def build_upset_figure(
         go.Bar(
             x=list(range(n_combos)),
             y=combo_df["count"],
-            marker_color=incorrect_colour,  # bars represent "wrong" combos, so orange fits
+            marker_color=PLOT_UPSET_INCORRECT_COLOR,
             hovertext=[
                 f"{c} instances incorrect in models: <br>" + ", ".join(
                     m for m in model_cols if combo_df.loc[i, m] == 1
@@ -51,7 +51,7 @@ def build_upset_figure(
             x=set_sizes.values[::-1],
             y=list(range(n_models)),
             orientation="h",
-            marker_color=incorrect_colour,
+            marker_color=PLOT_UPSET_INCORRECT_COLOR,
             name="",
             hovertemplate="%{x} incorrect<extra></extra>",
             showlegend=False,
@@ -77,7 +77,7 @@ def build_upset_figure(
     fig.add_trace(
         go.Scatter(
             x=correct_x, y=correct_y, mode="markers",
-            marker=dict(size=14, color=correct_colour),
+            marker={"size": 14, "color": PLOT_UPSET_CORRECT_COLOR},
             name="Correct",
             hoverinfo="skip", showlegend=True,
         ),
@@ -93,7 +93,7 @@ def build_upset_figure(
             go.Scatter(
                 x=[i, i], y=[min(active_js), max(active_js)],
                 mode="lines",
-                line=dict(color=incorrect_colour, width=2),
+                line={"color": PLOT_UPSET_INCORRECT_COLOR, "width": 2},
                 hoverinfo="skip", showlegend=False,
             ),
             row=2, col=2,
@@ -102,14 +102,14 @@ def build_upset_figure(
     fig.add_trace(
         go.Scatter(
             x=incorrect_x, y=incorrect_y, mode="markers",
-            marker=dict(size=14, color=incorrect_colour),
+            marker={"size": 14, "color": PLOT_UPSET_INCORRECT_COLOR},
             name="Incorrect",
             hoverinfo="skip", showlegend=True,
         ),
         row=2, col=2,
     )
 
-    # --- Axis formatting (unchanged from before) ---
+    # --- Axis formatting ---
     fig.update_xaxes(showticklabels=False, row=1, col=2)
     fig.update_yaxes(title_text="Count", row=1, col=2)
     fig.update_xaxes(autorange="reversed", title_text="Set size", row=2, col=1)
@@ -127,11 +127,10 @@ def build_upset_figure(
     fig.update_xaxes(range=[-0.5, n_combos - 0.5], matches="x3", row=2, col=2)
 
     fig.update_layout(
-        title="Model Disagreement — UpSet Overview",
         height=500,
         bargap=0.3,
         plot_bgcolor="white",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "right", "x": 1},
     )
 
     return fig
