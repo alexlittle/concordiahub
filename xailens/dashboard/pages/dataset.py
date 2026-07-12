@@ -129,9 +129,5 @@ def main():
                                      instance_metrics['models_disagree'],
                                      f"{settings.INSTANCES_FILENAME}?{query_string}&instances=disagree"))
 
-
-
-
-
 if __name__ == "__main__":
     main()

@@ -5,10 +5,20 @@ import plotly.express as px
 
 from xailens.dashboard.utils import plotly_theme
 from xailens import strings, config
+from xailens.dashboard.assets.icons import arrow_icon
 
 
 def render_metric_barchart(metrics: pd.DataFrame, metric_name: str, show_title: bool=True) -> plotly.graph_objects.Figure:
+    """
 
+    Args:
+        metrics ():
+        metric_name (): 
+        show_title ():
+
+    Returns:
+
+    """
     # find the best model
     max_val = metrics[metric_name].max()
 
@@ -37,12 +47,15 @@ def render_metric_barchart(metrics: pd.DataFrame, metric_name: str, show_title: 
     return plotly_theme.apply_theme(fig, show_title=show_title)
 
 
-def render_metric_card(title, value, link):
+def render_metric_card(title:str, value:str, link:str)-> str:
     return f"""
-    <div class="xl-metric-card">
+    <div class="xl-metric-card" title="View {title.lower()}">
         <a href="{link}" target="_self">
             <div class="xl-metric-label">{title}</div>
-            <div class="xl-metric-value">{value}</div>
+            <div class="xl-metric-value-container">
+                <span class="xl-metric-value">{value}</span>
+                {arrow_icon("test")}
+            </div>
         </a>
     </div>
 """
