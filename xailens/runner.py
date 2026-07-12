@@ -13,9 +13,9 @@ from xailens.registry.xai_registry import get_xai_adapter
 
 
 def compute_metrics(data: ModelData):
-    if (data.y_test is not None or data.y is not None) and data.y_pred is not None:
+    if data.y_test is not None and data.y_pred is not None:
         instance_id = data.data_schema.instance_id_column
-        full_test = data.y_test if data.y_test is not None else data.y
+        full_test = data.y_test
 
         pred_data = data.y_pred.set_index(instance_id).squeeze()
         test_data = full_test.set_index(instance_id).loc[pred_data.index].squeeze()
@@ -34,7 +34,7 @@ def compute_metrics(data: ModelData):
         series.name = 'value'
         return series
     else:
-        raise MissingDataError("Cannot compute metrics because y or y_test, and y_pred are required")
+        raise MissingDataError("Cannot compute metrics because y_test and y_pred are required")
 
 
 def write_global_explanations(xai_method: str,
