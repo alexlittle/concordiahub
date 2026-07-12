@@ -52,3 +52,4 @@ def render_instances_df(df:pd.DataFrame,
             </tbody>
         </table>
         """
+

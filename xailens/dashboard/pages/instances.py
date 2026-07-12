@@ -42,8 +42,6 @@ def main():
 
     st.html(f"<h2>{strings.INSTANCE_GROUPS[instance_group]} ({len(df_instances)})</h2>")
 
-
-
     # Display matching instances
     # remove agreement column so doesn't display
     df_instances = df_instances.drop(columns="agreement")

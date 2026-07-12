@@ -1,6 +1,9 @@
 import plotly.express as px
 import plotly.graph_objects as go
 
+from xailens import config
+
+
 THEME = {
     "color_sequence": px.colors.qualitative.Safe,
     "font_family": "Inter, sans-serif",
@@ -96,4 +99,41 @@ def apply_horizontal_bar_theme(fig: go.Figure, xaxis_title: str = "") -> go.Figu
     fig.update_traces(
         hovertemplate="<b>%{y}</b>: %{x:.4f}<extra></extra>"
     )
+    return fig
+
+
+def apply_upset_theme(fig: go.Figure, show_title: bool = False) -> go.Figure:
+    fig = apply_base_theme(fig, show_title=show_title)
+    fig.update_layout({"showlegend": True})
+    hoverlabel = {
+        "font_family": THEME["font_family"],
+        "font_size": THEME["hover_font_size"],
+        "font_color": THEME["hover_font_color"],
+        "bgcolor": THEME["hover_bgcolor"],
+        "bordercolor": THEME["hover_bordercolor"],
+    }
+    fig.update_layout(hoverlabel=hoverlabel)
+
+    # Top-right: combo count bar chart
+    fig.update_yaxes(showgrid=True, gridcolor="#eeeeee", row=1, col=2)
+    fig.update_xaxes(showgrid=False, row=1, col=2)
+
+    # Bottom-left: set size bar chart
+    fig.update_xaxes(showgrid=True, gridcolor="#eeeeee", row=2, col=1)
+    fig.update_yaxes(showgrid=False, row=2, col=1)
+
+    # Bottom-right: dot matrix — deliberately bare, don't add gridlines here
+    fig.update_xaxes(showgrid=False, row=2, col=2)
+    fig.update_yaxes(showgrid=False, row=2, col=2)
+
+    # Legend styling for the Correct/Incorrect dot legend
+    fig.update_layout(
+        legend=dict(
+            orientation="h",
+            yanchor="bottom", y=1.02,
+            xanchor="right", x=1,
+            font={"size": THEME["axis_tick_font_size"], "color": THEME["axis_tick_color"]},
+        )
+    )
+
     return fig

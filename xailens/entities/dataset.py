@@ -156,6 +156,44 @@ class Dataset:
         )
         return result[cols]
 
+    def get_upset_data(self, include_all_correct: bool = False) -> tuple[pd.DataFrame, pd.Series]:
+        """
+        Builds UpSet-ready data from get_all_instances().
+
+        Returns:
+            combo_df: one row per unique combination of models being wrong,
+                      with columns: <model cols...>, count, instance_ids
+            set_sizes: total wrong-count per model (Series, sorted desc)
+        """
+        df = self.get_all_instances()
+
+        model_cols = [
+            c for c in df.columns
+            if c not in ("instance_uuid", "true_label", "agreement")
+        ]
+
+        # binary "wrong" matrix: 1 if model's prediction != true_label
+        wrong_df = df[model_cols].ne(df["true_label"], axis=0).astype(int)
+        wrong_df.index = df["instance_uuid"]
+
+        if not include_all_correct:
+            # drop rows where every model got it right (all zeros) —
+            # these aren't interesting for a disagreement/error overview
+            wrong_df = wrong_df[wrong_df.sum(axis=1) > 0]
+
+        set_sizes = wrong_df[model_cols].sum().sort_values(ascending=False)
+
+        combo_df = (
+            wrong_df.groupby(model_cols)
+            .apply(lambda g: list(g.index))
+            .reset_index(name="instance_ids")
+        )
+        combo_df["count"] = combo_df["instance_ids"].apply(len)
+        combo_df = combo_df.sort_values("count", ascending=False).reset_index(
+            drop=True)
+
+        return combo_df, set_sizes
+
     #------------------------------
     # Private helper functions
     #-------------------------------
