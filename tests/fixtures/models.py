@@ -15,9 +15,10 @@ from xailens.entities.model import Model
 
 def _build_metadata(id_column, target_column, prediction_column,
                     feature_columns=None, class_names=None,
-                    model_display_name=None, xai_methods=None):
+                    model_display_name=None, xai_methods=None, model_uuid=None):
     return {
         "model_display_name": model_display_name,
+        "model_uuid": model_uuid,
         "xai_methods": xai_methods,
         "data_schema": {
             "instance_id_column": id_column,
@@ -29,9 +30,9 @@ def _build_metadata(id_column, target_column, prediction_column,
     }
 
 
-def _build_mock_store(y_test, y_pred, metrics, raw_instances, extra_dataframes=None):
+def _build_mock_store(y_test, y_pred, metrics, raw_instances, extra_dataframes=None, extra_json=None):
     """
-    Build a MagicMock standing in for FilesystemStore.
+    MagicMock for FilesystemStore.
     """
     store = MagicMock(name="MockFilesystemStore")
 
@@ -44,6 +45,8 @@ def _build_mock_store(y_test, y_pred, metrics, raw_instances, extra_dataframes=N
     if extra_dataframes:
         dataframes.update(extra_dataframes)
 
+    json_data = dict(extra_json or {})
+
     def load_dataframe(name):
         try:
             return dataframes[name].copy()
@@ -53,15 +56,25 @@ def _build_mock_store(y_test, y_pred, metrics, raw_instances, extra_dataframes=N
                 f"Available keys: {list(dataframes)}"
             )
 
+    def load_json(name):
+        try:
+            return json_data[name]
+        except KeyError:
+            raise FileNotFoundError(
+                f"No fake JSON registered for store key '{name}'. "
+                f"Available keys: {list(json_data)}"
+            )
+
     store.load_dataframe.side_effect = load_dataframe
+    store.load_json.side_effect = load_json
     store.load_series.return_value = metrics.copy()
     return store
 
 
-def _make_model(path, metadata, y_test, y_pred, metrics, raw_instances, extra_dataframes=None):
+def _make_model(path, metadata, y_test, y_pred, metrics, raw_instances, extra_dataframes=None, extra_json=None):
     with patch("xailens.entities.model.FilesystemStore"):
         model = Model(path=path, metadata=metadata)
-    model.store = _build_mock_store(y_test, y_pred, metrics, raw_instances, extra_dataframes)
+    model.store = _build_mock_store(y_test, y_pred, metrics, raw_instances, extra_dataframes, extra_json)
     return model
 
 
@@ -78,7 +91,7 @@ def lr_model_factory():
     def _factory(path="fake/lr_model", n_instances=5,
                  feature_columns=None, class_names=None,
                  model_display_name="Logistic Regression", xai_methods=None,
-                 y_test=None, y_pred=None, metrics=None, raw_instances=None, global_explanations=None):
+                 y_test=None, y_pred=None, metrics=None, raw_instances=None, global_explanations=None, local_explanations=None, model_uuid=None):
         id_col, target_col, pred_col = "instance_id", "target", "prediction"
         feature_columns = feature_columns or [
             "age", "sex", "cp", "trestbps", "chol", "fbs",
@@ -119,11 +132,21 @@ def lr_model_factory():
                                range(len(feature_columns))],
             })
 
-        extra_dataframes = {f"exp_global_{xai_methods[0]}": global_explanations}
+        if local_explanations is None:
+            local_explanations = pd.DataFrame({
+                id_col: ids,
+                **{col: [float((i + j) % 3) - 1 for j in range(n_instances)]
+                   for i, col in enumerate(feature_columns)},
+            })
 
+        extra_dataframes = {
+            f"exp_global_{xai_methods[0]}": global_explanations,
+            f"exp_local_{xai_methods[0]}": local_explanations,
+        }
+        model_uuid = model_uuid or "lr-model-uuid"
         metadata = _build_metadata(id_col, target_col, pred_col,
                                    feature_columns, class_names,
-                                   model_display_name, xai_methods)
+                                   model_display_name, xai_methods, model_uuid)
         return _make_model(path, metadata, y_test, y_pred, metrics,
                            raw_instances, extra_dataframes)
 
@@ -148,7 +171,7 @@ def xgboost_model_factory():
     def _factory(path="fake/xgboost_model", n_instances=5,
                  feature_columns=None, class_names=None,
                  model_display_name="XGBoost", xai_methods=None,
-                 y_test=None, y_pred=None, metrics=None, raw_instances=None, global_explanations=None):
+                 y_test=None, y_pred=None, metrics=None, raw_instances=None, global_explanations=None, local_explanations=None, model_uuid=None):
         id_col, target_col, pred_col = "instance_id", "target", "prediction"
         feature_columns = feature_columns or [
             "age", "sex", "cp", "trestbps", "chol", "fbs",
@@ -181,6 +204,7 @@ def xgboost_model_factory():
                    for i, col in enumerate(feature_columns)},
             })
         xai_methods = xai_methods or ["tree_shap"]
+
         if global_explanations is None:
             global_explanations = pd.DataFrame({
                 "feature": feature_columns,
@@ -188,11 +212,22 @@ def xgboost_model_factory():
                                range(len(feature_columns))],
             })
 
-        extra_dataframes = {f"exp_global_{xai_methods[0]}": global_explanations}
+        if local_explanations is None:
+            local_explanations = pd.DataFrame({
+                id_col: ids,
+                **{col: [float((i + j) % 3) - 1 for j in range(n_instances)]
+                   for i, col in enumerate(feature_columns)},
+            })
 
+        extra_dataframes = {
+            f"exp_global_{xai_methods[0]}": global_explanations,
+            f"exp_local_{xai_methods[0]}": local_explanations,
+        }
+
+        model_uuid = model_uuid or "xgb-model-uuid"
         metadata = _build_metadata(id_col, target_col, pred_col,
                                    feature_columns, class_names,
-                                   model_display_name, xai_methods)
+                                   model_display_name, xai_methods, model_uuid)
         return _make_model(path, metadata, y_test, y_pred, metrics,
                            raw_instances, extra_dataframes)
 
@@ -217,7 +252,7 @@ def llm_model_factory():
     def _factory(path="fake/llm_model", n_instances=5,
                  feature_columns=None, class_names=None,
                  model_display_name="LLM (CoT)", xai_methods=None,
-                 y_test=None, y_pred=None, metrics=None, raw_instances=None, global_explanations=None):
+                 y_test=None, y_pred=None, metrics=None, raw_instances=None, global_explanations=None, local_explanations_json=None, model_uuid=None):
         id_col, target_col, pred_col = "instance_id", "target", "prediction"
         feature_columns = feature_columns or [
             "age", "sex", "cp", "trestbps", "chol", "fbs",
@@ -259,13 +294,31 @@ def llm_model_factory():
                                range(len(feature_columns))],
             })
 
+
+        if local_explanations_json is None:
+            local_explanations_json = [
+                {
+                    id_col: id_,
+                    "reasoning": f"Fake reasoning for {id_}",
+                    "confidence": 0.75,
+                    "contributions": {
+                        feat: {"score": float((i + 1) * 0.1),
+                               "reasoning": f"{feat} contributed"}
+                        for i, feat in enumerate(feature_columns)
+                    },
+                }
+                for id_ in ids
+            ]
+
+        extra_json = {f"exp_local_{xai_methods[0]}": local_explanations_json}
         extra_dataframes = {f"exp_global_{xai_methods[0]}": global_explanations}
 
+        model_uuid = model_uuid or "llm-model-uuid"
         metadata = _build_metadata(id_col, target_col, pred_col,
                                    feature_columns, class_names,
-                                   model_display_name, xai_methods)
+                                   model_display_name, xai_methods, model_uuid)
         return _make_model(path, metadata, y_test, y_pred, metrics,
-                           raw_instances, extra_dataframes)
+                           raw_instances, extra_dataframes, extra_json)
 
     return _factory
 

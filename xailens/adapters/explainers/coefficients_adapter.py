@@ -33,7 +33,7 @@ class CoefficientsAdapter(XAIMethodAdapter):
             MissingDataError: if data.x is not provided
         """
         if ctx.data.x_test is None:
-            raise MissingDataError("CoefficientsAdapter requires x in ModelData")
+            raise MissingDataError("CoefficientsAdapter requires x_test in ModelData")
         coef = model.coef_[0]
         instance_id = ctx.data.data_schema.instance_id_column
         x_test = ctx.data.x_test.drop(columns=instance_id)
