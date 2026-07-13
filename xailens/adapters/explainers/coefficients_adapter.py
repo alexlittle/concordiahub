@@ -1,3 +1,7 @@
+"""
+CoefficientsAdapter class - for model with native interpretability
+"""
+
 import pandas as pd
 import numpy as np
 
@@ -28,7 +32,7 @@ class CoefficientsAdapter(XAIMethodAdapter):
 
         Args:
             ctx (ModelContext) : ModelContext object
-            model (HasCoefficients, optional): model exposing a coef_ attribute
+            model (Optional[HasCoefficients]): model exposing a coef_ attribute
 
         Returns:
             pd.DataFrame: dataframe containing local explanations
@@ -51,7 +55,7 @@ class CoefficientsAdapter(XAIMethodAdapter):
 
         Args:
             ctx (ModelContext): ModelContext object
-            model (HasCoefficients, optional): model exposing a coef_ attribute
+            model (Optional[HasCoefficients]): model exposing a coef_ attribute
 
         Returns:
             pd.DataFrame: dataframe containing global explanation, with two columns, feature and importance

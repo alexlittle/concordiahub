@@ -1,8 +1,19 @@
+"""
+Command line interface for xailens, launches the dashboard in a browser
+"""
+
+
 import os
 import subprocess
 import argparse
 
-def main():
+def main()-> None:
+    """
+    Run the streamlit app
+
+    Returns:
+        None
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--no-browser",

@@ -8,7 +8,7 @@ import pandas as pd
 import numpy as np
 import uuid
 
-from typing import Optional, Union, Any
+from typing import Optional, Any
 from datetime import datetime
 from dataclasses import asdict, fields, is_dataclass
 
@@ -106,13 +106,13 @@ class ArtifactStore:
         self.store.save_series("metrics", metrics_series)
 
     def write_data(self, name: str,
-                   data: Optional[Union[pd.Series, np.ndarray, list, pd.DataFrame]] = None) -> bool:
+                   data: Optional[pd.Series | np.ndarray | list | pd.DataFrame] = None) -> bool:
         """
         Saves the given data to the data store
 
         Args:
             name (string): name of the data to save
-            data (pd.Series, np.ndarray, list, or pd.DataFrame, optional): data to
+            data (Optional[pd.Series | np.ndarray | list | pd.DataFrame]): data to
             save. Series, ndarray, and list inputs are converted to a
             DataFrame before saving.
 
@@ -131,13 +131,13 @@ class ArtifactStore:
         self.store.save_dataframe(name, data)
         return True
 
-    def write_explanation(self, name: str, data: Union[pd.DataFrame, list[dict[str, Any]]], data_format: str ="df") -> None:
+    def write_explanation(self, name: str, data: pd.DataFrame | list[dict[str, Any]], data_format: str ="df") -> None:
         """
         Writes the given explanation to the data store
 
         Args:
             name (str): name of explanation file to write
-            data (pd.DataFrame, list[dict[str, Any]]): the data to write, may be dataframe or list (processed JSON)
+            data (pd.DataFrame | list[dict[str, Any]]): the data to write, may be dataframe or list (processed JSON)
             data_format (str): either "df" or "json", must match what is sent in data
 
         Returns:
