@@ -1,9 +1,22 @@
+"""
+Helper functions for displaying instances table on the dashboard
+"""
+from typing import Any
+
 import pandas as pd
 
 from xailens import strings
 from xailens.dashboard import settings
 
-def _display_value(val) -> str:
+def _display_value(val: Any) -> str:
+    """
+    Private function to convert bool value to string of True or False
+    Args:
+        val (Any): value to be converted
+
+    Returns:
+        str
+    """
     if val in (0, 1, True, False) and not isinstance(val, float):
         return str(bool(val))
     return str(val)

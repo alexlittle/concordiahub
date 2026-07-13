@@ -1,3 +1,7 @@
+"""
+Dataset Entity class - used to provide data for display on the dashboard
+"""
+
 import pandas as pd
 
 from xailens.exceptions import InvalidSelectionError
@@ -6,18 +10,18 @@ from xailens.entities.model import Model
 from xailens import config
 
 class Dataset:
-
-    def __init__(self, dataset_id: str, models: list[Model]):
-        """
-        Initialises the Dataset object, with the specified dataset and the
+    """
+    Initialises the Dataset object, with the specified dataset and the
         models to include
 
-        :param dataset_id: Dataset ID
-        :param models: List of Model objects
-        """
+    Args:
+        dataset_id (str): Dataset ID
+        models (list[Model]): List of Model objects
+    """
+
+    def __init__(self, dataset_id: str, models: list[Model]):
         self.dataset_id = dataset_id
         self.models = models
-
 
     def get_recommended_models(self) -> list[str]:
         """
@@ -47,7 +51,8 @@ class Dataset:
         """
         Gets the instance data for the specified instance uuid
 
-        :param instance_uuid: Instance UUID
+        Args:
+            instance_uuid (str): Instance UUID
 
         Returns:
             pd.Series: instance data
@@ -130,12 +135,14 @@ class Dataset:
         }
 
     def get_all_instances(self) -> pd.DataFrame:
-        """ Gets a dataframe of all the instances for all the models.
-        The dataframe includes columns:
-        - instance_uuid
-        - true_label (ground truth)
-        - prediction column for each dataset
-        - agreement column (either: allcorrect, allincorrect, disagree)
+        """
+        Gets a dataframe of all the instances for all the models.
+            The dataframe includes columns:
+            - instance_uuid
+            - true_label (ground truth)
+            - prediction column for each dataset
+            - agreement column (either: allcorrect, allincorrect, disagree)
+
         Returns:
             pd.DataFrame
         """
@@ -160,10 +167,13 @@ class Dataset:
         """
         Builds UpSet-ready data from get_all_instances().
 
+        Args:
+            include_all_correct (bool):
+
         Returns:
-            combo_df: one row per unique combination of models being wrong,
-                      with columns: <model cols...>, count, instance_ids
-            set_sizes: total wrong-count per model (Series, sorted desc)
+            tuple[pd.DataFrame, pd.Series]: dataframe with one row per unique
+                combination of models being wrong, with columns: <model cols...>
+                , count, instance_ids and pd.Series total wrong-count per model
         """
         df = self.get_all_instances()
 
@@ -202,9 +212,8 @@ class Dataset:
         filtered to the given common_ids.
 
         Returns:
-            tuple of (pred_df, y_true_common):
-                pred_df: DataFrame, one column per model, indexed by instance id
-                y_true_common: Series of ground truth, indexed by instance id
+            tuple[pd.DataFrame, pd.Series]: pd.DataFrame, one column per model,
+                indexed by instance id and pd.Series of ground truth, indexed by instance id
         """
         model_preds = {}
         y_true_common = None

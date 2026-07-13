@@ -19,21 +19,15 @@ from xailens.storage.filesystem_store import FilesystemStore
 
 
 class ArtifactStore:
-    """ArtifactStore - handles the data storage
+    """
+    ArtifactStore - handles the data storage
 
      Args:
         ctx (ModelContext): The current model configuration.
-        store (DataStore): Storage backend. Defaults to FilesystemStore.
+        store (Optional[DataStore]): Storage backend. Defaults to FilesystemStore.
     """
 
     def __init__(self, ctx: ModelContext, store: Optional[DataStore] = None) -> None:
-        """
-        Initialise the ArtifactStore
-
-        Args:
-            ctx (ModelContext): ModelContext object::
-            store (Optional[DataStore]): Storage backend. Defaults to None.
-        """
         self.ctx = ctx
         self.datetime = datetime.now().strftime("%Y%m%d-%H%M%S")
         dirname = self._resolve_dirname(ctx)
@@ -59,8 +53,6 @@ class ArtifactStore:
     def write_metadata(self) -> None:
         """
         Writes the artifact metadata directly from the context dataclass
-
-        Args:
         """
         excluded = {'data', 'model'}
         obj = {}
@@ -78,8 +70,6 @@ class ArtifactStore:
     def write_model(self) -> None:
         """
         Writes the model to the data store directly from the context dataclass
-
-        Args:
         """
         if self.ctx.model:
             self.store.save_model(config.MODEL_FILENAME ,self.ctx.model)
@@ -100,9 +90,9 @@ class ArtifactStore:
 
         Args:
             name (string): name of the data to save
-            data (Optional[pd.Series | np.ndarray | list | pd.DataFrame]): data to
-            save. Series, ndarray, and list inputs are converted to a
-            DataFrame before saving.
+            data (Optional[pd.Series | np.ndarray | list | pd.DataFrame]): data
+                to save. Series, ndarray, and list inputs are converted to a
+                DataFrame before saving.
 
         Returns:
             bool: True if the data was saved, False otherwise

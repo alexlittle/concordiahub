@@ -1,3 +1,6 @@
+"""
+Strings used throughout the framework, including dashboard
+"""
 
 # ---------------------
 # Runner messages
@@ -101,7 +104,19 @@ WARNING_GLOBAL_NOT_AVAILABLE = "Global explanations are not available for {adapt
 # MODEL_TYPES
 # ----------------
 class DisplayNameDict(dict):
+    """
+    Extends the dict class, to manage missing keys
+    """
     def __missing__(self, key: str) -> str:
+        """
+        Defines what to return is a key is missing from the dict
+        
+        Args:
+            key (str):
+
+        Returns:
+            str
+        """
         return key.replace("_", " ").title()
 
 MODEL_DISPLAY_NAME = DisplayNameDict({

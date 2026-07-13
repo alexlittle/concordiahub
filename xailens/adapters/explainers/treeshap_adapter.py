@@ -1,6 +1,13 @@
+"""
+TreeSHAPAdapter class - for processing SHAP explanations for tree based models
+"""
+
 import shap
 import pandas as pd
 from typing import Any
+
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor
+from xgboost import XGBClassifier, XGBRegressor
 
 from xailens.exceptions import MissingDataError, DataProcessingError
 from xailens.entities.context import ModelContext
@@ -8,6 +15,11 @@ from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config
 from xailens.entities.model import Model
+
+TreeModel = (XGBClassifier | XGBRegressor | RandomForestClassifier |
+             RandomForestRegressor | GradientBoostingClassifier | GradientBoostingRegressor)
+
+
 
 @register_xai("tree_shap")
 class TreeSHAPAdapter(XAIMethodAdapter):
@@ -20,13 +32,38 @@ class TreeSHAPAdapter(XAIMethodAdapter):
 
     # SHAP adds a "class" column, so this needs to be removed
     EXCLUDED_CONTRIBUTION_KEYS = {"class"}
-    
+
     @classmethod
     def load_local_explanation(cls, model: Model, instance_id: str) -> pd.DataFrame:
+        """
+        Loads local explanation for given instance_id
+
+        Args:
+            model (Model): Model object
+            instance_id (str): Instance to get the explanation for
+
+        Returns:
+            pd.DataFrame: dataframe containing local explanations
+        """
+
         df = super().load_local_explanation(model, instance_id)
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
-    def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+    def explain_global_df(self, ctx: ModelContext, model: TreeModel) -> pd.DataFrame:
+        """
+        Computes the global explanation from SHAP values
+
+        Args:
+            ctx (ModelContext): ModelContext object
+            model (TreeModel): trained tree-based model object
+
+        Returns:
+            pd.DataFrame: dataframe containing global explanations
+
+        Raises:
+            MissingDataError: if data.x_test is not provided
+            DataProcessingError: if errors in processing SHAP values
+        """
         if not hasattr(ctx.data, "x_test") or ctx.data.x_test is None:
             raise MissingDataError("TreeSHAPAdapter requires x_test in ModelData")
         instance_id = ctx.data.data_schema.instance_id_column
@@ -54,18 +91,22 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         else:
             raise DataProcessingError("The return values from SHAP don't match")
 
-    def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
-        """Computes the local explanation from the coefficients of the model
+    def explain_local_df(self, ctx: ModelContext, model: TreeModel) -> pd.DataFrame:
+        """
+        Computes the local explanations from SHAP values of all the instances in the test set
+
         Args:
-            ctx: ModelContext object
-            model: Trained model object
+            ctx (ModelContext): ModelContext object
+            model (TreeModel): trained tree-based model object
 
         Returns:
             pd.DataFrame: dataframe containing local explanations
 
         Raises:
             MissingDataError: if data.x_test is not provided
+            DataProcessingError: if errors in processing SHAP values
         """
+
         if not hasattr(ctx.data, "x_test") or ctx.data.x_test is None:
             raise MissingDataError("TreeSHAPAdapter requires x_test in ModelData")
 

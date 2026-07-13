@@ -84,6 +84,16 @@ def write_local_explanations(xai_method: str,
                               ctx: ModelContext,
                               model_adapter: ModelAdapter,
                               artifact_store: ArtifactStore):
+    """
+    Generates, processes and writes local explanations for the model
+
+    Args:
+        xai_method (str): XAI method to use
+        xai_adapter (XAIMethodAdapter): XAIMethodAdapter to use
+        ctx (ModelContext): the ModelContext being used
+        model_adapter (ModelAdapter):  the ModelAdapter being used
+        artifact_store (ArtifactStore): the ArtifactStore being used
+    """
     print(strings.RUN_LOCAL_EXPLANATIONS.format(xai_method=xai_method))
     if xai_adapter.explanation_file_type == "json":
         results = xai_adapter.explain_local_json(ctx)
@@ -94,6 +104,12 @@ def write_local_explanations(xai_method: str,
 
 
 def run(ctx: ModelContext):
+    """
+    Entry point for model developer loading their modal and data to the framework
+    
+    Args:
+        ctx (ModelConext): the ModelContext being used
+    """
     print(strings.RUN_STARTING)
 
     # check ctx provided

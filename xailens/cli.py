@@ -10,9 +10,6 @@ import argparse
 def main()-> None:
     """
     Run the streamlit app
-
-    Returns:
-        None
     """
     parser = argparse.ArgumentParser()
     parser.add_argument(
