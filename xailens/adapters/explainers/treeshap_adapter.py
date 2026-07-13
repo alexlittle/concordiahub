@@ -4,7 +4,7 @@ TreeSHAPAdapter class - for processing SHAP explanations for tree based models
 
 import shap
 import pandas as pd
-from typing import Any
+from typing import Any, Optional
 
 from xailens.exceptions import MissingDataError, DataProcessingError
 from xailens.entities.context import ModelContext
@@ -13,8 +13,6 @@ from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config
 from xailens.entities.model import Model
 from xailens.config import TreeModel
-
-
 
 
 @register_xai("tree_shap")
@@ -47,13 +45,13 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         df = super().load_local_explanation(model, instance_id)
         return df[~df["feature_name"].isin(cls.EXCLUDED_CONTRIBUTION_KEYS)]
 
-    def explain_global_df(self, ctx: ModelContext, model: TreeModel) -> pd.DataFrame:
+    def explain_global_df(self, ctx: ModelContext, model: Optional[TreeModel] = None) -> pd.DataFrame:
         """
         Computes the global explanation from SHAP values
 
         Args:
             ctx (ModelContext): ModelContext object
-            model (TreeModel): trained tree-based model object
+            model (Optional[TreeModel]): trained tree-based model object
 
         Returns:
             pd.DataFrame: dataframe containing global explanations
@@ -89,13 +87,13 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         else:
             raise DataProcessingError("The return values from SHAP don't match")
 
-    def explain_local_df(self, ctx: ModelContext, model: TreeModel) -> pd.DataFrame:
+    def explain_local_df(self, ctx: ModelContext, model: Optional[TreeModel] = None) -> pd.DataFrame:
         """
         Computes the local explanations from SHAP values of all the instances in the test set
 
         Args:
             ctx (ModelContext): ModelContext object
-            model (TreeModel): trained tree-based model object
+            model (Optional[TreeModel]): trained tree-based model object
 
         Returns:
             pd.DataFrame: dataframe containing local explanations
@@ -154,6 +152,6 @@ class TreeSHAPAdapter(XAIMethodAdapter):
             dict[str, Any]
 
         Raises:
-            NotImplementedError
+            NotImplementedError: will always return this as not implemented
         """
         raise NotImplementedError

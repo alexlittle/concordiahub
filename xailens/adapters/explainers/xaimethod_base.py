@@ -10,7 +10,7 @@ from xailens.entities.context import ModelContext
 from xailens.entities.model import Model
 from xailens.exceptions import MissingDataError
 from xailens import config
-
+from xailens.config import TreeModel
 
 class XAIMethodAdapter(ABC):
     """
@@ -59,6 +59,10 @@ class XAIMethodAdapter(ABC):
             instance_id (str): instance id to get the explanation for
 
         Returns:
+            pd.DataFrame: dataframe containing local explanation
+
+        Raises:
+            MissingDataError: requested instance is not in the dataset
 
         """
         df = model.store.load_dataframe(f"exp_local_{cls.key}")
@@ -77,21 +81,31 @@ class XAIMethodAdapter(ABC):
             "reasoning": None
         })
 
-    def get_compatible_visualisations(self):
-        """Gets the compatible visualisations for the instantiated class"""
+    def get_compatible_visualisations(self) -> dict:
+        """
+        Gets the compatible visualisations for the instantiated class
+
+        Returns:
+            dict: compatible visualisations
+        """
         return self.compatible_visualisations
 
-    def get_default_visualisation(self):
-        """Gets the default visualisation for the instantiated class"""
+    def get_default_visualisation(self) -> str:
+        """
+        Gets the default visualisation for the instantiated class
+
+        Returns:
+            str: default visualisation
+        """
         return self.default_visualisation
 
     @abstractmethod
-    def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+    def explain_global_df(self, ctx: ModelContext, model: Optional[TreeModel] = None) -> pd.DataFrame:
         """Computes the global explanation for the model
 
         Args:
-            ctx: ModelContext object
-            model: Trained model object
+            ctx (ModelContext): ModelContext object
+            model (Optional[TreeModel]): Trained model object
 
         Returns:
             pd.DataFrame: dataframe containing global explanation
@@ -102,18 +116,16 @@ class XAIMethodAdapter(ABC):
         pass
 
     @abstractmethod
-    def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: ModelContext, model: Optional[TreeModel] = None) -> pd.DataFrame:
         """Computes the local explanation for the model
 
         Args:
-            ctx: ModelContext object
-            model: Trained model object
+            ctx (ModelContext): ModelContext object
+            model (Optional[TreeModel]): Trained model object
 
         Returns:
             pd.DataFrame: dataframe containing local explanations
 
-        Raises:
-            MissingDataError: if required data is not provided
         """
         pass
 
@@ -122,7 +134,7 @@ class XAIMethodAdapter(ABC):
         """Computes the local explanation for the model
 
         Args:
-            ctx: ModelContext object
+            ctx (ModelContext): ModelContext object
 
         Returns:
             list of dicts - JSON containing local explanations

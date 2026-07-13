@@ -14,7 +14,7 @@ from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config
 from xailens.entities.model import Model
-
+from xailens.config import TreeModel
 
 @dataclass
 class ContribScore:
@@ -141,14 +141,14 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             for (feature, data), score in zip(contributions, scores)
         ])
 
-    def explain_global_json(self, ctx: ModelContext, _model: Optional[Any] =None) -> pd.DataFrame:
+    def explain_global_json(self, ctx: ModelContext, _model: Optional[TreeModel] = None) -> pd.DataFrame:
         """Generates the global explanations
         Uses the total number of instances of a mentioned feature divided by the
         total number of instances
 
         Args:
             ctx (ModelContext) : ModelContext object
-            _model (Optional[Any]) : Unused
+            _model (Optional[TreeModel]) : Unused
 
         Returns:
             pd.DataFrame: dataframe containing global explanations, with the following columns:
@@ -190,30 +190,36 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         return pd.DataFrame(rows)
 
 
-    def explain_global_df(self, ctx: ModelContext,  model: Optional[Any] = None) -> pd.DataFrame:
+    def explain_global_df(self, ctx: ModelContext,  model: Optional[TreeModel] = None) -> pd.DataFrame:
         """
         Function is not implemented for this class instance
 
         Args:
-            ctx (ModelContext):
-            model (Optional[Any]):
+            ctx (ModelContext): unused
+            model (Optional[TreeModel]): unused
+
+        Returns:
+            pd.DataFrame:
 
         Raises:
-            NotImplementedError:
+            NotImplementedError: always returns this as not implemented
 
         """
         raise NotImplementedError
 
-    def explain_local_df(self, ctx: ModelContext, model: Optional[Any] = None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: ModelContext, model: Optional[TreeModel] = None) -> pd.DataFrame:
         """
         Function is not implemented for this class instance
 
         Args:
-            ctx (ModelContext):
-            model (Optional[Any]):
+            ctx (ModelContext): unused
+            model (Optional[TreeModel]): unused
+
+        Returns:
+            pd.DataFrame:
 
         Raises:
-            NotImplementedError:
+            NotImplementedError: always returns this as not implemented
 
         """
         raise NotImplementedError
@@ -265,7 +271,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             prediction (str|None): prediction, if defined
 
         Returns:
-            LLMResponse
+            LLMResponse:
         """
         raw_contribs = raw[schema.contributions_field]
         if schema.contribution_key is not None:
