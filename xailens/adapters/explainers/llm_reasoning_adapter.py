@@ -1,7 +1,11 @@
+"""
+LLMReasoningAdapter class - for processing explanations from LLMs
+"""
+
 import json
 
 import pandas as pd
-from typing import Any
+from typing import Any, Optional
 from dataclasses import dataclass
 
 from xailens.entities.context import ModelContext, ResponseSchema
@@ -39,9 +43,7 @@ class LLMResponse:
 
 @register_xai("llm_reasoning")
 class LLMReasoningAdapter(XAIMethodAdapter):
-    """
 
-    """
 
     display_name = strings.LLM_REASONING_DISPLAY_NAME
     display_notes = strings.LLM_REASONING_NOTES
@@ -86,6 +88,9 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         Returns:
             pd.DataFrame: dataframe containing the local explanation, with the following columns:
                 feature_name, score, score_normalised_sum, score_normalised_max, reasoning, overall_reasoning, overall_confidence
+
+        Raises:
+            ValueError: if instance_id is not provided
         """
         records = model.store.load_json(f"exp_local_{cls.key}")
         instance_id_col = model.get(config.DATA_SCHEMA_ID_COLUMN)
@@ -118,13 +123,14 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             for (feature, data), score in zip(contributions, scores)
         ])
 
-    def explain_global_json(self, ctx: ModelContext, _model=None) -> pd.DataFrame:
+    def explain_global_json(self, ctx: ModelContext, _model: Optional[Any] =None) -> pd.DataFrame:
         """Generates the global explanations
         Uses the total number of instances of a mentioned feature divided by the
         total number of instances
 
         Args:
-            ctx: ModelContext object
+            ctx (ModelContext) : ModelContext object
+            _model (Optional[Any]) : Unused
 
         Returns:
             pd.DataFrame: dataframe containing global explanations, with the following columns:
@@ -203,7 +209,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         Processes the local explanations
 
         Args:
-            ctx: ModelContext object
+            ctx (ModelContext): ModelContext object
 
         Returns:
             list[dict[str, Any]]: list of dicts containing local explanations

@@ -33,9 +33,6 @@ class ArtifactStore:
         Args:
             ctx (ModelContext): ModelContext object::
             store (Optional[DataStore]): Storage backend. Defaults to None.
-
-        Returns:
-            None
         """
         self.ctx = ctx
         self.datetime = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -64,9 +61,6 @@ class ArtifactStore:
         Writes the artifact metadata directly from the context dataclass
 
         Args:
-
-        Returns:
-            None
         """
         excluded = {'data', 'model'}
         obj = {}
@@ -86,9 +80,6 @@ class ArtifactStore:
         Writes the model to the data store directly from the context dataclass
 
         Args:
-
-        Returns:
-            None
         """
         if self.ctx.model:
             self.store.save_model(config.MODEL_FILENAME ,self.ctx.model)
@@ -99,9 +90,6 @@ class ArtifactStore:
 
         Args:
             metrics_series (pd.Series): pandas series containing metrics:
-
-        Returns:
-            None
         """
         self.store.save_series("metrics", metrics_series)
 
@@ -139,9 +127,6 @@ class ArtifactStore:
             name (str): name of explanation file to write
             data (pd.DataFrame | list[dict[str, Any]]): the data to write, may be dataframe or list (processed JSON)
             data_format (str): either "df" or "json", must match what is sent in data
-
-        Returns:
-            None
         """
         self.store.save_explanation(name, data, data_format)
 

@@ -69,9 +69,6 @@ def write_global_explanations(xai_method: str,
         ctx (ModelContext): the ModelContext being used
         model_adapter (ModelAdapter):  the ModelAdapter being used
         artifact_store (ArtifactStore): the ArtifactStore being used
-
-    Returns:
-        None
     """
     print(strings.RUN_GLOBAL_EXPLANATIONS.format(xai_method=xai_method))
     if xai_adapter.explanation_file_type == "json":
