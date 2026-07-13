@@ -26,7 +26,7 @@ class XAIMethodAdapter(ABC):
         Loads the global explanation for the instantiated class
 
         Args:
-            model: Model object
+            model (Model): Model object
 
         Returns:
             pd.DataFrame: dataframe containing global explanation
@@ -46,6 +46,15 @@ class XAIMethodAdapter(ABC):
 
     @classmethod
     def load_local_explanation(cls, model: Model, instance_id: str) -> pd.DataFrame:
+        """
+
+        Args:
+            model (Model): Model object:
+            instance_id (str): instance id to get the explanation for
+
+        Returns:
+
+        """
         df = model.store.load_dataframe(f"exp_local_{cls.key}")
         row = df[df[model.get(config.DATA_SCHEMA_ID_COLUMN)] == instance_id]
         if row.empty:

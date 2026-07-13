@@ -1,6 +1,7 @@
-
 import pandas as pd
-from typing import Any
+import numpy as np
+
+from typing import Any, Optional, Protocol
 
 from xailens.exceptions import MissingDataError
 from xailens.registry.xai_registry import register_xai
@@ -9,6 +10,8 @@ from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config
 from xailens.entities.context import ModelContext
 
+class HasCoefficients(Protocol):
+    coef_: np.ndarray
 
 @register_xai("coefficients")
 class CoefficientsAdapter(XAIMethodAdapter):
@@ -20,12 +23,12 @@ class CoefficientsAdapter(XAIMethodAdapter):
     compatible_visualisations = config.COEFFS_COMPATIBLE_VIZ
 
 
-    def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: ModelContext, model: Optional[HasCoefficients] = None ) -> pd.DataFrame:
         """Computes the local explanation from the coefficients of the model
 
         Args:
-            ctx: ModelContext object
-            model: Trained model object
+            ctx (ModelContext) : ModelContext object
+            model (HasCoefficients, optional): model exposing a coef_ attribute
 
         Returns:
             pd.DataFrame: dataframe containing local explanations
@@ -42,13 +45,13 @@ class CoefficientsAdapter(XAIMethodAdapter):
         local_explanations.insert(0, instance_id, ctx.data.x_test[instance_id].values)
         return local_explanations
 
-    def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+    def explain_global_df(self, ctx: ModelContext, model: Optional[HasCoefficients] = None) -> pd.DataFrame:
         """
         Computes the global explanation from the coefficients of the model
 
         Args:
-            ctx (): ModelContext object
-            model (): the model object
+            ctx (ModelContext): ModelContext object
+            model (HasCoefficients, optional): model exposing a coef_ attribute
 
         Returns:
             pd.DataFrame: dataframe containing global explanation, with two columns, feature and importance
