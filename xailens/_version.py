@@ -1,2 +1,2 @@
-# ./_version.py
+"""Package version identifier."""
 __version__ = "0.2.0"

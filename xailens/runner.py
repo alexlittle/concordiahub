@@ -1,3 +1,9 @@
+"""
+Defines the run() function - the entry point for a developer to send their model
+for processing/storage/view on XAI Lens
+"""
+
+
 import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from dataclasses import fields
@@ -12,7 +18,19 @@ from xailens.registry.model_registry import get_model_adapter
 from xailens.registry.xai_registry import get_xai_adapter
 
 
-def compute_metrics(data: ModelData):
+def compute_metrics(data: ModelData) -> pd.Series:
+    """
+    Computes the metrics for the model, accuracy, f1, precision and recall
+
+    Args:
+        data (ModelData): dataclass
+
+    Returns:
+        pd.Series:
+
+    Raises:
+        MissingDataError: if required data is missing
+    """
     if data.y_test is not None and data.y_pred is not None:
         instance_id = data.data_schema.instance_id_column
         full_test = data.y_test
@@ -41,11 +59,24 @@ def write_global_explanations(xai_method: str,
                               xai_adapter: XAIMethodAdapter,
                               ctx: ModelContext,
                               model_adapter: ModelAdapter,
-                              artifact_store: ArtifactStore):
+                              artifact_store: ArtifactStore) -> None:
+    """
+    Generates, processes and writes global explanations for the model
+
+    Args:
+        xai_method (str): XAI method to use
+        xai_adapter (XAIMethodAdapter): XAIMethodAdapter to use
+        ctx (ModelContext): the ModelContext being used
+        model_adapter (ModelAdapter):  the ModelAdapter being used
+        artifact_store (ArtifactStore): the ArtifactStore being used
+
+    Returns:
+
+    """
     print(strings.RUN_GLOBAL_EXPLANATIONS.format(xai_method=xai_method))
     if xai_adapter.explanation_file_type == "json":
         results = xai_adapter.explain_global_json(ctx)
-        artifact_store.write_explanation(f"exp_global_{xai_method}", results,data_format="df")
+        artifact_store.write_explanation(f"exp_global_{xai_method}", results, data_format="df")
     else:
         results = xai_adapter.explain_global_df(ctx, model_adapter.prepare())
         artifact_store.write_explanation(f"exp_global_{xai_method}", results, data_format="df")

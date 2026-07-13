@@ -1,8 +1,14 @@
+"""
+ArtifactStore class - for handling data storage from the ModelContext
+"""
+
+
 import os
 import pandas as pd
 import numpy as np
 import uuid
 
+from typing import Optional, Union, Any
 from datetime import datetime
 from dataclasses import asdict, fields, is_dataclass
 
@@ -20,23 +26,47 @@ class ArtifactStore:
         store (DataStore): Storage backend. Defaults to FilesystemStore.
     """
 
-    def __init__(self, ctx: ModelContext, store: DataStore = None):
+    def __init__(self, ctx: ModelContext, store: Optional[DataStore] = None) -> None:
+        """
+        Initialise the ArtifactStore
+
+        Args:
+            ctx (ModelContext): ModelContext object::
+            store (Optional[DataStore]): Storage backend. Defaults to None.
+
+        Returns:
+            None
+        """
         self.ctx = ctx
         self.datetime = datetime.now().strftime("%Y%m%d-%H%M%S")
         dirname = self._resolve_dirname(ctx)
         self.store = store or FilesystemStore(dirname)
 
 
-    def _resolve_dirname(self, ctx):
+    def _resolve_dirname(self, ctx: ModelContext)-> str:
+        """
+        Private method to resolve the directory name
+
+        Args:
+            ctx (ModelContext): ModelContext object:
+
+        Returns:
+            str: directory name
+        """
         base_dir = os.path.dirname(os.path.abspath(__file__))
         if ctx.model_dir_name:
             return os.path.join(base_dir, config.MODEL_DATA_DIR_NAME, ctx.model_dir_name)
         return os.path.join(base_dir, config.MODEL_DATA_DIR_NAME, self.datetime)
 
 
-    def write_metadata(self):
+    def write_metadata(self) -> None:
         """
         Writes the artifact metadata directly from the context dataclass
+
+        Args:
+
+        Returns:
+            None
         """
         excluded = {'data', 'model'}
         obj = {}
@@ -51,16 +81,47 @@ class ArtifactStore:
         obj['data_schema'] = asdict(self.ctx.data.data_schema)
         self.store.save_json(config.META_INFO_FILENAME, obj)
 
-    def write_model(self):
+    def write_model(self) -> None:
+        """
+        Writes the model to the data store directly from the context dataclass
+
+        Args:
+
+        Returns:
+            None
+        """
         if self.ctx.model:
             self.store.save_model(config.MODEL_FILENAME ,self.ctx.model)
 
-    def write_metrics(self, metrics_series: pd.Series):
+    def write_metrics(self, metrics_series: pd.Series) -> None:
+        """
+        Writes the metrics to the data store directly from the context dataclass
+
+        Args:
+            metrics_series (pd.Series): pandas series containing metrics:
+
+        Returns:
+            None
+        """
         self.store.save_series("metrics", metrics_series)
 
-    def write_data(self, name, data):
+    def write_data(self, name: str,
+                   data: Optional[Union[pd.Series, np.ndarray, list, pd.DataFrame]] = None) -> bool:
+        """
+        Saves the given data to the data store
+
+        Args:
+            name (string): name of the data to save
+            data (pd.Series, np.ndarray, list, or pd.DataFrame, optional): data to
+            save. Series, ndarray, and list inputs are converted to a
+            DataFrame before saving.
+
+        Returns:
+            bool: True if the data was saved, False otherwise
+        """
+
         if data is None:
-            return
+            return False
         if isinstance(data, pd.Series):
             data = data.to_frame()
         elif isinstance(data, np.ndarray):
@@ -68,10 +129,31 @@ class ArtifactStore:
         elif isinstance(data, list):
             data = pd.DataFrame(data)
         self.store.save_dataframe(name, data)
+        return True
 
-    def write_explanation(self, name, data, data_format="df"):
+    def write_explanation(self, name: str, data: Union[pd.DataFrame, list[dict[str, Any]]], data_format: str ="df") -> None:
+        """
+        Writes the given explanation to the data store
+
+        Args:
+            name (str): name of explanation file to write
+            data (pd.DataFrame, list[dict[str, Any]]): the data to write, may be dataframe or list (processed JSON)
+            data_format (str): either "df" or "json", must match what is sent in data
+
+        Returns:
+            None
+        """
         self.store.save_explanation(name, data, data_format)
 
     def load_dataframe(self, name:str) -> pd.DataFrame:
+        """
+        Loads a dataframe from the data store
+
+        Args:
+            name (str): Name of the dataframe to load
+
+        Returns:
+            pd.DataFrame: dataframe
+        """
         return self.store.load_dataframe(name)
 
