@@ -1,9 +1,14 @@
+"""
+Helper functions for instance detail page
+"""
+
 import uuid
 
 import streamlit as st
 import plotly
 import pandas as pd
 
+from typing import MutableMapping, Any
 from dataclasses import dataclass
 
 from xailens.registry.xai_registry import get_xai_adapter
@@ -15,6 +20,9 @@ from xailens.dashboard.utils.plotly_theme import apply_horizontal_bar_theme
 
 @dataclass
 class ModelPanel:
+    """
+    Dataclass representing a model panel
+    """
     model: Model
     xai_class: type
     xai_instance: object
@@ -25,7 +33,20 @@ class ModelPanel:
     instance_uuid: uuid.UUID
 
 
-def build_model_panel(model: Model, viz_param_key, viz_params, instance_uuid) -> ModelPanel:
+def build_model_panel(model: Model, viz_param_key: str, viz_params: MutableMapping[str, Any], instance_uuid:str) -> ModelPanel:
+    """
+    Builds a ModelPanel from the given model
+
+    Args:
+        model (Model): Model object
+        viz_param_key (str): key identifying the visualisation parameters
+        viz_params (MutableMapping[str, Any]): Streamlit session state (or
+            dict-like equivalent) containing visualisation parameters
+        instance_uuid (str): identifier for the instance being visualised
+
+    Returns:
+        ModelPanel: panel object built from the model and visualisation params
+    """
     method = model.get("xai_methods")[0]
     xai_class = get_xai_adapter(method)
     xai_instance = xai_class()
@@ -51,6 +72,14 @@ def build_model_panel(model: Model, viz_param_key, viz_params, instance_uuid) ->
 
 
 def render_model_panel(panel: ModelPanel, plot_key: str):
+    """
+    Renders a ModelPanel from the given panel
+
+    Args:
+        panel (ModelPanel): ModelPanel object
+        plot_key (str): unique identifier for the plot
+
+    """
     with st.expander(f"{panel.model.get('model_display_name')} Explanation", expanded=False):
 
         axis_range = [-1.1, 1.1]
