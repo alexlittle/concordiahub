@@ -76,7 +76,7 @@ def model_data_factory(data_schema_factory):
 def model_context_factory(model_data_factory):
     def _factory(model_type="logistic_regression", xai_methods=None,
                  dataset_id="cleveland_heart_disease", data=None,
-                 model_display_name="Logistic Regression", model=None):
+                 model_display_name="Logistic Regression", model=None, response_schema=None):
         xai_methods = xai_methods or ["coefficients"]
         data = data or model_data_factory()
         return ModelContext(
@@ -86,5 +86,6 @@ def model_context_factory(model_data_factory):
             data=data,
             model_display_name=model_display_name,
             model=model or MagicMock(name="fake_sklearn_model"),
+            response_schema=response_schema,
         )
     return _factory

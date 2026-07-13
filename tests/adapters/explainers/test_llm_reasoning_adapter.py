@@ -1,6 +1,9 @@
 import pytest
-from xailens.adapters.explainers.llm_reasoning_adapter import LLMReasoningAdapter, ResponseSchema, LLMResponse, ContribScore
+import json
+import pandas as pd
 
+from xailens.adapters.explainers.llm_reasoning_adapter import LLMReasoningAdapter, ResponseSchema, LLMResponse, ContribScore
+from xailens.exceptions import MissingDataError
 
 @pytest.fixture
 def adapter():
@@ -94,3 +97,131 @@ def test_reformat_custom_contributions_field(adapter):
     schema = ResponseSchema(contributions_field="feature_scores", contribution_key="feature")
     result = adapter._reformat(raw, schema, 1)
     assert set(result.contributions.keys()) == {"age", "cholesterol"}
+
+# --------------------
+# test explain_global_json function
+# ----------------------
+def make_y_exp(*raw_dicts):
+    return pd.DataFrame({"explanation": [json.dumps(r) for r in raw_dicts]})
+
+def test_explain_global_json_importance_and_occurrence(adapter, model_context_factory, model_data_factory):
+    data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
+    ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
+
+    result = adapter.explain_global_json(ctx)
+
+    age_row = result[result["feature"] == "age"].iloc[0]
+    assert age_row["importance"] == 2.0
+    assert age_row["occurrence_count"] == 2
+    assert age_row["occurrence_rate"] == 1.0
+    assert age_row["n_instances"] == 2
+
+def test_explain_global_json_partial_feature_occurrence(adapter, model_context_factory, model_data_factory):
+    # cholesterol only appears in one of two rows
+    raw_no_cholesterol = {**LIST_RAW, "contributions": [LIST_RAW["contributions"][0]]}
+    data = model_data_factory(y_exp=make_y_exp(LIST_RAW, raw_no_cholesterol))
+    ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
+
+    result = adapter.explain_global_json(ctx)
+
+    cholesterol_row = result[result["feature"] == "cholesterol"].iloc[0]
+    assert cholesterol_row["occurrence_count"] == 1
+    assert cholesterol_row["occurrence_rate"] == 0.5
+    assert cholesterol_row["n_instances"] == 2
+
+def test_explain_global_json_dict_format(adapter, model_context_factory, model_data_factory):
+    data = model_data_factory(y_exp=make_y_exp(DICT_RAW))
+    ctx = model_context_factory(data=data, response_schema=DICT_SCHEMA)
+
+    result = adapter.explain_global_json(ctx)
+
+    assert set(result["feature"]) == {"exercise_angina", "chest_pain"}
+
+def test_explain_global_json_raises_without_y_exp(adapter, model_context_factory, model_data_factory):
+    data = model_data_factory(y_exp=None)
+    ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
+
+    with pytest.raises(MissingDataError):
+        adapter.explain_global_json(ctx)
+
+def test_explain_global_json_raises_without_response_schema(adapter, model_context_factory, model_data_factory):
+    data = model_data_factory(y_exp=make_y_exp(LIST_RAW))
+    ctx = model_context_factory(data=data, response_schema=None)
+
+    with pytest.raises(MissingDataError):
+        adapter.explain_global_json(ctx)
+
+
+# --------------------
+# test explain_local_json function
+# ----------------------
+def test_load_local_explanation_corrcet(llm_model_factory):
+    model = llm_model_factory()
+
+    result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
+
+    assert isinstance(result, pd.DataFrame)
+    scores = result["score"].tolist()
+    abs_sum = sum(abs(s) for s in scores)
+    abs_max = max(abs(s) for s in scores)
+    for _, row in result.iterrows():
+        assert row["score_normalised_sum"] == pytest.approx(row["score"] / abs_sum)
+        assert row["score_normalised_max"] == pytest.approx(row["score"] / abs_max)
+    assert (result["overall_reasoning"] == "Fake reasoning for inst_0").all()
+    assert (result["overall_confidence"] == 0.75).all()
+
+def test_load_local_explanation_instance_not_found(llm_model_factory):
+    model = llm_model_factory()
+
+    with pytest.raises(ValueError, match="inst_999"):
+        LLMReasoningAdapter.load_local_explanation(model, "inst_999")
+
+def test_load_local_explanation_zero_scores_fallback(llm_model_factory):
+    local_json = [{
+        "instance_id": "inst_0",
+        "reasoning": "no signal",
+        "confidence": 0.5,
+        "contributions": {
+            "age": {"score": 0.0, "reasoning": "none"},
+            "sex": {"score": 0.0, "reasoning": "none"},
+        },
+    }]
+    model = llm_model_factory(local_explanations_json=local_json)
+
+    result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
+
+    assert (result["score_normalised_sum"] == result["score"]).all()
+    assert (result["score_normalised_max"] == result["score"]).all()
+
+def test_load_local_explanation_single_contribution(llm_model_factory):
+    local_json = [{
+        "instance_id": "inst_0",
+        "reasoning": "only one feature",
+        "confidence": 0.9,
+        "contributions": {
+            "age": {"score": 3.0, "reasoning": "big effect"},
+        },
+    }]
+    model = llm_model_factory(local_explanations_json=local_json)
+
+    result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
+
+    assert len(result) == 1
+    assert result.iloc[0]["score_normalised_sum"] == 1.0
+    assert result.iloc[0]["score_normalised_max"] == 1.0
+
+def test_load_local_explanation_string_scores_coerced_to_float(llm_model_factory):
+    local_json = [{
+        "instance_id": "inst_0",
+        "reasoning": "mixed types",
+        "confidence": 0.6,
+        "contributions": {
+            "age": {"score": "2", "reasoning": "string score"},
+            "sex": {"score": -1.5, "reasoning": "float score"},
+        },
+    }]
+    model = llm_model_factory(local_explanations_json=local_json)
+
+    result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
+
+    assert result["score"].tolist() == [2.0, -1.5]
