@@ -43,6 +43,22 @@ package-dir = {"" = "."}
 where = ["."]
 include = ["xailens*"]
 
+# Interrogate settings for checking doc strings
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-magic = true
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-module = false
+fail-under = 0 # so won't fail, just reports
+verbose = 2
+exclude = ["tests", "docs", "build"]
+
+[tool.pydoclint]
+style = "google"
+exclude = "tests|docs"
 
 # Read version from xailens/_version.py
 [tool.setuptools.dynamic]
@@ -62,6 +78,8 @@ dev = [
     "pandas-stubs==3.0.3.260530",
     "Sphinx==9.1.0",
     "sphinx_rtd_theme==3.1.0",
+    "interrogate==1.7.0",
+    "pydoclint==0.9.1"
 ]
 examples = [
     "ollama==0.6.1",

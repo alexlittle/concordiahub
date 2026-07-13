@@ -39,7 +39,9 @@ class LLMResponse:
 
 @register_xai("llm_reasoning")
 class LLMReasoningAdapter(XAIMethodAdapter):
-    """"""
+    """
+
+    """
 
     display_name = strings.LLM_REASONING_DISPLAY_NAME
     display_notes = strings.LLM_REASONING_NOTES
@@ -51,6 +53,16 @@ class LLMReasoningAdapter(XAIMethodAdapter):
 
     @classmethod
     def load_global_explanation(cls, model: Model) -> pd.DataFrame:
+        """
+        Returns the global explanation for the specified model
+
+        Args:
+            model (Model): a Model object to get the explanation for
+
+        Returns:
+            pd.DataFrame: dataframe containing the global explanation, with the following columns:
+                feature_name, score, score_normalised_sum, score_normalised_max
+        """
         df = model.store.load_dataframe(f"exp_global_{cls.key}")
         abs_importance = df["importance"].abs()
         abs_sum = abs_importance.sum()
@@ -64,6 +76,17 @@ class LLMReasoningAdapter(XAIMethodAdapter):
 
     @classmethod
     def load_local_explanation(cls, model: Model, instance_id: str) -> pd.DataFrame:
+        """
+        Returns the local explanation for a given instance
+
+        Args:
+            model (Model): a Model object
+            instance_id (str): identifier for the instance to get the local explanation for
+
+        Returns:
+            pd.DataFrame: dataframe containing the local explanation, with the following columns:
+                feature_name, score, score_normalised_sum, score_normalised_max, reasoning, overall_reasoning, overall_confidence
+        """
         records = model.store.load_json(f"exp_local_{cls.key}")
         instance_id_col = model.get(config.DATA_SCHEMA_ID_COLUMN)
 
@@ -104,7 +127,8 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             ctx: ModelContext object
 
         Returns:
-            pd.DataFrame: dataframe containing global explanations
+            pd.DataFrame: dataframe containing global explanations, with the following columns:
+                feature, importance, occurrence_count, occurrence_rate, n_instances
 
         Raises:
             MissingDataError: if data.y_exp is not provided
@@ -143,13 +167,41 @@ class LLMReasoningAdapter(XAIMethodAdapter):
 
 
     def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+        """
+        Function is not implemented for this class instance
+
+        Args:
+            ctx ():
+            model ():
+
+        Returns:
+
+        Raises:
+            NotImplementedError
+
+        """
         raise NotImplementedError
 
     def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+        """
+        Function is not implemented for this class instance
+
+        Args:
+            ctx ():
+            model ():
+
+        Returns:
+
+        Raises:
+            NotImplementedError
+
+        """
         raise NotImplementedError
 
     def explain_local_json(self, ctx: ModelContext) -> list[dict[str, Any]]:
-        """Processes the local explanations
+        """
+        Processes the local explanations
+
         Args:
             ctx: ModelContext object
 
@@ -183,6 +235,18 @@ class LLMReasoningAdapter(XAIMethodAdapter):
 
     @staticmethod
     def _reformat(raw: dict, schema: ResponseSchema, prediction: str | None) -> LLMResponse:
+        """
+        Private helper function to reformat an explanation in raw dict format (from JSON) into an LLMResponse object.
+        This uses the DataSchema definition to process the specific dict structure into a common LLMResponse object structure.
+
+        Args:
+            raw (dict): dict
+            schema (ResponseSchema): response schema:
+            prediction (str|None): prediction, if defined
+
+        Returns:
+            LLMResponse
+        """
         raw_contribs = raw[schema.contributions_field]
         if schema.contribution_key is not None:
             contributions = {

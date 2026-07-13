@@ -35,7 +35,8 @@ class ArtifactStore:
 
 
     def write_metadata(self):
-        """Writes the artifact metadata directly from the context dataclass
+        """
+        Writes the artifact metadata directly from the context dataclass
         """
         excluded = {'data', 'model'}
         obj = {}
