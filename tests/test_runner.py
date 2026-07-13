@@ -1,11 +1,8 @@
 import pytest
-import numpy as np
-import pandas as pd
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
 
 from xailens import runner
-from xailens.exceptions import InvalidConfigurationError, MissingDataError
-from xailens.entities.context import ModelContext, ModelData, DataSchema
+from xailens.exceptions import InvalidConfigurationError
 
 MODULE_UNDER_TEST = "xailens.runner"
 

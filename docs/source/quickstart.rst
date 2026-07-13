@@ -1,29 +1,23 @@
-QuickStart
---------------
+Quickstart
+----------
 
-Install the package::
+1. Install the package
 
-    pip install xailens
+.. code-block:: console
 
-Add at the end of your model model code:
+   (venv) $ pip install xailens
+
+2 .Add at the end of your model code:
 
 .. code-block:: python
 
     import xailens
 
-    # the data/predictions/model you need for running XAI Lens
-    # probably these are already in your code, this is just for info as to what you need
-    raw = pd.read_csv('raw_data.csv') # your raw dataset (for test instances at least)
-    X_test = pd.read_csv('X_test.csv') # your test instances
-    y_pred = pd.read_csv('y_pred.csv') # your models predictions
-    y_test = pd.read_csv('y_test.csv') # your test targets
-    model = joblib.load('model.joblib') # your model
-
     # define the dataschema
     data_schema = xailens.DataSchema(
-        instance_id_column="instance_uuid", # the unique identifier for your instances
+        instance_id_column="instance_uuid", # name of the unique identifier column for your instances
         target_column="target", # name of your target column, from y_test
-        prediction_column="y_pred" # name of your prediction column, from y_pred
+        prediction_column="pred_value" # name of your prediction column, from y_pred
         )
 
     # your data and predictions
@@ -38,7 +32,7 @@ Add at the end of your model model code:
     # overall context
     ctx = xailens.ModelContext(
         "logistic_regression", # model type, can be "logistic_regression", "xgboost" or "llm"
-        ["coefficients"], # XAI methods to apply, can be "coefficients", "tree_shap" or "llm_reasoning"
+        ["coefficients"], # XAI methods to apply, options are "coefficients", "tree_shap", "llm_reasoning"
         "cleveland-heart-data", # identifier for your dataset
         model_data, # ModelData from above
         model=model, # your model (joblib file)
@@ -49,7 +43,9 @@ Add at the end of your model model code:
     xailens.run(ctx)
 
 
-Start the dashboard::
+3. Start the dashboard
 
-    xailens-dash
+.. code-block:: console
+
+   (venv) $ xailens-dash
 
