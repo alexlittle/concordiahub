@@ -1,3 +1,7 @@
+"""
+General settings for the Streamlit app
+"""
+
 from typing import Final
 
 HOME_FILENAME: Final[str] = "home"

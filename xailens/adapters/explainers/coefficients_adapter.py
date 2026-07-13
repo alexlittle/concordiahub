@@ -15,6 +15,10 @@ from xailens import strings, config
 from xailens.entities.context import ModelContext
 
 class HasCoefficients(Protocol):
+    """
+    Helper class for type hinting - the model used for the CoefficientsAdapter
+    must have a "coef_" attribute
+    """
     coef_: np.ndarray
 
 @register_xai("coefficients")
@@ -71,4 +75,16 @@ class CoefficientsAdapter(XAIMethodAdapter):
 
 
     def explain_local_json(self, ctx: ModelContext) -> dict[str, Any]:
+        """
+        Not implemented for CoefficientsAdapter
+
+        Args:
+            ctx (ModelContext): ModelContext object
+
+        Returns:
+            dict[str, Any]
+
+        Raises:
+            NotImplementedError
+        """
         raise NotImplementedError

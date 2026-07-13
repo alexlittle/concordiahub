@@ -18,11 +18,17 @@ from xailens.entities.model import Model
 
 @dataclass
 class ContribScore:
+    """
+    Dataclass for a score and reasoning contribution
+    """
     score: int
     reasoning: str
 
 @dataclass
 class LLMResponse:
+    """
+    Dataclass for a response from LLMs
+    """
     reasoning: str
     prediction: int | str
     confidence: float
@@ -30,6 +36,16 @@ class LLMResponse:
     raw: dict
 
     def to_dict(self, instance_id_col: str, instance_id: str) -> dict:
+        """
+        Formats the response as a dictionary
+
+        Args:
+            instance_id_col (str): name of the instance id column
+            instance_id (str): the instance id
+
+        Returns:
+            dict: formatted to a common structure
+        """
         return {
             instance_id_col: instance_id,
             "reasoning": self.reasoning,
@@ -43,7 +59,9 @@ class LLMResponse:
 
 @register_xai("llm_reasoning")
 class LLMReasoningAdapter(XAIMethodAdapter):
-
+    """
+    LLMReasoningAdapter class - for processing local and global explanations from LLMs
+    """
 
     display_name = strings.LLM_REASONING_DISPLAY_NAME
     display_notes = strings.LLM_REASONING_NOTES

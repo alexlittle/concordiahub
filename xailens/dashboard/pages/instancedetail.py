@@ -1,3 +1,7 @@
+"""
+Streamlit page to display details of a specific instance
+"""
+
 import streamlit as st
 
 from xailens.dashboard.utils.layout import apply_layout
@@ -11,6 +15,10 @@ from xailens.entities.dataset import Dataset
 from xailens.dashboard.utils.heatmap import render_features_heatmap
 
 def main():
+    """
+    Streamlit page to display details of a specific instance
+    """
+
     explorer = get_explorer()
 
     dataset = st.query_params.get('dataset')

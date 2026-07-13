@@ -23,10 +23,23 @@ def _display_value(val: Any) -> str:
 
 
 def generate_rows_html(df: pd.DataFrame,
-                       query_params:dict,
-                       true_label_col:str = "true_label",
-                       id_col:str = None,
-                       skip_cols:str = None):
+                       query_params: dict,
+                       true_label_col: str = "true_label",
+                       id_col: str = None,
+                       skip_cols: str = None) -> str:
+    """
+    Generates the rows for an HTML table of the instances, including the urls
+
+    Args:
+        df (pd.DataFrame): dataframe containing instances data
+        query_params (dict): query parameters to append to any links
+        true_label_col (str): column name containing true label
+        id_col (str): instance id column name
+        skip_cols (str ): other columns that should not be displayed
+
+    Returns:
+        str: of HTML table rows
+    """
     skip_cols = skip_cols or []
     id_display_col = id_col or strings.DISPLAY_NAMES["instance_uuid"]
     pred_cols = [c for c in df.columns if c not in [true_label_col, id_display_col] + skip_cols]
@@ -50,7 +63,20 @@ def render_instances_df(df:pd.DataFrame,
                         query_params:dict = None,
                         true_label_col:str = "true_label",
                         id_col:str = None,
-                        skip_cols:str = None):
+                        skip_cols:str = None)-> str:
+        """
+        Generates a full HTML table of the instances, including the urls
+
+        Args:
+            df (pd.DataFrame): dataframe containing instances data
+            query_params (dict): query parameters to append to any links
+            true_label_col (str): column name containing true label
+            id_col (str): instance id column name
+            skip_cols (str ): other columns that should not be displayed
+
+        Returns:
+            str: of HTML table rows
+        """
         rows_html = generate_rows_html(df, query_params, true_label_col, id_col, skip_cols)
         header = "".join(f"<th nowrap>{col}</th>" for col in df.columns)
         return f"""

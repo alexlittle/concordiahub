@@ -1,8 +1,21 @@
+"""
+Helper functions for home page
+"""
+
 from xailens.entities.model_explorer import ModelExplorer
 from xailens import strings
 
 
-def render_datasets(explorer: ModelExplorer):
+def render_datasets(explorer: ModelExplorer)-> str:
+    """
+    Renders cards for each dataset in the ModelExplorer
+
+    Args:
+        explorer (ModelExplorer): ModelExplorer object
+
+    Returns:
+        str: HTML code to display the datasets
+    """
     datasets = explorer.get_datasets()
 
     parts = ["<div class='dataset-grid'>"]

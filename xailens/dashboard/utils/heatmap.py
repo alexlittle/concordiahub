@@ -1,9 +1,23 @@
+"""
+Function for rendering a heatmap
+"""
+
+import plotly
 import plotly.graph_objects as go
 import pandas as pd
 
 from xailens.dashboard.utils import plotly_theme
 
-def render_features_heatmap(df_exp: pd.DataFrame):
+def render_features_heatmap(df_exp: pd.DataFrame)-> plotly.graph_objects.Figure:
+    """
+    Generates a heatmap visualisation
+
+    Args:
+        df_exp (pd.DataFrame): Dataframe to build the heatmap from
+
+    Returns:
+        plotly.graph_objects.Figure: the heatmap
+    """
     model_cols = sorted(col for col in df_exp.columns if col != "feature_name")
     llm_cols = {col for col in model_cols if df_exp[col].isna().all()}
     x_labels = [f"{col} *" if col in llm_cols else col for col in model_cols]

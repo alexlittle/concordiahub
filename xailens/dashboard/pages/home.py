@@ -1,3 +1,7 @@
+"""
+Streamlit homepage - to select a dataset
+"""
+
 import streamlit as st
 
 from xailens.dashboard.utils.layout import apply_layout
@@ -7,6 +11,9 @@ from xailens.dashboard.utils import home_helpers
 from xailens import strings
 
 def main():
+    """
+    Streamlit homepage - to select a dataset
+    """
     explorer = get_explorer()
 
     apply_layout(strings.HOMEPAGE_TITLE)

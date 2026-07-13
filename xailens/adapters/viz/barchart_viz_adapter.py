@@ -1,4 +1,8 @@
-from typing import Any
+"""
+BarChartVizAdapter implementation of VizAdapter
+"""
+
+from typing import Any, Optional
 
 import plotly.graph_objects as go
 import pandas as pd
@@ -10,12 +14,26 @@ from xailens import strings, config
 
 @register_viz("barchart")
 class BarChartVizAdapter(VizAdapter):
+    """
+    BarChartVizAdapter implementation of VizAdapter
+    """
 
     display_name = strings.BARCHART_DISPLAY_NAME
     compatible_explanations = config.BARCHART_COMPATIBLE_XAI
 
-    def render(self, explanation: pd.DataFrame, axis_range=None) -> list[Any]:
+    def render(self, explanation: pd.DataFrame, axis_range: Optional[tuple[float, float]]=None) -> list[Any]:
+        """
+        Render the bar chart visualization
 
+        Args:
+            explanation (pd.DataFrame): explanation dataframe
+            axis_range (Optional[tuple[float, float]]): (min, max) bounds for
+                the x-axis. If None, Plotly auto-scales the axis.
+
+        Returns:
+            list[Any] - list containing the plotly figure
+
+        """
         # filter to show only the largest contributors, not all
         explanation = self._top_features(explanation)
 

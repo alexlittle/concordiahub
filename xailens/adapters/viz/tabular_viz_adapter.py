@@ -1,5 +1,9 @@
+"""
+TabularAdapter implementation of VizAdapter
+"""
+
 import pandas as pd
-from typing import Any
+from typing import Any, Optional
 
 from xailens.adapters.viz.viz_base import VizAdapter
 from xailens.registry.viz_registry import register_viz
@@ -8,10 +12,26 @@ from xailens import strings, config
 
 @register_viz("tabular")
 class TabularAdapter(VizAdapter):
+    """
+    TabularAdapter implementation of VizAdapter
+    """
+
     display_name = strings.TABULAR_DISPLAY_NAME
     compatible_explanations = config.TABULAR_COMPATIBLE_XAI
 
-    def render(self, explanation: pd.DataFrame, axis_range=None) -> list[Any]:
+    def render(self, explanation: pd.DataFrame, axis_range: Optional[tuple[float, float]]=None) -> list[Any]:
+        """
+        Render the explanation in tabular format
+
+        Args:
+            explanation (pd.DataFrame): explanation dataframe
+            axis_range (Optional[tuple[float, float]]): (min, max) bounds for
+                the x-axis. If None, Plotly auto-scales the axis.
+
+        Returns:
+            list[Any] - list containing the overall explanation if it exists, and a dataframe for tabular display
+
+        """
 
         explanation = self._top_features(explanation)
         explanation = explanation.sort_values("score_normalised_max", ascending=True)
@@ -43,11 +63,8 @@ class TabularAdapter(VizAdapter):
                                                     "score_normalised_sum",
                                                     "reasoning"])
 
-
-
         # rename for display
         explanation = explanation.rename(columns=final_columns)
         parts.append(explanation.sort_values(strings.TABULAR_SCORE_TITLE, ascending=False))
-
 
         return parts

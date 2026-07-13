@@ -1,6 +1,10 @@
-# turn off transformer verbose messages
+"""
+Starts the Streamlit app
+"""
+
 import os
 
+# turn off transformer verbose messages
 os.environ["TRANSFORMERS_VERBOSITY"] = "error"
 
 import streamlit as st

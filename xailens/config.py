@@ -4,8 +4,12 @@ Configuration file for XAI-Compare
 
 from typing import Final
 
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor
+from xgboost import XGBClassifier, XGBRegressor
+
 from xailens import strings
 from xailens.viz_option import VizOption
+
 
 # Constants for artifact filename/structure
 MODEL_DATA_DIR_NAME: Final[str] = "model_data"
@@ -15,6 +19,10 @@ MODEL_FILENAME: Final[str] = "model"
 DATA_SCHEMA_ID_COLUMN: Final[str] = 'data_schema.instance_id_column'
 DATA_SCHEMA_TARGET_COLUMN: Final[str] = 'data_schema.target_column'
 DATA_SCHEMA_PREDICTION_COLUMN: Final[str] = 'data_schema.prediction_column'
+
+
+TreeModel = (XGBClassifier | XGBRegressor | RandomForestClassifier |
+             RandomForestRegressor | GradientBoostingClassifier | GradientBoostingRegressor)
 
 # Which metric to base the best model on
 BEST_MODEL_METRIC = "f1_weighted"

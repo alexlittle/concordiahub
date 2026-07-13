@@ -1,13 +1,29 @@
+"""
+Helper functions for common dashboard display elements
+"""
+
 import streamlit as st
 
+from typing import Optional
 from xailens.dashboard import settings
 from xailens import strings
 from xailens.dashboard.assets.icons import help_icon
 
 
-def display_breadcrumbs(dataset: str = None,
-                        instance_group: str = None,
-                        instance_uuid:str = None) -> str:
+def display_breadcrumbs(dataset: Optional[str] = None,
+                        instance_group: Optional[str] = None,
+                        instance_uuid:Optional[str] = None) -> str:
+    """
+    Display breadcrumbs for a page
+
+    Args:
+        dataset (Optional[str]): dataset name
+        instance_group (Optional[str]): instance group name
+        instance_uuid (Optional[str]):  instance uuid
+
+    Returns:
+        str: HTML to display breadcrumbs
+    """
     parts = ["<a href='/' target='_self'>Home</a>"]
 
     models = st.query_params.get('models')
@@ -35,6 +51,16 @@ def display_breadcrumbs(dataset: str = None,
 
 
 def title_with_help_icon(title: str, help_text:str) -> str:
+    """
+    Display a title with help icon/text
+
+    Args:
+        title (str): title
+        help_text (str): help text
+
+    Returns:
+        str: HTML to display title and help icon/text
+    """
     return f"""
             <div class="card-header-row">
                 <h3>{title}</h3>

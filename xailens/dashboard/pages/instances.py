@@ -1,3 +1,7 @@
+"""
+Streamlit page to display instances
+"""
+
 import streamlit as st
 
 from xailens.dashboard.utils.layout import apply_layout
@@ -8,8 +12,11 @@ from xailens import strings
 from xailens.entities.dataset import Dataset
 
 
-
 def main():
+    """
+    Streamlit page to display instances
+    """
+
     explorer = get_explorer()
 
     dataset = st.query_params.get('dataset')

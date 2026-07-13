@@ -6,24 +6,22 @@ import shap
 import pandas as pd
 from typing import Any
 
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor
-from xgboost import XGBClassifier, XGBRegressor
-
 from xailens.exceptions import MissingDataError, DataProcessingError
 from xailens.entities.context import ModelContext
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
 from xailens import strings, config
 from xailens.entities.model import Model
+from xailens.config import TreeModel
 
-TreeModel = (XGBClassifier | XGBRegressor | RandomForestClassifier |
-             RandomForestRegressor | GradientBoostingClassifier | GradientBoostingRegressor)
 
 
 
 @register_xai("tree_shap")
 class TreeSHAPAdapter(XAIMethodAdapter):
-    """Tree SHAP Explainer"""
+    """
+    Tree SHAP Explainer
+    """
 
     display_name = strings.TREE_SHAP_DISPLAY_NAME
     display_notes = strings.TREE_SHAP_NOTES
@@ -146,4 +144,16 @@ class TreeSHAPAdapter(XAIMethodAdapter):
 
 
     def explain_local_json(self, ctx: ModelContext) -> dict[str, Any]:
+        """
+        Not implemented for TreeSHAPAdapter
+
+        Args:
+            ctx (ModelContext): ModelContext object
+
+        Returns:
+            dict[str, Any]
+
+        Raises:
+            NotImplementedError
+        """
         raise NotImplementedError

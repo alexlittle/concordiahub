@@ -1,3 +1,7 @@
+"""
+Helpers for the dataset page
+"""
+
 import pandas as pd
 import plotly
 import plotly.express as px
@@ -10,15 +14,17 @@ from xailens.dashboard.assets.icons import arrow_icon
 
 def render_metric_barchart(metrics: pd.DataFrame, metric_name: str, show_title: bool=True) -> plotly.graph_objects.Figure:
     """
+    Renders a barchart of the metrics
 
     Args:
-        metrics ():
-        metric_name (): 
-        show_title ():
+        metrics (pd.DataFrame): dataframe of metrics
+        metric_name (str): name of the metric to display
+        show_title (bool, optional): whether to display the title of the metric. Defaults to True
 
     Returns:
-
+        plotly.graph_objects.Figure: plotly graph object
     """
+
     # find the best model
     max_val = metrics[metric_name].max()
 
@@ -48,6 +54,17 @@ def render_metric_barchart(metrics: pd.DataFrame, metric_name: str, show_title: 
 
 
 def render_metric_card(title:str, value:str, link:str)-> str:
+    """
+    Renders a metrics card
+
+    Args:
+        title (str): title of the metric
+        value (str): value of the metric
+        link (str): where the metric card will link to
+
+    Returns:
+        str: HTML code for the metric card
+    """
     return f"""
     <div class="xl-metric-card" title="View {title.lower()}">
         <a href="{link}" target="_self">

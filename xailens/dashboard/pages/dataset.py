@@ -1,3 +1,8 @@
+"""
+Streamlit page to display dataset overview
+"""
+
+
 import streamlit as st
 
 from xailens.dashboard.utils.layout import apply_layout
@@ -12,6 +17,10 @@ from xailens.dashboard import settings
 from xailens.dashboard.utils.plotly_theme import apply_upset_theme
 
 def main():
+    """
+    Streamlit page to display dataset overview
+    """
+
     explorer = get_explorer()
 
 
