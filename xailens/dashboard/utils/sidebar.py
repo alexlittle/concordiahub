@@ -1,3 +1,7 @@
+"""
+Functions for rendering the streamlit sidebar
+"""
+
 import base64
 
 from pathlib import Path
@@ -5,7 +9,13 @@ from pathlib import Path
 from xailens._version import __version__
 from xailens import strings
 
-def render_header():
+def render_header() -> str:
+    """
+    Generates HTML code for the sidebar header
+
+    Returns:
+        str: HTML code
+    """
     logo_path = Path(__file__).parent.parent / "assets" / "xai-lens-logo.svg"
 
     with open(logo_path, "rb") as f:
@@ -20,7 +30,14 @@ def render_header():
         </a>
     """
 
-def render_footer():
+def render_footer() -> str:
+    """
+    Generates HTML code for the sidebar footer
+
+    Returns:
+        str: HTML code
+    """
+
     return f"""
         <div class="sidebar-footer">
             XAI Lens v{__version__}<br/>

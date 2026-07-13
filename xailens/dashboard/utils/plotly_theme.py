@@ -1,3 +1,7 @@
+"""
+Theme to apply to plotly graph objects
+"""
+
 import plotly.express as px
 import plotly.graph_objects as go
 
@@ -22,6 +26,16 @@ THEME = {
 }
 
 def apply_base_theme(fig: go.Figure, show_title: bool=True) -> go.Figure:
+    """
+    Apply the base theme
+
+    Args:
+        fig (go.Figure): plotly figure object to apply theme to
+        show_title (bool): if the title should be shown
+
+    Returns:
+        go.Figure: plotly figure object with theme applied
+    """
 
     layout_updates = {
         "margin": {"t": 40, "b": 10, "l": 10, "r": 10},
@@ -59,6 +73,17 @@ def apply_base_theme(fig: go.Figure, show_title: bool=True) -> go.Figure:
     return fig
 
 def apply_theme(fig: go.Figure, show_title: bool=True) -> go.Figure:
+    """
+    Apply the theme for basic barcharts
+
+    Args:
+        fig (go.Figure): plotly figure object to apply theme to
+        show_title (bool): if the title should be shown
+
+    Returns:
+        go.Figure: plotly figure object with theme applied
+    """
+
     fig = apply_base_theme(fig, show_title=show_title)
     fig.update_layout(
         hoverlabel={
@@ -75,6 +100,17 @@ def apply_theme(fig: go.Figure, show_title: bool=True) -> go.Figure:
 
 
 def apply_horizontal_bar_theme(fig: go.Figure, xaxis_title: str = "") -> go.Figure:
+    """
+    Apply the theme for horizontal bar charts
+
+    Args:
+        fig (go.Figure): plotly figure object to apply theme to
+        xaxis_title (str): title for the x-axis
+
+    Returns:
+        go.Figure: plotly figure object with theme applied
+    """
+
     fig = apply_base_theme(fig)
     fig.update_layout(
         hoverlabel={
@@ -101,6 +137,17 @@ def apply_horizontal_bar_theme(fig: go.Figure, xaxis_title: str = "") -> go.Figu
 
 
 def apply_upset_theme(fig: go.Figure, show_title: bool = False) -> go.Figure:
+    """
+    Apply the theme for upset matrix-set chart
+
+    Args:
+        fig (go.Figure): plotly figure object to apply theme to
+        show_title (bool): if the title should be shown
+
+    Returns:
+        go.Figure: plotly figure object with theme applied
+    """
+
     fig = apply_base_theme(fig, show_title=show_title)
     fig.update_layout({"showlegend": True})
     hoverlabel = {

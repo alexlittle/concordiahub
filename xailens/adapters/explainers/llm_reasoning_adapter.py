@@ -190,34 +190,30 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         return pd.DataFrame(rows)
 
 
-    def explain_global_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+    def explain_global_df(self, ctx: ModelContext,  model: Optional[Any] = None) -> pd.DataFrame:
         """
         Function is not implemented for this class instance
 
         Args:
-            ctx ():
-            model ():
-
-        Returns:
+            ctx (ModelContext):
+            model (Optional[Any]):
 
         Raises:
-            NotImplementedError
+            NotImplementedError:
 
         """
         raise NotImplementedError
 
-    def explain_local_df(self, ctx: ModelContext, model=None) -> pd.DataFrame:
+    def explain_local_df(self, ctx: ModelContext, model: Optional[Any] = None) -> pd.DataFrame:
         """
         Function is not implemented for this class instance
 
         Args:
-            ctx ():
-            model ():
-
-        Returns:
+            ctx (ModelContext):
+            model (Optional[Any]):
 
         Raises:
-            NotImplementedError
+            NotImplementedError:
 
         """
         raise NotImplementedError

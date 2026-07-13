@@ -41,6 +41,12 @@ class Dataset:
         return best_models
 
     def get_metrics(self) -> pd.DataFrame:
+        """
+        Gets the metrics for current dataset
+
+        Returns:
+            pd.DataFrame: metrics
+        """
         rows = {me.get("model_display_name"): me.get_metrics() for me in self.models}
         df = pd.DataFrame(rows).T
         df.index.name = "model"
@@ -62,6 +68,16 @@ class Dataset:
         return self.models[0].get_instance_data(instance_uuid)
 
     def _get_explanations(self, instance_uuid: str | None = None) -> pd.DataFrame:
+        """
+        Private helper function for getting the global explanations (if not instance_uuid given) or
+        local explanations if instance_uuid if specified
+
+        Args:
+            instance_uuid (str | None): an instance UUID
+
+        Returns:
+            pd.DataFrame: explanations
+        """
         explanations = {}
         keep_features = set()
         for model in self.models:
@@ -99,16 +115,36 @@ class Dataset:
         return result[: config.PLOT_MAX_FEATURES].reset_index(drop=True)
 
     def get_global_explanations(self) -> pd.DataFrame:
+        """
+        Returns the global explanations for the dataset
+
+        Returns:
+            pd.DataFrame: global explanation
+        """
         return self._get_explanations()
 
     def get_local_explanations(self, instance_uuid: str) -> pd.DataFrame:
+        """
+        Returns the local explanations for the given instance_uuid
+
+        Args:
+            instance_uuid (str): instance uuid
+
+        Returns:
+            pd.DataFrame: local explanation
+        """
         result = self._get_explanations(instance_uuid)
         model_cols = [col for col in result.columns if col != "feature_name"]
         result[model_cols] = result[model_cols].abs()
         return result
 
     def get_instance_consensus_ids(self) -> set:
-        """Returns instance IDs common to all models."""
+        """
+        Returns instance IDs common to all models.
+
+        Returns:
+            set
+        """
         common_ids = None
         for model in self.models:
             y_true, _ = model.load_targets()
@@ -120,6 +156,12 @@ class Dataset:
         return common_ids
 
     def get_instance_consensus(self) -> dict:
+        """
+        Gets metrics on the overall instance consensus across all models for this dataset
+
+        Returns:
+            dict
+        """
         common_ids = self.get_instance_consensus_ids()
         pred_df, y_true_common = self._get_common_predictions(common_ids)
         correct_df = pred_df.eq(y_true_common, axis=0)
@@ -207,9 +249,12 @@ class Dataset:
     #------------------------------
     # Private helper functions
     #-------------------------------
-    def _get_common_predictions(self, common_ids) -> tuple[pd.DataFrame, pd.Series]:
+    def _get_common_predictions(self, common_ids: set) -> tuple[pd.DataFrame, pd.Series]:
         """Builds aligned prediction and ground-truth series for all models,
         filtered to the given common_ids.
+
+        Args:
+            common_ids (set): set of the ids in common
 
         Returns:
             tuple[pd.DataFrame, pd.Series]: pd.DataFrame, one column per model,
@@ -238,6 +283,15 @@ class Dataset:
 
 
     def _agreement(self, row: pd.Series) -> str:
+        """
+        Private helper function to determine if all models are correct, incorrect or disagree.
+
+        Args:
+            row (pd.Series): model predictions
+
+        Returns:
+            str: either "correct", "allincorrect" or "disagree"
+        """
         if row.all():
             return "allcorrect"
         if (~row).all():

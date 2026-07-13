@@ -115,7 +115,7 @@ class DisplayNameDict(dict):
             key (str):
 
         Returns:
-            str
+            str: 
         """
         return key.replace("_", " ").title()
 

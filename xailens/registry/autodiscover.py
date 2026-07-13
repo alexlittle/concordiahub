@@ -1,3 +1,7 @@
+"""
+Autodiscovers the model, XAI method and viz adapters
+"""
+
 import importlib
 import pkgutil
 import threading

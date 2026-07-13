@@ -4,7 +4,7 @@ Base abstract class for all XAI method adapters
 
 import pandas as pd
 from abc import ABC, abstractmethod
-from typing import Any, Optional
+from typing import Any, Optional, ClassVar
 
 from xailens.entities.context import ModelContext
 from xailens.entities.model import Model
@@ -17,6 +17,8 @@ class XAIMethodAdapter(ABC):
     Abstract class for XAI method adapter.
     """
     display_name: str | None = None
+    key: ClassVar[str] = None
+
     display_notes: str | None = None
     default_visualisation: Optional[str]
     compatible_visualisations: Optional[dict]

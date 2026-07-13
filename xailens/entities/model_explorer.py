@@ -1,3 +1,7 @@
+"""
+Model Explorer class
+"""
+
 import os
 import json
 
@@ -8,9 +12,11 @@ from xailens.entities.model import Model
 
 
 class ModelExplorer:
+    """
+    Model Explorer class
+    """
 
     def __init__(self):
-        """Initializes ModelExplorer"""
         base_dir = Path(__file__).resolve().parent.parent
         self.models_dir = os.path.join(base_dir, config.MODEL_DATA_DIR_NAME)
         self._metadata_cache = self._load_all_metadata()

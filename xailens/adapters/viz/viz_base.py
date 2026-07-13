@@ -4,7 +4,7 @@ Base abstract class for all Visualisation adapters
 
 import pandas as pd
 
-from typing import Any, Optional
+from typing import Any, Optional, ClassVar
 from abc import ABC, abstractmethod
 
 from xailens import config
@@ -16,6 +16,8 @@ class VizAdapter(ABC):
     """
 
     display_name: str | None = None
+    key: ClassVar[str] = None
+
     compatible_explanations: list[str] = []
 
     @abstractmethod
@@ -40,7 +42,7 @@ class VizAdapter(ABC):
     def _top_features(self, explanation: pd.DataFrame, n: int = config.PLOT_MAX_FEATURES) -> pd.DataFrame:
         """
         Helper method to filter to only the largest feature contributions, not all
-        
+
         Args:
             explanation (pd.DataFrame): explanation dataframe:
             n (int): number of feature contributions to select

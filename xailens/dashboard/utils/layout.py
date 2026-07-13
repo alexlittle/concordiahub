@@ -1,16 +1,32 @@
+"""
+Functions for the Streamlit page layout
+"""
+
 
 import streamlit as st
 
+from typing import Optional
 from xailens.dashboard.utils.styles import load_css
 from xailens import strings, config
 from xailens.dashboard.utils import sidebar
 
 
 def apply_layout(title: str,
-                 dataset_id: str = None,
-                 all_model_names: list = None,
-                 selected_model_names: list = None,
-                 selected_instance_group: str = None,):
+                 dataset_id: Optional[str] = None,
+                 all_model_names: Optional[list] = None,
+                 selected_model_names: Optional[list] = None,
+                 selected_instance_group: Optional[str] = None,):
+    """
+    Applies the layout to the Streamlit page
+
+    Args:
+        title (str): title of the page
+        dataset_id (Optional[str]): current dataset id, or None
+        all_model_names (Optional[list]): all the models for the current dataset, or None
+        selected_model_names (Optional[list]): the selected models for the current dataset, or None
+        selected_instance_group (Optional[str]): the selected instance group for the current dataset, or None
+
+    """
 
     # Page title
     st.set_page_config(page_title=f"{strings.APP_NAME} - {title}", layout="wide")
@@ -33,10 +49,21 @@ def apply_layout(title: str,
     st.html(f"<h1 class='header'>{title}</h1>")
 
 
-def render_sidebar_options(all_model_names,
-                           selected_model_names,
-                           dataset_id: str = None,
-                           selected_instance_group=None,):
+def render_sidebar_options(all_model_names: list,
+                           selected_model_names: list,
+                           dataset_id: Optional[str] = None,
+                           selected_instance_group: Optional[str] = None,):
+    """
+    Renders the sidebar options and filter form for the current dataset
+
+    Args:
+        all_model_names (list): all the models for the current dataset
+        selected_model_names (list): selected models for the current dataset
+        dataset_id (Optional[str]): current dataset id, or None
+        selected_instance_group (Optional[str]): selected instance group for the current dataset, or None
+
+    """
+
     st.html(f"<h3>{strings.SIDEBAR_MODEL_FILTER_TITLE}</h3>")
     selected_ds = []
     for name in sorted(all_model_names):

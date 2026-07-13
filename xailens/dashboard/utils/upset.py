@@ -1,3 +1,8 @@
+"""
+Function to build an UpSet matrix-set plot
+"""
+
+
 import pandas as pd
 import plotly.graph_objects as go
 
@@ -9,6 +14,17 @@ from xailens.config import PLOT_UPSET_CORRECT_COLOR, PLOT_UPSET_INCORRECT_COLOR
 def build_upset_figure(combo_df: pd.DataFrame,
                        set_sizes: pd.Series,
                        max_combos: int = 25) -> go.Figure:
+    """
+    Builds the upset matrix-set plot
+
+    Args:
+        combo_df (pd.DataFrame): dataframe containing model combinations
+        set_sizes (pd.Series): set sizes for each model
+        max_combos (int): maximum number of combinations to display
+
+    Returns:
+        go.Figure: upset matrix-set plot
+    """
 
     model_cols = list(set_sizes.index)
     combo_df = combo_df.head(max_combos).reset_index(drop=True)

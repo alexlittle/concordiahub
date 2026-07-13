@@ -21,7 +21,7 @@ DATA_SCHEMA_TARGET_COLUMN: Final[str] = 'data_schema.target_column'
 DATA_SCHEMA_PREDICTION_COLUMN: Final[str] = 'data_schema.prediction_column'
 
 
-TreeModel = (XGBClassifier | XGBRegressor | RandomForestClassifier |
+type TreeModel = (XGBClassifier | XGBRegressor | RandomForestClassifier |
              RandomForestRegressor | GradientBoostingClassifier | GradientBoostingRegressor)
 
 # Which metric to base the best model on

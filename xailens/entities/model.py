@@ -1,7 +1,13 @@
+"""
+Model class
+"""
+
 import pandas as pd
 import dataclasses
 
-import xailens.config as config
+from typing import Any,Optional
+
+from xailens import config
 from xailens.storage.filesystem_store import FilesystemStore
 from xailens.schema import DataSchema
 
@@ -15,15 +21,17 @@ class Model:
         self.store = FilesystemStore(path)
         self.metadata = metadata or {}
 
-    def get(self, key:str, default=None):
+    def get(self, key: str, default: Optional[str] = None) -> str :
         """
         Gets a value by its key, will also look in component dicts,
         (eg) dataschema.target_column
+
         Args:
-            key (): the key to look for
-            default (): a default value to return if key is not found
+            key (str): the key to look for
+            default (Optional[str]): a default value to return if key is not found
 
         Returns:
+            str:
 
         """
         parts = key.split(".")
@@ -39,8 +47,9 @@ class Model:
     def get_data_schema(self) -> DataSchema:
         """
         Returns the DataSchema dataclass for the model
+
         Returns:
-            DataSchema dataclass instance
+            DataSchema:  dataclass instance
         """
         kwargs = {}
         for field in dataclasses.fields(DataSchema):
@@ -48,17 +57,25 @@ class Model:
             kwargs[field.name] = value
         return DataSchema(**kwargs)
 
-    def _get_series(self):
+    def _get_series(self) -> tuple[pd.Series, pd.Series]:
         """
+        Private helper function to get the tuple from self.load_targets()
 
         Returns:
-
+            tuple[pd.Series, pd.Series]: true target and predictions
         """
         y_true, y_pred = self.load_targets()
         return (y_true[self.get(config.DATA_SCHEMA_TARGET_COLUMN)],
                 y_pred[self.get(config.DATA_SCHEMA_PREDICTION_COLUMN)])
 
-    def load_targets(self):
+    def load_targets(self) -> tuple[pd.DataFrame, pd.DataFrame]:
+        """
+        Load the target columns from the data
+
+        Returns:
+            tuple[pd.DataFrame, pd.DataFrame]: target and prediction columns
+        """
+
         target_cols = [self.get(config.DATA_SCHEMA_ID_COLUMN), self.get(config.DATA_SCHEMA_TARGET_COLUMN)]
         pred_cols = [self.get(config.DATA_SCHEMA_ID_COLUMN), self.get(config.DATA_SCHEMA_PREDICTION_COLUMN)]
         y_true = self.store.load_dataframe("y_test")[target_cols]
@@ -68,20 +85,22 @@ class Model:
 
     def get_metrics(self) -> pd.Series:
         """
+        Get the metrics for the model
 
         Returns:
-
+            pd.Series
         """
         return self.store.load_series("metrics")
 
-    def get_instance_data(self, instance_uuid) -> pd.Series:
+    def get_instance_data(self, instance_uuid: str) -> pd.Series:
         """
+        Get the raw instance data
 
         Args:
-            instance_uuid ():
+            instance_uuid (str):
 
         Returns:
-
+            pd.Series:
         """
         uuid_col = self.get(config.DATA_SCHEMA_ID_COLUMN)
         raw = self.store.load_dataframe("raw_instances")
@@ -89,14 +108,15 @@ class Model:
 
         return row.drop(labels=[uuid_col])
 
-    def get_instance_prediction(self, instance_uuid) -> str:
+    def get_instance_prediction(self, instance_uuid: str) -> str:
         """
+        Get the models prediction for the given instance
 
         Args:
-            instance_uuid ():
+            instance_uuid (str):
 
         Returns:
-
+            str:
         """
         uuid_col = self.get(config.DATA_SCHEMA_ID_COLUMN)
         pred_col = self.get(config.DATA_SCHEMA_PREDICTION_COLUMN)

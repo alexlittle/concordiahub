@@ -82,9 +82,9 @@ class CoefficientsAdapter(XAIMethodAdapter):
             ctx (ModelContext): ModelContext object
 
         Returns:
-            dict[str, Any]
+            dict[str, Any]:
 
         Raises:
-            NotImplementedError
+            NotImplementedError:
         """
         raise NotImplementedError
