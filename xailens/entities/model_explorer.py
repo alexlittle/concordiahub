@@ -17,8 +17,7 @@ class ModelExplorer:
     """
 
     def __init__(self):
-        base_dir = Path(__file__).resolve().parent.parent
-        self.models_dir = os.path.join(base_dir, config.MODEL_DATA_DIR_NAME)
+        self.models_dir = config.MODEL_DATA_DIR
         self._metadata_cache = self._load_all_metadata()
         self._uuid_index = {
             model.get("model_uuid"): model for model in self._metadata_cache

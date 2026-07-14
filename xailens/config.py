@@ -2,8 +2,10 @@
 Configuration file for XAI-Compare
 """
 
+import os
 from typing import Final
 
+from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
@@ -12,7 +14,7 @@ from xailens.viz_option import VizOption
 
 
 # Constants for artifact filename/structure
-MODEL_DATA_DIR_NAME: Final[str] = "model_data"
+MODEL_DATA_DIR: Final[str] = os.path.join(Path(__file__).resolve().parents[1], "data_store")
 META_INFO_FILENAME: Final[str] = "meta"
 MODEL_FILENAME: Final[str] = "model"
 

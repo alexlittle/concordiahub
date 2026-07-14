@@ -44,10 +44,9 @@ class ArtifactStore:
         Returns:
             str: directory name
         """
-        base_dir = os.path.dirname(os.path.abspath(__file__))
         if ctx.model_dir_name:
-            return os.path.join(base_dir, config.MODEL_DATA_DIR_NAME, ctx.model_dir_name)
-        return os.path.join(base_dir, config.MODEL_DATA_DIR_NAME, self.datetime)
+            return os.path.join(config.MODEL_DATA_DIR, ctx.model_dir_name)
+        return os.path.join(config.MODEL_DATA_DIR, self.datetime)
 
 
     def write_metadata(self) -> None:

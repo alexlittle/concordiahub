@@ -79,23 +79,32 @@ def build_upset_figure(combo_df: pd.DataFrame,
     correct_x, correct_y = [], []
     incorrect_x, incorrect_y = [], []
     row_order = model_cols[::-1]
+    combo_key_list = [
+        ",".join(m for m in model_cols if combo_df.loc[i, m] == 1)
+        for i in range(n_combos)
+    ]
 
+    correct_cd, incorrect_cd = [], []
     for i in range(n_combos):
         for j, m in enumerate(row_order):
             if combo_df.loc[i, m] == 1:
                 incorrect_x.append(i)
                 incorrect_y.append(j)
+                incorrect_cd.append(combo_key_list[i])
             else:
                 correct_x.append(i)
                 correct_y.append(j)
+                correct_cd.append(combo_key_list[i])
 
     # base layer: every "correct" dot
     fig.add_trace(
         go.Scatter(
             x=correct_x, y=correct_y, mode="markers",
             marker={"size": 14, "color": PLOT_UPSET_CORRECT_COLOR},
+            customdata=correct_cd,
             name="Correct",
-            hoverinfo="skip", showlegend=True,
+            hovertemplate="Models: %{customdata}<br>Click to view instances<extra></extra>",
+            showlegend=True,
         ),
         row=2, col=2,
     )
@@ -110,7 +119,9 @@ def build_upset_figure(combo_df: pd.DataFrame,
                 x=[i, i], y=[min(active_js), max(active_js)],
                 mode="lines",
                 line={"color": PLOT_UPSET_INCORRECT_COLOR, "width": 2},
-                hoverinfo="skip", showlegend=False,
+                name="Incorrect",
+                hovertemplate="Models: %{customdata}<br>Click to view instances<extra></extra>",
+                showlegend=False,
             ),
             row=2, col=2,
         )
@@ -119,8 +130,10 @@ def build_upset_figure(combo_df: pd.DataFrame,
         go.Scatter(
             x=incorrect_x, y=incorrect_y, mode="markers",
             marker={"size": 14, "color": PLOT_UPSET_INCORRECT_COLOR},
+            customdata=incorrect_cd,
             name="Incorrect",
-            hoverinfo="skip", showlegend=True,
+            hovertemplate="Models: %{customdata}<br>Click to view instances<extra></extra>",
+            showlegend=True,
         ),
         row=2, col=2,
     )
