@@ -24,15 +24,17 @@ class ModelExplorer:
             model.get("model_uuid"): model for model in self._metadata_cache
         }
 
-    def get_datasets(self)-> set:
+    def get_datasets(self) -> list:
         """Gets names of all datasets stored in the models directory
 
         Returns:
-            set: set of distinct dataset names
+            list: list of distinct dataset names
         """
+
         datasets = set()
         for model in self._metadata_cache:
             datasets.add(model["dataset_id"])
+
         return sorted(datasets)
 
     def get_models_for_dataset(self, dataset: str) -> dict:

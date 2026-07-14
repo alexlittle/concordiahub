@@ -70,7 +70,7 @@ class FilesystemStore(DataStore):
 
         Args:
            filename (str): name of file to save
-           data (pd.DataFrame): the dataframe to save
+           df (pd.DataFrame): the dataframe to save
 
         """
         path = os.path.join(self.dirname, f"{filename}.csv")
@@ -82,7 +82,7 @@ class FilesystemStore(DataStore):
 
         Args:
            filename (str): name of file to save
-           data (pd.Series): the series to save
+           series (pd.Series): the series to save
 
         """
         path = os.path.join(self.dirname, f"{filename}.csv")
