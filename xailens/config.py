@@ -24,6 +24,9 @@ DATA_SCHEMA_PREDICTION_COLUMN: Final[str] = 'data_schema.prediction_column'
 type TreeModel = (XGBClassifier | XGBRegressor | RandomForestClassifier |
              RandomForestRegressor | GradientBoostingClassifier | GradientBoostingRegressor)
 
+# for now only treemodels supported, when other options are available, add here
+type ScikitLearnModel = TreeModel
+
 # Which metric to base the best model on
 BEST_MODEL_METRIC = "f1_weighted"
 

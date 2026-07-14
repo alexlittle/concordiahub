@@ -5,7 +5,7 @@ Base abstract class for all Model adapters
 from abc import ABC
 
 from typing import Optional, ClassVar
-from xailens.config import TreeModel
+from xailens.config import ScikitLearnModel
 
 class ModelAdapter(ABC):
     """
@@ -14,15 +14,15 @@ class ModelAdapter(ABC):
     display_name: str | None = None
     key: ClassVar[str] = None
 
-    def __init__(self, model: Optional[TreeModel] = None):
+    def __init__(self, model: Optional[ScikitLearnModel] = None):
         self.model = model
 
-    def prepare(self) -> TreeModel:
+    def prepare(self) -> ScikitLearnModel:
         """
         Returns the model
 
         Returns:
-            TreeModel: The model
+            ScikitLearnModel: The model
         """
         return self.model
 

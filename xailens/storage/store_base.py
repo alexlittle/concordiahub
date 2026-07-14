@@ -6,7 +6,7 @@ import pandas as pd
 from abc import ABC, abstractmethod
 from typing import Optional, Any
 
-from xailens.config import TreeModel
+from xailens.config import ScikitLearnModel
 
 
 class DataStore(ABC):
@@ -51,13 +51,13 @@ class DataStore(ABC):
         pass
 
     @abstractmethod
-    def save_model(self, filename:str, model: TreeModel) -> None:
+    def save_model(self, filename:str, model: ScikitLearnModel) -> None:
         """
         Saves model to joblib
 
         Args:
             filename (str): name of the file to save
-            model (TreeModel): model object to save
+            model (ScikitLearnModel): model object to save
 
         """
         pass

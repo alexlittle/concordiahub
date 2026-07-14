@@ -11,7 +11,7 @@ import streamlit as st
 
 from typing import Any, Optional
 
-from xailens.config import TreeModel
+from xailens.config import ScikitLearnModel
 from xailens.storage.store_base import DataStore
 
 
@@ -106,13 +106,13 @@ class FilesystemStore(DataStore):
             with open(os.path.join(self.dirname, f"{filename}.json"), "w") as f:
                 json.dump(data, f, indent=4)
 
-    def save_model(self, filename:str, model:TreeModel):
+    def save_model(self, filename:str, model:ScikitLearnModel):
         """
         Saves model to joblib file
 
         Args:
             filename (str): name of the file to save
-            model (TreeModel): model object to save
+            model (ScikitLearnModel): model object to save
 
         """
         joblib.dump(model, os.path.join(self.dirname, f"{filename}.joblib"))
