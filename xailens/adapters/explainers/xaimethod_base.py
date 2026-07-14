@@ -137,7 +137,7 @@ class XAIMethodAdapter(ABC):
             ctx (ModelContext): ModelContext object
 
         Returns:
-            list of dicts - JSON containing local explanations
+            list[dict[str, Any]]: JSON containing local explanations
 
         Raises:
             MissingDataError: if required data is not provided

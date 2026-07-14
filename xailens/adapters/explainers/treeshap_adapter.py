@@ -149,7 +149,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
             ctx (ModelContext): ModelContext object
 
         Returns:
-            dict[str, Any]
+            dict[str, Any]:
 
         Raises:
             NotImplementedError: will always return this as not implemented

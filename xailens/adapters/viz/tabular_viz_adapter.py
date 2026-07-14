@@ -29,7 +29,7 @@ class TabularAdapter(VizAdapter):
                 the x-axis. If None, Plotly auto-scales the axis.
 
         Returns:
-            list[Any] - list containing the overall explanation if it exists, and a dataframe for tabular display
+            list[Any]: list containing the overall explanation if it exists, and a dataframe for tabular display
 
         """
 

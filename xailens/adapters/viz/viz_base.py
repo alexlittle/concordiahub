@@ -31,10 +31,10 @@ class VizAdapter(ABC):
                 the x-axis. If None, Plotly auto-scales the axis.
 
         Returns:
-            list[Any] - list containing the overall explanation if it exists, and a dataframe for tabular display
+            list[Any]: list containing the overall explanation if it exists, and a dataframe for tabular display
 
         Raises:
-            NotImplementedError
+            NotImplementedError:
         """
         raise NotImplementedError
 
@@ -48,6 +48,6 @@ class VizAdapter(ABC):
             n (int): number of feature contributions to select
 
         Returns:
-            pd.DataFrame - dataframe containing the largest contributions
+            pd.DataFrame: dataframe containing the largest contributions
         """
         return explanation.reindex(explanation["score_normalised_max"].astype(float).abs().nlargest(n).index)

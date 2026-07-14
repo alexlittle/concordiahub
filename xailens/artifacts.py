@@ -89,7 +89,7 @@ class ArtifactStore:
         Saves the given data to the data store
 
         Args:
-            name (string): name of the data to save
+            name (str): name of the data to save
             data (Optional[pd.Series | np.ndarray | list | pd.DataFrame]): data
                 to save. Series, ndarray, and list inputs are converted to a
                 DataFrame before saving.

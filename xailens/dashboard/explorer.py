@@ -8,11 +8,11 @@ import streamlit as st
 from xailens.entities.model_explorer import ModelExplorer
 
 @st.cache_resource
-def get_explorer():
+def get_explorer() -> ModelExplorer:
     """
     Helper method to get the cached ModelExplorer object
 
     Returns:
-        ModelExplorer
+        ModelExplorer: ModelExplorer object
     """
     return ModelExplorer()

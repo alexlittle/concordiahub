@@ -71,7 +71,7 @@ def build_model_panel(model: Model, viz_param_key: str, viz_params: MutableMappi
     )
 
 
-def render_model_panel(panel: ModelPanel, plot_key: str):
+def render_model_panel(panel: ModelPanel, plot_key: str) -> None:
     """
     Renders a ModelPanel from the given panel
 

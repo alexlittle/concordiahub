@@ -31,7 +31,7 @@ class Dataset:
         Returns a list in case there is a tie between models
 
         Returns:
-            list(str): recommended model names
+            list[str]: recommended model names
         """
         df = self.get_metrics()
         s = df[config.BEST_MODEL_METRIC]
@@ -77,6 +77,9 @@ class Dataset:
 
         Returns:
             pd.DataFrame: explanations
+
+        Raises:
+            InvalidSelectionError:
         """
         explanations = {}
         keep_features = set()
@@ -143,7 +146,7 @@ class Dataset:
         Returns instance IDs common to all models.
 
         Returns:
-            set
+            set: set of instance IDs
         """
         common_ids = None
         for model in self.models:
@@ -160,7 +163,7 @@ class Dataset:
         Gets metrics on the overall instance consensus across all models for this dataset
 
         Returns:
-            dict
+            dict:
         """
         common_ids = self.get_instance_consensus_ids()
         pred_df, y_true_common = self._get_common_predictions(common_ids)
@@ -186,7 +189,7 @@ class Dataset:
             - agreement column (either: allcorrect, allincorrect, disagree)
 
         Returns:
-            pd.DataFrame
+            pd.DataFrame:
         """
         common_ids = self.get_instance_consensus_ids()
         pred_df, y_true_common = self._get_common_predictions(common_ids)

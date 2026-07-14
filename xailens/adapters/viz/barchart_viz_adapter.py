@@ -31,7 +31,7 @@ class BarChartVizAdapter(VizAdapter):
                 the x-axis. If None, Plotly auto-scales the axis.
 
         Returns:
-            list[Any] - list containing the plotly figure
+            list[Any]: list containing the plotly figure
 
         """
         # filter to show only the largest contributors, not all

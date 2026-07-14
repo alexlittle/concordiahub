@@ -88,7 +88,7 @@ class Model:
         Get the metrics for the model
 
         Returns:
-            pd.Series
+            pd.Series:
         """
         return self.store.load_series("metrics")
 

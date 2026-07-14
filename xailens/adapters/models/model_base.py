@@ -17,7 +17,7 @@ class ModelAdapter(ABC):
     def __init__(self, model: Optional[TreeModel] = None):
         self.model = model
 
-    def prepare(self):
+    def prepare(self) -> TreeModel:
         """
         Returns the model
 

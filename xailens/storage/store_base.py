@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 
 
 class DataStore(ABC):
+
     @abstractmethod
     def save_json(self, filename, data): pass
 

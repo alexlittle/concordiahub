@@ -15,7 +15,7 @@ def _display_value(val: Any) -> str:
         val (Any): value to be converted
 
     Returns:
-        str
+        str: string value of the val provided
     """
     if val in (0, 1, True, False) and not isinstance(val, float):
         return str(bool(val))

@@ -24,7 +24,7 @@ class ModelExplorer:
             model.get("model_uuid"): model for model in self._metadata_cache
         }
 
-    def get_datasets(self):
+    def get_datasets(self)-> set:
         """Gets names of all datasets stored in the models directory
 
         Returns:
@@ -36,11 +36,15 @@ class ModelExplorer:
         return sorted(datasets)
 
     def get_models_for_dataset(self, dataset: str) -> dict:
-        """ Gets all the models for the given dataset name
+        """
+        Gets all the models for the given dataset name
+
         Args:
-            dataset str: dataset name
+            dataset (str): dataset name
+
         Returns:
-            dict of model names and model_data"""
+            dict: of model names and model_data
+        """
     
         models = {}
         for model in self._metadata_cache:
@@ -51,11 +55,16 @@ class ModelExplorer:
         return dict(sorted(models.items()))
 
     def get_selected_models_for_dataset(self, dataset: str, model_names: list[str]) -> [Model]:
-        """ Gets all the models for the given dataset name
+        """
+        Gets all the models for the given dataset name
+
         Args:
-            dataset str: dataset name
+            dataset (str): dataset name
+
         Returns:
-            list of Model (sorted by model_display_name)"""
+            [Model]: list of Models (sorted by model_display_name)
+        """
+
         models = []
         for model in self._metadata_cache:
             if model["dataset_id"] == dataset and model["model_display_name"] in model_names:
@@ -64,10 +73,13 @@ class ModelExplorer:
 
     def get_models_for_dataset(self, dataset: str) -> [Model]:
         """ Gets all the models for the given dataset name
+
         Args:
-            dataset str: dataset name
+            dataset (str): dataset name
+
         Returns:
-            list of Model"""
+            [Model]: list of Models
+        """
         models = []
         for model in self._metadata_cache:
             if model["dataset_id"] == dataset:
@@ -75,10 +87,14 @@ class ModelExplorer:
         return models
 
     def is_valid_dataset(self, dataset) -> bool:
-        """Checks if dataset is valid
+        """
+        Checks if dataset is valid
+
         Args:
-            dataset str: dataset name
+            dataset (str): dataset name
+
         Returns:
+            bool: True if dataset is valid, False otherwise
         """
         for model in self._metadata_cache:
             if model["dataset_id"] == dataset:
@@ -88,21 +104,27 @@ class ModelExplorer:
 
     def get_model_by_uuid(self, uuid: str) -> Model | None:
         """Gets a Run by its UUID
+
         Args:
-            uuid: Run's UUID
+            uuid (str): UUID of the Model
 
         Returns:
-            Run or None"""
+            Model | None
+
+        """
         meta = self._uuid_index.get(uuid)
         return Model(path=meta["_path"], metadata=meta) if meta else None
 
     def get_models_by_uuids(self, uuids: list[str]) -> list[Model]:
-        """Gets a list of Runs by their UUIDs
+        """
+        Gets a list of Models by their UUIDs
+
         Args:
-            List[uuid]: Run UUIDs
+            uuids (list[str]): List of Model UUIDs
 
         Returns:
-            List[Run] or None"""
+            list[Model]: list of Models
+        """
 
         models = []
         for u in uuids:
@@ -116,7 +138,13 @@ class ModelExplorer:
     # Private helper functions
     #-----------------------------
     def _load_all_metadata(self) -> list[dict]:
-        """Cache all metadata from disk"""
+        """
+        Private helper function to load all metadata. If a cache object exists,
+        the cache will be used, otherwise it will load from the metadata json files
+
+        Returns:
+            list[dict]: list of metadata
+        """
         if hasattr(self, '_metadata_cache'):
             return self._metadata_cache
 
