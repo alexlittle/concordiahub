@@ -106,9 +106,13 @@ def write_local_explanations(xai_method: str,
 def run(ctx: ModelContext):
     """
     Entry point for model developer loading their modal and data to the framework
-    
+
     Args:
-        ctx (ModelConext): the ModelContext being used
+        ctx (ModelContext): the ModelContext being used
+
+    Raises:
+        InvalidConfigurationError: If invalid ModelContext object
+
     """
     print(strings.RUN_STARTING)
 

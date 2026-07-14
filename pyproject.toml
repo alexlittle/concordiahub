@@ -43,7 +43,7 @@ package-dir = {"" = "."}
 where = ["."]
 include = ["xailens*"]
 
-# Interrogate settings for checking doc strings
+# Interrogate settings for checking existence of doc strings
 [tool.interrogate]
 ignore-init-method = true
 ignore-init-module = true
@@ -52,10 +52,11 @@ ignore-semiprivate = false
 ignore-private = false
 ignore-property-decorators = false
 ignore-module = false
-fail-under = 0 # so won't fail, just reports
+fail-under = 80
 verbose = 2
 exclude = ["tests", "docs", "build"]
 
+# pydoclint settings for checking correctness and consistency of docstrings
 [tool.pydoclint]
 style = "google"
 exclude = "tests|docs"

@@ -60,6 +60,7 @@ class ModelExplorer:
 
         Args:
             dataset (str): dataset name
+            model_names (list[str]): list of model names
 
         Returns:
             [Model]: list of Models (sorted by model_display_name)
@@ -86,7 +87,7 @@ class ModelExplorer:
                 models.append(self.get_model_by_uuid(model["model_uuid"]))
         return models
 
-    def is_valid_dataset(self, dataset) -> bool:
+    def is_valid_dataset(self, dataset: str) -> bool:
         """
         Checks if dataset is valid
 
@@ -103,13 +104,14 @@ class ModelExplorer:
 
 
     def get_model_by_uuid(self, uuid: str) -> Model | None:
-        """Gets a Run by its UUID
+        """
+        Gets a Run by its UUID
 
         Args:
             uuid (str): UUID of the Model
 
         Returns:
-            Model | None
+            Model | None: a Model object if found, otherwise None
 
         """
         meta = self._uuid_index.get(uuid)
