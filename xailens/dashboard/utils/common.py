@@ -5,6 +5,7 @@ Helper functions for common dashboard display elements
 import streamlit as st
 
 from typing import Optional
+
 from xailens.dashboard import settings
 from xailens import strings
 from xailens.dashboard.assets.icons import help_icon
@@ -12,9 +13,11 @@ from xailens.dashboard.assets.icons import help_icon
 
 def display_breadcrumbs(dataset: Optional[str] = None,
                         instance_group: Optional[str] = None,
-                        instance_uuid:Optional[str] = None) -> str:
+                        instance_uuid: Optional[str] = None,
+                        set: Optional[str] = None) -> str:
     """
-    Display breadcrumbs for a page
+    Display breadcrumbs for a page. Works out what the breadcrumbs are based on
+    which params are set.
 
     Args:
         dataset (Optional[str]): dataset name
@@ -33,16 +36,24 @@ def display_breadcrumbs(dataset: Optional[str] = None,
         model_param = ""
 
     if dataset:
-        if instance_group:
-            parts.append(f"<a href='/{settings.DATASET_FILENAME}?dataset={dataset}{model_param}' target='_self'>{dataset}</a>")
+        if instance_group or set:
+            parts.append(f"""
+                <a href='/{settings.DATASET_FILENAME}?dataset={dataset}{model_param}'
+                target='_self'>{dataset}</a>""")
         else:
             parts.append(f"{dataset}")
 
-    if instance_group:
+    if instance_group and not set:
         if instance_uuid:
             parts.append(f"<a href='/{settings.INSTANCES_FILENAME}?dataset={dataset}{model_param}&instances={instance_group}' target='_self'>{strings.INSTANCE_GROUPS[instance_group]}</a>")
         else:
             parts.append(strings.INSTANCE_GROUPS[instance_group])
+
+    if set and not instance_group:
+        if instance_uuid:
+            parts.append(f"<a href='/{settings.INSTANCES_FILENAME}?dataset={dataset}{model_param}&set={set}' target='_self'>{strings.MISCLASSIFIED}</a>")
+        else:
+            parts.append(strings.MISCLASSIFIED)
 
     if instance_uuid:
         parts.append(f"{instance_uuid}")

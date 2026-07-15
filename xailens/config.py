@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, Grad
 from xgboost import XGBClassifier, XGBRegressor
 
 from xailens import strings
-from xailens.viz_option import VizOption
+from xailens.entities.viz_option import VizOption
 
 
 # Constants for artifact filename/structure

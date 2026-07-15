@@ -1,15 +1,17 @@
 """
-Function to build an UpSet matrix-set plot
+Functions to build and render an UpSet-style matrix-set plot
 """
 
 
 import pandas as pd
 import plotly.graph_objects as go
+import streamlit as st
 
 from plotly.subplots import make_subplots
 
-from xailens.config import PLOT_UPSET_CORRECT_COLOR, PLOT_UPSET_INCORRECT_COLOR
-
+from xailens.entities.dataset import Dataset
+from xailens.config import PLOTLY_CONFIG, PLOT_UPSET_CORRECT_COLOR, PLOT_UPSET_INCORRECT_COLOR
+from xailens.dashboard.utils.plotly_theme import apply_upset_theme
 
 def build_upset_figure(combo_df: pd.DataFrame,
                        set_sizes: pd.Series,
@@ -31,6 +33,11 @@ def build_upset_figure(combo_df: pd.DataFrame,
     n_combos = len(combo_df)
     n_models = len(model_cols)
 
+    # Make the 4 different areas for the plots:
+    # top-left - empty
+    # top-right bar chart of num instances in the set
+    # bottom-left - bar chart of num instances wrong per model
+    # bottom-right - matrix set dots with the groups of misclassifications
     fig = make_subplots(
         rows=2, cols=2,
         row_heights=[0.65, 0.35],
@@ -43,7 +50,7 @@ def build_upset_figure(combo_df: pd.DataFrame,
         ],
     )
 
-    # --- Top-right: combo size bar chart ---
+    #  Top-right -  bar chart of the set combinations
     fig.add_trace(
         go.Bar(
             x=list(range(n_combos)),
@@ -61,7 +68,7 @@ def build_upset_figure(combo_df: pd.DataFrame,
         row=1, col=2,
     )
 
-    # --- Bottom-left: set size bar chart ---
+    # Bottom-left: bar chart of the number of misclassifications per model
     fig.add_trace(
         go.Bar(
             x=set_sizes.values[::-1],
@@ -69,13 +76,13 @@ def build_upset_figure(combo_df: pd.DataFrame,
             orientation="h",
             marker_color=PLOT_UPSET_INCORRECT_COLOR,
             name="",
-            hovertemplate="%{x} incorrect<extra></extra>",
+            hovertemplate="%{x} instances incorrect<extra></extra>",
             showlegend=False,
         ),
         row=2, col=1,
     )
 
-    # --- Bottom-right: full matrix, every dot coloured correct/incorrect ---
+    # Bottom-right - full matrix, every dot coloured for correct/incorrect
     correct_x, correct_y = [], []
     incorrect_x, incorrect_y = [], []
     row_order = model_cols[::-1]
@@ -84,6 +91,7 @@ def build_upset_figure(combo_df: pd.DataFrame,
         for i in range(n_combos)
     ]
 
+    # calculate what combination dots should be shown as correct/incorrect
     correct_cd, incorrect_cd = [], []
     for i in range(n_combos):
         for j, m in enumerate(row_order):
@@ -96,7 +104,7 @@ def build_upset_figure(combo_df: pd.DataFrame,
                 correct_y.append(j)
                 correct_cd.append(combo_key_list[i])
 
-    # base layer: every "correct" dot
+    # base - every "correct" dot
     fig.add_trace(
         go.Scatter(
             x=correct_x, y=correct_y, mode="markers",
@@ -105,11 +113,13 @@ def build_upset_figure(combo_df: pd.DataFrame,
             name="Correct",
             hovertemplate="Models: %{customdata}<br>Click to view instances<extra></extra>",
             showlegend=True,
+            selected={"marker": {"opacity": 1}},
+            unselected={"marker": {"opacity": 1}},
         ),
         row=2, col=2,
     )
 
-    # connecting lines + incorrect dots, per combo
+    # connecting lines and incorrect dots
     for i in range(n_combos):
         active_js = [j for j, m in enumerate(row_order) if combo_df.loc[i, m] == 1]
         if not active_js:
@@ -120,7 +130,6 @@ def build_upset_figure(combo_df: pd.DataFrame,
                 mode="lines",
                 line={"color": PLOT_UPSET_INCORRECT_COLOR, "width": 2},
                 name="Incorrect",
-                hovertemplate="Models: %{customdata}<br>Click to view instances<extra></extra>",
                 showlegend=False,
             ),
             row=2, col=2,
@@ -134,6 +143,8 @@ def build_upset_figure(combo_df: pd.DataFrame,
             name="Incorrect",
             hovertemplate="Models: %{customdata}<br>Click to view instances<extra></extra>",
             showlegend=True,
+            selected={"marker": {"opacity": 1}},
+            unselected={"marker": {"opacity": 1}},
         ),
         row=2, col=2,
     )
@@ -159,7 +170,50 @@ def build_upset_figure(combo_df: pd.DataFrame,
         height=500,
         bargap=0.3,
         plot_bgcolor="white",
-        legend={"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "right", "x": 1},
+        legend={"orientation": "h",
+                "yanchor": "bottom",
+                "y": 1.02,
+                "xanchor": "right",
+                "x": 1},
     )
 
     return fig
+
+def render_upset_figure(dataset: Dataset,
+                        navigate_on_click: bool = True) -> None:
+    """
+    Renders a matrix-set plotly figure
+
+    Args:
+        dataset (Dataset): dataset to base the figure on
+        navigate_on_click (bool): whether to actually force a whole page rerun.
+            When this figure is on the page that's linked to, this should
+            be set to False. Defaults to True
+
+    """
+    combo_df, set_sizes = dataset.get_upset_data()
+    fig = build_upset_figure(combo_df, set_sizes)
+    fig = apply_upset_theme(fig, show_title=False)
+
+    # catch events (clicks) on the chart
+    event = st.plotly_chart(
+        fig,
+        width='stretch',
+        config=PLOTLY_CONFIG,
+        on_select="rerun",
+        selection_mode="points",
+        key="upset_matrix",
+    )
+
+    # when clicked on the points direct to correct page/set
+    if event and event["selection"]["points"]:
+        point = event["selection"]["points"][0]
+        set_key = point.get("customdata")
+        if set_key and set_key != st.query_params.get("set"):
+            merged_params = dict(st.query_params)
+            merged_params["set"] = set_key
+            if navigate_on_click:
+                st.switch_page("pages/instances.py",
+                               query_params=merged_params)
+            else:
+                st.query_params["set"] = set_key

@@ -74,6 +74,8 @@ INSTANCES_DISAGREE_TITLE = "Models Disagree"
 # Instance groups page
 #-------------------------------
 
+MISCLASSIFIED = "Misclassifications"
+
 INSTANCE_GROUPS = {
     "all": "All Instances",
     "allcorrect": "All Correct Instances",

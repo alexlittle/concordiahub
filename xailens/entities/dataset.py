@@ -131,7 +131,7 @@ class Dataset:
         Returns the local explanations for the given instance_uuid
 
         Args:
-            instance_uuid (str): instance uuid
+            instance_uuid (str): instance uuid to get the explanations for
 
         Returns:
             pd.DataFrame: local explanation
@@ -160,7 +160,8 @@ class Dataset:
 
     def get_instance_consensus(self) -> dict:
         """
-        Gets metrics on the overall instance consensus across all models for this dataset
+        Gets metrics on the overall instance consensus across all models for
+        this dataset
 
         Returns:
             dict:
@@ -191,12 +192,14 @@ class Dataset:
         Returns:
             pd.DataFrame:
         """
+
         common_ids = self.get_instance_consensus_ids()
         pred_df, y_true_common = self._get_common_predictions(common_ids)
         correct_df = pred_df.eq(y_true_common, axis=0)
         result = pd.DataFrame({"true_label": y_true_common})
         result = pd.concat([result, pred_df], axis=1)
         result["agreement"] = correct_df.apply(self._agreement, axis=1)
+
         # sort by true_label
         result = result.sort_values(by=["true_label"], ascending=True)
         result = result.reset_index(names="instance_uuid")
@@ -213,7 +216,9 @@ class Dataset:
         Builds UpSet-ready data from get_all_instances().
 
         Args:
-            include_all_correct (bool):
+            include_all_correct (bool): whether to include all correct/incorrect.
+                Defaults to False.
+
 
         Returns:
             tuple[pd.DataFrame, pd.Series]: dataframe with one row per unique
@@ -232,8 +237,8 @@ class Dataset:
         wrong_df.index = df["instance_uuid"]
 
         if not include_all_correct:
-            # drop rows where every model got it right (all zeros) —
-            # these aren't interesting for a disagreement/error overview
+            # drop rows where every model got it right, as not needed when
+            # wanting to display misclassifications
             wrong_df = wrong_df[wrong_df.sum(axis=1) > 0]
 
         set_sizes = wrong_df[model_cols].sum().sort_values(ascending=False)
@@ -249,11 +254,41 @@ class Dataset:
 
         return combo_df, set_sizes
 
+    def get_instances_for_set(self, set_key: str) -> pd.DataFrame:
+        """
+        Returns instances where exactly the given models are incorrect.
+
+        Args:
+            set_key (str): comma-separated model names, matching the format
+                used to build UpSet matrix customdata.
+
+        Returns:
+            pd.DataFrame: rows from get_all_instances() matching the combination.
+        """
+        combo_df, _ = self.get_upset_data()
+        model_cols = [c for c in combo_df.columns if
+                      c not in ("count", "instance_ids")]
+        selected = set(set_key.split(","))
+
+        match = combo_df[
+            combo_df[model_cols].apply(
+                lambda row: {m for m in model_cols if row[m] == 1} == selected,
+                axis=1,
+            )
+        ]
+        if match.empty:
+            return self.get_all_instances().iloc[0:0]
+
+        instance_ids = match.iloc[0]["instance_ids"]
+        df = self.get_all_instances()
+        return df[df["instance_uuid"].isin(instance_ids)]
+
     #------------------------------
     # Private helper functions
     #-------------------------------
     def _get_common_predictions(self, common_ids: set) -> tuple[pd.DataFrame, pd.Series]:
-        """Builds aligned prediction and ground-truth series for all models,
+        """
+        Builds prediction (dataframe) and ground-truth (series) for all models,
         filtered to the given common_ids.
 
         Args:
@@ -287,7 +322,8 @@ class Dataset:
 
     def _agreement(self, row: pd.Series) -> str:
         """
-        Private helper function to determine if all models are correct, incorrect or disagree.
+        Private helper function to determine if all models are correct,
+        incorrect or disagree.
 
         Args:
             row (pd.Series): model predictions

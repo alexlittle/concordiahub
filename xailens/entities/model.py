@@ -5,11 +5,11 @@ Model class
 import pandas as pd
 import dataclasses
 
-from typing import Any,Optional
+from typing import Optional
 
 from xailens import config
 from xailens.storage.filesystem_store import FilesystemStore
-from xailens.schema import DataSchema
+from xailens.entities.schema import DataSchema
 
 class Model:
     """

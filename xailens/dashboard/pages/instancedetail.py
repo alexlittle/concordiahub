@@ -24,6 +24,7 @@ def main():
     dataset = st.query_params.get('dataset')
     models_param = st.query_params.get("models")
     instance_group = st.query_params.get("instances")
+    set = st.query_params.get("set")
     instance_uuid = st.query_params.get("instance_uuid")
 
     all_models = explorer.get_models_for_dataset(dataset)
@@ -39,7 +40,10 @@ def main():
                  selected_model_names=selected_model_names,
                  dataset_id=dataset,)
 
-    st.html(display_breadcrumbs(dataset, instance_group=instance_group, instance_uuid=instance_uuid))
+    st.html(display_breadcrumbs(dataset,
+                                instance_group=instance_group,
+                                set=set,
+                                instance_uuid=instance_uuid))
 
 
     selected_models = explorer.get_selected_models_for_dataset(dataset, selected_model_names)

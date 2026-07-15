@@ -1,5 +1,9 @@
 """
 Model Explorer class
+
+Automatically scans and caches the data_store (holding the model data and
+explanations) to provide helper functions to the dashboard, eg for what datasets
+are available, which models are available for each dataset.
 """
 
 import os
@@ -24,10 +28,11 @@ class ModelExplorer:
         }
 
     def get_datasets(self) -> list:
-        """Gets names of all datasets stored in the models directory
+        """
+        Gets names of all datasets stored in the models directory
 
         Returns:
-            list: list of distinct dataset names
+            list: list of distinct dataset names sorted alphabetically
         """
 
         datasets = set()
@@ -74,7 +79,8 @@ class ModelExplorer:
         return sorted(models, key=lambda m: m.get("model_display_name"))
 
     def get_models_for_dataset(self, dataset: str) -> [Model]:
-        """ Gets all the models for the given dataset name
+        """
+        Gets all the models for the given dataset name
 
         Args:
             dataset (str): dataset name
@@ -90,7 +96,7 @@ class ModelExplorer:
 
     def is_valid_dataset(self, dataset: str) -> bool:
         """
-        Checks if dataset is valid
+        Checks if dataset is valid (i.e. it exists in the data_store)
 
         Args:
             dataset (str): dataset name
@@ -106,7 +112,7 @@ class ModelExplorer:
 
     def get_model_by_uuid(self, uuid: str) -> Model | None:
         """
-        Gets a Run by its UUID
+        Gets the full Model object by its UUID
 
         Args:
             uuid (str): UUID of the Model

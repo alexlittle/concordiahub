@@ -1,17 +1,17 @@
 # XAI Lens
 
-Under development as part of my MSc project, XAI Lens allows model developers to compare Explainable AI methods and 
+Developed as part of my MSc project, XAI Lens allows model developers to compare Explainable AI methods and 
 explanations between models, including scikit-learn models and LLMs.
-
-
 
 As this is a proof of concept framework, not all model, XAI method or visualisation types have been developed. However,
 the architecture (adapter pattern) allows new model types, XAI methods and visualisations to be added without large 
 changes to the codebase.
 
-## Live Demo
+## Demo & Documentation
 
-A demo is available at: https://xai.alexlittle.net/ 
+Demo available at: https://xailens.alexlittle.net/
+
+Documentation available at: https://xailens-docs.alexlittle.net/ 
 
 ## Install
 
@@ -19,14 +19,65 @@ A demo is available at: https://xai.alexlittle.net/
 * Launch the dashboard with `xailens-dash`
 
 
+## Repository Structure
+
+```
+.
+├── docs                          # Documentation in Sphinx RST format
+├── examples                      # Example models used in the demo              
+├── LICENSE                       # GNU 3 open Source license
+├── pyproject.toml                # Project/pip install file
+├── README.md                     # This readme file
+├── requirements-dev.txt          # Required packages if developing more features  
+├── requirements-examples.txt     # Required packages for running the example models
+├── requirements.txt              # Core required packages
+├── setup.py
+├── sonar-project.properties      # SonarQube configuration file
+├── tests                         # Tests - dir/file structure mirrors the xailens core package structure
+└── xailens
+    ├── adapters
+    │   ├── explainers
+    │   ├── models
+    │   └── viz
+    ├── artifacts.py
+    ├── cli.py
+    ├── config.py
+    ├── dashboard
+    │   ├── app.py
+    │   ├── assets
+    │   ├── explorer.py
+    │   ├── pages
+    │   ├── settings.py
+    │   └── utils
+    ├── entities
+    │   ├── context.py
+    │   ├── dataset.py
+    │   ├── model_explorer.py
+    │   ├── model.py
+    │   ├── schema.py
+    │   └── viz_option.py
+    ├── exceptions.py
+    ├── registry
+    │   ├── autodiscover.py
+    │   ├── model_registry.py
+    │   ├── viz_registry.py
+    │   └── xai_registry.py
+    ├── runner.py
+    ├── storage
+    │   ├── filesystem_store.py
+    │   └── store_base.py
+    ├── strings.py
+    └── _version.py
+    
+```
+
 ## Source code/Development
-* This repo uses Git LFS for large files. Before cloning, install Git LFS:
+
+This repo uses Git LFS for large files. Before cloning, install Git LFS:
 ```bash
 sudo apt install git-lfs 
 git lfs install
 ```
-
-
 
 
 ## CI & Code Quality

@@ -4,18 +4,17 @@ Streamlit page to display dataset overview
 
 
 import streamlit as st
-import streamlit.components.v1 as components
 
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard.utils.common import display_breadcrumbs, title_with_help_icon
 from xailens.dashboard.utils.dataset_helpers import render_metric_barchart, render_metric_card
-from xailens.dashboard.utils.upset import build_upset_figure
+from xailens.dashboard.utils.upset import render_upset_figure
 from xailens.dashboard.utils.heatmap import render_features_heatmap
 from xailens.entities.dataset import Dataset
 from xailens import strings, config
 from xailens.dashboard import settings
-from xailens.dashboard.utils.plotly_theme import apply_upset_theme
+
 
 def main():
     """
@@ -131,25 +130,7 @@ def main():
                                          instance_metrics['models_disagree'],
                                          f"{settings.INSTANCES_FILENAME}?{query_string}&instances=disagree"))
 
-            combo_df, set_sizes = dataset_obj.get_upset_data()
-            fig = build_upset_figure(combo_df, set_sizes)
-            fig = apply_upset_theme(fig, show_title=False)
-            event = st.plotly_chart(
-                fig,
-                width='stretch',
-                config=config.PLOTLY_CONFIG,
-                on_select="rerun",
-                selection_mode="points",
-                key="upset_matrix",
-            )
-
-            if event and event["selection"]["points"]:
-                point = event["selection"]["points"][0]
-                set_key = point.get("customdata")
-                if set_key:
-                    merged_params = dict(st.query_params)
-                    merged_params["set"] = set_key
-                    st.switch_page("pages/instances.py", query_params=merged_params)
+            render_upset_figure(dataset_obj)
 
 if __name__ == "__main__":
     main()

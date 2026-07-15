@@ -1,5 +1,5 @@
 """
-Streamlit page to display instances
+Streamlit page to display instances and misclassifications
 """
 
 import streamlit as st
@@ -10,18 +10,21 @@ from xailens.dashboard.utils.common import display_breadcrumbs
 from xailens.dashboard.utils.display_instances_df import render_instances_df
 from xailens import strings
 from xailens.entities.dataset import Dataset
+from xailens.dashboard.utils.upset import render_upset_figure
 
 
 def main():
     """
-    Streamlit page to display instances
+    Streamlit page to display instances and misclassifications
     """
 
     explorer = get_explorer()
 
+    # get the query params
     dataset = st.query_params.get('dataset')
     models_param = st.query_params.get("models")
-    instance_group = st.query_params.get("instances")
+    instance_group = st.query_params.get("instances", None)
+
 
     all_models = explorer.get_models_for_dataset(dataset)
     all_model_names = [me.get("model_display_name") for me in all_models]
@@ -35,24 +38,42 @@ def main():
                  all_model_names=all_model_names,
                  selected_model_names=selected_model_names,
                  dataset_id=dataset,
-                 selected_instance_group=instance_group,)
+                 selected_instance_group=instance_group)
 
     # Get the selected models for the dataset and matching instances
-    selected_models = explorer.get_selected_models_for_dataset(dataset, selected_model_names)
+    selected_models = explorer.get_selected_models_for_dataset(
+        dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_models)
     df_instances = dataset_obj.get_all_instances()
-    if instance_group != "all":
+
+    breadcrumb_slot = st.empty()
+    heading_slot = st.empty()
+
+    render_upset_figure(dataset_obj, navigate_on_click=False)
+
+    set = st.query_params.get("set", None)
+
+    # determine which instances to show based on if it's an instance_group or a
+    # set
+    if instance_group is not None and instance_group != "all":
         df_instances = df_instances[df_instances['agreement'] == instance_group]
 
-    # breadcrumb
-    st.html(display_breadcrumbs(dataset, instance_group=instance_group))
+    if instance_group is None and set is not None:
+        df_instances = dataset_obj.get_instances_for_set(set)
 
-    st.html(f"<h2>{strings.INSTANCE_GROUPS[instance_group]} ({len(df_instances)})</h2>")
+    # breadcrumb
+    breadcrumb_slot.html(display_breadcrumbs(dataset, instance_group=instance_group, set=set))
+
+    if instance_group is not None:
+        heading_slot.html(f"<h2>{strings.INSTANCE_GROUPS[instance_group]} ({len(df_instances)})</h2>")
+    else:
+        heading_slot.html(f"<h2>{strings.MISCLASSIFIED}</h2>")
 
     # Display matching instances
     # remove agreement column so doesn't display
     df_instances = df_instances.drop(columns="agreement")
 
+    # append "prediction" to the column title
     rename_map = {
         col: strings.DISPLAY_NAMES.get(col, f"{col} Prediction")
         for col in df_instances.columns
@@ -60,7 +81,13 @@ def main():
 
     df_instances = df_instances.rename(columns=rename_map)
     query_params = dict(st.query_params)
-    st.html(render_instances_df(df_instances, query_params, true_label_col=strings.DISPLAY_NAMES["true_label"]))
+
+
+
+    st.html(render_instances_df(
+        df_instances,
+        query_params,
+        true_label_col=strings.DISPLAY_NAMES["true_label"]))
 
 
 
