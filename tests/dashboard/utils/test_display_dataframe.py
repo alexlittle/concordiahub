@@ -4,7 +4,9 @@ Tests for _display_value, generate_rows_html, and render_instances_df.
 import pandas as pd
 import pytest
 
-from xailens.dashboard.utils.display_instances_df import _display_value, generate_rows_html, render_instances_df
+from xailens.dashboard.utils.display_dataframe import (
+    generate_rows_html, render_dataframe)
+from xailens.dashboard.utils.common import display_bool_value
 from xailens import strings
 from xailens.dashboard import settings
 
@@ -24,7 +26,7 @@ from xailens.dashboard import settings
     (None, "None"),
 ])
 def test_display_value_non_float(val, expected):
-    assert _display_value(val) == expected
+    assert display_bool_value(val) == expected
 
 
 @pytest.mark.parametrize("val, expected", [
@@ -34,7 +36,7 @@ def test_display_value_non_float(val, expected):
 def test_display_value_float_bypasses_bool_conversion(val, expected):
     # Floats that are numerically 0/1 should NOT be rendered as True/False,
     # since the isinstance(val, float) check excludes them.
-    assert _display_value(val) == expected
+    assert display_bool_value(val) == expected
 
 
 # -------------------------
@@ -106,13 +108,13 @@ def test_generate_rows_html_empty_dataframe_returns_empty_string():
 # ---------------------------------------------------------------------------
 
 def test_render_instances_df_includes_all_column_headers(sample_df):
-    html = render_instances_df(sample_df, query_params={})
+    html = render_dataframe(sample_df, query_params={})
     for col in sample_df.columns:
         assert f"<th nowrap>{col}</th>" in html
 
 
 def test_render_instances_df_wraps_rows_in_table_body(sample_df):
-    html = render_instances_df(sample_df, query_params={})
+    html = render_dataframe(sample_df, query_params={})
     assert '<table class="report-table">' in html
     assert "<tbody>" in html
     assert "id-1" in html

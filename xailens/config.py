@@ -3,14 +3,14 @@ Configuration file for XAI-Compare
 """
 
 import os
-from typing import Final
 
+from typing import Final
+from dataclasses import dataclass
 from pathlib import Path
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor
 from xgboost import XGBClassifier, XGBRegressor
 
 from xailens import strings
-from xailens.entities.viz_option import VizOption
 
 
 # Constants for artifact filename/structure
@@ -38,6 +38,13 @@ BEST_MODEL_METRIC = "f1_weighted"
 # being very slow to load
 KEEP_NUM_FEATURES = 500
 
+@dataclass
+class VizOption:
+    """
+    Helper dataclass for VizOption - with a display name and method
+    """
+    display_name: str
+    method: str | None = None
 
 #------------------------
 # XAI Method default visualisations & defaults

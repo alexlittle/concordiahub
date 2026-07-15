@@ -10,7 +10,7 @@ from xailens import strings, config
 from xailens.dashboard.utils.common import display_breadcrumbs
 from xailens.dashboard.utils.instancedetail_helpers import build_model_panel, render_model_panel
 from xailens.dashboard.utils.display_table import render_series
-from xailens.dashboard.utils.display_instances_df import render_instances_df
+from xailens.dashboard.utils.display_dataframe import render_dataframe
 from xailens.entities.dataset import Dataset
 from xailens.dashboard.utils.heatmap import render_features_heatmap
 
@@ -24,7 +24,7 @@ def main():
     dataset = st.query_params.get('dataset')
     models_param = st.query_params.get("models")
     instance_group = st.query_params.get("instances")
-    set = st.query_params.get("set")
+    matrix_set = st.query_params.get("matrix_set")
     instance_uuid = st.query_params.get("instance_uuid")
 
     all_models = explorer.get_models_for_dataset(dataset)
@@ -42,7 +42,7 @@ def main():
 
     st.html(display_breadcrumbs(dataset,
                                 instance_group=instance_group,
-                                set=set,
+                                matrix_set=matrix_set,
                                 instance_uuid=instance_uuid))
 
 
@@ -63,7 +63,7 @@ def main():
 
     df_instance = df_instance.rename(columns=rename_map)
 
-    st.html(render_instances_df(df_instance, true_label_col=strings.DISPLAY_NAMES["true_label"]))
+    st.html(render_dataframe(df_instance, true_label_col=strings.DISPLAY_NAMES["true_label"]))
 
     col1, col2 = st.columns(2, gap="large")
 

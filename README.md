@@ -21,54 +21,56 @@ Documentation available at: https://xailens-docs.alexlittle.net/
 
 ## Repository Structure
 
+An overview of this repository's directory and file structure. Note that not 
+every directory/file is included here.
+
 ```
 .
-├── docs                          # Documentation in Sphinx RST format
-├── examples                      # Example models used in the demo              
-├── LICENSE                       # GNU 3 open Source license
-├── pyproject.toml                # Project/pip install file
-├── README.md                     # This readme file
-├── requirements-dev.txt          # Required packages if developing more features  
-├── requirements-examples.txt     # Required packages for running the example models
-├── requirements.txt              # Core required packages
-├── setup.py
-├── sonar-project.properties      # SonarQube configuration file
-├── tests                         # Tests - dir/file structure mirrors the xailens core package structure
-└── xailens
-    ├── adapters
-    │   ├── explainers
-    │   ├── models
-    │   └── viz
-    ├── artifacts.py
-    ├── cli.py
-    ├── config.py
-    ├── dashboard
-    │   ├── app.py
-    │   ├── assets
-    │   ├── explorer.py
-    │   ├── pages
-    │   ├── settings.py
-    │   └── utils
-    ├── entities
-    │   ├── context.py
-    │   ├── dataset.py
-    │   ├── model_explorer.py
-    │   ├── model.py
-    │   ├── schema.py
-    │   └── viz_option.py
-    ├── exceptions.py
-    ├── registry
-    │   ├── autodiscover.py
-    │   ├── model_registry.py
-    │   ├── viz_registry.py
-    │   └── xai_registry.py
-    ├── runner.py
-    ├── storage
-    │   ├── filesystem_store.py
-    │   └── store_base.py
-    ├── strings.py
-    └── _version.py
-    
+├── docs                     # Documentation in Sphinx RST format
+├── examples                 # Example models used in the demo              
+├── tests                    # Tests - dir/file structure mirrors the xailens 
+│                            # core package structure
+├── xailens                    # Core XAI Lens code
+│   ├── adapters                 # Adapters
+│   │   ├── explainers             # Adapters for XAI methods (eg TreeShap)
+│   │   ├── models                 # Adapters for model types (eg LLM, XGBoost)
+│   │   └── viz                    # Adapters for visualisations (eg bar chart)
+│   ├── dashboard                # Streamlit dashboard application
+│   │   ├── assets                 # CSS, logo/icons etc
+│   │   ├── pages                  # Streamlit pages
+│   │   ├── utils                  # Helper functions/utilities/components for pages
+│   │   ├── app.py                 # Dashboard start up
+│   │   ├── explorer.py            # Memory caching of model_explorer class
+│   │   └── settings.py            # Dashboard settings
+│   ├── entities                 # Helper classes for library and dashboard
+│   │   ├── context.py             # Dataclasses for sending model to framework
+│   │   ├── dataset.py             # Dataset class (represents a dataset)
+│   │   ├── model_explorer.py      # Explorer class (for dataset, models available)
+│   │   ├── model.py               # Model class
+│   │   └── schema.py              # Dataclass for model data description
+│   ├── registry                 # Adapter registries
+│   │   ├── autodiscover.py        # Autodiscovers the adapters available
+│   │   ├── model_registry.py      # Registry for model adapters
+│   │   ├── viz_registry.py        # Registry for visualisation adapters
+│   │   └── xai_registry.py        # Registry for XAi method adapters
+│   ├── storage                  # Storage classes
+│   │   ├── filesystem_store.py    # Filesystem store class
+│   │   └── store_base.py          # Base (abstract) store class
+│   ├── artifacts.py             # Artifact store - manages models and storage
+│   ├── cli.py                   # Command line interface for launching dashboard
+│   ├── config.py                # XAI Lens configuration
+│   ├── exceptions.py            # Custom exceptions
+│   ├── runner.py                # Orchestrator/entry point for loading a model
+│   ├── strings.py               # Strings used throughout library
+│   └── _version.py              # library version number
+├── LICENSE                    # GNU 3 open Source license
+├── pyproject.toml             # Project/pip install file
+├── README.md                  # This readme file
+├── requirements-dev.txt       # Required packages if developing more features 
+├── requirements-examples.txt  # Required packages for running the example models
+├── requirements.txt           # Core required packages
+├── setup.py                   # Project/pip install file
+└── sonar-project.properties   # SonarQube configuration file   
 ```
 
 ## Source code/Development

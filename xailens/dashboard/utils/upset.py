@@ -50,20 +50,31 @@ def build_upset_figure(combo_df: pd.DataFrame,
         ],
     )
 
+    correct_x, correct_y = [], []
+    incorrect_x, incorrect_y = [], []
+    row_order = model_cols[::-1]
+    combo_key_list = [
+        ",".join(m for m in model_cols if combo_df.loc[i, m] == 1)
+        for i in range(n_combos)
+    ]
+
     #  Top-right -  bar chart of the set combinations
     fig.add_trace(
         go.Bar(
             x=list(range(n_combos)),
             y=combo_df["count"],
             marker_color=PLOT_UPSET_INCORRECT_COLOR,
+            customdata=combo_key_list,
             hovertext=[
                 f"{c} instances incorrect in models: <br>" + ", ".join(
                     m for m in model_cols if combo_df.loc[i, m] == 1
-                )
+                ) + "<br>Click to view instances"
                 for i, c in enumerate(combo_df["count"])
             ],
             hoverinfo="text",
             showlegend=False,
+            selected={"marker": {"opacity": 1}},
+            unselected={"marker": {"opacity": 1}},
         ),
         row=1, col=2,
     )
@@ -83,16 +94,10 @@ def build_upset_figure(combo_df: pd.DataFrame,
     )
 
     # Bottom-right - full matrix, every dot coloured for correct/incorrect
-    correct_x, correct_y = [], []
-    incorrect_x, incorrect_y = [], []
-    row_order = model_cols[::-1]
-    combo_key_list = [
-        ",".join(m for m in model_cols if combo_df.loc[i, m] == 1)
-        for i in range(n_combos)
-    ]
+
 
     # calculate what combination dots should be shown as correct/incorrect
-    correct_cd, incorrect_cd = [], []
+    incorrect_cd = []
     for i in range(n_combos):
         for j, m in enumerate(row_order):
             if combo_df.loc[i, m] == 1:
@@ -102,16 +107,16 @@ def build_upset_figure(combo_df: pd.DataFrame,
             else:
                 correct_x.append(i)
                 correct_y.append(j)
-                correct_cd.append(combo_key_list[i])
 
     # base - every "correct" dot
     fig.add_trace(
         go.Scatter(
-            x=correct_x, y=correct_y, mode="markers",
+            x=correct_x,
+            y=correct_y,
+            mode="markers",
             marker={"size": 14, "color": PLOT_UPSET_CORRECT_COLOR},
-            customdata=correct_cd,
             name="Correct",
-            hovertemplate="Models: %{customdata}<br>Click to view instances<extra></extra>",
+            hoverinfo="skip",
             showlegend=True,
             selected={"marker": {"opacity": 1}},
             unselected={"marker": {"opacity": 1}},
@@ -126,7 +131,8 @@ def build_upset_figure(combo_df: pd.DataFrame,
             continue
         fig.add_trace(
             go.Scatter(
-                x=[i, i], y=[min(active_js), max(active_js)],
+                x=[i, i],
+                y=[min(active_js), max(active_js)],
                 mode="lines",
                 line={"color": PLOT_UPSET_INCORRECT_COLOR, "width": 2},
                 name="Incorrect",
@@ -137,7 +143,9 @@ def build_upset_figure(combo_df: pd.DataFrame,
 
     fig.add_trace(
         go.Scatter(
-            x=incorrect_x, y=incorrect_y, mode="markers",
+            x=incorrect_x,
+            y=incorrect_y,
+            mode="markers",
             marker={"size": 14, "color": PLOT_UPSET_INCORRECT_COLOR},
             customdata=incorrect_cd,
             name="Incorrect",
@@ -151,8 +159,8 @@ def build_upset_figure(combo_df: pd.DataFrame,
 
     # --- Axis formatting ---
     fig.update_xaxes(showticklabels=False, row=1, col=2)
-    fig.update_yaxes(title_text="Count", row=1, col=2)
-    fig.update_xaxes(autorange="reversed", title_text="Set size", row=2, col=1)
+    fig.update_yaxes(title_text="Instances incorrect", row=1, col=2)
+    fig.update_xaxes(autorange="reversed", title_text="Instances incorrect", row=2, col=1)
     fig.update_yaxes(
         tickmode="array", tickvals=list(range(n_models)),
         ticktext=model_cols[::-1], row=2, col=1,
@@ -209,11 +217,11 @@ def render_upset_figure(dataset: Dataset,
     if event and event["selection"]["points"]:
         point = event["selection"]["points"][0]
         set_key = point.get("customdata")
-        if set_key and set_key != st.query_params.get("set"):
+        if set_key and set_key != st.query_params.get("matrix_set"):
             merged_params = dict(st.query_params)
-            merged_params["set"] = set_key
+            merged_params["matrix_set"] = set_key
             if navigate_on_click:
                 st.switch_page("pages/instances.py",
                                query_params=merged_params)
             else:
-                st.query_params["set"] = set_key
+                st.query_params["matrix_set"] = set_key

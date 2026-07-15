@@ -3,11 +3,13 @@ Streamlit page to display instances and misclassifications
 """
 
 import streamlit as st
+from itables.streamlit import interactive_table
+from itables.typing import JavascriptFunction
 
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard.utils.common import display_breadcrumbs
-from xailens.dashboard.utils.display_instances_df import render_instances_df
+from xailens.dashboard.utils.display_instances_df import build_display_df
 from xailens import strings
 from xailens.entities.dataset import Dataset
 from xailens.dashboard.utils.upset import render_upset_figure
@@ -49,23 +51,32 @@ def main():
     breadcrumb_slot = st.empty()
     heading_slot = st.empty()
 
-    render_upset_figure(dataset_obj, navigate_on_click=False)
+    # only show the matrix plot if a matrix set if given (i.e. there isn't
+    # an instance group
+    if instance_group is None:
+        render_upset_figure(dataset_obj, navigate_on_click=False)
 
-    set = st.query_params.get("set", None)
+    matrix_set = st.query_params.get("matrix_set", None)
 
     # determine which instances to show based on if it's an instance_group or a
-    # set
+    # matrix_set
     if instance_group is not None and instance_group != "all":
         df_instances = df_instances[df_instances['agreement'] == instance_group]
 
-    if instance_group is None and set is not None:
-        df_instances = dataset_obj.get_instances_for_set(set)
+    if instance_group is None and matrix_set is not None:
+        df_instances = dataset_obj.get_instances_for_set(matrix_set)
 
     # breadcrumb
-    breadcrumb_slot.html(display_breadcrumbs(dataset, instance_group=instance_group, set=set))
+    breadcrumb_slot.html(
+        display_breadcrumbs(dataset,
+                            instance_group=instance_group,
+                            matrix_set=matrix_set))
 
+    # page title
     if instance_group is not None:
-        heading_slot.html(f"<h2>{strings.INSTANCE_GROUPS[instance_group]} ({len(df_instances)})</h2>")
+        heading_slot.html(
+            f"""<h2>{strings.INSTANCE_GROUPS[instance_group]}
+            ({len(df_instances)})</h2>""")
     else:
         heading_slot.html(f"<h2>{strings.MISCLASSIFIED}</h2>")
 
@@ -78,16 +89,26 @@ def main():
         col: strings.DISPLAY_NAMES.get(col, f"{col} Prediction")
         for col in df_instances.columns
     }
-
     df_instances = df_instances.rename(columns=rename_map)
+
+    # display the table of instances
     query_params = dict(st.query_params)
 
+    if matrix_set is not None:
+        st.html("<h3>Misclassifications for </h3>")
 
-
-    st.html(render_instances_df(
-        df_instances,
-        query_params,
-        true_label_col=strings.DISPLAY_NAMES["true_label"]))
+    interactive_table(
+        build_display_df(df_instances,
+                         query_params,
+                         strings.DISPLAY_NAMES["true_label"]),
+        allow_html=True,
+        maxBytes=5000000,  # maxBytes and maxRows need to be set to make sure
+                          # it doesn't max out at 64k
+        maxRows=50000,
+        pageLength=25,
+        showIndex=False, # don't display the id column
+        classes="display compact",
+    )
 
 
 
