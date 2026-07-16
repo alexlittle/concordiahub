@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.registry.viz_registry import get_viz_adapter
 from xailens import exceptions, config
-from xailens.dashboard.utils.display_table import render_dataframe
+from xailens.dashboard.utils.display_table import dataframe_to_html_table
 from xailens.entities.model import Model
 from xailens.dashboard.utils.plotly_theme import apply_horizontal_bar_theme
 from xailens.dashboard.utils.common import title_with_help_icon
@@ -139,7 +139,7 @@ def render_model_panel(panel: ModelPanel, plot_key: str) -> None:
                                     key=plot_key,
                                     config=config.PLOTLY_CONFIG)
                 elif isinstance(viz, pd.DataFrame):
-                    st.html(render_dataframe(viz))
+                    st.html(dataframe_to_html_table(viz))
                 else:
                     st.html(viz)
         except NotImplementedError:

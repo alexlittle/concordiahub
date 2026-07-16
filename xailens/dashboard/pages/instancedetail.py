@@ -11,7 +11,7 @@ from xailens.dashboard.utils.common import (
     display_breadcrumbs, rename_model_prediction_columns)
 from xailens.dashboard.utils.instancedetail_helpers import (
     build_model_panel, render_model_panel)
-from xailens.dashboard.utils.display_table import render_series
+from xailens.dashboard.utils.display_table import series_to_html_table
 from xailens.dashboard.utils.display_dataframe import render_dataframe
 from xailens.entities.dataset import Dataset
 from xailens.dashboard.utils.heatmap import render_features_heatmap
@@ -84,7 +84,7 @@ def main():
             # display the original data
             st.html(f"<h3>{strings.INSTANCE_DETAIL_DATA_TITLE}</h3>")
             instance_data = dataset_obj.get_instance_data(instance_uuid)
-            st.html(render_series(instance_data))
+            st.html(series_to_html_table(instance_data))
 
     with tab2:
         # Panels for each model explanation - split so there are 2 columns

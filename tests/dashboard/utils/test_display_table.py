@@ -7,13 +7,12 @@ Test the functions in xailens.dashboard.utils.display_table:
 
 """
 
-
-
 import pytest
 import pandas as pd
 import numpy as np
 from xailens.dashboard.utils.display_table import (
-    _format_cell, generate_rows_html, render_dataframe, render_series)
+    _format_cell, generate_rows_html, dataframe_to_html_table,
+    series_to_html_table)
 
 
 @pytest.fixture
@@ -66,17 +65,17 @@ def test_generate_rows_html(sample_df):
     assert sample_df.shape[0] == html.count("<tr>")
 
 def test_render_dataframe(sample_df):
-    html = render_dataframe(sample_df)
+    html = dataframe_to_html_table(sample_df)
     assert "<table" in html
     assert "report-table" in html
 
 def test_render_series_single(single_value_series):
-    html = render_series(single_value_series)
+    html = series_to_html_table(single_value_series)
     assert "<strong>Age</strong>" in html
     assert "<table" not in html
 
 def test_render_series_multi(multi_value_series):
-    html = render_series(multi_value_series)
+    html = series_to_html_table(multi_value_series)
     assert "<table" in html
     # should be length of series plus the header
     assert html.count("<tr>") == len(multi_value_series) + 1

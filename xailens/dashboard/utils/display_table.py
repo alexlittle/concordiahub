@@ -44,7 +44,7 @@ def generate_rows_html(df: pd.DataFrame) -> str:
         rows.append(f"<tr>{cells}</tr>")
     return "\n".join(rows)
 
-def render_dataframe(df: pd.DataFrame) -> str:
+def dataframe_to_html_table(df: pd.DataFrame) -> str:
     """
     Generates an HTML table for the given dataframe
 
@@ -70,9 +70,9 @@ def render_dataframe(df: pd.DataFrame) -> str:
     """
 
 
-def render_series(series: pd.Series) -> str:
+def series_to_html_table(series: pd.Series) -> str:
     """
-    Generates an HTML table for the given series
+    Generates a HTML table code for the given series
 
     Args:
         series (pd.Series): series
