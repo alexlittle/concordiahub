@@ -8,7 +8,7 @@ import streamlit as st
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard.utils.common import display_breadcrumbs, title_with_help_icon
-from xailens.dashboard.utils.dataset_helpers import render_metric_barchart, render_metric_card
+from xailens.dashboard.utils.dataset_helpers import render_metric_barchart, generate_metric_card
 from xailens.dashboard.utils.upset import render_upset_figure
 from xailens.dashboard.utils.heatmap import render_features_heatmap
 from xailens.entities.dataset import Dataset
@@ -53,7 +53,7 @@ def main():
     selected_models = explorer.get_selected_models_for_dataset(dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_models)
 
-    tab1, tab2, tab3 = st.tabs(["Overview", "More Metrics", "Instance Consensus"])
+    tab1, tab2, tab3 = st.tabs(strings.DATASET_TABS)
 
     with tab1:
         with st.container(border=True, key="recommended-models"):
@@ -117,17 +117,17 @@ def main():
             query_string = "&".join(f"{k}={v}" for k, v in params.items())
             col7, col8, col9, col10 = st.columns(4)
 
-            col7.html(render_metric_card(strings.INSTANCES_TOTAL_TITLE,
-                                         instance_metrics['total'],
+            col7.html(generate_metric_card(strings.INSTANCES_TOTAL_TITLE,
+                                           instance_metrics['total'],
                                          f"{settings.INSTANCES_FILENAME}?{query_string}&instances=all"))
-            col8.html(render_metric_card(strings.INSTANCES_ALL_CORRECT_TITLE,
-                                         instance_metrics['all_correct'],
+            col8.html(generate_metric_card(strings.INSTANCES_ALL_CORRECT_TITLE,
+                                           instance_metrics['all_correct'],
                                          f"{settings.INSTANCES_FILENAME}?{query_string}&instances=allcorrect"))
-            col9.html(render_metric_card(strings.INSTANCES_ALL_INCORRECT_TITLE,
-                                         instance_metrics['all_incorrect'],
+            col9.html(generate_metric_card(strings.INSTANCES_ALL_INCORRECT_TITLE,
+                                           instance_metrics['all_incorrect'],
                                          f"{settings.INSTANCES_FILENAME}?{query_string}&instances=allincorrect"))
-            col10.html(render_metric_card(strings.INSTANCES_DISAGREE_TITLE,
-                                         instance_metrics['models_disagree'],
+            col10.html(generate_metric_card(strings.INSTANCES_DISAGREE_TITLE,
+                                            instance_metrics['models_disagree'],
                                          f"{settings.INSTANCES_FILENAME}?{query_string}&instances=disagree"))
 
             render_upset_figure(dataset_obj)

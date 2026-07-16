@@ -3,7 +3,7 @@ import pytest
 import plotly.graph_objects as go
 from unittest.mock import patch
 
-from xailens.dashboard.utils.dataset_helpers import render_metric_barchart, render_metric_card
+from xailens.dashboard.utils.dataset_helpers import render_metric_barchart, generate_metric_card
 
 
 def test_inspect_model(lr_model):
@@ -66,12 +66,12 @@ class TestRenderMetricBarchart:
 
 class TestRenderMetricCard:
     def test_renders_expected_html_structure(self):
-        html = render_metric_card("Accuracy", "0.83", "/models/lr")
+        html = generate_metric_card("Accuracy", "0.83", "/models/lr")
         assert 'class="xl-metric-card"' in html
         assert 'href="/models/lr"' in html
         assert 'class="xl-metric-label">Accuracy<' in html
         assert 'class="xl-metric-value">0.83<' in html
 
     def test_handles_numeric_value(self):
-        html = render_metric_card("Score", 0.95, "#")
+        html = generate_metric_card("Score", 0.95, "#")
         assert "0.95" in html

@@ -1,7 +1,7 @@
 """
 Helper functions for common dashboard display elements
 """
-
+import pandas as pd
 import streamlit as st
 
 from typing import Optional, Any
@@ -122,3 +122,21 @@ def display_bool_value(val: Any) -> str:
     if val in (0, 1, True, False) and not isinstance(val, float):
         return str(bool(val))
     return str(val)
+
+def rename_model_prediction_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Renames a model name column to be model name + "prediction"
+
+    Args:
+        df (pd.DataFrame): input dataframe
+
+    Returns:
+        pd.DataFrame: dataframe with renamed columns
+    """
+
+    rename_map = {
+        col: strings.DISPLAY_NAMES.get(col, f"{col} Prediction")
+        for col in df.columns
+    }
+    df = df.rename(columns=rename_map)
+    return df

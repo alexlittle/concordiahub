@@ -12,7 +12,10 @@ from xailens import strings, config
 from xailens.dashboard.assets.icons import arrow_icon
 
 
-def render_metric_barchart(metrics: pd.DataFrame, metric_name: str, show_title: bool=True) -> plotly.graph_objects.Figure:
+def render_metric_barchart(
+        metrics: pd.DataFrame,
+        metric_name: str,
+        show_title: bool=True) -> plotly.graph_objects.Figure:
     """
     Renders a barchart of the metrics
 
@@ -53,9 +56,9 @@ def render_metric_barchart(metrics: pd.DataFrame, metric_name: str, show_title: 
     return plotly_theme.apply_theme(fig, show_title=show_title)
 
 
-def render_metric_card(title:str, value:str, link:str)-> str:
+def generate_metric_card(title:str, value:str, link:str)-> str:
     """
-    Renders a metrics card
+    Generates HTML code for a metrics card
 
     Args:
         title (str): title of the metric

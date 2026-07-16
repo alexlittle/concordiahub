@@ -21,7 +21,9 @@ class BarChartVizAdapter(VizAdapter):
     display_name = strings.BARCHART_DISPLAY_NAME
     compatible_explanations = config.BARCHART_COMPATIBLE_XAI
 
-    def render(self, explanation: pd.DataFrame, axis_range: Optional[tuple[float, float]]=None) -> list[Any]:
+    def render(self,
+               explanation: pd.DataFrame,
+               axis_range: Optional[tuple[float, float]]=None) -> list[Any]:
         """
         Render the bar chart visualization
 
@@ -37,11 +39,14 @@ class BarChartVizAdapter(VizAdapter):
         # filter to show only the largest contributors, not all
         explanation = self._top_features(explanation)
 
-        explanation = explanation.sort_values("score_normalised_max", ascending=True)
+        explanation = explanation.sort_values("score_normalised_max",
+                                              ascending=True)
         colors = [config.PLOT_SECONDARY_COLOR if v < 0 else config.PLOT_PRIMARY_COLOR
                   for v in explanation["score_normalised_max"]]
 
+        # use features names as y-axis labels
         feature_names = explanation["feature_name"].tolist()
+
         # use the total n features to determine the necessary height
         n_features = len(feature_names)
 

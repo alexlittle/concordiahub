@@ -80,6 +80,11 @@ def render_series(series: pd.Series) -> str:
     Returns:
         str: HTML code for the table
     """
+
+    if len(series) == 1:
+        name, value = next(series.items())
+        return f'<p><strong>{name.capitalize()}</strong>:</p><p>{markdown(str(value))}</p>'
+
     rows = [
         f"<tr><td>{name}</td><td>{markdown(str(value))}</td></tr>" for name, value in series.items()
     ]

@@ -44,6 +44,10 @@ HOME_DATASET_NUM_MODELS = "{count} models"
 
 # Dataset page elements
 #-------------------------------
+
+# tabs
+DATASET_TABS = ["Overview", "More Metrics", "Instance Consensus"]
+
 # section titles
 RECOMMENDED_MODEL_TITLE = "Recommended Model"
 RECOMMENDED_MODELS_TITLE = "Recommended Models"
@@ -101,6 +105,10 @@ DISPLAY_NAMES = {
 
 # Instance detail page
 #-------------------------------
+
+# tabs
+INSTANCE_DETAIL_TABS = ["Instance Overview", "Model Explanations"]
+
 INSTANCE_DETAIL_PREDICTIONS_TITLE = "Model Predictions"
 INSTANCE_DETAIL_HEATMAP_TITLE = "Local Feature Importance Heatmap"
 INSTANCE_DETAIL_DATA_TITLE = "Instance Data"
@@ -187,7 +195,7 @@ WATERFALL_X_AXIS = "Contribution"
 
 # Tabular Visualisation
 TABULAR_DISPLAY_NAME = "Tabular (text)"
-TABULAR_SCORE_TITLE = "Score (1 to -1)"
+TABULAR_SCORE_TITLE = "Normalised<br/>Score (1 to -1)"
 
 
 MATRIX_SET_PLOT_TITLE = "Sets of Misclassified Instances"

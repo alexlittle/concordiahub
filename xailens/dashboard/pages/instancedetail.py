@@ -7,7 +7,8 @@ import streamlit as st
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
 from xailens import strings, config
-from xailens.dashboard.utils.common import display_breadcrumbs
+from xailens.dashboard.utils.common import (
+    display_breadcrumbs, rename_model_prediction_columns)
 from xailens.dashboard.utils.instancedetail_helpers import (
     build_model_panel, render_model_panel)
 from xailens.dashboard.utils.display_table import render_series
@@ -22,6 +23,7 @@ def main():
 
     explorer = get_explorer()
 
+    # get all the query params
     dataset = st.query_params.get('dataset')
     models_param = st.query_params.get("models")
     instance_group = st.query_params.get("instances")
@@ -51,57 +53,55 @@ def main():
         dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_models)
 
-    # Overall predictions
-    st.html(f"<h2>{strings.INSTANCE_DETAIL_PREDICTIONS_TITLE}</h2>")
-    df_instances = dataset_obj.get_all_instances()
-    df_instance = df_instances[df_instances["instance_uuid"] == instance_uuid]
-    df_instance = df_instance.drop(columns=["instance_uuid", "agreement"])
+    tab1, tab2 = st.tabs(strings.INSTANCE_DETAIL_TABS)
 
-    rename_map = {
-        col: strings.DISPLAY_NAMES.get(col, f"{col} Prediction")
-        for col in df_instance.columns
-    }
+    with tab1:
+        # Overall predictions
+        st.html(f"<h3>{strings.INSTANCE_DETAIL_PREDICTIONS_TITLE}</h3>")
+        df_instances = dataset_obj.get_all_instances()
+        df_instance = df_instances[df_instances["instance_uuid"] == instance_uuid]
+        df_instance = df_instance.drop(columns=["instance_uuid", "agreement"])
 
-    df_instance = df_instance.rename(columns=rename_map)
+        # append "prediction" to the column title
+        df_instance = rename_model_prediction_columns(df_instance)
 
-    st.html(render_dataframe(
-        df_instance, true_label_col=strings.DISPLAY_NAMES["true_label"]))
+        # show table of the predictions for each model
+        st.html(render_dataframe(
+            df_instance, true_label_col=strings.DISPLAY_NAMES["true_label"]))
 
-    col1, col2 = st.columns(2, gap="large")
+        col1, col2 = st.columns(2, gap="large")
 
-    with col1:
-    # display the local feature heatmap
-        st.html(f"<h2>{strings.INSTANCE_DETAIL_HEATMAP_TITLE}</h2>")
-        df_local_exp = dataset_obj.get_local_explanations(instance_uuid)
-        st.plotly_chart(
-            render_features_heatmap(df_local_exp),
-            width='content',
-            config=config.PLOTLY_CONFIG)
+        with col1:
+            # display the local feature heatmap
+            st.html(f"<h3>{strings.INSTANCE_DETAIL_HEATMAP_TITLE}</h3>")
+            df_local_exp = dataset_obj.get_local_explanations(instance_uuid)
+            st.plotly_chart(
+                render_features_heatmap(df_local_exp),
+                width='content',
+                config=config.PLOTLY_CONFIG)
 
-    with col2:
-        st.html(f"<h2>{strings.INSTANCE_DETAIL_DATA_TITLE}</h2>")
+        with col2:
+            # display the original data
+            st.html(f"<h3>{strings.INSTANCE_DETAIL_DATA_TITLE}</h3>")
+            instance_data = dataset_obj.get_instance_data(instance_uuid)
+            st.html(render_series(instance_data))
 
-        # display the original data
-        instance_data = dataset_obj.get_instance_data(instance_uuid)
-
-        st.html(render_series(instance_data))
-
-    # Panels for each model explanation
-    st.html(f"<h2>{strings.INSTANCE_DETAIL_MODEL_EXPLANATIONS}</h2>")
-    for i in range(0, len(selected_models), 2):
-        cols = st.columns(2, gap="large")
-        for j, col in enumerate(cols):
-            idx = i + j
-            if idx < len(selected_models):
-                me = selected_models[idx]
-                with col:
-                    key = me.get("model_uuid")
-                    viz_state_key = f"model-viz-{key}"
-                    panel = build_model_panel(me,
-                                              viz_state_key,
-                                              st.session_state,
-                                              instance_uuid)
-                    render_model_panel(panel, f"explanation_{key}")
+    with tab2:
+        # Panels for each model explanation - split so there are 2 columns
+        for i in range(0, len(selected_models), 2):
+            cols = st.columns(2, gap="large")
+            for j, col in enumerate(cols):
+                idx = i + j
+                if idx < len(selected_models):
+                    model = selected_models[idx]
+                    with col:
+                        key = model.get("model_uuid")
+                        viz_state_key = f"model-viz-{key}"
+                        panel = build_model_panel(model,
+                                                  viz_state_key,
+                                                  st.session_state,
+                                                  instance_uuid)
+                        render_model_panel(panel, f"explanation_{key}")
 
 if __name__ == "__main__":
     main()

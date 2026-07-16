@@ -7,12 +7,13 @@ from itables.streamlit import interactive_table
 
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
-from xailens.dashboard.utils.common import display_breadcrumbs
+from xailens.dashboard.utils.common import (
+    display_breadcrumbs, rename_model_prediction_columns)
 from xailens.dashboard.utils.instances_table import build_display_df
 from xailens import strings
 from xailens.entities.dataset import Dataset
 from xailens.dashboard.utils.upset import render_upset_figure
-
+from xailens.dashboard import settings
 
 def main():
     """
@@ -91,11 +92,7 @@ def main():
     df_instances = df_instances.drop(columns="agreement")
 
     # append "prediction" to the column title
-    rename_map = {
-        col: strings.DISPLAY_NAMES.get(col, f"{col} Prediction")
-        for col in df_instances.columns
-    }
-    df_instances = df_instances.rename(columns=rename_map)
+    df_instances = rename_model_prediction_columns(df_instances)
 
     # display the table of instances
     query_params = dict(st.query_params)
@@ -104,17 +101,19 @@ def main():
         # put in alpha order
         models = sorted(matrix_set.split(","))
         model_set = ", ".join(models)
-        st.html(f"<h3>{strings.MISCLASSIFIED_INSTANCES_TITLE.format(models=model_set)}</h3>")
+        st.html(f"<h3>"
+                f"{strings.MISCLASSIFIED_INSTANCES_TITLE.format(
+                    models=model_set)}</h3>")
 
     interactive_table(
         build_display_df(df_instances,
                          query_params,
                          strings.DISPLAY_NAMES["true_label"]),
         allow_html=True,
-        maxBytes=5000000,  # maxBytes and maxRows need to be set to make sure
-                          # it doesn't max out at 64k
-        maxRows=50000,
-        pageLength=25,
+        # maxBytes/maxRows need to be set to make sure it doesn't max out at 64k
+        maxBytes=settings.ITABLE_MAX_BYTES,
+        maxRows=settings.ITABLE_MAX_ROWS,
+        pageLength=settings.ITABLE_ROWS_PER_PAGE,
         showIndex=False, # don't display the id column
         classes="display compact",
     )
