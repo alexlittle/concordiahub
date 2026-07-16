@@ -1,6 +1,7 @@
 """
-Tests for _display_value, generate_rows_html, and render_instances_df.
+Tests for _display_value, generate_rows_html, and render_dataframe.
 """
+
 import pandas as pd
 import pytest
 
@@ -13,7 +14,7 @@ from xailens.dashboard import settings
 
 
 # -----------------
-# test  _display_value
+# test  display_bool_value
 # ----------------
 
 @pytest.mark.parametrize("val, expected", [
@@ -25,7 +26,7 @@ from xailens.dashboard import settings
     ("abc", "abc"),
     (None, "None"),
 ])
-def test_display_value_non_float(val, expected):
+def test_display_bool_value_non_float(val, expected):
     assert display_bool_value(val) == expected
 
 
@@ -33,9 +34,8 @@ def test_display_value_non_float(val, expected):
     (0.0, "0.0"),
     (1.0, "1.0"),
 ])
-def test_display_value_float_bypasses_bool_conversion(val, expected):
+def test_display_bool_value_float_bypasses_bool_conversion(val, expected):
     # Floats that are numerically 0/1 should NOT be rendered as True/False,
-    # since the isinstance(val, float) check excludes them.
     assert display_bool_value(val) == expected
 
 

@@ -4,6 +4,7 @@ from streamlit.testing.v1 import AppTest
 PAGE = Path(__file__).parents[3] / "xailens" / "dashboard" / "pages" / "instancedetail.py"
 
 def test_instancedetail_page_loads(monkeypatch, mock_explorer):
+
     monkeypatch.setattr(
         "xailens.dashboard.explorer.get_explorer",
         lambda: mock_explorer

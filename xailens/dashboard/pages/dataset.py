@@ -110,7 +110,7 @@ def main():
     with tab3:
         # Instance consensus overview
         with st.container(border=True):
-            st.html(title_with_help_icon(strings.INSTANCE_CONCENSUS_TITLE, strings.HELP_INSTANCES))
+            st.html(title_with_help_icon(strings.INSTANCE_CONSENSUS_TITLE, strings.HELP_INSTANCES))
 
             instance_metrics = dataset_obj.get_instance_consensus()
             params = st.query_params.to_dict()

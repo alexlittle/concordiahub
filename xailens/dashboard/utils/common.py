@@ -29,7 +29,7 @@ def _breadcrumb_instance_group_set(
         matrix_set (Optional[str]):  matrix sets (as comma separated string)
 
     Returns:
-        str: HTML to display breadcrumbs
+        list[str]: list of items to include as breadcrumbs
     """
 
     parts = []
@@ -64,7 +64,7 @@ def display_breadcrumbs(dataset: Optional[str] = None,
         matrix_set (Optional[str]):  matrix sets (as comma separated string)
 
     Returns:
-        str: HTML to display breadcrumbs
+        str: HTML code to display breadcrumbs
     """
     parts = ["<a href='/' target='_self'>Home</a>"]
 
@@ -100,7 +100,7 @@ def title_with_help_icon(title: str, help_text:str) -> str:
         help_text (str): help text
 
     Returns:
-        str: HTML to display title and help icon/text
+        str: HTML code to display title and help icon/text
     """
     return f"""
             <div class="card-header-row">
@@ -112,6 +112,7 @@ def title_with_help_icon(title: str, help_text:str) -> str:
 def display_bool_value(val: Any) -> str:
     """
     Function to convert bool value to string of True or False
+
     Args:
         val (Any): value to be converted
 

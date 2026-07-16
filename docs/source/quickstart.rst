@@ -15,30 +15,38 @@ Quickstart
 
     # define the dataschema
     data_schema = xailens.DataSchema(
-        instance_id_column="instance_uuid", # name of the unique identifier column for your instances
-        target_column="target", # name of your target column, from y_test
-        prediction_column="pred_value" # name of your prediction column, from y_pred
-        )
+        # name of the unique identifier column for your instances
+        instance_id_column="instance_uuid",
+        # name of your target column, from y_test
+        target_column="target",
+        # name of your prediction column, from y_pred
+        prediction_column="pred_value")
 
     # your data and predictions
     model_data = xailens.ModelData(
-        data_schema=data_schema, # DataSchema from above
-        raw_instances=raw, # your raw data
-        x_test=X_test, # your X_test dataframe
-        y_pred=y_pred, # your y_pred dataframe
-        y_test=y_test # your y_test dataframe
-        )
+        data_schema=data_schema,        # DataSchema from above
+        raw_instances=raw,              # your raw data
+        x_test=X_test,                  # your X_test dataframe
+        y_pred=y_pred,                  # your y_pred dataframe
+        y_test=y_test)                  # your y_test dataframe
 
     # overall context
     ctx = xailens.ModelContext(
-        "logistic_regression", # model type, can be "logistic_regression", "xgboost" or "llm"
-        ["coefficients"], # XAI methods to apply, options are "coefficients", "tree_shap", "llm_reasoning"
-        "cleveland-heart-data", # identifier for your dataset
-        model_data, # ModelData from above
-        model=model, # your model (joblib file)
-        model_dir_name="heart_lr", # directory name to save to (can be blank)
-        model_display_name="Logistic Regression" # display name for your model, as it will appear in the dashboard
-        )
+        # model type, can be "logistic_regression"," xgboost" or "llm"
+        "logistic_regression",
+        # XAI methods to apply, options are "coefficients", "tree_shap",
+        # "llm_reasoning"
+        ["coefficients"],
+        # identifier for your dataset
+        "cleveland-heart-data",
+        # ModelData from above
+        model_data,
+        # your model object (that will be saved as joblib file)
+        model=model,
+        # directory name to save to (can be blank)
+        model_dir_name="heart_lr",
+        # display name for your model, as it will appear in the dashboard
+        model_display_name="Logistic Regression")
 
     xailens.run(ctx)
 

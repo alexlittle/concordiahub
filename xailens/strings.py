@@ -47,7 +47,7 @@ RECOMMENDED_MODEL_EXPLANATION = "Based on the highest {metric} score"
 PERF_F1_WEIGHTED_TITLE = "F1 Weighted Score"
 PERF_METRICS_TITLE = "Accuracy, Precision & Recall Metrics"
 GLOBAL_EXPLANATION_TITLE = "Global Feature Importance Heatmap"
-INSTANCE_CONCENSUS_TITLE = "Instance Consensus"
+INSTANCE_CONSENSUS_TITLE = "Instance Consensus"
 
 # performance metrics graphs
 METRICS_NAMES = {
@@ -177,6 +177,9 @@ WATERFALL_X_AXIS = "Contribution"
 # Tabular Visualisation
 TABULAR_DISPLAY_NAME = "Tabular (text)"
 TABULAR_SCORE_TITLE = "Score (1 to -1)"
+
+
+MATRIX_SET_PLOT_TITLE = "Sets of Misclassified Instances"
 
 # ----------------
 # HELP TEXT

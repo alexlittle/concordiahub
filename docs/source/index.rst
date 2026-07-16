@@ -6,11 +6,16 @@
 XAI Lens
 ========================
 
-XAI Lens is a proof-of-concept framework and dashboard for model developers to compare models, not only comparing raw
-performance metrics, but also global and local explainable AI methods.
+Developed as part of my MSc project, XAI Lens allows model developers to compare
+Explainable AI methods and explanations between models, including scikit-learn
+models and LLMs.
 
-XAI Lens supports classical machine learning models as well as LLMs.
+As this is a proof of concept framework, not all model, XAI method or
+visualisation types have been developed. However, the architecture allows new
+model types, XAI methods and visualisations to be added without large changes to
+the codebase.
 
+Demo available at: https://xailens.alexlittle.net/
 
 
 .. toctree::

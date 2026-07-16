@@ -4,12 +4,11 @@ Streamlit page to display instances and misclassifications
 
 import streamlit as st
 from itables.streamlit import interactive_table
-from itables.typing import JavascriptFunction
 
 from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard.utils.common import display_breadcrumbs
-from xailens.dashboard.utils.display_instances_df import build_display_df
+from xailens.dashboard.utils.instances_table import build_display_df
 from xailens import strings
 from xailens.entities.dataset import Dataset
 from xailens.dashboard.utils.upset import render_upset_figure

@@ -52,22 +52,19 @@ def build_display_df(df: pd.DataFrame,
     display_df[id_display_col] = df[id_display_col].apply(
         lambda val: (
         f'<a href="{settings.INSTANCE_DETAIL_FILENAME}?{query_string}&instance_uuid={val}" '
-        f'style="{cell_style}">{val}</a>'
-        )
+        f'style="{cell_style}">{val}</a>')
     )
 
     for col in pred_cols:
         display_df[col] = df.apply(
             lambda row, c=col: (
                 f'<span style="{correct_style if row[c] == row[true_label_col] else incorrect_style}">'
-                f'{display_bool_value(row[c])}</span>'
-            ),
-            axis=1,
-        )
+                f'{display_bool_value(row[c])}</span>'),
+            axis=1)
 
     for col in df.columns.difference(pred_cols + [id_display_col]):
         display_df[col] = df[col].apply(
-            lambda v: f'<span style="{cell_style}">{display_bool_value(v)}</span>'
-        )
+            lambda v:
+            f'<span style="{cell_style}">{display_bool_value(v)}</span>')
 
     return display_df

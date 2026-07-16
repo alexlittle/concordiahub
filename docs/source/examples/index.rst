@@ -3,15 +3,16 @@ Examples
 
 Setup
 --------
-To run these examples some extra packages will need to be installed. To install all the additional packages, run:
+To run these examples some extra packages will need to be installed. To
+install all the additional packages, run:
 
-``pip install "xailens[examples]"``
+``pip install xailens[examples]``
 
 
 Example 1: XGBoost Model on MedSynth
 ---------------------------------------
 
-In:  ``/examples/ex1_xgboost_small.ipynb``
+In:  ``examples/ex1_xgboost_small.ipynb``
 
 
 

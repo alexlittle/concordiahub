@@ -13,6 +13,8 @@ from xailens.entities.dataset import Dataset
 from xailens.config import PLOTLY_CONFIG, PLOT_UPSET_CORRECT_COLOR, PLOT_UPSET_INCORRECT_COLOR
 from xailens.dashboard.utils.plotly_theme import apply_upset_theme
 
+from xailens import strings
+
 def build_upset_figure(combo_df: pd.DataFrame,
                        set_sizes: pd.Series,
                        max_combos: int = 25) -> go.Figure:
@@ -39,7 +41,8 @@ def build_upset_figure(combo_df: pd.DataFrame,
     # bottom-left - bar chart of num instances wrong per model
     # bottom-right - matrix set dots with the groups of misclassifications
     fig = make_subplots(
-        rows=2, cols=2,
+        rows=2,
+        cols=2,
         row_heights=[0.65, 0.35],
         column_widths=[0.20, 0.80],
         horizontal_spacing=0.02,
@@ -48,6 +51,13 @@ def build_upset_figure(combo_df: pd.DataFrame,
             [None, {"type": "bar"}],
             [{"type": "bar"}, {"type": "scatter"}],
         ],
+    )
+
+    # Overall title to the set of subplots
+    fig.update_layout(
+        title_text = strings.MATRIX_SET_PLOT_TITLE,
+        title_x=0,
+        title_xanchor="left",
     )
 
     correct_x, correct_y = [], []
@@ -201,9 +211,9 @@ def render_upset_figure(dataset: Dataset,
     """
     combo_df, set_sizes = dataset.get_upset_data()
     fig = build_upset_figure(combo_df, set_sizes)
-    fig = apply_upset_theme(fig, show_title=False)
+    fig = apply_upset_theme(fig, show_title=True)
 
-    # catch events (clicks) on the chart
+    # Display the chart and catch events (clicks) on the chart
     event = st.plotly_chart(
         fig,
         width='stretch',
