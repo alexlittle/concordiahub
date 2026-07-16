@@ -27,7 +27,12 @@ APP_NAME = "XAI Lens"
 SIDEBAR_MODEL_FILTER_TITLE = "Include models:"
 SIDEBAR_INSTANCE_GROUP_FILTER_TITLE = "Instances:"
 
+# common across pages
+#------------------------
+CLICK_TO_VIEW = "Click to view"
+
 # Page titles
+#-----------------
 HOMEPAGE_TITLE = "Select a dataset"
 DATASET_TITLE = "Model Comparison for {dataset} Dataset"
 INSTANCE_TITLE = "Instance Comparison for {dataset} Dataset"
@@ -83,10 +88,15 @@ INSTANCE_GROUPS = {
     "disagree": "Models Disagree"
 }
 
+MISCLASSIFIED_INSTANCES_TITLE = "Misclassified by: {models}"
+
 DISPLAY_NAMES = {
     "instance_uuid": "Instance ID",
     "true_label": "True Value",
+    "view_detail": "View full details"
 }
+
+
 
 
 # Instance detail page

@@ -170,12 +170,19 @@ def build_upset_figure(combo_df: pd.DataFrame,
     # --- Axis formatting ---
     fig.update_xaxes(showticklabels=False, row=1, col=2)
     fig.update_yaxes(title_text="Instances incorrect", row=1, col=2)
-    fig.update_xaxes(autorange="reversed", title_text="Instances incorrect", row=2, col=1)
+    fig.update_xaxes(autorange="reversed",
+                     title_text="Instances incorrect",
+                     row=2,
+                     col=1)
     fig.update_yaxes(
         tickmode="array", tickvals=list(range(n_models)),
         ticktext=model_cols[::-1], row=2, col=1,
     )
-    fig.update_xaxes(showticklabels=False, row=2, col=2)
+    fig.update_xaxes(
+        showticklabels=False,
+        title_text="Sets: click on a set to view instances",
+        row=2, col=2,
+    )
     fig.update_yaxes(
         tickmode="array", tickvals=list(range(n_models)),
         ticktext=[""] * n_models, showgrid=False, row=2, col=2,

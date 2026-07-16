@@ -94,7 +94,10 @@ def main():
     query_params = dict(st.query_params)
 
     if matrix_set is not None:
-        st.html("<h3>Misclassifications for </h3>")
+        # put in alpha order
+        models = sorted(matrix_set.split(","))
+        model_set = ", ".join(models)
+        st.html(f"<h3>{strings.MISCLASSIFIED_INSTANCES_TITLE.format(models=model_set)}</h3>")
 
     interactive_table(
         build_display_df(df_instances,
