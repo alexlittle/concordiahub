@@ -111,6 +111,7 @@ INSTANCE_DETAIL_MODEL_EXPLANATIONS = "Model Explanations"
 # ----------------
 
 WARNING_GLOBAL_NOT_AVAILABLE = "Global explanations are not available for {adapter}"
+WARNING_INVALID_URL_PARAMS = "Invalid combination of url parameters"
 
 # ----------------
 # MODEL_TYPES

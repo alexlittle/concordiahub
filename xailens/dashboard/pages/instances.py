@@ -57,6 +57,13 @@ def main():
 
     matrix_set = st.query_params.get("matrix_set", None)
 
+    # check that only one of matrix_set or instance_group is present
+    if (matrix_set is not None and instance_group is not None) or \
+            (matrix_set is None and instance_group is None):
+        st.warning(strings.WARNING_INVALID_URL_PARAMS)
+        st.stop()
+
+
     # determine which instances to show based on if it's an instance_group or a
     # matrix_set
     if instance_group is not None and instance_group != "all":

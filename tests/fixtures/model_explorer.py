@@ -3,8 +3,12 @@ from unittest.mock import MagicMock
 
 
 @pytest.fixture
-def mock_explorer_factory(lr_model_factory, xgboost_model_factory, llm_model_factory):
-    def _factory(dataset_id="cleveland_heart_disease", models=None, valid=True):
+def mock_explorer_factory(lr_model_factory,
+                          xgboost_model_factory,
+                          llm_model_factory):
+    def _factory(dataset_id="cleveland_heart_disease",
+                 models=None,
+                 valid=True):
         if models is None:
             models = [
                 lr_model_factory(),
