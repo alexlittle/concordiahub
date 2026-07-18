@@ -54,7 +54,7 @@ class FilesystemStore(DataStore):
 
     def save_json(self, filename: str, data: str):
         """
-        Saves data to json file
+        Saves data to JSON file
 
         Args:
             filename (str): name of file to save

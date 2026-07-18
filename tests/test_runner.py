@@ -1,3 +1,13 @@
+"""
+Tests for runner.py, specifically a call to the run function.
+
+Covers:
+- no context provided
+- empty context provided
+- completes successfully
+"""
+
+
 import pytest
 from unittest.mock import patch
 

@@ -1,3 +1,13 @@
+"""
+Tests for cli.py to launch dashboard app
+
+Tests:
+- xailen-dash launches the streamlit app
+- runs without launching browser
+- runs with launching browser
+"""
+
+
 from unittest.mock import patch
 from xailens.cli import main
 

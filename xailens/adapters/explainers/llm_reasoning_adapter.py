@@ -60,7 +60,8 @@ class LLMResponse:
 @register_xai("llm_reasoning")
 class LLMReasoningAdapter(XAIMethodAdapter):
     """
-    LLMReasoningAdapter class - for processing local and global explanations from LLMs
+    LLMReasoningAdapter class - for processing local and global explanations
+    from LLMs
     """
 
     display_name = strings.LLM_REASONING_DISPLAY_NAME
@@ -80,8 +81,9 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             model (Model): a Model object to get the explanation for
 
         Returns:
-            pd.DataFrame: dataframe containing the global explanation, with the following columns:
-                feature_name, score, score_normalised_sum, score_normalised_max
+            pd.DataFrame: dataframe containing the global explanation, with the
+                following columns: feature_name, score, score_normalised_sum,
+                score_normalised_max
         """
         df = model.store.load_dataframe(f"exp_global_{cls.key}")
         abs_importance = df["importance"].abs()
@@ -95,17 +97,22 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         })
 
     @classmethod
-    def load_local_explanation(cls, model: Model, instance_id: str) -> pd.DataFrame:
+    def load_local_explanation(cls,
+                               model: Model,
+                               instance_id: str) -> pd.DataFrame:
         """
         Returns the local explanation for a given instance
 
         Args:
             model (Model): a Model object
-            instance_id (str): identifier for the instance to get the local explanation for
+            instance_id (str): identifier for the instance to get the local
+                explanation for
 
         Returns:
-            pd.DataFrame: dataframe containing the local explanation, with the following columns:
-                feature_name, score, score_normalised_sum, score_normalised_max, reasoning, overall_reasoning, overall_confidence
+            pd.DataFrame: dataframe containing the local explanation, with the
+                following columns: feature_name, score, score_normalised_sum,
+                score_normalised_max, reasoning, overall_reasoning,
+                overall_confidence
 
         Raises:
             ValueError: if instance_id is not provided
@@ -113,10 +120,12 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         records = model.store.load_json(f"exp_local_{cls.key}")
         instance_id_col = model.get(config.DATA_SCHEMA_ID_COLUMN)
 
-        row = next((r for r in records if r[instance_id_col] == instance_id), None)
+        row = next((r for r in records if r[instance_id_col] == instance_id),
+                   None)
         if row is None:
             raise ValueError(
-                f"Instance '{instance_id}' not found in explanations for {cls.key}")
+                f"Instance '{instance_id}' not found in explanations "
+                f"for {cls.key}")
 
         # make sure data[score] treaded as a proper float value
         contributions = list(row["contributions"].items())
@@ -141,7 +150,9 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             for (feature, data), score in zip(contributions, scores)
         ])
 
-    def explain_global_json(self, ctx: ModelContext, _model: Optional[TreeModel] = None) -> pd.DataFrame:
+    def explain_global_json(self,
+                            ctx: ModelContext,
+                            _model: Optional[TreeModel] = None) -> pd.DataFrame:
         """Generates the global explanations
         Uses the total number of instances of a mentioned feature divided by the
         total number of instances
@@ -151,16 +162,19 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             _model (Optional[TreeModel]) : Unused
 
         Returns:
-            pd.DataFrame: dataframe containing global explanations, with the following columns:
-                feature, importance, occurrence_count, occurrence_rate, n_instances
+            pd.DataFrame: dataframe containing global explanations, with the
+                following columns: feature, importance, occurrence_count,
+                occurrence_rate, n_instances
 
         Raises:
             MissingDataError: if data.y_exp is not provided
         """
         if ctx.data.y_exp is None:
-            raise MissingDataError("LLMReasoningAdapter requires y_exp in ModelData")
+            raise MissingDataError(
+                "LLMReasoningAdapter requires y_exp in ModelData")
         if ctx.response_schema is None:
-            raise MissingDataError("LLMReasoningAdapter requires a ResponseSchema in ModelContext")
+            raise MissingDataError(
+                "LLMReasoningAdapter requires a ResponseSchema in ModelContext")
 
         results = {}
         n_instances = 0
@@ -173,7 +187,8 @@ class LLMReasoningAdapter(XAIMethodAdapter):
 
             for feature, contrib in response.contributions.items():
                 if feature not in results:
-                    results[feature] = {"sum_abs_score": 0, "occurrence_count": 0}
+                    results[feature] = {"sum_abs_score": 0,
+                                        "occurrence_count": 0}
                 results[feature]["sum_abs_score"] += abs(float(contrib.score))
                 results[feature]["occurrence_count"] += 1
 
@@ -190,7 +205,9 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         return pd.DataFrame(rows)
 
 
-    def explain_global_df(self, ctx: ModelContext,  model: Optional[TreeModel] = None) -> pd.DataFrame:
+    def explain_global_df(self,
+                          ctx: ModelContext,
+                          model: Optional[TreeModel] = None) -> pd.DataFrame:
         """
         Function is not implemented for this class instance
 
@@ -207,7 +224,9 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         """
         raise NotImplementedError
 
-    def explain_local_df(self, ctx: ModelContext, model: Optional[TreeModel] = None) -> pd.DataFrame:
+    def explain_local_df(self,
+                         ctx: ModelContext,
+                         model: Optional[TreeModel] = None) -> pd.DataFrame:
         """
         Function is not implemented for this class instance
 
@@ -224,7 +243,8 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         """
         raise NotImplementedError
 
-    def explain_local_json(self, ctx: ModelContext) -> list[dict[str, Any]]:
+    def explain_local_json(self,
+                           ctx: ModelContext) -> list[dict[str, Any]]:
         """
         Processes the local explanations
 
@@ -238,7 +258,8 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             MissingDataError: if data.x is not provided
         """
         if ctx.data.y_exp is None or ctx.data.y_pred is None:
-            raise MissingDataError("LLMReasoningAdapter requires y_exp and y_pred in ModelData")
+            raise MissingDataError(
+                "LLMReasoningAdapter requires y_exp and y_pred in ModelData")
         if ctx.response_schema is None:
             raise MissingDataError(
                 "LLMReasoningAdapter requires a ResponseSchema in ModelContext")
@@ -251,19 +272,25 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         for _, row in ctx.data.y_exp.iterrows():
             raw = json.loads(row["explanation"])
             instance_id = row[instance_id_col]
-            match = y_pred.loc[y_pred[instance_id_col] == instance_id, prediction_col]
+            match = y_pred.loc[
+                y_pred[instance_id_col] == instance_id, prediction_col]
             if match.empty:
                 continue
-            prediction = match.iloc[0].item() if hasattr(match.iloc[0], 'item') else match.iloc[0]
+            prediction = match.iloc[0].item() if hasattr(
+                match.iloc[0], 'item') else match.iloc[0]
             response = self._reformat(raw, ctx.response_schema, prediction)
             output.append(response.to_dict(instance_id_col, instance_id))
         return output
 
     @staticmethod
-    def _reformat(raw: dict, schema: ResponseSchema, prediction: str | None) -> LLMResponse:
+    def _reformat(raw: dict,
+                  schema: ResponseSchema,
+                  prediction: str | None) -> LLMResponse:
         """
-        Private helper function to reformat an explanation in raw dict format (from JSON) into an LLMResponse object.
-        This uses the DataSchema definition to process the specific dict structure into a common LLMResponse object structure.
+        Private helper function to reformat an explanation in raw dict format
+        (from JSON) into an LLMResponse object.
+        This uses the DataSchema definition to process the specific dict
+        structure into a common LLMResponse object structure.
 
         Args:
             raw (dict): dict

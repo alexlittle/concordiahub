@@ -1,3 +1,21 @@
+"""
+Tests for ArtifactStore class
+
+Covers tests for:
+
+- Initial instantiation of ArtifactStore
+- write_metadata
+- write_model
+- write_data
+
+not covered here, but by other tests:
+- write_explanation
+- load_dataframe
+- write_metrics
+
+"""
+
+
 import pytest
 import numpy as np
 import pandas as pd
