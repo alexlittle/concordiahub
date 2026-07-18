@@ -18,7 +18,8 @@ from xailens.storage.store_base import DataStore
 @st.cache_resource
 def _cached_load_csv(path: str) -> pd.DataFrame:
     """
-    Loads a CSV file into dataframe. Caching in memory for faster response on next function call.
+    Loads a CSV file into dataframe. Caching in memory for faster response
+    on next function call.
 
     Args:
         path (str): path to the CSV file
@@ -32,7 +33,8 @@ def _cached_load_csv(path: str) -> pd.DataFrame:
 @st.cache_resource
 def _cached_load_json(path: str) -> list[dict[str, Any]]:
     """
-    Loads a JSON file. Caching in memory for faster response on next function call.
+    Loads a JSON file. Caching in memory for faster response on next function
+    call.
 
     Args:
         path (str): path to the JSON file
@@ -88,14 +90,19 @@ class FilesystemStore(DataStore):
         path = os.path.join(self.dirname, f"{filename}.csv")
         series.to_csv(path)
 
-    def save_explanation(self, filename:str, data: pd.DataFrame | str, data_format: Optional[str]="df"):
+    def save_explanation(
+            self,
+            filename:str,
+            data: pd.DataFrame | str, data_format: Optional[str]="df"):
         """
         Saves explanation to csv or JSON file
 
         Args:
             filename (str): name of file to save
-            data (pd.DataFrame | str): either a dataframe or JSON in string format
-            data_format (Optional[str]): format to save, either "df" or "json", defaults to "df"
+            data (pd.DataFrame | str): either a dataframe or JSON in string
+                format
+            data_format (Optional[str]): format to save, either "df" or "json",
+                defaults to "df"
 
         """
         if data_format == "df":
@@ -151,4 +158,6 @@ class FilesystemStore(DataStore):
         Returns:
             pd.Series: the series to return
         """
-        return pd.read_csv(os.path.join(self.dirname, f"{filename}.csv"), index_col=0).squeeze()
+        return pd.read_csv(
+            os.path.join(
+                self.dirname, f"{filename}.csv"), index_col=0).squeeze()
