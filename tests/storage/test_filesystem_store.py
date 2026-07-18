@@ -54,13 +54,13 @@ def store():
 
 
 # Test instantiation
-def test_creates_dirname_with_exist_ok():
+def test_init():
     with patch(f"{MODULE}.os.makedirs") as mock_makedirs:
         FilesystemStore("some_dir")
     mock_makedirs.assert_called_once_with("some_dir", exist_ok=True)
 
 # test save_json
-def test_writes_expected_path_and_content(store):
+def test_save_json(store):
     m = mock_open()
     with patch(f"{MODULE}.open", m), patch(f"{MODULE}.json.dump") as mock_dump:
         store.save_json("myfile", {"a": 1})
@@ -73,14 +73,14 @@ def test_writes_expected_path_and_content(store):
 
 
 # test save_dataframe
-def test_calls_to_csv_with_expected_path(store):
+def test_save_dataframe(store):
     df = MagicMock(spec=pd.DataFrame)
     store.save_dataframe("mydf", df)
     df.to_csv.assert_called_once_with(
         os.path.join("fake_dir", "mydf.csv"), index=False)
 
 # test save_series
-def test_calls_to_csv_with_expected_path(store):
+def test_save_series(store):
     series = MagicMock(spec=pd.Series)
     store.save_series("myseries", series)
     series.to_csv.assert_called_once_with(
@@ -88,7 +88,7 @@ def test_calls_to_csv_with_expected_path(store):
 
 
 # test save_explanation - dataframe
-def test_df_format_stringifies_columns_and_saves_csv(store):
+def test_save_explanation_df(store):
     df = MagicMock(spec=pd.DataFrame)
     df.columns = pd.Index([1, 2, 3])
     store.save_explanation("myexp", df, data_format="df")
@@ -99,7 +99,7 @@ def test_df_format_stringifies_columns_and_saves_csv(store):
         os.path.join("fake_dir", "myexp.csv"), index=False)
 
 # test save_explanation - json
-def test_non_df_format_writes_json(store):
+def test_save_explanation_json(store):
     m = mock_open()
     with patch(f"{MODULE}.open", m), patch(f"{MODULE}.json.dump") as mock_dump:
         store.save_explanation("myexp", {"k": "v"}, data_format="json")
@@ -111,7 +111,7 @@ def test_non_df_format_writes_json(store):
 
 
 # test save_model
-def test_calls_joblib_dump_with_expected_path(store):
+def test_save_model(store):
     model = MagicMock()
     with patch(f"{MODULE}.joblib.dump") as mock_dump:
         store.save_model("mymodel", model)
@@ -120,7 +120,7 @@ def test_calls_joblib_dump_with_expected_path(store):
 
 
 # test load_dataframe
-def test_calls_read_csv_with_expected_path(store):
+def test_load_dataframe(store):
     expected_df = pd.DataFrame({"a": [1, 2]})
     with patch(f"{MODULE}.pd.read_csv", return_value=expected_df) as mock_read:
         result = store.load_dataframe("mydf")
@@ -129,7 +129,7 @@ def test_calls_read_csv_with_expected_path(store):
     pd.testing.assert_frame_equal(result, expected_df)
 
 # test load_json
-def test_calls_open_and_json_load_with_expected_path(store):
+def test_load_json(store):
     m = mock_open(read_data='{"a": 1}')
     with patch(f"{MODULE}.open", m), patch(
         f"{MODULE}.json.load", return_value={"a": 1}
@@ -142,7 +142,7 @@ def test_calls_open_and_json_load_with_expected_path(store):
 
 
 # test load_series
-def test_calls_read_csv_with_index_col_and_squeezes(store):
+def test_load_series(store):
     # single-col frame that squeeze() will turn into a Series
     single_col_df = pd.DataFrame({"value": [1, 2, 3]})
     with patch(f"{MODULE}.pd.read_csv", return_value=single_col_df) as mock_read:
