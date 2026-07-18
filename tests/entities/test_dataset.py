@@ -1,12 +1,36 @@
+"""
+Tests for the Dataset class (xailens.entities.dataset)
+
+Uses the tests.fixtures.dataset and tests.fixtures.model fixtures
+
+Covers:
+- get_metrics
+- get_recommended_models
+- get_instance_data
+- get_global_explanations
+- get_local_explanations
+- get_instance_consensus_ids
+- get_instance_consensus
+- get_all_instances
+- _get_common_predictions (private helper)
+- _get_explanations (private helper)
+- _agreement (private helper)
+
+To cover:
+- get_instances_for_set
+- get_upset_data
+
+
+"""
+
+
 import pandas as pd
-import pytest
 
-import xailens.config as config
+MODULE_UNDER_TEST = "xailens.entities.dataset"
 
-
-# ---------------------------------------------------------------------------
+# ------------------------------------
 # get_metrics / get_recommended_models
-# ---------------------------------------------------------------------------
+# ------------------------------------
 
 def test_get_metrics_indexed_by_model_display_name(heart_disease_dataset):
     df = heart_disease_dataset.get_metrics()
@@ -44,13 +68,12 @@ def test_get_recommended_models_handles_tie(heart_disease_dataset_factory):
     assert set(recommended) == {"Logistic Regression", "XGBoost"}
 
 
-# ---------------------------------------------------------------------------
+# -------------------
 # get_instance_data
-# ---------------------------------------------------------------------------
+# -------------------
 
 def test_get_instance_data_delegates_to_first_model(
-    heart_disease_dataset_factory, lr_model_factory
-):
+    heart_disease_dataset_factory, lr_model_factory):
     lr_model = lr_model_factory()
     dataset = heart_disease_dataset_factory(models=[lr_model])
 
@@ -60,9 +83,9 @@ def test_get_instance_data_delegates_to_first_model(
     pd.testing.assert_series_equal(result, expected)
 
 
-# ---------------------------------------------------------------------------
+# ------------------------
 # get_instance_consensus_ids
-# ---------------------------------------------------------------------------
+# -------------------------
 
 def test_get_instance_consensus_ids_full_overlap(heart_disease_dataset):
     # default fixtures all use the same 5 instance ids
@@ -95,9 +118,9 @@ def test_get_instance_consensus_ids_partial_overlap(
     assert common_ids == {"inst_0", "inst_1"}
 
 
-# ---------------------------------------------------------------------------
+# ---------------------
 # get_instance_consensus
-# ---------------------------------------------------------------------------
+# ---------------------
 
 def test_get_instance_consensus_default_data(heart_disease_dataset):
     # With default fixture data, LR is wrong on every instance while
@@ -146,9 +169,9 @@ def test_get_instance_consensus_mixed_scenario(heart_disease_dataset_factory):
     }
 
 
-# ---------------------------------------------------------------------------
+# ----------------
 # get_all_instances
-# ---------------------------------------------------------------------------
+# ----------------
 
 def test_get_all_instances_columns_and_shape(heart_disease_dataset):
     result = heart_disease_dataset.get_all_instances()
