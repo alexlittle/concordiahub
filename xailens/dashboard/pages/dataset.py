@@ -50,7 +50,8 @@ def main():
     st.html(display_breadcrumbs(dataset))
 
     # Get the selected models for the dataset
-    selected_models = explorer.get_selected_models_for_dataset(dataset, selected_model_names)
+    selected_models = explorer.get_selected_models_for_dataset(
+        dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_models)
 
     tab1, tab2, tab3 = st.tabs(strings.DATASET_TABS)
@@ -58,14 +59,9 @@ def main():
     with tab1:
         with st.container(border=True, key="recommended-models"):
             recommended_models = dataset_obj.get_recommended_models()
-            if len(recommended_models) == 1:
-                title = f"""
-                    <span class='recommended-title'>{strings.RECOMMENDED_MODEL_TITLE}</span>: 
-                    <span class='recommended-model'>{recommended_models[0]}"""
-            else:
-                title = f"""
-                        <span class='recommended-title'>{strings.RECOMMENDED_MODELS_TITLE}</span>: 
-                        <span class='recommended-model'>{', '.join(recommended_models)}</span>"""
+            title = f"""
+                <span class='recommended-title'>{strings.recommended_title(len(recommended_models))}</span>: 
+                <span class='recommended-model'>{strings.format_recommended_models(recommended_models)}</span>"""
 
             st.html(title_with_help_icon(title, strings.HELP_RECOMMENDED_MODEL))
 
@@ -77,15 +73,23 @@ def main():
         with col1:
             # F1 weighted score
             with st.container(border=True):
-                st.html(title_with_help_icon(strings.METRICS_NAMES["f1_weighted"],
-                                             strings.HELP_METRICS["f1_weighted"]))
-                st.plotly_chart(render_metric_barchart(metrics, "f1_weighted", show_title=False), config=config.PLOTLY_CONFIG)
+                st.html(title_with_help_icon(
+                    strings.METRICS_NAMES["f1_weighted"],
+                    strings.HELP_METRICS["f1_weighted"]))
+                st.plotly_chart(render_metric_barchart(
+                    metrics,
+                    "f1_weighted",
+                    show_title=False), config=config.PLOTLY_CONFIG)
         with col2:
             # Global explanations
             with st.container(border=True):
-                st.html(title_with_help_icon(strings.GLOBAL_EXPLANATION_TITLE, strings.HELP_GLOBAL_EXPLANATION))
+                st.html(title_with_help_icon(
+                    strings.GLOBAL_EXPLANATION_TITLE,
+                    strings.HELP_GLOBAL_EXPLANATION))
                 df_global_exp = dataset_obj.get_global_explanations()
-                st.plotly_chart(render_features_heatmap(df_global_exp), width='content', config=config.PLOTLY_CONFIG)
+                st.plotly_chart(render_features_heatmap(df_global_exp),
+                                width='content',
+                                config=config.PLOTLY_CONFIG)
 
     with tab2:
         # accuracy/precision/recall bar charts
@@ -94,23 +98,30 @@ def main():
             with st.container(border=True):
                 st.html(title_with_help_icon(strings.METRICS_NAMES["accuracy"],
                                              strings.HELP_METRICS["accuracy"]))
-                st.plotly_chart(render_metric_barchart(metrics, "accuracy", show_title=False), config=config.PLOTLY_CONFIG)
+                st.plotly_chart(render_metric_barchart(
+                    metrics, "accuracy", show_title=False),
+                    config=config.PLOTLY_CONFIG)
         with col5:
             with st.container(border=True):
                 st.html(title_with_help_icon(strings.METRICS_NAMES["precision_weighted"],
                                              strings.HELP_METRICS["precision_weighted"]))
-                st.plotly_chart(render_metric_barchart(metrics, "precision_weighted", show_title=False), config=config.PLOTLY_CONFIG)
+                st.plotly_chart(render_metric_barchart(
+                    metrics, "precision_weighted", show_title=False),
+                    config=config.PLOTLY_CONFIG)
         with col6:
             with st.container(border=True):
                 st.html(title_with_help_icon(strings.METRICS_NAMES["recall_weighted"],
                                              strings.HELP_METRICS["recall_weighted"]))
                 st.plotly_chart(
-                    render_metric_barchart(metrics, "recall_weighted", show_title=False), config=config.PLOTLY_CONFIG)
+                    render_metric_barchart(
+                        metrics, "recall_weighted", show_title=False),
+                    config=config.PLOTLY_CONFIG)
 
     with tab3:
         # Instance consensus overview
         with st.container(border=True):
-            st.html(title_with_help_icon(strings.INSTANCE_CONSENSUS_TITLE, strings.HELP_INSTANCES))
+            st.html(title_with_help_icon(strings.INSTANCE_CONSENSUS_TITLE,
+                                         strings.HELP_INSTANCES))
 
             instance_metrics = dataset_obj.get_instance_consensus()
             params = st.query_params.to_dict()

@@ -65,7 +65,7 @@ every directory/file is included here.
 │   ├── runner.py                # Orchestrator/entry point for loading a model
 │   ├── strings.py               # Strings used throughout library
 │   └── _version.py              # library version number
-├── LICENSE                    # GNU 3 open Source license
+├── LICENSE                    # GNU 3 open source license
 ├── pyproject.toml             # Project/pip install file
 ├── README.md                  # This readme file
 ├── requirements-dev.txt       # Required packages if developing more features 
@@ -90,7 +90,7 @@ git lfs install
 
 [![CI](https://github.com/alexlittle/xailens/actions/workflows/ci.yml/badge.svg)](https://github.com/alexlittle/xailens/actions)
 
-### SonarCloud — Quality Overview
+### SonarCloud - Quality Overview
 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_xailens&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xailens)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_xailens&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xaicompare)

@@ -39,15 +39,18 @@ class VizAdapter(ABC):
         raise NotImplementedError
 
     #
-    def _top_features(self, explanation: pd.DataFrame, n: int = config.PLOT_MAX_FEATURES) -> pd.DataFrame:
+    def _top_features(self, explanation: pd.DataFrame, n: Optional[int] = None) -> pd.DataFrame:
         """
         Helper method to filter to only the largest feature contributions, not all
 
         Args:
             explanation (pd.DataFrame): explanation dataframe:
-            n (int): number of feature contributions to select
+            n (Optional[int]): number of feature contributions to select,
+                defaults to None, but when None will use the value given in
+                config.PLOT_MAX_FEATURES
 
         Returns:
             pd.DataFrame: dataframe containing the largest contributions
         """
+        n = n if n is not None else config.PLOT_MAX_FEATURES
         return explanation.reindex(explanation["score_normalised_max"].astype(float).abs().nlargest(n).index)

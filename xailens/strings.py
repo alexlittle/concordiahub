@@ -51,7 +51,35 @@ DATASET_TABS = ["Overview", "More Metrics", "Instance Consensus"]
 # section titles
 RECOMMENDED_MODEL_TITLE = "Recommended Model"
 RECOMMENDED_MODELS_TITLE = "Recommended Models"
-RECOMMENDED_MODEL_EXPLANATION = "Based on the highest {metric} score"
+
+# functions to help display correctly pluralised text
+
+def recommended_title(count: int) -> str:
+    """
+    Returns the correct pluralised title
+
+    Args:
+        count (int): how many models are recommended
+
+    Returns:
+        str: the recommended pluralised title
+    """
+    return RECOMMENDED_MODEL_TITLE if count == 1 else RECOMMENDED_MODELS_TITLE
+
+def format_recommended_models(recommended_models: list[str]) -> str:
+    """
+    Format the model names for display.
+
+    Args:
+        recommended_models (list[str]): list of the model names
+
+    Returns:
+        str: joined list of model names for display
+    """
+    if len(recommended_models) == 1:
+        return recommended_models[0]
+    return ', '.join(recommended_models)
+
 
 PERF_F1_WEIGHTED_TITLE = "F1 Weighted Score"
 PERF_METRICS_TITLE = "Accuracy, Precision & Recall Metrics"

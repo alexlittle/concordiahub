@@ -6,6 +6,7 @@ from types import ModuleType
 
 import pytest
 
+from unittest.mock import MagicMock
 from xailens.exceptions import InvalidConfigurationError
 
 # Import registry APIs from their respective modules
@@ -265,3 +266,28 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
 
     # Even with many concurrent calls, the module should be imported once
     assert import_calls.count("xailens.adapters.threaded") == 1
+
+
+def test_autodiscover_inner_check_short_circuits_race(monkeypatch, fresh_module):
+    """
+    Simulates another thread finishing discovery between this thread's outer
+    check and its lock acquisition, forcing the inner 'if __DISCOVERED: return'
+    to be the one that fires.
+    """
+    autodiscover = fresh_module
+
+    class FakeLock:
+        def __enter__(self):
+            # Pretend another thread just set this while we were waiting on the lock
+            setattr(autodiscover, "__DISCOVERED", True)
+        def __exit__(self, *args):
+            return False
+
+    monkeypatch.setattr(autodiscover, "__LOCK", FakeLock())
+
+    mock_walk = MagicMock()
+    monkeypatch.setattr("pkgutil.walk_packages", mock_walk)
+
+    autodiscover.autodiscover_adapters()
+
+    mock_walk.assert_not_called()

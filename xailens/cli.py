@@ -27,5 +27,5 @@ def main()-> None:
 
     subprocess.run(cmd)
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     main()
