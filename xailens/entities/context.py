@@ -5,7 +5,18 @@ Context dataclasses for XAI-Compare
 import pandas as pd
 from dataclasses import dataclass
 from typing import Any, Optional
-from xailens.entities.schema import ResponseSchema, DataSchema
+
+
+@dataclass
+class DataSchema:
+    """
+    DataSchema - defines format of the data provided by the model developer
+    """
+    instance_id_column: str
+    target_column: str
+    prediction_column: str
+    feature_columns: Optional[list[str]] = None
+    class_names: Optional[list] = None
 
 @dataclass
 class ModelData:
@@ -19,6 +30,13 @@ class ModelData:
     y_pred: pd.DataFrame
     y_exp: Optional[pd.DataFrame] = None
 
+@dataclass
+class ResponseSchema:
+    """
+    ResponseSchema - defines format of an LLM response
+    """
+    contributions_field: str
+    contribution_key: str | None
 
 @dataclass
 class ModelContext:
@@ -34,4 +52,7 @@ class ModelContext:
     model_subtype: Optional[str] = None
     model_dir_name: Optional[str] = None
     response_schema: Optional[ResponseSchema] = None
+
+
+
 

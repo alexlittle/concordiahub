@@ -1,3 +1,9 @@
+"""
+LLM for the UCI Cleveland Heart Disease dataset
+
+Set the specific Ollama model you'd like to use in the config.py file
+"""
+
 import pandas as pd
 import ollama
 import json
@@ -12,8 +18,6 @@ df = pd.read_csv(config.HEART_INPUT_FILE)
 
 for col, mapping in HEART_COLUMN_MAPPINGS.items():
     df[col] = df[col].map(mapping)
-
-print(df.head())
 
 JINJA_ENV = Environment(
     loader=FileSystemLoader(config.LLM_TEMPLATE_DIR),
@@ -46,7 +50,6 @@ def run_llm_request(patient_data: dict, model: str):
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": build_prompt(patient_data)}
         ],
-        logprobs=True,
         options={
             "num_ctx": 8192,
             "temperature": 0.2,
@@ -101,7 +104,8 @@ for idx, row in df.iterrows():
         exp_outputs.append(exp_output)
 
 
-
+# save and store all outputs, so can be registered with the XAI framework
+# separately
 pred_outputs_df = pd.DataFrame(pred_outputs)
 exp_outputs_df = pd.DataFrame(exp_outputs)
 

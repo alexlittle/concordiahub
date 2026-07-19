@@ -9,7 +9,7 @@ from typing import Optional
 
 from xailens import config
 from xailens.storage.filesystem_store import FilesystemStore
-from xailens.entities.schema import DataSchema
+from xailens.entities.context import DataSchema
 
 class Model:
     """

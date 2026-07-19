@@ -1,38 +1,18 @@
+"""
+Helper functions for model development
+
+"""
 
 import pandas as pd
 import re
 import subprocess
 
-ICD10_CODES = {
-    "A": ("A00", "B99", "Certain infectious and parasitic diseases"),
-    "B": ("A00", "B99", "Certain infectious and parasitic diseases"),
-    "C": ("C00", "D49", "Neoplasms"),
-    "D": ("C00", "D49", "Neoplasms"),
-    "E": ("E00", "E89", "Endocrine, nutritional and metabolic diseases"),
-    "F": ("F01", "F99", "Mental, behavioral and neurodevelopmental disorders"),
-    "G": ("G00", "G99", "Diseases of the nervous system"),
-    "H": ("H00", "H95", "Diseases of eye/ear/adnexa/mastoid"),
-    "I": ("I00", "I99", "Diseases of the circulatory system"),
-    "J": ("J00", "J99", "Diseases of the respiratory system"),
-    "K": ("K00", "K95", "Diseases of the digestive system"),
-    "L": ("L00", "L99", "Diseases of the skin and subcutaneous tissue"),
-    "M": ("M00", "M99", "Diseases of musculoskeletal system"),
-    "N": ("N00", "N99", "Diseases of the genitourinary system"),
-    "O": ("O00", "O9A", "Pregnancy, childbirth and puerperium"),
-    "P": ("P00", "P96", "Perinatal conditions"),
-    "Q": ("Q00", "Q99", "Congenital malformations"),
-    "R": ("R00", "R99", "Symptoms, signs, abnormal findings"),
-    "S": ("S00", "T88", "Injury and poisoning"),
-    "T": ("S00", "T88", "Injury and poisoning"),
-    "V": ("V00", "Y99", "External causes of morbidity"),
-    "W": ("V00", "Y99", "External causes of morbidity"),
-    "X": ("V00", "Y99", "External causes of morbidity"),
-    "Y": ("V00", "Y99", "External causes of morbidity"),
-    "Z": ("Z00", "Z99", "Factors influencing health status"),
-    "U": ("U00", "U85", "Special purposes")
-}
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
+# Mapping of Cleveland heart data column int values to their text names
 HEART_COLUMN_MAPPINGS = {
     'sex': { 0: 'Female', 1: 'Male'},
     'chest pain type': { 1: 'typical angina', 2: 'atypical angina', 3: 'non-anginal pain', 4: 'asymptomatic'},
@@ -43,7 +23,7 @@ HEART_COLUMN_MAPPINGS = {
     'thalassemia': { 3: 'normal', 6: 'fixed defect', 7: 'reversible defect'}
 }
 
-
+# mapping of ICD codes to their full names
 ICD10_CHAPTERS = {
     "A": "Certain infectious and parasitic diseases",
     "B": "Certain infectious and parasitic diseases",
@@ -73,6 +53,7 @@ ICD10_CHAPTERS = {
     "U": "Special purposes"
 }
 
+# apply the ICD code mapping
 def map_icd10_to_chapter(code):
     if pd.isna(code):
         return None
@@ -126,3 +107,24 @@ def clean_text(text: str) -> str:
     text = re.sub(r'^\s*\d+\.\s+', '', text, flags=re.MULTILINE)
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
+
+def create_confusion_matrix(y_true, y_pred, dataset, model):
+    cm = confusion_matrix(y_true, y_pred)
+
+    plt.figure(figsize=(5, 4))
+    sns.heatmap(
+        cm,
+        annot=True,
+        fmt="d",
+        cmap="Blues"
+    )
+    plt.xlabel("Predicted")
+    plt.ylabel("Actual")
+    plt.title("Confusion Matrix")
+    plt.tight_layout()
+    plt.savefig(f"perf_results/cm_{dataset}_{model}.png", dpi=300)
+    plt.show()
+
+def save_class_report(report, dataset, model):
+    with open(f"perf_results/classification_{dataset}_{model}.txt", "w") as f:
+        f.write(report)

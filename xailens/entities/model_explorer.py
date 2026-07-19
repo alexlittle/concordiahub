@@ -41,25 +41,6 @@ class ModelExplorer:
 
         return sorted(datasets)
 
-    def get_models_for_dataset(self, dataset: str) -> dict:
-        """
-        Gets all the models for the given dataset name
-
-        Args:
-            dataset (str): dataset name
-
-        Returns:
-            dict: of model names and model_data
-        """
-    
-        models = {}
-        for model in self._metadata_cache:
-            if model["dataset_id"] == dataset:
-                model_obj = self.get_model_by_uuid(model["model_uuid"])
-                if model_obj:
-                    models[model_obj.get("model_display_name")] = model["model_uuid"]
-        return dict(sorted(models.items()))
-
     def get_selected_models_for_dataset(self, dataset: str, model_names: list[str]) -> [Model]:
         """
         Gets all the models for the given dataset name

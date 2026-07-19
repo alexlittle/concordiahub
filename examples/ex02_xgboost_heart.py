@@ -1,13 +1,19 @@
+"""
+XGBoost model for the UCI Cleveland Heart Disease dataset
+"""
+
 import pandas as pd
-import joblib
+import xailens
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 from xgboost import XGBClassifier
 
 from examples import config
-
-from helpers import check_gpu
+from examples.helpers import (HEART_COLUMN_MAPPINGS,
+                              create_confusion_matrix,
+                              check_gpu,
+                              save_class_report)
 
 device = check_gpu()
 print(f"System check: {device} detected.")
@@ -47,8 +53,15 @@ y_pred = pd.DataFrame({
 })
 
 print("Accuracy:", accuracy_score(y_test, y_pred_vals))
-print("\nClassification Report:\n")
-print(classification_report(y_test, y_pred_vals))
+report = classification_report(y_test, y_pred_vals)
+
+print(report)
+
+save_class_report(report, "heart", "xgboost")
+create_confusion_matrix(y_test,
+                        y_pred_vals,
+                        "heart",
+                        "xgboost")
 
 y_train_df = pd.DataFrame({config.INSTANCE_UUID_COL: X_train[config.INSTANCE_UUID_COL].values, 'target': y_train.values})
 y_test_df = pd.DataFrame({config.INSTANCE_UUID_COL: X_test[config.INSTANCE_UUID_COL].values, 'target': y_test.values})
@@ -56,8 +69,29 @@ y_test_df = pd.DataFrame({config.INSTANCE_UUID_COL: X_test[config.INSTANCE_UUID_
 raw_instances = df.set_index(config.INSTANCE_UUID_COL).drop(columns=['target']).loc[
     X_test[config.INSTANCE_UUID_COL].values
 ]
-raw_instances.reset_index().to_parquet('./cache/heart/xgboost/raw_instances.parquet')
-X_test.to_parquet('./cache/heart/xgboost/X_test.parquet', index=False)
-y_test_df.to_parquet('./cache/heart/xgboost/y_test.parquet', index=False)
-y_pred.to_parquet('./cache/heart/xgboost/y_pred.parquet', index=False)
-joblib.dump(model, './cache/heart/xgboost/model.joblib')
+
+for col, mapping in HEART_COLUMN_MAPPINGS.items():
+    raw_instances[col] = raw_instances[col].map(mapping)
+
+data_schema = xailens.DataSchema(
+    instance_id_column=config.INSTANCE_UUID_COL,
+    target_column="target",
+    prediction_column="y_pred")
+
+model_data = xailens.ModelData(
+    data_schema=data_schema,
+    raw_instances=raw_instances,
+    x_test=X_test,
+    y_test=y_test_df,
+    y_pred=y_pred)
+
+ctx = xailens.ModelContext(
+    "xgboost",
+    ["tree_shap"],
+    "cleveland-heart-data",
+    model_data,
+    model=model,
+    model_dir_name="heart_xgboost",
+    model_display_name="XGBoost")
+
+xailens.run(ctx)
