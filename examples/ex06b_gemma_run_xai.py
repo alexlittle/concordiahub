@@ -1,9 +1,15 @@
+"""
+Script to register the LLM Gemma medsynth model with the XAI Lens Framework, from
+pre-generated explanations
+"""
+
 import pandas as pd
-import xailens as xai
+import xailens
 
 from examples import config
 from examples.helpers import safe_dirname
-from helpers import ICD10_CHAPTERS
+from helpers import ICD10_CHAPTERS, create_confusion_matrix, save_class_report
+from sklearn.metrics import classification_report
 
 current_model = "gemma3_27b-it-qat"
 dir_name = f"llm_{safe_dirname(current_model)}"
@@ -23,18 +29,31 @@ y_pred["prediction"] = y_pred["prediction"].map(
     lambda code: f"{code}: {ICD10_CHAPTERS[code]}" if code in ICD10_CHAPTERS else code
 )
 
+report = classification_report(y["target"],
+                               y_pred['prediction'],
+                               zero_division=True)
+print(report)
 
-schema = xai.ResponseSchema(
+save_class_report(report, "medsynth", "llm_gemma")
+class_names = sorted(set(y["target"]) | set(y_pred["prediction"]))
+create_confusion_matrix(y["target"],
+                        y_pred['prediction'],
+                        "medsynth",
+                        "llm_gemma",
+                        figsize=(10, 10),
+                        class_names=class_names)
+
+schema = xailens.ResponseSchema(
     contributions_field="key_factors",
     contribution_key="phrase",
 )
 
-data_schema = xai.DataSchema(
+data_schema = xailens.DataSchema(
     instance_id_column=config.INSTANCE_UUID_COL,
     target_column="target",
     prediction_column="prediction")
 
-model_data = xai.ModelData(
+model_data = xailens.ModelData(
     data_schema=data_schema,
     raw_instances=raw,
     x_test=X,
@@ -42,7 +61,7 @@ model_data = xai.ModelData(
     y_pred=y_pred,
     y_exp=y_exp)
 
-ctx = xai.ModelContext(
+ctx = xailens.ModelContext(
     "llm",
     ["llm_reasoning"],
     "medsynth",
@@ -52,4 +71,4 @@ ctx = xai.ModelContext(
     model_display_name="Gemma 3",
     response_schema=schema)
 
-xai.run(ctx)
+xailens.run(ctx)

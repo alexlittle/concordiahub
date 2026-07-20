@@ -1,3 +1,8 @@
+"""
+LLM for the MedSynth dataset using the Qwen 2.5 Ollama model
+"""
+
+
 import pandas as pd
 import ollama
 import json
@@ -9,9 +14,9 @@ from examples import config
 from examples.helpers import safe_dirname
 
 MODEL = "qwen2.5:14b-instruct-q8_0"
-# -----------------------------
+
+
 # Load input conversations
-# -----------------------------
 df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 
 # only run on those that match the test samples from XGboost model
@@ -20,9 +25,7 @@ xgboost_df = pd.read_parquet('./cache/medsynth/xgboost/y_test.parquet')
 
 df = df[df['instance_uuid'].isin(xgboost_df['instance_uuid'])].reset_index(drop=True)
 
-# -----------------------------
 # Prompt template
-# -----------------------------
 
 JINJA_ENV = Environment(
     loader=FileSystemLoader(config.LLM_TEMPLATE_DIR),
@@ -31,6 +34,7 @@ JINJA_ENV = Environment(
     lstrip_blocks=True
 )
 
+# build the prompt
 def build_prompt(scenario):
     user_prompt_template = JINJA_ENV.get_template("medsynth.jinja")
     return user_prompt_template.render(scenario=scenario)

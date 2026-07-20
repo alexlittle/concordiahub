@@ -108,15 +108,27 @@ def clean_text(text: str) -> str:
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
 
-def create_confusion_matrix(y_true, y_pred, dataset, model, figsize=(2, 2)):
+def create_confusion_matrix(y_true,
+                            y_pred,
+                            dataset,
+                            model,
+                            figsize=(2, 2),
+                            class_names=None):
     cm = confusion_matrix(y_true, y_pred)
+
+    if class_names is not None:
+        tick_labels = [str(name)[0] for name in class_names]
+    else:
+        tick_labels = "auto"
 
     plt.figure(figsize=figsize)
     sns.heatmap(
         cm,
         annot=True,
         fmt="d",
-        cmap="Blues"
+        cmap="Blues",
+        xticklabels=tick_labels,
+        yticklabels=tick_labels,
     )
     plt.xlabel("Predicted")
     plt.ylabel("Actual")

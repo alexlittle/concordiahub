@@ -1,0 +1,26 @@
+| Class | Precision | Recall | F1-score | Support |
+|---|---|---|---|---|
+| A: Certain infectious and parasitic diseases | 0.29 | 0.44 | 0.35 | 45 |
+| C: Neoplasms | 0.64 | 0.54 | 0.59 | 180 |
+| D: Neoplasms | 0.00 | 1.00 | 0.00 | 0 |
+| E: Endocrine, nutritional and metabolic diseases | 0.39 | 0.83 | 0.53 | 81 |
+| F: Mental, behavioral and neurodevelopmental disorders | 0.78 | 0.87 | 0.82 | 100 |
+| G: Diseases of the nervous system | 0.30 | 0.83 | 0.44 | 71 |
+| H: Diseases of eye/ear/adnexa/mastoid | 0.86 | 0.91 | 0.88 | 87 |
+| I: Diseases of the circulatory system | 0.55 | 0.70 | 0.61 | 143 |
+| J: Diseases of the respiratory system | 0.56 | 0.85 | 0.68 | 106 |
+| K: Diseases of the digestive system | 0.59 | 0.98 | 0.74 | 127 |
+| L: Diseases of the skin and subcutaneous tissue | 0.55 | 0.81 | 0.65 | 78 |
+| M: Diseases of musculoskeletal system | 0.60 | 0.74 | 0.66 | 231 |
+| N: Diseases of the genitourinary system | 0.56 | 0.73 | 0.63 | 114 |
+| O: Pregnancy, childbirth and puerperium | 0.61 | 0.78 | 0.68 | 65 |
+| P: Perinatal conditions | 0.50 | 0.50 | 0.50 | 6 |
+| Q: Congenital malformations | 1.00 | 1.00 | 1.00 | 5 |
+| R: Symptoms, signs, abnormal findings | 0.32 | 0.03 | 0.05 | 222 |
+| S: Injury and poisoning | 0.90 | 0.24 | 0.38 | 107 |
+| T: Injury and poisoning | 0.00 | 1.00 | 0.00 | 0 |
+| U: Special purposes | 1.00 | 0.00 | 0.00 | 1 |
+| Z: Factors influencing health status | 1.00 | 0.03 | 0.06 | 279 |
+| **accuracy** | | | 0.56 | 2048 |
+| **macro avg** | 0.57 | 0.66 | 0.49 | 2048 |
+| **weighted avg** | 0.63 | 0.56 | 0.49 | 2048 |

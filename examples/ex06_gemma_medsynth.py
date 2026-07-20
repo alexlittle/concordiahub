@@ -1,3 +1,7 @@
+"""
+LLM for the MedSynth dataset using the Gemma 3 Ollama model
+"""
+
 import pandas as pd
 import ollama
 import json
@@ -10,9 +14,8 @@ from examples.helpers import safe_dirname
 
 
 MODEL = "gemma3:27b-it-qat"
-# -----------------------------
+
 # Load input conversations
-# -----------------------------
 df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 
 # only run on those that match the test samples from XGboost model
@@ -21,10 +24,7 @@ xgboost_df = pd.read_parquet('./cache/medsynth/xgboost/y_test.parquet')
 
 df = df[df['instance_uuid'].isin(xgboost_df['instance_uuid'])].reset_index(drop=True)
 
-# -----------------------------
-# Prompt template
-# -----------------------------
-
+# Load prompt template
 JINJA_ENV = Environment(
     loader=FileSystemLoader(config.LLM_TEMPLATE_DIR),
     undefined=StrictUndefined,
@@ -32,11 +32,12 @@ JINJA_ENV = Environment(
     lstrip_blocks=True
 )
 
+# function to build the prompt
 def build_prompt(scenario):
     user_prompt_template = JINJA_ENV.get_template("medsynth.jinja")
     return user_prompt_template.render(scenario=scenario)
 
-# run Ollama
+# function to run Ollama request
 def run_llm_request(scenario):
     system_prompt_template = JINJA_ENV.get_template("medsynth_system.jinja")
     system_prompt = system_prompt_template.render()
@@ -49,7 +50,6 @@ def run_llm_request(scenario):
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": build_prompt(scenario)}
         ],
-        logprobs=True,
         options={
             "num_ctx": 8192,
             "temperature": 0.2,
@@ -59,6 +59,7 @@ def run_llm_request(scenario):
     return response
 
 
+# function to parse the response - checking a valid JSON object is returned
 def parse_response(response: str) -> dict:
     content = response["message"]["content"].strip()
 
@@ -103,7 +104,6 @@ exp_outputs_df = pd.DataFrame(exp_outputs)
 
 y = df[[config.INSTANCE_UUID_COL, "target"]]
 X = df.drop(columns=["target"])
-
 
 dir_name = f"llm_{safe_dirname(MODEL)}"
 os.makedirs(f"./cache/medsynth/{dir_name}/", exist_ok=True)

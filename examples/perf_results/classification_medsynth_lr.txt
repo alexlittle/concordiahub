@@ -1,0 +1,25 @@
+                                                        precision    recall  f1-score   support
+
+          A: Certain infectious and parasitic diseases       0.67      0.04      0.08        45
+                                          C: Neoplasms       0.65      0.64      0.64       180
+      E: Endocrine, nutritional and metabolic diseases       0.68      0.28      0.40        81
+F: Mental, behavioral and neurodevelopmental disorders       0.71      0.69      0.70       100
+                     G: Diseases of the nervous system       0.56      0.21      0.31        71
+                 H: Diseases of eye/ear/adnexa/mastoid       0.89      0.86      0.88        87
+                 I: Diseases of the circulatory system       0.59      0.73      0.66       143
+                 J: Diseases of the respiratory system       0.69      0.76      0.73       106
+                   K: Diseases of the digestive system       0.58      0.66      0.62       127
+       L: Diseases of the skin and subcutaneous tissue       0.72      0.68      0.70        78
+                 M: Diseases of musculoskeletal system       0.70      0.87      0.78       231
+               N: Diseases of the genitourinary system       0.58      0.43      0.49       114
+               O: Pregnancy, childbirth and puerperium       0.79      0.46      0.58        65
+                               P: Perinatal conditions       1.00      0.00      0.00         6
+                           Q: Congenital malformations       1.00      0.00      0.00         5
+                 R: Symptoms, signs, abnormal findings       0.29      0.29      0.29       222
+                               S: Injury and poisoning       0.80      0.52      0.63       107
+                                   U: Special purposes       1.00      0.00      0.00         1
+                  Z: Factors influencing health status       0.41      0.59      0.49       279
+
+                                              accuracy                           0.58      2048
+                                             macro avg       0.70      0.46      0.47      2048
+                                          weighted avg       0.60      0.58      0.57      2048

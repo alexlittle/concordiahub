@@ -1,5 +1,5 @@
 """
-File to register the LLM Qwen model with the XAI Lens Framework, from
+Script to register the LLM Qwen model with the XAI Lens Framework, from
 pre-generated explanations
 """
 import pandas as pd

@@ -1,3 +1,7 @@
+"""
+XGBoost model for the MedSynth dataset
+"""
+
 import pandas as pd
 import joblib
 import spacy
@@ -8,12 +12,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 from xgboost import XGBClassifier
 
-from helpers import check_gpu, clean_text, extract_spans_from_doc
+from helpers import clean_text, extract_spans_from_doc
 from examples import config
 
-
-device = check_gpu()
-print(f"System check: {device} detected.")
 
 # load the spaCy model
 # uses: https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl
@@ -29,17 +30,20 @@ df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 
 y = df.set_index(config.INSTANCE_UUID_COL)['target'].astype('category').cat.codes
 
+# run spaCy over the scenario texts to extract the noun chunks/entities and
+# create parsed docs
 docs = list(tqdm(
     nlp.pipe(df['scenario'].map(clean_text), batch_size=64),
     total=len(df),
     desc="Extracting spans"
 ))
+
+# turn each parsed doc into a string of phrases, joined by "|"
 df['scenario_spans'] = [extract_spans_from_doc(doc) for doc in docs]
 
 
-# vectorize texts based on the "noun chunks"
-# don't drop stop words as could break the phrase chunking and spaCy already
-# handles stop words so they won't be individual tokens
+# vectorise the text using  "|" as the separator - prevents the phrases being
+# broken up into individual wordss
 scenario_tfidf = TfidfVectorizer(
     token_pattern=r"[^|]+",
     max_features=3000,
@@ -47,6 +51,8 @@ scenario_tfidf = TfidfVectorizer(
     max_df=0.8,
 )
 
+# build a dataframe with the phrases as column names, values are the TF-IDF
+# weights
 X = scenario_tfidf.fit_transform(df['scenario_spans'])
 
 feature_names = scenario_tfidf.get_feature_names_out()

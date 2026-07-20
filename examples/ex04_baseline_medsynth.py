@@ -1,3 +1,8 @@
+"""
+Logistic Regression model for the MedSynth dataset
+"""
+
+
 import pandas as pd
 import joblib
 import spacy
@@ -22,21 +27,33 @@ try:
 except OSError:
     raise OSError("spaCy model not found. Run: python -m spacy download en_core_web_sm")
 
+#
 df = pd.read_csv(config.MEDSYNTH_FULL_FILE)
 y = df.set_index(config.INSTANCE_UUID_COL)['target'].astype('category').cat.codes
+
+# run spaCy over the scenario texts to extract the noun chunks/entities and
+# create parsed docs
 docs = list(tqdm(
     nlp.pipe(df['scenario'].map(clean_text), batch_size=64),
     total=len(df),
     desc="Extracting spans"
 ))
+
+# turn each parsed doc into a string of phrases, joined by "|"
 df['scenario_spans'] = [extract_spans_from_doc(doc) for doc in docs]
 
+
+# vectorise the text using  "|" as the separator - prevents the phrases being
+# broken up into individual words
 scenario_tfidf = TfidfVectorizer(
     token_pattern=r"[^|]+",
     max_features=3000,
     sublinear_tf=True,
     max_df=0.8,
 )
+
+# build a dataframe with the phrases as column names, values are the TF-IDF
+# weights
 X = scenario_tfidf.fit_transform(df['scenario_spans'])
 feature_names = scenario_tfidf.get_feature_names_out()
 X_df = pd.DataFrame(
