@@ -80,7 +80,7 @@ def test_runner_correct_json(model_context_factory):
         mock_store.write_metadata.assert_called_once()
         mock_store.write_model.assert_called_once()
         mock_store.write_explanation.assert_any_call(
-            "exp_global_llm_reasoning", "fake_global_json", data_format="json"
+            "exp_global_llm_reasoning", "fake_global_json", data_format="df"
         )
         mock_store.write_explanation.assert_any_call(
             "exp_local_llm_reasoning", "fake_local_json", data_format="json"
@@ -93,7 +93,7 @@ def test_runner_missing_y_test(model_context_factory, model_data_factory):
     ctx = model_context_factory(data=data)
     with pytest.raises(MissingDataError):
         runner.compute_metrics(ctx.data)
-        
+
 # test runner with missing y_pred
 def test_runner_missing_y_pred(model_context_factory, model_data_factory):
     data = dataclasses.replace(model_data_factory(), y_pred=None)

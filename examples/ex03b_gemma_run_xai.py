@@ -21,7 +21,6 @@ y_preds = pd.read_parquet(f"./cache/heart/{dir_name}/y_preds.parquet")
 y_exp = pd.read_parquet(f"./cache/heart/{dir_name}/y_exp.parquet")
 
 # print/save the classification & confusion matrix
-
 report = classification_report(y["target"], y_preds["prediction"])
 print(report)
 save_class_report(report, "heart", "llm_gemma")

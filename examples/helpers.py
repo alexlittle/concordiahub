@@ -108,10 +108,10 @@ def clean_text(text: str) -> str:
     text = re.sub(r'\s+', ' ', text)
     return text.strip()
 
-def create_confusion_matrix(y_true, y_pred, dataset, model):
+def create_confusion_matrix(y_true, y_pred, dataset, model, figsize=(2, 2)):
     cm = confusion_matrix(y_true, y_pred)
 
-    plt.figure(figsize=(5, 4))
+    plt.figure(figsize=figsize)
     sns.heatmap(
         cm,
         annot=True,
@@ -122,7 +122,7 @@ def create_confusion_matrix(y_true, y_pred, dataset, model):
     plt.ylabel("Actual")
     plt.title("Confusion Matrix")
     plt.tight_layout()
-    plt.savefig(f"perf_results/cm_{dataset}_{model}.png", dpi=300)
+    plt.savefig(f"perf_results/cm_{dataset}_{model}.png", dpi=100)
     plt.show()
 
 def save_class_report(report, dataset, model):
