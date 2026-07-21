@@ -10,11 +10,11 @@ from xailens.dashboard import settings
 from xailens.dashboard.utils.common import display_bool_value
 
 
-def generate_rows_html(df: pd.DataFrame,
-                       query_params: dict,
-                       true_label_col: Optional[str] = "true_label",
-                       id_col: Optional[str] = None,
-                       skip_cols: Optional[list] = None) -> str:
+def generate_instance_rows_html(df: pd.DataFrame,
+                                query_params: dict,
+                                true_label_col: Optional[str] = "true_label",
+                                id_col: Optional[str] = None,
+                                skip_cols: Optional[list] = None) -> str:
     """
     Generates the rows for an HTML table of the instances, including the urls
 
@@ -66,7 +66,7 @@ def render_dataframe(df:pd.DataFrame,
         Returns:
             str: of HTML table rows
         """
-        rows_html = generate_rows_html(
+        rows_html = generate_instance_rows_html(
             df, query_params, true_label_col, id_col, skip_cols)
         header = "".join(f"<th nowrap>{col}</th>" for col in df.columns)
         return f"""

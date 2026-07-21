@@ -28,7 +28,7 @@ def _format_cell(value: Any) -> str:
     return str(value)
 
 
-def generate_rows_html(df: pd.DataFrame) -> str:
+def generate_table_rows_html(df: pd.DataFrame) -> str:
     """
     Generates HTML table rows for the given dataframe
 
@@ -54,7 +54,7 @@ def dataframe_to_html_table(df: pd.DataFrame) -> str:
     Returns:
         str: HTML code for the table
     """
-    rows_html = generate_rows_html(df)
+    rows_html = generate_table_rows_html(df)
     header = "".join(f"<th nowrap>{col}</th>" for col in df.columns)
     return f"""
     <table class="report-table">

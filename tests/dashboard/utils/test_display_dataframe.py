@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 
 from xailens.dashboard.utils.display_dataframe import (
-    generate_rows_html, render_dataframe)
+    generate_instance_rows_html, render_dataframe)
 from xailens.dashboard.utils.common import display_bool_value
 from xailens import strings
 from xailens.dashboard import settings
@@ -59,7 +59,7 @@ def sample_df():
 
 
 def test_generate_rows_html_marks_correct_and_incorrect_predictions(sample_df):
-    html = generate_rows_html(sample_df, query_params={})
+    html = generate_instance_rows_html(sample_df, query_params={})
 
     assert 'class="pred-correct"' in html
     assert 'class="pred-incorrect"' in html
@@ -71,19 +71,19 @@ def test_generate_rows_html_marks_correct_and_incorrect_predictions(sample_df):
 
 
 def test_generate_rows_html_builds_id_link_with_query_params(sample_df):
-    html = generate_rows_html(sample_df, query_params={"dataset": "cleveland"})
+    html = generate_instance_rows_html(sample_df, query_params={"dataset": "cleveland"})
 
     assert '<a href="instance_detail.html?dataset=cleveland&instance_uuid=id-1">id-1</a>' in html
     assert '<a href="instance_detail.html?dataset=cleveland&instance_uuid=id-2">id-2</a>' in html
 
 
 def test_generate_rows_html_true_label_col_renders_plain(sample_df):
-    row1 = generate_rows_html(sample_df, query_params={}).split("\n")[0]
+    row1 = generate_instance_rows_html(sample_df, query_params={}).split("\n")[0]
     assert "<td>True</td>" in row1
 
 
 def test_generate_rows_html_skip_cols_excluded_from_pred_styling(sample_df):
-    html = generate_rows_html(sample_df, query_params={}, skip_cols=["model_a"])
+    html = generate_instance_rows_html(sample_df, query_params={}, skip_cols=["model_a"])
 
     assert "pred-correct" not in html
     assert "pred-incorrect" not in html
@@ -92,14 +92,14 @@ def test_generate_rows_html_skip_cols_excluded_from_pred_styling(sample_df):
 
 def test_generate_rows_html_custom_id_col(sample_df):
     df = sample_df.rename(columns={"instance_uuid": "patient_id"})
-    html = generate_rows_html(df, query_params={}, id_col="patient_id")
+    html = generate_instance_rows_html(df, query_params={}, id_col="patient_id")
 
     assert '<a href="instance_detail.html?&instance_uuid=id-1">id-1</a>' in html
 
 
 def test_generate_rows_html_empty_dataframe_returns_empty_string():
     df = pd.DataFrame(columns=["instance_uuid", "true_label", "model_a"])
-    html = generate_rows_html(df, query_params={})
+    html = generate_instance_rows_html(df, query_params={})
     assert html == ""
 
 

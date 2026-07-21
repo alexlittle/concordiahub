@@ -11,7 +11,7 @@ import pytest
 import pandas as pd
 import numpy as np
 from xailens.dashboard.utils.display_table import (
-    _format_cell, generate_rows_html, dataframe_to_html_table,
+    _format_cell, generate_table_rows_html, dataframe_to_html_table,
     series_to_html_table)
 
 
@@ -60,7 +60,7 @@ def test_display_bool_value_non_float(val, expected):
     assert _format_cell(val) == expected
 
 def test_generate_rows_html(sample_df):
-    html = generate_rows_html(sample_df)
+    html = generate_table_rows_html(sample_df)
     assert "<tr>" in html
     assert sample_df.shape[0] == html.count("<tr>")
 
