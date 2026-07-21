@@ -16,7 +16,7 @@ class LLMAdapter(ModelAdapter):
 
     display_name = strings.LLM_DISPLAY_NAME
 
-    def prepare(self) -> ScikitLearnModel:
+    def get_model(self) -> ScikitLearnModel:
         """
         Not required/implemented for this adapter
 

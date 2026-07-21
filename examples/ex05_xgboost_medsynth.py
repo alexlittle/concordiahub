@@ -69,7 +69,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 model = XGBClassifier(
-    n_estimators=500,
+    n_estimators=1000,
     learning_rate=0.1,
     objective='multi:softprob',
     random_state=42,

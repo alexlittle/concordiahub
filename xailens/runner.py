@@ -80,7 +80,7 @@ def write_global_explanations(xai_method: str,
                                          results,
                                          data_format="df")
     else:
-        results = xai_adapter.explain_global_df(ctx, model_adapter.prepare())
+        results = xai_adapter.explain_global_df(ctx, model_adapter.get_model())
         artifact_store.write_explanation(f"exp_global_{xai_method}",
                                          results,
                                          data_format="df")
@@ -106,7 +106,7 @@ def write_local_explanations(xai_method: str,
         results = xai_adapter.explain_local_json(ctx)
         artifact_store.write_explanation(f"exp_local_{xai_method}", results, data_format="json")
     else:
-        results = xai_adapter.explain_local_df(ctx, model_adapter.prepare())
+        results = xai_adapter.explain_local_df(ctx, model_adapter.get_model())
         artifact_store.write_explanation(f"exp_local_{xai_method}", results, data_format="df")
 
 

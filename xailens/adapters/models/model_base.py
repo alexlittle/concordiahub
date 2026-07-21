@@ -17,7 +17,7 @@ class ModelAdapter(ABC):
     def __init__(self, model: Optional[ScikitLearnModel] = None):
         self.model = model
 
-    def prepare(self) -> ScikitLearnModel:
+    def get_model(self) -> ScikitLearnModel:
         """
         Returns the model
 

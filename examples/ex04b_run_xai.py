@@ -7,7 +7,7 @@ Framework
 import joblib
 import pandas as pd
 
-import xailens as xai
+import xailens
 from examples import config
 from helpers import ICD10_CHAPTERS
 from examples.helpers import  create_confusion_matrix, save_class_report
@@ -43,19 +43,19 @@ create_confusion_matrix(y_test["y_test"],
                         class_names=class_names)
 
 
-data_schema = xai.DataSchema(
+data_schema = xailens.DataSchema(
     instance_id_column=config.INSTANCE_UUID_COL,
     target_column="y_test",
     prediction_column="y_pred")
 
-model_data = xai.ModelData(
+model_data = xailens.ModelData(
     data_schema=data_schema,
     raw_instances=raw,
     x_test=X_test,
     y_test=y_test,
     y_pred=y_pred)
 
-ctx = xai.ModelContext(
+ctx = xailens.ModelContext(
     "logistic_regression",
     ["coefficients"],
     "medsynth",
@@ -64,4 +64,4 @@ ctx = xai.ModelContext(
     model_dir_name="medsynth_baseline",
     model_display_name="Logistic Regression")
 
-xai.run(ctx)
+xailens.run(ctx)

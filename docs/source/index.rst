@@ -25,5 +25,3 @@ Demo available at: https://xailens.alexlittle.net/
    quickstart
    dev/index
    examples/index
-   api/index
-
