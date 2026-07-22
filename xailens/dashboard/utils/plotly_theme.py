@@ -27,7 +27,7 @@ THEME = {
 
 def apply_base_theme(fig: go.Figure, show_title: bool=True) -> go.Figure:
     """
-    Apply the base theme
+    Apply the base theme for all plotly charts
 
     Args:
         fig (go.Figure): plotly figure object to apply theme to
@@ -163,9 +163,36 @@ def apply_upset_theme(fig: go.Figure, show_title: bool = False) -> go.Figure:
     fig.update_yaxes(showgrid=True, gridcolor="#eeeeee", row=1, col=2)
     fig.update_xaxes(showgrid=False, row=1, col=2)
 
+    # make the y-axis in top right bar chart have horizontal text
+    fig.add_annotation(
+        text="Instances<br>incorrect",
+        xref="paper", yref="paper",
+        x=0,
+        y=fig.layout.yaxis.domain[1],
+        xanchor="left", yanchor="bottom",
+        showarrow=False,
+        xshift=170,
+        yshift=-100,
+        align="left",
+        font={
+            "family": THEME["font_family"],
+            "size": THEME["axis_title_font_size"],
+            "color": THEME["axis_title_color"],
+        },
+    )
+
     # Bottom-left: set size bar chart
     fig.update_xaxes(showgrid=True, gridcolor="#eeeeee", row=2, col=1)
     fig.update_yaxes(showgrid=False, row=2, col=1)
+
+    fig.update_yaxes(
+        showgrid=False,
+        tickfont={
+            "size": THEME["axis_title_font_size"],
+            "color": THEME["axis_title_color"],
+        },
+        row=2, col=1,
+    )
 
     # Bottom-right: dot matrix — deliberately bare, don't add gridlines here
     fig.update_xaxes(showgrid=False, row=2, col=2)

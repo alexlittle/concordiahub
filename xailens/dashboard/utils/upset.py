@@ -169,7 +169,7 @@ def build_upset_figure(combo_df: pd.DataFrame,
 
     # --- Axis formatting ---
     fig.update_xaxes(showticklabels=False, row=1, col=2)
-    fig.update_yaxes(title_text="Instances incorrect", row=1, col=2)
+
     fig.update_xaxes(autorange="reversed",
                      title_text="Instances incorrect",
                      row=2,
