@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 import pandas as pd
 
 from xailens.dashboard.utils import plotly_theme
+from xailens import strings
 
 def render_features_heatmap(df_exp: pd.DataFrame)-> plotly.graph_objects.Figure:
     """
@@ -33,6 +34,8 @@ def render_features_heatmap(df_exp: pd.DataFrame)-> plotly.graph_objects.Figure:
     ]
 
     fig = go.Figure()
+
+    # add the importance scale
     fig.add_trace(go.Heatmap(
         z=z_main,
         x=x_labels,
@@ -40,8 +43,14 @@ def render_features_heatmap(df_exp: pd.DataFrame)-> plotly.graph_objects.Figure:
         colorscale="Blues",
         zmin=0,
         zmax=1,
-        colorbar={"title": "Importance"},
-        hovertemplate="<b>%{x}</b><br>%{y}<br>Importance: %{z:.4f}<extra></extra>",
+        colorbar={
+            "title": strings.HEATMAP_COLOUR_BAR_TITLE,
+            "len": 0.75,
+            "y": 0.6,
+            "yanchor": "middle",
+            "x": 1.02,
+        },
+        hovertemplate=strings.HEATMAP_HOVER_TEMPLATE,
         hoverongaps=False,
     ))
 
@@ -56,7 +65,7 @@ def render_features_heatmap(df_exp: pd.DataFrame)-> plotly.graph_objects.Figure:
             y=y_labels,
             colorscale=[[0, "lightgrey"], [1, "lightgrey"]],
             showscale=False,
-            hovertemplate="<b>%{x}</b><br>%{y}<br>No data<extra></extra>",
+            hovertemplate= strings.HEATMAP_HOVER_MISSING_TEMPLATE,
             hoverongaps=False,
         ))
 
@@ -69,4 +78,26 @@ def render_features_heatmap(df_exp: pd.DataFrame)-> plotly.graph_objects.Figure:
         width=max(400, len(model_cols) * 200),
         hovermode="closest",
     )
+
+    if any(any(row_mask) for row_mask in missing_mask):
+        fig.add_shape(
+            type="rect",
+            xref="paper", yref="paper",
+            x0=1.05, x1=1.12,
+            y0=0.14, y1=0.19,
+            fillcolor="lightgrey",
+            line={"width": 0},
+        )
+        fig.add_annotation(
+            text="No data",
+            xref="paper", yref="paper",
+            x=1.13, y=0.16,
+            xanchor="left", yanchor="middle",
+            showarrow=False,
+            font={
+                "family": plotly_theme.THEME["font_family"],
+                "size": plotly_theme.THEME["axis_tick_font_size"],
+                "color": plotly_theme.THEME["axis_tick_color"],
+            },
+        )
     return fig

@@ -128,7 +128,6 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         contributions = list(row["contributions"].items())
         scores = [float(data["score"]) for _, data in contributions]
 
-        abs_sum = sum(abs(s) for s in scores)
         abs_max = max(abs(s) for s in scores)
 
         overall_reasoning = row["reasoning"]

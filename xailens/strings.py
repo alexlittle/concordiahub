@@ -225,7 +225,12 @@ WATERFALL_X_AXIS = "Contribution"
 TABULAR_DISPLAY_NAME = "Tabular (text)"
 TABULAR_SCORE_TITLE = "Normalised<br/>Score (1 to -1)"
 
+# Heatmaps
+HEATMAP_COLOUR_BAR_TITLE = "Importance"
+HEATMAP_HOVER_TEMPLATE = "<b>%{x}</b><br>%{y}<br>Importance: %{z:.4f}<extra></extra>"
+HEATMAP_HOVER_MISSING_TEMPLATE = "<b>%{x}</b><br>%{y}<br>No data<extra></extra>"
 
+# Matrix set plot
 MATRIX_SET_PLOT_TITLE = "Sets of Misclassified Instances"
 
 # ----------------
