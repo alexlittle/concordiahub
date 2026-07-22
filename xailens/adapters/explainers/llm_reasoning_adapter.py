@@ -120,9 +120,9 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         row = next((r for r in records if r[instance_id_col] == instance_id),
                    None)
         if row is None:
-            raise ValueError(
-                f"Instance '{instance_id}' not found in explanations "
-                f"for {cls.key}")
+            raise MissingDataError(strings.ERROR_INSTANCE_NOT_FOUND.format(
+                instance_id=instance_id, key=cls.key))
+
 
         # make sure data[score] treaded as a proper float value
         contributions = list(row["contributions"].items())
@@ -253,8 +253,8 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             MissingDataError: if data.x is not provided
         """
         if ctx.data.y_exp is None or ctx.data.y_pred is None:
-            raise MissingDataError(
-                "LLMReasoningAdapter requires y_exp and y_pred in ModelData")
+            raise MissingDataError(strings.ERROR_MISSING_MODELDATA.format(
+                method="cls.key", data="y_exp, y_pred"))
         if ctx.response_schema is None:
             raise MissingDataError(
                 "LLMReasoningAdapter requires a ResponseSchema in ModelContext")

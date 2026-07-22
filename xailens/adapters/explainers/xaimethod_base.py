@@ -9,7 +9,7 @@ from typing import Any, Optional, ClassVar
 from xailens.entities.context import ModelContext
 from xailens.entities.model import Model
 from xailens.exceptions import MissingDataError
-from xailens import config
+from xailens import config, strings
 from xailens.config import TreeModel
 
 class XAIMethodAdapter(ABC):
@@ -23,7 +23,7 @@ class XAIMethodAdapter(ABC):
     default_visualisation: Optional[str]
     compatible_visualisations: Optional[dict]
 
-    # type of explanation storage - df or json, default to df
+    # type of explanation storage - df or JSON, default to df
     explanation_file_type: str = "df"
 
     @classmethod
@@ -66,7 +66,8 @@ class XAIMethodAdapter(ABC):
         df = model.store.load_dataframe(f"exp_local_{cls.key}")
         row = df[df[model.get(config.DATA_SCHEMA_ID_COLUMN)] == instance_id]
         if row.empty:
-            raise MissingDataError(f"Instance '{instance_id}' not found in explanations for {cls.key}")
+            raise MissingDataError(strings.ERROR_INSTANCE_NOT_FOUND.format(
+                instance_id=instance_id, key=cls.key))
         explanation = row.iloc[0].drop(model.get(config.DATA_SCHEMA_ID_COLUMN), errors='coerce')
 
         abs_max = explanation.abs().max()

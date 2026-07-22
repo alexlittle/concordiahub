@@ -43,11 +43,11 @@ class TabularAdapter(VizAdapter):
             overall_confidence = explanation["overall_confidence"].iloc[0]
 
             overall_text = f"""
-                    <em>Overall Reasoning</em>: {overall_reasoning} <br/>
-                    <em>Overall Confidence</em>: {overall_confidence} <br/>"""
+                    <strong>{strings.TABULAR_OVERALL_REASON_TITLE}</strong>: {overall_reasoning} <br/>
+                    <strong>{strings.TABULAR_OVERALL_CONF_TITLE}</strong>: {overall_confidence} <br/>"""
             parts.append(overall_text)
 
-            final_columns = {"feature_name": "Feature",
+            final_columns = {"feature_name": strings.TABULAR_FEATURE_TITLE,
                      "score_normalised_max": strings.TABULAR_SCORE_TITLE,
                      "reasoning": "Reasoning"}
             # drop unnecessary columns
@@ -55,7 +55,7 @@ class TabularAdapter(VizAdapter):
                                                     "overall_reasoning",
                                                     "overall_confidence"])
         else:
-            final_columns = {"feature_name": "Feature",
+            final_columns = {"feature_name": strings.TABULAR_FEATURE_TITLE,
                              "score_normalised_max": strings.TABULAR_SCORE_TITLE}
             # drop unnecessary columns
             explanation = explanation.drop(columns=["score", "reasoning"])

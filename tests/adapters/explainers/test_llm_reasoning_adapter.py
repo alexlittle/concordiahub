@@ -155,7 +155,7 @@ def test_explain_global_json_raises_without_response_schema(adapter, model_conte
 # --------------------
 # test explain_local_json function
 # ----------------------
-def test_load_local_explanation_corrcet(llm_model_factory):
+def test_load_local_explanation_correct(llm_model_factory):
     model = llm_model_factory()
 
     result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
@@ -171,7 +171,7 @@ def test_load_local_explanation_corrcet(llm_model_factory):
 def test_load_local_explanation_instance_not_found(llm_model_factory):
     model = llm_model_factory()
 
-    with pytest.raises(ValueError, match="inst_999"):
+    with pytest.raises(MissingDataError, match="inst_999"):
         LLMReasoningAdapter.load_local_explanation(model, "inst_999")
 
 def test_load_local_explanation_zero_scores_fallback(llm_model_factory):

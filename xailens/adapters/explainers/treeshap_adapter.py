@@ -61,7 +61,8 @@ class TreeSHAPAdapter(XAIMethodAdapter):
             DataProcessingError: if errors in processing SHAP values
         """
         if not hasattr(ctx.data, "x_test") or ctx.data.x_test is None:
-            raise MissingDataError("TreeSHAPAdapter requires x_test in ModelData")
+            raise MissingDataError(strings.ERROR_MISSING_MODELDATA.format(
+                method="cls.key", data="x_test"))
         instance_id = ctx.data.data_schema.instance_id_column
         data = ctx.data.x_test.copy()
         data = data.drop(columns=[instance_id]).select_dtypes(include=['number'])
@@ -104,7 +105,8 @@ class TreeSHAPAdapter(XAIMethodAdapter):
         """
 
         if not hasattr(ctx.data, "x_test") or ctx.data.x_test is None:
-            raise MissingDataError("TreeSHAPAdapter requires x_test in ModelData")
+            raise MissingDataError(strings.ERROR_MISSING_MODELDATA.format(
+                method="cls.key", data="x_test"))
 
         instance_id = ctx.data.data_schema.instance_id_column
         data = ctx.data.x_test.copy()

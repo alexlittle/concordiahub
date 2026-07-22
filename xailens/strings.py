@@ -1,5 +1,7 @@
 """
-Strings used throughout the framework, including dashboard
+Strings used throughout the framework, including dashboard.
+These are all user facing, so having in one place makes it easier to update or
+to translate to alternative languages
 """
 
 # ---------------------
@@ -129,8 +131,6 @@ DISPLAY_NAMES = {
 }
 
 
-
-
 # Instance detail page
 #-------------------------------
 
@@ -145,6 +145,9 @@ INSTANCE_DETAIL_MODEL_EXPLANATIONS = "Model Explanations"
 # ----------------
 # Error/Warning messages
 # ----------------
+
+ERROR_MISSING_MODELDATA = "{method} requires {data} in ModelData"
+ERROR_INSTANCE_NOT_FOUND = "Instance '{instance_id}' not found in explanations for {key}"
 
 WARNING_GLOBAL_NOT_AVAILABLE = "Global explanations are not available for {adapter}"
 WARNING_INVALID_URL_PARAMS = "Invalid combination of url parameters"
@@ -223,12 +226,17 @@ WATERFALL_X_AXIS = "Contribution"
 
 # Tabular Visualisation
 TABULAR_DISPLAY_NAME = "Tabular (text)"
+TABULAR_FEATURE_TITLE = "Feature"
 TABULAR_SCORE_TITLE = "Normalised<br/>Score (1 to -1)"
+TABULAR_OVERALL_REASON_TITLE = "Overall Reasoning"
+TABULAR_OVERALL_CONF_TITLE= "Overall confidence"
+
 
 # Heatmaps
 HEATMAP_COLOUR_BAR_TITLE = "Importance"
 HEATMAP_HOVER_TEMPLATE = "<b>%{x}</b><br>%{y}<br>Importance: %{z:.4f}<extra></extra>"
 HEATMAP_HOVER_MISSING_TEMPLATE = "<b>%{x}</b><br>%{y}<br>No data<extra></extra>"
+HEATMAP_NO_DATA = "No data"
 
 # Matrix set plot
 MATRIX_SET_PLOT_TITLE = "Sets of Misclassified Instances"

@@ -74,7 +74,7 @@ def render_features_heatmap(df_exp: pd.DataFrame)-> plotly.graph_objects.Figure:
         title="",
         xaxis={"side": "top"},
         yaxis={"autorange": "reversed", "range": None},
-        height=max(400, len(df_exp) * 30),
+        height=max(400, len(df_exp) * 35),
         width=max(400, len(model_cols) * 200),
         hovermode="closest",
     )
@@ -89,7 +89,7 @@ def render_features_heatmap(df_exp: pd.DataFrame)-> plotly.graph_objects.Figure:
             line={"width": 0},
         )
         fig.add_annotation(
-            text="No data",
+            text=strings.HEATMAP_NO_DATA,
             xref="paper", yref="paper",
             x=1.13, y=0.16,
             xanchor="left", yanchor="middle",
