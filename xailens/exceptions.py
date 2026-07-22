@@ -20,12 +20,6 @@ class InvalidSelectionError(Exception):
     """
     pass
 
-class InvalidUrlParamsError(Exception):
-    """
-    Exception raised for invalid url params, eg missing parameters in dashboard url
-    """
-    pass
-
 class DataProcessingError(Exception):
     """
     Exception raised when data processing fails, eg with SHAP calculations

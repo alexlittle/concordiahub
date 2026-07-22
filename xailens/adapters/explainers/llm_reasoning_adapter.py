@@ -82,17 +82,14 @@ class LLMReasoningAdapter(XAIMethodAdapter):
 
         Returns:
             pd.DataFrame: dataframe containing the global explanation, with the
-                following columns: feature_name, score, score_normalised_sum,
-                score_normalised_max
+                following columns: feature_name, score, score_normalised_max
         """
         df = model.store.load_dataframe(f"exp_global_{cls.key}")
         abs_importance = df["importance"].abs()
-        abs_sum = abs_importance.sum()
         abs_max = abs_importance.max()
         return pd.DataFrame({
             "feature_name": df["feature"],
             "score": df["importance"],
-            "score_normalised_sum": abs_importance / abs_sum if abs_sum != 0 else abs_importance,
             "score_normalised_max": abs_importance / abs_max if abs_max != 0 else abs_importance,
         })
 
@@ -141,7 +138,6 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             {
                 "feature_name": feature,
                 "score": score,
-                "score_normalised_sum": score / abs_sum if abs_sum != 0 else score,
                 "score_normalised_max": score / abs_max if abs_max != 0 else score,
                 "reasoning": data["reasoning"],
                 "overall_reasoning": overall_reasoning,

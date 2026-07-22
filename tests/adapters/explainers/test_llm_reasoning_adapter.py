@@ -162,10 +162,8 @@ def test_load_local_explanation_corrcet(llm_model_factory):
 
     assert isinstance(result, pd.DataFrame)
     scores = result["score"].tolist()
-    abs_sum = sum(abs(s) for s in scores)
     abs_max = max(abs(s) for s in scores)
     for _, row in result.iterrows():
-        assert row["score_normalised_sum"] == pytest.approx(row["score"] / abs_sum)
         assert row["score_normalised_max"] == pytest.approx(row["score"] / abs_max)
     assert (result["overall_reasoning"] == "Fake reasoning for inst_0").all()
     assert (result["overall_confidence"] == 0.75).all()
@@ -190,7 +188,6 @@ def test_load_local_explanation_zero_scores_fallback(llm_model_factory):
 
     result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
 
-    assert (result["score_normalised_sum"] == result["score"]).all()
     assert (result["score_normalised_max"] == result["score"]).all()
 
 def test_load_local_explanation_single_contribution(llm_model_factory):
@@ -207,7 +204,6 @@ def test_load_local_explanation_single_contribution(llm_model_factory):
     result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
 
     assert len(result) == 1
-    assert result.iloc[0]["score_normalised_sum"] == 1.0
     assert result.iloc[0]["score_normalised_max"] == 1.0
 
 def test_load_local_explanation_string_scores_coerced_to_float(llm_model_factory):

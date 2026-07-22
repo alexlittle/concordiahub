@@ -34,7 +34,6 @@ def test_returns_reasoning_text_and_renamed_table(adapter, monkeypatch):
         "feature_name": ["age", "sex", "chol"],
         "score": [0.5, -0.2, 0.1],
         "score_normalised_max": [0.5, -0.2, 0.1],
-        "score_normalised_sum": [0.7, -0.3, 0.15],
         "overall_reasoning": ["age matters"] * 3,
         "overall_confidence": ["high"] * 3,
         "reasoning": ["age reason", "sex reason", "chol reason"],
@@ -50,7 +49,7 @@ def test_returns_reasoning_text_and_renamed_table(adapter, monkeypatch):
     assert list(table.columns) == ["Feature",
                                    strings.TABULAR_SCORE_TITLE, "Reasoning"]
     # dropped columns shouldn't be returned
-    for dropped in ("score", "score_normalised_sum", "overall_reasoning", "overall_confidence"):
+    for dropped in ("score", "overall_reasoning", "overall_confidence"):
         assert dropped not in table.columns
     # sorted descending by score title
     assert table[strings.TABULAR_SCORE_TITLE].tolist() == sorted(
@@ -65,7 +64,6 @@ def test_top_n_feature_limit(adapter, monkeypatch):
         "feature_name": ["age", "sex", "chol"],
         "score": [0.1, 0.2, 0.9],
         "score_normalised_max": [0.1, -0.9, 0.5],
-        "score_normalised_sum": [0.1, 0.2, 0.3],
         "overall_reasoning": ["x"] * 3,
         "overall_confidence": ["y"] * 3,
         "reasoning": ["a", "b", "c"],
@@ -86,7 +84,6 @@ def test_returns_single_table_with_reasoning_dropped(adapter, monkeypatch):
         "feature_name": ["age", "sex", "chol"],
         "score": [0.5, -0.2, 0.1],
         "score_normalised_max": [0.5, -0.2, 0.1],
-        "score_normalised_sum": [0.7, -0.3, 0.15],
         "reasoning": ["age reason", "sex reason", "chol reason"],
     })
 

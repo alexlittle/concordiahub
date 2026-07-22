@@ -41,12 +41,10 @@ class XAIMethodAdapter(ABC):
         explanation = df.groupby("feature")["importance"].mean()
 
         explanation_abs = explanation.abs()
-        abs_sum = explanation.abs().sum()
         abs_max = explanation.abs().max()
         return pd.DataFrame({
             "feature_name": explanation.index,
             "score": explanation.values,
-            "score_normalised_sum": explanation_abs.values / abs_sum if abs_sum != 0 else explanation_abs.values,
             "score_normalised_max": explanation_abs.values / abs_max if abs_max != 0 else explanation_abs.values,
         })
 
@@ -71,12 +69,10 @@ class XAIMethodAdapter(ABC):
             raise MissingDataError(f"Instance '{instance_id}' not found in explanations for {cls.key}")
         explanation = row.iloc[0].drop(model.get(config.DATA_SCHEMA_ID_COLUMN), errors='coerce')
 
-        abs_sum = explanation.abs().sum()
         abs_max = explanation.abs().max()
         return pd.DataFrame({
             "feature_name": explanation.index,
             "score": explanation.values,
-            "score_normalised_sum": explanation.values / abs_sum if abs_sum != 0 else explanation.values,
             "score_normalised_max": explanation.values / abs_max if abs_max != 0 else explanation.values,
             "reasoning": None
         })

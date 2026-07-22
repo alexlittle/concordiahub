@@ -52,16 +52,13 @@ class TabularAdapter(VizAdapter):
                      "reasoning": "Reasoning"}
             # drop unnecessary columns
             explanation = explanation.drop(columns=["score",
-                                                    "score_normalised_sum",
                                                     "overall_reasoning",
                                                     "overall_confidence"])
         else:
             final_columns = {"feature_name": "Feature",
                              "score_normalised_max": strings.TABULAR_SCORE_TITLE}
             # drop unnecessary columns
-            explanation = explanation.drop(columns=["score",
-                                                    "score_normalised_sum",
-                                                    "reasoning"])
+            explanation = explanation.drop(columns=["score", "reasoning"])
 
         # rename for display
         explanation = explanation.rename(columns=final_columns)

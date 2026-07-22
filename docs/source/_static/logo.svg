@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 512 512"
+   width="512"
+   height="512"
+   version="1.1"
+   id="svg21"
+   sodipodi:docname="logo.svg"
+   inkscape:export-filename="logo.png"
+   inkscape:export-xdpi="28.125"
+   inkscape:export-ydpi="28.125"
+   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview23"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false"
+     inkscape:zoom="0.4609375"
+     inkscape:cx="258.16949"
+     inkscape:cy="259.25424"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg21" />
+  <defs
+     id="defs5">
+    <clipPath
+       id="lens-clip">
+      <circle
+         cx="210"
+         cy="210"
+         r="168"
+         id="circle2" />
+    </clipPath>
+  </defs>
+  <!-- Magnifying glass handle -->
+  <line
+     x1="338"
+     y1="338"
+     x2="460"
+     y2="460"
+     stroke="#0d4f4f"
+     stroke-width="52"
+     stroke-linecap="round"
+     id="line7" />
+  <!-- Handle highlight -->
+  <line
+     x1="338"
+     y1="338"
+     x2="452"
+     y2="452"
+     stroke="#166e6e"
+     stroke-width="18"
+     stroke-linecap="round"
+     opacity="0.4"
+     id="line9" />
+  <!-- Lens outer ring -->
+  <circle
+     cx="210"
+     cy="210"
+     r="168"
+     fill="none"
+     stroke="#0d4f4f"
+     stroke-width="38"
+     id="circle11" />
+  <!-- Lens fill -->
+  <circle
+     cx="210"
+     cy="210"
+     r="149"
+     fill="#e0f2f2"
+     id="circle13" />
+  <!-- Inner ring detail -->
+  <circle
+     cx="210"
+     cy="210"
+     r="149"
+     fill="none"
+     stroke="#166e6e"
+     stroke-width="3"
+     opacity="0.5"
+     id="circle15" />
+  <!-- XAI text — centred on circle cx/cy -->
+  <text
+     x="210"
+     y="210"
+     text-anchor="middle"
+     dominant-baseline="central"
+     font-family="Georgia, 'Times New Roman', serif"
+     font-size="158"
+     font-weight="normal"
+     letter-spacing="4"
+     fill="#0d4f4f"
+     id="text17">XAI</text>
+  <!-- Lens glare highlight -->
+  <ellipse
+     cx="155"
+     cy="148"
+     rx="38"
+     ry="22"
+     fill="white"
+     opacity="0.35"
+     transform="rotate(-35 155 148)"
+     id="ellipse19" />
+</svg>
