@@ -7,4 +7,5 @@ pytest_plugins = [
     "tests.fixtures.dataset",
     "tests.fixtures.model_explorer",
     "tests.fixtures.context",
+    "tests.fixtures.adapter_module"
 ]

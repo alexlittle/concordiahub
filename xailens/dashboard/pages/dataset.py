@@ -54,9 +54,17 @@ def main():
         dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_models)
 
-    tab1, tab2, tab3 = st.tabs(strings.DATASET_TABS)
+    # Get performance metrics
+    metrics = dataset_obj.get_metrics()
+    metrics = metrics.sort_values(by=['model'])
 
-    with tab1:
+    view = st.segmented_control(
+        "View",
+        strings.DATASET_TABS,
+        default="Overview",
+        label_visibility="collapsed",
+    )
+    if view == "Overview":
         with st.container(border=True, key="recommended-models"):
             recommended_models = dataset_obj.get_recommended_models()
             title = f"""
@@ -64,10 +72,6 @@ def main():
                 <span class='recommended-model'>{strings.format_recommended_models(recommended_models)}</span>"""
 
             st.html(title_with_help_icon(title, strings.HELP_RECOMMENDED_MODEL))
-
-        # Get performance metrics
-        metrics = dataset_obj.get_metrics()
-        metrics = metrics.sort_values(by=['model'])
 
         col1, col2= st.columns([2, 2])
         with col1:
@@ -91,7 +95,7 @@ def main():
                                 width='content',
                                 config=config.PLOTLY_CONFIG)
 
-    with tab2:
+    if view == "More Metrics":
         # accuracy/precision/recall bar charts
         col4, col5, col6 = st.columns(3)
         with col4:
@@ -117,7 +121,7 @@ def main():
                         metrics, "recall_weighted", show_title=False),
                     config=config.PLOTLY_CONFIG)
 
-    with tab3:
+    if view == "Instance Consensus":
         # Instance consensus overview
         with st.container(border=True):
             st.html(title_with_help_icon(strings.INSTANCE_CONSENSUS_TITLE,

@@ -141,18 +141,19 @@ p {
 /*
     Tab style
  */
-button[data-baseweb="tab"] p {
+div[data-testid="stButtonGroup"] button p {
     font-size: 1.1rem;
     font-weight: 400;
+}
+div[data-testid="stButtonGroup"] button {
+    padding: 0.35rem 1rem;
+    min-height: 2.5rem;
+}
+div[data-testid="stButtonGroup"] button p {
     color: var(--color-link);
 }
-
-button[data-baseweb="tab"][aria-selected="true"] p {
-    color: var(--color-link);
-}
-
-div[data-baseweb="tab-list"] {
-    gap: 24px;
+div[data-testid="stButtonGroup"] button[aria-checked="true"] p {
+    color: inherit;
 }
 
 /*

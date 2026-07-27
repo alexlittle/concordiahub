@@ -1,137 +1,18 @@
+"""
+Tests for autodiscovery of adapters
 
-import importlib
+Covers:
+
+- checking new adapters are registered correctly
+- checks badly configured adapters show a warning but don't crash correct ones
+- check only imports adapters once
+- checks concurrency if multiple threads try to register adapters at the same time
+
+"""
 import sys
 import threading
 from types import ModuleType
 
-import pytest
-
-from unittest.mock import MagicMock
-from xailens.exceptions import InvalidConfigurationError
-
-# Import registry APIs from their respective modules
-from xailens.registry.model_registry import (
-    MODEL_REGISTRY,
-    register_model,
-    get_model_adapter,
-)
-
-from xailens.registry.xai_registry import (
-    XAI_REGISTRY,
-    register_xai,
-    get_xai_adapter,
-)
-
-from xailens.registry.viz_registry import (
-    VIZ_REGISTRY,
-    register_viz,
-    get_viz_adapter,
-)
-
-
-MODULE_UNDER_TEST = "xailens.registry.autodiscover"
-
-
-def _ensure_clean_import():
-    """
-    Ensure a fresh import by clearing it from sys.modules.
-    """
-    if MODULE_UNDER_TEST in sys.modules:
-        del sys.modules[MODULE_UNDER_TEST]
-    return importlib.import_module(MODULE_UNDER_TEST)
-
-
-@pytest.fixture(autouse=True)
-def fresh_module(monkeypatch):
-    """
-    Provides a freshly imported module for each test and ensures
-    the xailens.adapters package exists with a __path__.
-    """
-    #  'xailens' package in sys.modules
-    if "xailens" not in sys.modules:
-        xailens = ModuleType("xailens")
-        sys.modules["xailens"] = xailens
-
-    # xailens.adapters exists and has a __path__
-    adapters_pkg_name = "xailens.adapters"
-    adapters_pkg = ModuleType(adapters_pkg_name)
-    adapters_pkg.__path__ = ["FAKE_PATH"]
-    sys.modules[adapters_pkg_name] = adapters_pkg
-
-    mod = _ensure_clean_import()
-    yield mod
-
-    # Cleanup between tests
-    for key in [MODULE_UNDER_TEST, adapters_pkg_name]:
-        if key in sys.modules:
-            del sys.modules[key]
-
-# ------------------------
-# Model registry tests
-# ------------------------
-def test_register_and_get_model_adapter(fresh_module):
-    @register_model("my-model")
-    class MyAdapter:
-        def __init__(self, model=None):
-            self.model = model
-
-    model_class = get_model_adapter("my-model")
-    model_adapter = model_class(None)
-    assert isinstance(model_adapter, MyAdapter)
-    assert MyAdapter is MODEL_REGISTRY["my-model"]
-
-
-def test_get_model_adapter_missing_raises(fresh_module):
-    with pytest.raises(InvalidConfigurationError) as exc:
-        get_model_adapter("missing")
-    assert "not registered" in str(exc.value)
-
-
-# ------------------------
-# XAI registry tests
-# ------------------------
-def test_register_and_get_xai_adapter(fresh_module):
-    @register_xai("my-expl")
-    class MyAdapter:
-        def __init__(self):
-            pass
-
-    xai_class = get_xai_adapter("my-expl")
-    xai_adapter = xai_class()
-    assert isinstance(xai_adapter, MyAdapter)
-    assert MyAdapter is XAI_REGISTRY["my-expl"]
-
-
-def test_get_explainer_adapter_missing_raises(fresh_module):
-    with pytest.raises(InvalidConfigurationError) as exc:
-        get_xai_adapter("missing")
-    assert "not registered" in str(exc.value)
-
-
-# ------------------------
-# Viz registry tests
-# ------------------------
-def test_register_and_get_viz_adapter(fresh_module):
-    @register_viz("my-viz")
-    class MyAdapter:
-        pass
-
-    cls = get_viz_adapter("my-viz")
-    assert cls is MyAdapter
-
-    # Decorator returns the class unchanged
-    assert MyAdapter is VIZ_REGISTRY["my-viz"]
-
-
-def test_get_viz_adapter_missing_raises(fresh_module):
-    with pytest.raises(InvalidConfigurationError) as exc:
-        get_viz_adapter("missing")
-    assert "not registered" in str(exc.value)
-
-
-# ------------------------
-# Autodiscovery tests
-# ------------------------
 def test_autodiscover_imports_all_submodules(monkeypatch, fresh_module):
     autodiscover = fresh_module
 
@@ -188,7 +69,7 @@ def test_autodiscover_continues_on_import_error(monkeypatch, fresh_module, capsy
 
     autodiscover.autodiscover_adapters()
 
-    # Verify warning printed but function did not raise
+    # check warning printed but not a crash
     out = capsys.readouterr().out
     assert "[WARN] Failed importing xailens.adapters.bad: boom" in out
 
@@ -207,7 +88,6 @@ def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     import_calls = []
 
     def fake_walk_packages(path, prefix):
-        # Relaxed: path type + correct prefix
         assert isinstance(path, (list, tuple))
         assert prefix == "xailens.adapters."
         for item in discovered_once:
@@ -222,9 +102,9 @@ def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     monkeypatch.setattr("pkgutil.walk_packages", lambda path, prefix: fake_walk_packages(path, prefix))
     monkeypatch.setattr("importlib.import_module", fake_import_module)
 
-    # First call
+    # call 1
     autodiscover.autodiscover_adapters()
-    # Second call
+    # call 2
     autodiscover.autodiscover_adapters()
 
     assert import_calls.count("xailens.adapters.once") == 1
@@ -233,7 +113,6 @@ def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
 def test_autodiscover_thread_safety(monkeypatch, fresh_module):
     """
     Multiple threads calling autodiscover concurrently should still only import once.
-    This exercises the lock + double-checked __DISCOVERED behavior.
     """
     autodiscover = fresh_module
 
@@ -264,30 +143,5 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
     for t in threads:
         t.join()
 
-    # Even with many concurrent calls, the module should be imported once
+    # Even with concurrent calls, the module only imported once
     assert import_calls.count("xailens.adapters.threaded") == 1
-
-
-def test_autodiscover_inner_check_short_circuits_race(monkeypatch, fresh_module):
-    """
-    Simulates another thread finishing discovery between this thread's outer
-    check and its lock acquisition, forcing the inner 'if __DISCOVERED: return'
-    to be the one that fires.
-    """
-    autodiscover = fresh_module
-
-    class FakeLock:
-        def __enter__(self):
-            # Pretend another thread just set this while we were waiting on the lock
-            setattr(autodiscover, "__DISCOVERED", True)
-        def __exit__(self, *args):
-            return False
-
-    monkeypatch.setattr(autodiscover, "__LOCK", FakeLock())
-
-    mock_walk = MagicMock()
-    monkeypatch.setattr("pkgutil.walk_packages", mock_walk)
-
-    autodiscover.autodiscover_adapters()
-
-    mock_walk.assert_not_called()

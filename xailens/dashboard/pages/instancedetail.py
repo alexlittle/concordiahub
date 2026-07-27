@@ -53,9 +53,14 @@ def main():
         dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_models)
 
-    tab1, tab2 = st.tabs(strings.INSTANCE_DETAIL_TABS)
+    view = st.segmented_control(
+        "View",
+        strings.INSTANCE_DETAIL_TABS,
+        default="Instance Overview",
+        label_visibility="collapsed",
+    )
 
-    with tab1:
+    if view == "Instance Overview":
         # Overall predictions
         st.html(f"<h3>{strings.INSTANCE_DETAIL_PREDICTIONS_TITLE}</h3>")
         df_instances = dataset_obj.get_all_instances()
@@ -86,7 +91,7 @@ def main():
             instance_data = dataset_obj.get_instance_data(instance_uuid)
             st.html(series_to_html_table(instance_data))
 
-    with tab2:
+    if view == "Model Explanations":
         # Panels for each model explanation - split so there are 2 columns
         for i in range(0, len(selected_models), 2):
             cols = st.columns(2, gap="large")

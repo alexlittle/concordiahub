@@ -18,10 +18,11 @@ the codebase.
 Demo available at: https://xailens.alexlittle.net/
 
 
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   quickstart
+   register-model
    dev/index
    examples/index
