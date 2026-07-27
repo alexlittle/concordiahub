@@ -91,8 +91,8 @@ class Dataset:
             else:
                 df = adapter.load_global_explanation(model)
 
-            # remove and leading/trailing whitespace
-            df["feature_name"] = df["feature_name"].str.strip()
+            # remove and leading/trailing whitespace and make lower case
+            df["feature_name"] = df["feature_name"].str.strip().str.lower()
 
             # make sure the values are properly numeric
             df["score_normalised_max"] = pd.to_numeric(df["score_normalised_max"], errors="coerce")
