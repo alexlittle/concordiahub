@@ -12,7 +12,7 @@ from xailens.dashboard.utils.common import (
 from xailens.dashboard.utils.instances_table import build_display_df
 from xailens import strings
 from xailens.entities.dataset import Dataset
-from xailens.dashboard.utils.upset import render_upset_figure
+from xailens.dashboard.utils.matrix_set import render_matrixset_figure
 from xailens.dashboard import settings
 
 def main():
@@ -54,7 +54,7 @@ def main():
     # only show the matrix plot if a matrix set if given (i.e. there isn't
     # an instance group
     if instance_group is None:
-        render_upset_figure(dataset_obj, navigate_on_click=False)
+        render_matrixset_figure(dataset_obj, navigate_on_click=False)
 
     matrix_set = st.query_params.get("matrix_set", None)
 

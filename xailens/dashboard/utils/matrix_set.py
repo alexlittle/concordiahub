@@ -11,7 +11,7 @@ from plotly.subplots import make_subplots
 
 from xailens.entities.dataset import Dataset
 from xailens.config import PLOTLY_CONFIG, PLOT_UPSET_CORRECT_COLOR, PLOT_UPSET_INCORRECT_COLOR
-from xailens.dashboard.utils.plotly_theme import apply_upset_theme
+from xailens.dashboard.utils.plotly_theme import apply_matrixset_theme
 
 from xailens import strings
 
@@ -204,7 +204,7 @@ def build_upset_figure(combo_df: pd.DataFrame,
 
     return fig
 
-def render_upset_figure(dataset: Dataset,
+def render_matrixset_figure(dataset: Dataset,
                         navigate_on_click: bool = True) -> None:
     """
     Renders a matrix-set plotly figure
@@ -216,9 +216,9 @@ def render_upset_figure(dataset: Dataset,
             be set to False. Defaults to True
 
     """
-    combo_df, set_sizes = dataset.get_upset_data()
-    fig = build_upset_figure(combo_df, set_sizes)
-    fig = apply_upset_theme(fig, show_title=True)
+    combo_df, set_sizes = dataset.get_matrixset_data()
+    fig = build_matrixset_figure(combo_df, set_sizes)
+    fig = apply_matrixset_theme(fig, show_title=True)
 
     # Display the chart and catch events (clicks) on the chart
     event = st.plotly_chart(
@@ -227,7 +227,7 @@ def render_upset_figure(dataset: Dataset,
         config=PLOTLY_CONFIG,
         on_select="rerun",
         selection_mode="points",
-        key="upset_matrix",
+        key="matrixset_matrix",
     )
 
     # when clicked on the points direct to correct page/set

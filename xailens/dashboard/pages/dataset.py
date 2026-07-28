@@ -9,7 +9,7 @@ from xailens.dashboard.utils.layout import apply_layout
 from xailens.dashboard.explorer import get_explorer
 from xailens.dashboard.utils.common import display_breadcrumbs, title_with_help_icon
 from xailens.dashboard.utils.dataset_helpers import render_metric_barchart, generate_metric_card
-from xailens.dashboard.utils.upset import render_upset_figure
+from xailens.dashboard.utils.matrix_set import render_matrixset_figure
 from xailens.dashboard.utils.heatmap import render_features_heatmap
 from xailens.entities.dataset import Dataset
 from xailens import strings, config
@@ -145,7 +145,7 @@ def main():
                                             instance_metrics['models_disagree'],
                                          f"{settings.INSTANCES_FILENAME}?{query_string}&instances=disagree"))
 
-            render_upset_figure(dataset_obj)
+            render_matrixset_figure(dataset_obj)
 
 if __name__ == "__main__":
     main()

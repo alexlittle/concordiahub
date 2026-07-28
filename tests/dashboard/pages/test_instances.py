@@ -14,14 +14,14 @@ PAGE = Path(__file__).parents[3] / "xailens" / "dashboard" / "pages" / "instance
 
 
 # ---------------------------------
-# Mocks for render_upset_figure / interactive_table
+# Mocks for render_matrixset_figure / interactive_table
 # ---------------------------------
 
 @pytest.fixture
-def mock_render_upset_figure(monkeypatch):
+def mock_render_matrixset_figure(monkeypatch):
     mock = MagicMock()
     monkeypatch.setattr(
-        "xailens.dashboard.utils.upset.render_upset_figure", mock)
+        "xailens.dashboard.utils.matrix_set.render_matrixset_figure", mock)
     return mock
 
 
@@ -97,7 +97,7 @@ def all_incorrect_dataset(
 def test_matrix_set_shows_plot_and_table(
         monkeypatch,
         mock_explorer,
-        mock_render_upset_figure,
+        mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
         "xailens.dashboard.explorer.get_explorer", lambda: mock_explorer
@@ -110,8 +110,8 @@ def test_matrix_set_shows_plot_and_table(
     assert not at.exception
     assert not at.error
 
-    mock_render_upset_figure.assert_called_once()
-    assert mock_render_upset_figure.call_args.kwargs.get("navigate_on_click") is False
+    mock_render_matrixset_figure.assert_called_once()
+    assert mock_render_matrixset_figure.call_args.kwargs.get("navigate_on_click") is False
 
     mock_interactive_table.assert_called_once()
 
@@ -123,7 +123,7 @@ def test_matrix_set_shows_plot_and_table(
 def test_instance_group_disagree_shows_table_only(
         monkeypatch,
         mock_explorer,
-        mock_render_upset_figure,
+        mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
         "xailens.dashboard.explorer.get_explorer", lambda: mock_explorer
@@ -136,7 +136,7 @@ def test_instance_group_disagree_shows_table_only(
     assert not at.exception
     assert not at.error
 
-    mock_render_upset_figure.assert_not_called()
+    mock_render_matrixset_figure.assert_not_called()
     mock_interactive_table.assert_called_once()
 
     displayed_df = mock_interactive_table.call_args.args[0]
@@ -148,7 +148,7 @@ def test_instance_group_disagree_shows_table_only(
 def test_instance_group_allcorrect_filters_table(
         monkeypatch,
         all_correct_dataset,
-        mock_render_upset_figure,
+        mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
         "xailens.dashboard.explorer.get_explorer",
@@ -162,7 +162,7 @@ def test_instance_group_allcorrect_filters_table(
     assert not at.exception
     assert not at.error
 
-    mock_render_upset_figure.assert_not_called()
+    mock_render_matrixset_figure.assert_not_called()
     mock_interactive_table.assert_called_once()
 
     displayed_df = mock_interactive_table.call_args.args[0]
@@ -173,7 +173,7 @@ def test_instance_group_allcorrect_filters_table(
 def test_instance_group_allincorrect_filters_table(
         monkeypatch,
         all_incorrect_dataset,
-        mock_render_upset_figure,
+        mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
         "xailens.dashboard.explorer.get_explorer",
@@ -187,7 +187,7 @@ def test_instance_group_allincorrect_filters_table(
     assert not at.exception
     assert not at.error
 
-    mock_render_upset_figure.assert_not_called()
+    mock_render_matrixset_figure.assert_not_called()
     mock_interactive_table.assert_called_once()
 
     displayed_df = mock_interactive_table.call_args.args[0]
@@ -201,7 +201,7 @@ def test_instance_group_allincorrect_filters_table(
 def test_instance_group_all_shows_unfiltered_table(
         monkeypatch,
         mock_explorer,
-        mock_render_upset_figure,
+        mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
         "xailens.dashboard.explorer.get_explorer",
@@ -215,7 +215,7 @@ def test_instance_group_all_shows_unfiltered_table(
     assert not at.exception
     assert not at.error
 
-    mock_render_upset_figure.assert_not_called()
+    mock_render_matrixset_figure.assert_not_called()
     mock_interactive_table.assert_called_once()
 
 
@@ -226,7 +226,7 @@ def test_instance_group_all_shows_unfiltered_table(
 def test_no_params_shows_warning(
         monkeypatch,
         mock_explorer,
-        mock_render_upset_figure,
+        mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
         "xailens.dashboard.explorer.get_explorer",
@@ -239,14 +239,14 @@ def test_no_params_shows_warning(
     assert not at.exception
     warnings = [w.value for w in at.warning]
     assert strings.WARNING_INVALID_URL_PARAMS in warnings
-    mock_render_upset_figure.assert_called_once()
+    mock_render_matrixset_figure.assert_called_once()
     mock_interactive_table.assert_not_called()
 
 
 def test_both_params_shows_warning_no_plot(
         monkeypatch,
         mock_explorer,
-        mock_render_upset_figure,
+        mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
         "xailens.dashboard.explorer.get_explorer",
@@ -262,5 +262,5 @@ def test_both_params_shows_warning_no_plot(
     warnings = [w.value for w in at.warning]
     assert strings.WARNING_INVALID_URL_PARAMS in warnings
 
-    mock_render_upset_figure.assert_not_called()
+    mock_render_matrixset_figure.assert_not_called()
     mock_interactive_table.assert_not_called()

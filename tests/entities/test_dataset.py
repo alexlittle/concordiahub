@@ -18,7 +18,7 @@ Covers:
 
 To cover:
 - get_instances_for_set
-- get_upset_data
+- get_matrixset_data
 
 
 """

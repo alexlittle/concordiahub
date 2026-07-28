@@ -211,7 +211,7 @@ class Dataset:
         )
         return result[cols]
 
-    def get_upset_data(self, include_all_correct: bool = False) -> tuple[pd.DataFrame, pd.Series]:
+    def get_matrixset_data(self, include_all_correct: bool = False) -> tuple[pd.DataFrame, pd.Series]:
         """
         Builds UpSet-ready data from get_all_instances().
 
@@ -265,7 +265,7 @@ class Dataset:
         Returns:
             pd.DataFrame: rows from get_all_instances() matching the combination.
         """
-        combo_df, _ = self.get_upset_data()
+        combo_df, _ = self.get_matrixset_data()
         model_cols = [c for c in combo_df.columns if
                       c not in ("count", "instance_ids")]
         selected = set(set_key.split(","))

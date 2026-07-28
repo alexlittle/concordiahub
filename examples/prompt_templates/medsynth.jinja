@@ -1,4 +1,5 @@
-Review the following patient-doctor conversation and classify it into the most likely ICD-10 chapter.
+Review the following patient-doctor conversation and classify it into the most
+likely ICD-10 chapter.
 
 Conversation:
 {{ scenario }}
@@ -25,22 +26,26 @@ The valid ICD-10 chapters are:
 - Z:   Factors influencing health status
 - U:   Special purposes
 
-Your prediction must be one of the chapter codes listed above (e.g. "A", "C", "I", "J" etc).
+Your prediction must be one of the chapter codes listed above (e.g. "A", "C",
+"I", "J" etc).
 
 Your task has three parts:
 
-PART 1 - Clinical reasoning
-Write 2-4 sentences of reasoning explaining which ICD-10 chapter this conversation points toward.
+PART 1: Clinical reasoning
+Write 2-4 sentences of reasoning explaining which ICD-10 chapter this
+conversation points toward.
 Base your reasoning only on what is explicitly stated in the conversation.
 Do not invent symptoms or facts not mentioned.
-First identify the strongest evidence pointing toward a specific chapter, then consider whether
-any other chapter could fit, then reach a conclusion.
+First identify the strongest evidence pointing toward a specific chapter,
+then consider whether any other chapter could fit, then reach a conclusion.
 
-PART 2 - Prediction
-State your predicted ICD-10 chapter code and your confidence as a probability between 0.0 and 1.0.
+PART 2: Prediction
+State your predicted ICD-10 chapter code and your confidence as a probability
+between 0.0 and 1.0.
 
-PART 3 - Key factors
-For each key phrase or term from the conversation that influenced your classification.
+PART 3: Key factors
+For each key phrase or term from the conversation that influenced your
+classification.
 
 Ground every phrase in the original text. If you cannot find the exact wording
 in the conversation, do not include it as a key factor. Provide:
@@ -58,7 +63,7 @@ in the conversation, do not include it as a key factor. Provide:
     or clause fragments.
   - A one-sentence explanation of why it influenced your reasoning
 
-Extract between 8 and 10 key factors. Prioritise specificity — prefer
+Extract between 8 and 10 key factors. Prioritise specificity, prefer
 "left knee pain" over "pain", "type 2 diabetes" over "diabetes".
 
 Return your response as a single valid JSON object with exactly this structure:
@@ -68,12 +73,14 @@ Return your response as a single valid JSON object with exactly this structure:
   "confidence": <float 0.0-1.0>,
   "key_factors": [
     {
-      "phrase": "<exact noun phrase copied verbatim from the conversation, 1-4 words>",
+      "phrase": "<exact noun phrase copied verbatim from the conversation,
+                 1-4 words>",
       "score": <int -2 to 2>,
       "reasoning": "<one sentence>"
     },
     {
-      "phrase": "<exact noun phrase copied verbatim from the conversation, 1-4 words>",
+      "phrase": "<exact noun phrase copied verbatim from the conversation,
+                 1-4 words>",
       "score": <int -2 to 2>,
       "reasoning": "<one sentence>"
     }

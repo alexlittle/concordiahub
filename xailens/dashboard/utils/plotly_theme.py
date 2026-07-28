@@ -136,9 +136,9 @@ def apply_horizontal_bar_theme(fig: go.Figure, xaxis_title: str = "") -> go.Figu
     return fig
 
 
-def apply_upset_theme(fig: go.Figure, show_title: bool = False) -> go.Figure:
+def apply_matrixset_theme(fig: go.Figure, show_title: bool = False) -> go.Figure:
     """
-    Apply the theme for upset matrix-set chart
+    Apply the theme for matrix-set chart
 
     Args:
         fig (go.Figure): plotly figure object to apply theme to
