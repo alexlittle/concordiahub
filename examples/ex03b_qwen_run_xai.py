@@ -12,11 +12,11 @@ from sklearn.metrics import classification_report
 current_model = "qwen2.5:14b-instruct-q8_0"
 dir_name = f"llm_{safe_dirname(current_model)}"
 
-raw = pd.read_parquet(f"./cache/heart/{dir_name}/raw_instances.parquet")
-X = pd.read_parquet(f"./cache/heart/{dir_name}/X.parquet")
-y = pd.read_parquet(f"./cache/heart/{dir_name}/y.parquet")
-y_preds = pd.read_parquet(f"./cache/heart/{dir_name}/y_preds.parquet")
-y_exp = pd.read_parquet(f"./cache/heart/{dir_name}/y_exp.parquet")
+raw = pd.read_parquet(f"./cache/heart/{dir_name}/raw_instances_filtered.parquet")
+X = pd.read_parquet(f"./cache/heart/{dir_name}/X_filtered.parquet")
+y = pd.read_parquet(f"./cache/heart/{dir_name}/y_filtered.parquet")
+y_preds = pd.read_parquet(f"./cache/heart/{dir_name}/y_preds_filtered.parquet")
+y_exp = pd.read_parquet(f"./cache/heart/{dir_name}/y_exp_filtered.parquet")
 
 report = classification_report(y["target"], y_preds["prediction"])
 print(report)
