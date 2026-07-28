@@ -38,7 +38,6 @@ class VizAdapter(ABC):
         """
         raise NotImplementedError
 
-    #
     def _top_features(self, explanation: pd.DataFrame, n: Optional[int] = None) -> pd.DataFrame:
         """
         Helper method to filter to only the largest feature contributions, not all

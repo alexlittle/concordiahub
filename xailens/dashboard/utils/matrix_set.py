@@ -15,11 +15,11 @@ from xailens.dashboard.utils.plotly_theme import apply_matrixset_theme
 
 from xailens import strings
 
-def build_upset_figure(combo_df: pd.DataFrame,
+def build_matrixset_figure(combo_df: pd.DataFrame,
                        set_sizes: pd.Series,
                        max_combos: int = 25) -> go.Figure:
     """
-    Builds the upset matrix-set plot
+    Builds the matrix-set plot
 
     Args:
         combo_df (pd.DataFrame): dataframe containing model combinations

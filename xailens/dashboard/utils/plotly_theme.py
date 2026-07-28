@@ -171,7 +171,7 @@ def apply_matrixset_theme(fig: go.Figure, show_title: bool = False) -> go.Figure
         y=fig.layout.yaxis.domain[1],
         xanchor="left", yanchor="bottom",
         showarrow=False,
-        xshift=170,
+        xshift=150,
         yshift=-100,
         align="left",
         font={
