@@ -149,8 +149,12 @@ class LLMReasoningAdapter(XAIMethodAdapter):
                             ctx: ModelContext,
                             _model: Optional[TreeModel] = None) -> pd.DataFrame:
         """Generates the global explanations
-        Uses the total number of instances of a mentioned feature divided by the
-        total number of instances
+
+        Importance is the mean absolute contribution score across all
+        instances: each feature's absolute scores are summed and divided by
+        the total instance count, so features not named in an instance count
+        as zero. This matches the aggregation SHAP applies to its own values.
+        Occurrence counts are returned alongside but do not affect importance.
 
         Args:
             ctx (ModelContext) : ModelContext object
