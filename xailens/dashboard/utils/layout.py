@@ -65,26 +65,38 @@ def render_sidebar_options(all_model_names: list,
     """
 
     st.html(f"<h3>{strings.SIDEBAR_MODEL_FILTER_TITLE}</h3>")
-    selected_ds = []
-    for name in sorted(all_model_names):
-        if st.checkbox(name, value=name in selected_model_names, key=f"chk_{dataset_id}_{name}"):
-            selected_ds.append(name)
 
-    selected_ig = None
-    if selected_instance_group:
-        options = list(strings.INSTANCE_GROUPS)
-        selected_ig = st.radio(
-            label=f"{strings.SIDEBAR_INSTANCE_GROUP_FILTER_TITLE}",
-            options=options,
-            format_func=lambda k: strings.INSTANCE_GROUPS[k],
-            index=options.index(selected_instance_group) if selected_instance_group in options else 0,
-            key=f"radio_{dataset_id}_instance_group"
-        )
+    chk_keys = {n: f"chk_{dataset_id}_{n}" for n in sorted(all_model_names)}
+    radio_key = f"radio_{dataset_id}_instance_group"
 
-    if st.button("Apply selection"):
+    def _apply():
+        """
+        Internal helper function to apply the layout to the sidebar
+        """
+        selected = [n for n, k in chk_keys.items() if
+                    st.session_state.get(k)]
         st.query_params["dataset"] = dataset_id
-        st.query_params["models"] = ",".join(selected_ds)
-        if selected_ig:
-            st.query_params["instances"] = selected_ig
-        st.rerun()
+        if selected:
+            st.query_params["models"] = ",".join(selected)
+        else:
+            st.query_params.pop("models", None)
+        if selected_instance_group:
+            st.query_params["instances"] = st.session_state[radio_key]
+
+    with st.form(f"filters_{dataset_id}", border=False):
+        for name, k in chk_keys.items():
+            st.checkbox(name, value=name in selected_model_names, key=k)
+
+        if selected_instance_group:
+            options = list(strings.INSTANCE_GROUPS)
+            st.radio(
+                label=strings.SIDEBAR_INSTANCE_GROUP_FILTER_TITLE,
+                options=options,
+                format_func=lambda k: strings.INSTANCE_GROUPS[k],
+                index=options.index(selected_instance_group)
+                if selected_instance_group in options else 0,
+                key=radio_key,
+            )
+
+        st.form_submit_button("Apply selection", on_click=_apply)
 

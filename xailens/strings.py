@@ -48,7 +48,10 @@ HOME_DATASET_NUM_MODELS = "{count} models"
 #-------------------------------
 
 # tabs
-DATASET_TABS = ["Overview", "More Metrics", "Instance Consensus"]
+DATASET_TAB_OVERVIEW = "Overview"
+DATASET_TAB_MORE_METRICS = "More Metrics"
+DATASET_TAB_INSTANCE_CONSENSUS = "Instance Consensus"
+DATASET_TABS = [DATASET_TAB_OVERVIEW, DATASET_TAB_MORE_METRICS, DATASET_TAB_INSTANCE_CONSENSUS]
 
 # section titles
 RECOMMENDED_MODEL_TITLE = "Recommended Model"
@@ -135,7 +138,9 @@ DISPLAY_NAMES = {
 #-------------------------------
 
 # tabs
-INSTANCE_DETAIL_TABS = ["Instance Overview", "Model Explanations"]
+INSTANCE_DETAIL_TAB_OVERVIEW = "Instance Overview"
+INSTANCE_DETAIL_TAB_EXPLANATIONS = "Model Explanations"
+INSTANCE_DETAIL_TABS = [INSTANCE_DETAIL_TAB_OVERVIEW, INSTANCE_DETAIL_TAB_EXPLANATIONS]
 
 INSTANCE_DETAIL_PREDICTIONS_TITLE = "Model Predictions"
 INSTANCE_DETAIL_HEATMAP_TITLE = "Local Feature Importance Heatmap"

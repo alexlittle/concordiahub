@@ -53,14 +53,28 @@ def main():
         dataset, selected_model_names)
     dataset_obj = Dataset(dataset, selected_models)
 
+    TABS = strings.INSTANCE_DETAIL_TABS
+
+    url_view = st.query_params.get("detail_tab", strings.INSTANCE_DETAIL_TAB_OVERVIEW)
+    if st.session_state.get("_detail_tab_url") != url_view:
+        st.session_state["_detail_tab_url"] = url_view
+        st.session_state["detail_tab"] = url_view
+
+    def _sync_tab():
+        v = st.session_state["detail_tab"] or strings.INSTANCE_DETAIL_TAB_OVERVIEW
+        st.session_state["detail_tab"] = v
+        st.session_state["_detail_tab_url"] = v
+        st.query_params["detail_tab"] = v
+
     view = st.segmented_control(
         "View",
-        strings.INSTANCE_DETAIL_TABS,
-        default="Instance Overview",
+        TABS,
+        key="detail_tab",
+        on_change=_sync_tab,
         label_visibility="collapsed",
     )
 
-    if view == "Instance Overview":
+    if view == strings.INSTANCE_DETAIL_TAB_OVERVIEW:
         # Overall predictions
         st.html(f"<h3>{strings.INSTANCE_DETAIL_PREDICTIONS_TITLE}</h3>")
         df_instances = dataset_obj.get_all_instances()
@@ -91,7 +105,7 @@ def main():
             instance_data = dataset_obj.get_instance_data(instance_uuid)
             st.html(series_to_html_table(instance_data))
 
-    if view == "Model Explanations":
+    if view == strings.INSTANCE_DETAIL_TAB_EXPLANATIONS:
         # Panels for each model explanation - split so there are 2 columns
         for i in range(0, len(selected_models), 2):
             cols = st.columns(2, gap="large")

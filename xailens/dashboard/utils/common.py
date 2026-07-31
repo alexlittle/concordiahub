@@ -69,15 +69,15 @@ def display_breadcrumbs(dataset: Optional[str] = None,
     parts = ["<a href='/' target='_self'>Home</a>"]
 
     models = st.query_params.get('models')
-    if models:
-        model_param = f"&models={models}"
-    else:
-        model_param = ""
+    model_param = f"&models={models}" if models else ""
+
+    ds_tab = st.query_params.get('ds_tab')
+    tab_param = f"&ds_tab={ds_tab}" if ds_tab else ""
 
     if dataset:
-        if instance_group or set:
+        if instance_group or matrix_set:
             parts.append(f"""
-                <a href='/{settings.DATASET_FILENAME}?dataset={dataset}{model_param}'
+                <a href='/{settings.DATASET_FILENAME}?dataset={dataset}{model_param}{tab_param}'
                 target='_self'>{dataset}</a>""")
         else:
             parts.append(f"{dataset}")

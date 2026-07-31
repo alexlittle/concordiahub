@@ -45,10 +45,6 @@ def main():
         st.error(f"Dataset {dataset} does not exist")
         st.stop()
 
-    # show breadcrumb and anchor links
-
-    st.html(display_breadcrumbs(dataset))
-
     # Get the selected models for the dataset
     selected_models = explorer.get_selected_models_for_dataset(
         dataset, selected_model_names)
@@ -58,13 +54,32 @@ def main():
     metrics = dataset_obj.get_metrics()
     metrics = metrics.sort_values(by=['model'])
 
+
+    # sort out the tabs with the view url param, so navigating preserves the tab
+    TABS = strings.DATASET_TABS
+
+    url_view = st.query_params.get("ds_tab", strings.DATASET_TAB_OVERVIEW)
+    if st.session_state.get("_ds_tab_url") != url_view:
+        st.session_state["_ds_tab_url"] = url_view
+        st.session_state["ds_tab"] = url_view
+
+    def _sync_tab():
+        v = st.session_state["ds_tab"] or strings.DATASET_TAB_OVERVIEW
+        st.session_state["ds_tab"] = v
+        st.session_state["_ds_tab_url"] = v
+        st.query_params["ds_tab"] = v
+
+    # show breadcrumb and anchor links
+    st.html(display_breadcrumbs(dataset))
+
     view = st.segmented_control(
         "View",
-        strings.DATASET_TABS,
-        default="Overview",
+        TABS,
+        key="ds_tab",
+        on_change=_sync_tab,
         label_visibility="collapsed",
     )
-    if view == "Overview":
+    if view == strings.DATASET_TAB_OVERVIEW:
         with st.container(border=True, key="recommended-models"):
             recommended_models = dataset_obj.get_recommended_models()
             title = f"""
@@ -95,7 +110,7 @@ def main():
                                 width='content',
                                 config=config.PLOTLY_CONFIG)
 
-    if view == "More Metrics":
+    if view == strings.DATASET_TAB_MORE_METRICS:
         # accuracy/precision/recall bar charts
         col4, col5, col6 = st.columns(3)
         with col4:
@@ -121,7 +136,7 @@ def main():
                         metrics, "recall_weighted", show_title=False),
                     config=config.PLOTLY_CONFIG)
 
-    if view == "Instance Consensus":
+    if view == strings.DATASET_TAB_INSTANCE_CONSENSUS:
         # Instance consensus overview
         with st.container(border=True):
             st.html(title_with_help_icon(strings.INSTANCE_CONSENSUS_TITLE,
