@@ -26,8 +26,6 @@ def main():
     dataset = st.query_params.get('dataset')
     models_param = st.query_params.get("models")
     instance_group = st.query_params.get("instances", None)
-    ds_tab = st.query_params.get("ds_tab", "Overview")
-
 
     all_models = explorer.get_models_for_dataset(dataset)
     all_model_names = [me.get("model_display_name") for me in all_models]

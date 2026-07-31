@@ -1,3 +1,14 @@
+"""
+Tests for TreeSHAPAdapter
+
+Tests cover:
+
+- missing data
+- binary classification
+- multiclass classification
+- returns a dataframe object
+"""
+
 import pytest
 import numpy as np
 import pandas as pd
@@ -123,3 +134,32 @@ def test_multiclass_falls_back_to_integer_class_index(adapter, mock_model, x_tes
                            model_display_name="model_display_name")
         result = adapter.explain_local_df(ctx, mock_model)
         assert sorted(result['class'].unique().tolist()) == [0, 1, 2]
+
+
+def test_global_binary(adapter, mock_model, x_test, data_schema):
+    shap_values = np.random.rand(3, 5)
+    with patch(f"{MODULE_UNDER_TEST}.shap.TreeExplainer") as mock_explainer:
+        mock_explainer.return_value.shap_values.return_value = shap_values
+        data = ModelData(data_schema, x_test=x_test, y_test=None, raw_instances=NameError, y_pred=None)
+        ctx = ModelContext(model_type="xgboost",
+                           xai_methods=["shap_tree"],
+                           dataset_id="dataset",
+                           data=data,
+                           model_display_name="model_display_name")
+        result = adapter.explain_global_df(ctx, mock_model)
+        assert 'feature' in result.columns
+        assert 'importance' in result.columns
+
+
+def test_global_multiclass(adapter, mock_model, x_test, data_schema):
+    shap_values = np.random.rand(3, 5, 3)
+    with patch(f"{MODULE_UNDER_TEST}.shap.TreeExplainer") as mock_explainer:
+        mock_explainer.return_value.shap_values.return_value = shap_values
+        data = ModelData(data_schema, x_test=x_test, y_test=None, raw_instances=NameError, y_pred=None)
+        ctx = ModelContext(model_type="xgboost",
+                           xai_methods=["shap_tree"],
+                           dataset_id="dataset",
+                           data=data,
+                           model_display_name="model_display_name")
+        result = adapter.explain_global_df(ctx, mock_model)
+        assert result.shape == (15, 2)

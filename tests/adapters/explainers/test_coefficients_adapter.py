@@ -1,10 +1,54 @@
 import pytest
 import pandas as pd
+import numpy as np
 from unittest.mock import MagicMock
 from xailens.adapters.explainers.coefficients_adapter import CoefficientsAdapter
 from xailens.exceptions import MissingDataError
+from xailens.entities.context import ModelData, ModelContext
 from xailens import config
 from xailens.entities.context import DataSchema
+
+
+MODULE_UNDER_TEST = "xailens.adapters.explainers.coefficients_adapter"
+
+
+@pytest.fixture
+def adapter():
+    return CoefficientsAdapter()
+
+@pytest.fixture
+def instance_uuids():
+    return ['uuid-001', 'uuid-002', 'uuid-003']
+
+@pytest.fixture
+def mock_model():
+    m = MagicMock()
+    m.coef_ = np.random.rand(1, 5)   # binary: one row of 5 coefficients
+    return m
+
+@pytest.fixture
+def data_schema():
+    return DataSchema("instance_uuid", "target", "prediction")
+
+@pytest.fixture
+def x_test(instance_uuids):
+    df = pd.DataFrame(
+        np.random.rand(3, 5),
+        columns=['f1', 'f2', 'f3', 'f4', 'f5'],
+    )
+    df.insert(0, 'instance_uuid', instance_uuids)
+    return df
+
+@pytest.fixture
+def make_ctx(data_schema):
+    def _make(x_test):
+        data = ModelData(data_schema, x_test=x_test, y_test=None, raw_instances=None, y_pred=None)
+        return ModelContext(model_type="logistic_regression",
+                            xai_methods=["coefficients"],
+                            dataset_id="dataset",
+                            data=data,
+                            model_display_name="model_display_name")
+    return _make
 
 def make_run(instance_id_column="id", dataframe=None):
     run = MagicMock()
@@ -54,3 +98,59 @@ def test_uses_correct_id_column():
     result = CoefficientsAdapter.load_local_explanation(run, "sample-1")
     row = result[result["feature_name"] == "feat1"].iloc[0]
     assert row["score"] == 0.5
+
+
+def test_global_multiclass(adapter, x_test, data_schema):
+    model = MagicMock()
+    model.coef_ = np.random.rand(3, 5)   # 3 classes
+
+    data = ModelData(data_schema, x_test=x_test, y_test=None,
+                     raw_instances=None, y_pred=None)
+    ctx = ModelContext(model_type="logistic_regression",
+                       xai_methods=["coefficients"],
+                       dataset_id="dataset",
+                       data=data,
+                       model_display_name="model_display_name")
+
+    result = adapter.explain_global_df(ctx, model)
+
+    assert result.shape == (5, 2)
+    assert list(result["feature"]) == ['f1', 'f2', 'f3', 'f4', 'f5']
+    np.testing.assert_allclose(result["importance"], model.coef_[0])
+
+
+def test_local_multiclass(adapter, x_test, data_schema):
+    model = MagicMock()
+    model.coef_ = np.random.rand(3, 5)   # 3 classes
+
+    data = ModelData(data_schema, x_test=x_test, y_test=None,
+                     raw_instances=None, y_pred=None)
+    ctx = ModelContext(model_type="logistic_regression",
+                       xai_methods=["coefficients"],
+                       dataset_id="dataset",
+                       data=data,
+                       model_display_name="model_display_name")
+
+    result = adapter.explain_local_df(ctx, model)
+
+    assert result.shape == (3, 6)
+
+def test_local_raises_when_x_test_missing(adapter, mock_model, make_ctx):
+    ctx = make_ctx(x_test=None)
+
+    with pytest.raises(MissingDataError) as exc:
+        adapter.explain_local_df(ctx, mock_model)
+
+    assert "x_test" in str(exc.value)
+
+def test_local_raises_when_explain_json(adapter, mock_model):
+    data = ModelData(data_schema, x_test=x_test, y_test=None, raw_instances=None, y_pred=None)
+    ctx = ModelContext(model_type="logistic_regression",
+                       xai_methods=["coefficients"],
+                       dataset_id="dataset",
+                       data=data,
+                       model_display_name="model_display_name")
+
+    with pytest.raises(NotImplementedError):
+        adapter.explain_local_json(ctx)
+
