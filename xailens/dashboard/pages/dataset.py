@@ -16,6 +16,14 @@ from xailens import strings, config
 from xailens.dashboard import settings
 
 
+def _sync_tab():
+    """Keeps track of tab state"""
+    v = st.session_state["ds_tab"] or strings.DATASET_TAB_OVERVIEW
+    st.session_state["ds_tab"] = v
+    st.session_state["_ds_tab_url"] = v
+    st.query_params["ds_tab"] = v
+
+
 def main():
     """
     Streamlit page to display dataset overview
@@ -62,12 +70,6 @@ def main():
     if st.session_state.get("_ds_tab_url") != url_view:
         st.session_state["_ds_tab_url"] = url_view
         st.session_state["ds_tab"] = url_view
-
-    def _sync_tab():
-        v = st.session_state["ds_tab"] or strings.DATASET_TAB_OVERVIEW
-        st.session_state["ds_tab"] = v
-        st.session_state["_ds_tab_url"] = v
-        st.query_params["ds_tab"] = v
 
     # show breadcrumb and anchor links
     st.html(display_breadcrumbs(dataset))

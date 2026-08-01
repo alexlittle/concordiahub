@@ -16,6 +16,15 @@ from xailens.dashboard.utils.display_dataframe import render_dataframe
 from xailens.entities.dataset import Dataset
 from xailens.dashboard.utils.heatmap import render_features_heatmap
 
+
+def _sync_tab():
+    """Keeps track of tab state"""
+    v = st.session_state["detail_tab"] or strings.INSTANCE_DETAIL_TAB_OVERVIEW
+    st.session_state["detail_tab"] = v
+    st.session_state["_detail_tab_url"] = v
+    st.query_params["detail_tab"] = v
+
+
 def main():
     """
     Streamlit page to display details of a specific instance
@@ -60,11 +69,7 @@ def main():
         st.session_state["_detail_tab_url"] = url_view
         st.session_state["detail_tab"] = url_view
 
-    def _sync_tab():
-        v = st.session_state["detail_tab"] or strings.INSTANCE_DETAIL_TAB_OVERVIEW
-        st.session_state["detail_tab"] = v
-        st.session_state["_detail_tab_url"] = v
-        st.query_params["detail_tab"] = v
+
 
     view = st.segmented_control(
         "View",

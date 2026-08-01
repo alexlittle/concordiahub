@@ -1,5 +1,9 @@
 """
-Tests for the instances page: xailens/dashboard/pages/instances.py
+Tests for the instances page
+
+Covers:
+
+
 """
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -264,3 +268,27 @@ def test_both_params_shows_warning_no_plot(
 
     mock_render_matrixset_figure.assert_not_called()
     mock_interactive_table.assert_not_called()
+
+
+def test_matrix_set_shows_plot_and_table(
+        monkeypatch,
+        mock_explorer,
+        mock_render_matrixset_figure,
+        mock_interactive_table):
+    """Test loading with specific models"""
+    monkeypatch.setattr(
+        "xailens.dashboard.explorer.get_explorer", lambda: mock_explorer
+    )
+    at = AppTest.from_file(str(PAGE))
+    at.query_params["models"] = "XGBoost"
+    at.query_params["dataset"] = "cleveland_heart_disease"
+    at.query_params["matrix_set"] = "xgboost"
+    at.run()
+
+    assert not at.exception
+    assert not at.error
+
+    mock_render_matrixset_figure.assert_called_once()
+    assert mock_render_matrixset_figure.call_args.kwargs.get("navigate_on_click") is False
+
+    mock_interactive_table.assert_called_once()
