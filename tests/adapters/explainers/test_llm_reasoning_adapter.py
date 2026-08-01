@@ -1,3 +1,9 @@
+"""
+Tests for the LLMReasoningAdapter
+
+"""
+
+
 import pytest
 import json
 import pandas as pd
@@ -162,7 +168,7 @@ def test_explain_global_json_raises_without_response_schema(adapter, model_conte
 # ----------------------
 
 
-def test_explain_local_json_importance_and_occurrence(adapter, model_context_factory, model_data_factory):
+def test_explain_local_json(adapter, model_context_factory, model_data_factory):
     data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
     ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
 
@@ -173,6 +179,17 @@ def test_explain_local_json_importance_and_occurrence(adapter, model_context_fac
     assert first["instance_id"] == "inst_0"
     assert set(first["contributions"]) == {"age", "cholesterol"}
     assert first["contributions"]["age"]["score"] == 2
+
+# --------------------
+# test explain_local_df function
+# ----------------------
+def test_explain_local_df_not_implemented(adapter, model_context_factory, model_data_factory):
+    data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
+    ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
+
+    with pytest.raises(NotImplementedError):
+        adapter.explain_local_df(ctx)
+
 
 # --------------------
 # test load_local_json function
@@ -243,3 +260,4 @@ def test_load_local_explanation_string_scores_coerced_to_float(llm_model_factory
     result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
 
     assert result["score"].tolist() == [2.0, -1.5]
+

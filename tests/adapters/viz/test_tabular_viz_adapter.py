@@ -16,8 +16,6 @@ from xailens.adapters.viz.tabular_viz_adapter import TabularAdapter
 from xailens import strings, config
 
 
-MODULE_UNDER_TEST = "xailens.adapters.viz.tabular_adapter"
-
 
 @pytest.fixture
 def adapter():
