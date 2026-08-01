@@ -9,10 +9,16 @@ from xailens.exceptions import MissingDataError
 def adapter():
     return LLMReasoningAdapter()
 
+def make_y_exp(*raw_dicts, id_column="instance_id"):
+    return pd.DataFrame({
+        id_column: [f"inst_{i}" for i in range(len(raw_dicts))],
+        "explanation": [json.dumps(r) for r in raw_dicts],
+    })
 
 # --- list-of-dicts format (contribution_key set) ---
 
 LIST_RAW = {
+    "instance_id": "inst_0",
     "reasoning": "high cholesterol and age are key risk factors",
     "prediction": 1,
     "confidence": 0.85,
@@ -56,6 +62,7 @@ def test_reformat_list_format_raw_preserved(adapter):
 # --- dict-of-dicts format (contribution_key is None) ---
 
 DICT_RAW = {
+    "instance_id": "uuid_0",
     "reasoning": "exercise and chest pain are dominant",
     "prediction": 0,
     "confidence": 0.72,
@@ -101,8 +108,6 @@ def test_reformat_custom_contributions_field(adapter):
 # --------------------
 # test explain_global_json function
 # ----------------------
-def make_y_exp(*raw_dicts):
-    return pd.DataFrame({"explanation": [json.dumps(r) for r in raw_dicts]})
 
 def test_explain_global_json_importance_and_occurrence(adapter, model_context_factory, model_data_factory):
     data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
@@ -154,6 +159,23 @@ def test_explain_global_json_raises_without_response_schema(adapter, model_conte
 
 # --------------------
 # test explain_local_json function
+# ----------------------
+
+
+def test_explain_local_json_importance_and_occurrence(adapter, model_context_factory, model_data_factory):
+    data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
+    ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
+
+    result = adapter.explain_local_json(ctx)
+
+    assert len(result) == 2
+    first = result[0]
+    assert first["instance_id"] == "inst_0"
+    assert set(first["contributions"]) == {"age", "cholesterol"}
+    assert first["contributions"]["age"]["score"] == 2
+
+# --------------------
+# test load_local_json function
 # ----------------------
 def test_load_local_explanation_correct(llm_model_factory):
     model = llm_model_factory()
