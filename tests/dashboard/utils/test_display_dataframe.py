@@ -1,5 +1,10 @@
 """
-Tests for _display_value, generate_rows_html, and render_dataframe.
+Tests for display_dataframe
+
+Covers:
+- _display_value
+- generate_rows_html
+- render_dataframe.
 """
 
 import pandas as pd
@@ -7,41 +12,9 @@ import pytest
 
 from xailens.dashboard.utils.display_dataframe import (
     generate_instance_rows_html, render_dataframe)
-from xailens.dashboard.utils.common import display_bool_value
 from xailens import strings
 from xailens.dashboard import settings
 
-
-
-# -----------------
-# test  display_bool_value
-# ----------------
-
-@pytest.mark.parametrize("val, expected", [
-    (0, "False"),
-    (1, "True"),
-    (True, "True"),
-    (False, "False"),
-    (2, "2"),
-    ("abc", "abc"),
-    (None, "None"),
-])
-def test_display_bool_value_non_float(val, expected):
-    assert display_bool_value(val) == expected
-
-
-@pytest.mark.parametrize("val, expected", [
-    (0.0, "0.0"),
-    (1.0, "1.0"),
-])
-def test_display_bool_value_float_bypasses_bool_conversion(val, expected):
-    # Floats that are numerically 0/1 should NOT be rendered as True/False,
-    assert display_bool_value(val) == expected
-
-
-# -------------------------
-# test generate_rows_html
-# -----------------------
 
 @pytest.fixture(autouse=True)
 def patch_lookups(monkeypatch):
@@ -57,7 +30,9 @@ def sample_df():
         "model_a": [1, 1],   # row1 correct, row2 incorrect
     })
 
-
+# -------------------------
+# test generate_rows_html
+# -----------------------
 def test_generate_rows_html_marks_correct_and_incorrect_predictions(sample_df):
     html = generate_instance_rows_html(sample_df, query_params={})
 
@@ -82,7 +57,7 @@ def test_generate_rows_html_true_label_col_renders_plain(sample_df):
     assert "<td>True</td>" in row1
 
 
-def test_generate_rows_html_skip_cols_excluded_from_pred_styling(sample_df):
+def test_generate_rows_html_skip_cols_excluded_from_styling(sample_df):
     html = generate_instance_rows_html(sample_df, query_params={}, skip_cols=["model_a"])
 
     assert "pred-correct" not in html
@@ -103,9 +78,9 @@ def test_generate_rows_html_empty_dataframe_returns_empty_string():
     assert html == ""
 
 
-# ---------------------------------------------------------------------------
+# ----------------------
 # test render_instances_df
-# ---------------------------------------------------------------------------
+# ----------------------
 
 def test_render_instances_df_includes_all_column_headers(sample_df):
     html = render_dataframe(sample_df, query_params={})

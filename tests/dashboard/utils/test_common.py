@@ -9,8 +9,11 @@ Covers:
 - rename_model_prediction_columns
 """
 import pytest
+import pandas as pd
 
-from xailens.dashboard.utils.common import display_breadcrumbs
+from xailens.dashboard.utils.common import (
+    display_breadcrumbs, title_with_help_icon, display_bool_value,
+    rename_model_prediction_columns)
 from xailens import strings
 
 #-----------------
@@ -60,3 +63,54 @@ def test_matrix_set_and_instance_id():
 #-----------------
 # title_with_help_icon
 #-----------------
+
+def test_title_with_help_icon():
+    """Tests title with help icon """
+    result = title_with_help_icon("FakeTitle","Some fake help text")
+
+    assert "Some fake help text" in result
+    assert "FakeTitle" in result
+    assert "<img" in result
+
+
+# -----------------
+# test display_bool_value
+# ----------------
+
+@pytest.mark.parametrize("val, expected", [
+    (0, "False"),
+    (1, "True"),
+    (True, "True"),
+    (False, "False"),
+    (2, "2"),
+    ("abc", "abc"),
+    (None, "None"),
+])
+def test_display_bool_value_non_float(val, expected):
+    assert display_bool_value(val) == expected
+
+
+@pytest.mark.parametrize("val, expected", [
+    (0.0, "0.0"),
+    (1.0, "1.0"),
+])
+def test_display_bool_value_float_bypasses_bool_conversion(val, expected):
+    # Floats that are numerically 0/1 should NOT be rendered as True/False,
+    assert display_bool_value(val) == expected
+
+# -----------------
+# test rename_model_prediction_columns
+# ----------------
+def test_rename_model_prediction_columns(monkeypatch):
+    """Test with rename model prediction column param """
+    monkeypatch.setattr(strings, "DISPLAY_NAMES", {"instance_id": "Instance"})
+    df = pd.DataFrame({
+        "instance_id": ["inst_0"],
+        "logistic_regression": [1],
+        "xgboost": [0],
+    })
+
+    result = rename_model_prediction_columns(df)
+
+    assert list(result.columns) == [
+        "Instance", "logistic_regression Prediction", "xgboost Prediction"]

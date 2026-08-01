@@ -1,5 +1,8 @@
 """
-Test the functions in xailens.dashboard.utils.display_table:
+Test the functions in xailens.dashboard.utils.display_table
+
+Covers:
+
 - _format_cell
 - generate_rows_html
 - render_dataframe
@@ -55,26 +58,30 @@ def multi_value_series():
     ("string", "string"),
     (float('nan'), ""),
 ])
-
 def test_display_bool_value_non_float(val, expected):
+    """ Tests expected formatting of values """
     assert _format_cell(val) == expected
 
 def test_generate_rows_html(sample_df):
+    """ Tests generating HTML table """
     html = generate_table_rows_html(sample_df)
     assert "<tr>" in html
     assert sample_df.shape[0] == html.count("<tr>")
 
 def test_render_dataframe(sample_df):
+    """Tests creating an HTML table from dataframe """
     html = dataframe_to_html_table(sample_df)
     assert "<table" in html
     assert "report-table" in html
 
 def test_render_series_single(single_value_series):
+    """ Tests creating an HTML table from single value series """
     html = series_to_html_table(single_value_series)
     assert "<strong>Age</strong>" in html
     assert "<table" not in html
 
 def test_render_series_multi(multi_value_series):
+    """Tests creating an HTML table from multi value series """
     html = series_to_html_table(multi_value_series)
     assert "<table" in html
     # should be length of series plus the header
