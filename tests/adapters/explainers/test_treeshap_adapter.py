@@ -163,3 +163,18 @@ def test_global_multiclass(adapter, mock_model, x_test, data_schema):
                            model_display_name="model_display_name")
         result = adapter.explain_global_df(ctx, mock_model)
         assert result.shape == (15, 2)
+
+
+def test_global_missing_data(adapter, mock_model, x_test, data_schema):
+    shap_values = np.random.rand(3, 5, 3)
+    with patch(f"{MODULE_UNDER_TEST}.shap.TreeExplainer") as mock_explainer:
+        mock_explainer.return_value.shap_values.return_value = shap_values
+        data = ModelData(data_schema, x_test=None, y_test=None, raw_instances=NameError, y_pred=None)
+        ctx = ModelContext(model_type="xgboost",
+                           xai_methods=["shap_tree"],
+                           dataset_id="dataset",
+                           data=data,
+                           model_display_name="model_display_name")
+
+        with pytest.raises(MissingDataError):
+            adapter.explain_global_df(ctx, mock_model)

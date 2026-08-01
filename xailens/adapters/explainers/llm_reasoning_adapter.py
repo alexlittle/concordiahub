@@ -271,8 +271,8 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         for _, row in ctx.data.y_exp.iterrows():
             raw = json.loads(row["explanation"])
             instance_id = row[instance_id_col]
-            match = y_pred.loc[
-                y_pred[instance_id_col] == instance_id, prediction_col]
+            match = y_pred.loc[y_pred[instance_id_col] == instance_id, prediction_col]
+            # if a prediction for particular instance is missing, then just continue
             if match.empty:
                 continue
             prediction = match.iloc[0].item() if hasattr(

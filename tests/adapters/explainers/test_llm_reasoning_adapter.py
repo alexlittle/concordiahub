@@ -164,6 +164,16 @@ def test_explain_global_json_raises_without_response_schema(adapter, model_conte
 
 
 # --------------------
+# test explain_global_df function
+# ----------------------
+def test_explain_global_df_not_implemented(adapter, model_context_factory, model_data_factory):
+    data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
+    ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
+
+    with pytest.raises(NotImplementedError):
+        adapter.explain_global_df(ctx)
+
+# --------------------
 # test explain_local_json function
 # ----------------------
 
@@ -179,6 +189,44 @@ def test_explain_local_json(adapter, model_context_factory, model_data_factory):
     assert first["instance_id"] == "inst_0"
     assert set(first["contributions"]) == {"age", "cholesterol"}
     assert first["contributions"]["age"]["score"] == 2
+
+def test_explain_lcoal_json_raises_without_y_exp(adapter, model_context_factory, model_data_factory):
+    data = model_data_factory(y_exp=None)
+    ctx = model_context_factory(data=data, response_schema=None)
+
+    with pytest.raises(MissingDataError):
+        adapter.explain_local_json(ctx)
+
+
+def test_explain_lcoal_json_raises_without_y_pred(adapter, model_context_factory, model_data_factory):
+    data = model_data_factory(y_pred=None)
+    ctx = model_context_factory(data=data, response_schema=None)
+
+    with pytest.raises(MissingDataError):
+        adapter.explain_local_json(ctx)
+
+def test_explain_lcoal_json_raises_without_schema(adapter, model_context_factory, model_data_factory):
+    data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
+    ctx = model_context_factory(data=data, response_schema=None)
+
+    with pytest.raises(MissingDataError):
+        adapter.explain_local_json(ctx)
+
+
+def test_explain_local_json_skips_instance_missing_from_y_pred(
+        adapter, model_context_factory, model_data_factory):
+    # y_exp has inst_0 and inst_1; y_pred only has inst_0
+    y_pred = pd.DataFrame({
+        "instance_id": ["inst_0"],
+        "prediction": [1],
+    })
+    data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW), y_pred=y_pred)
+    ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
+
+    result = adapter.explain_local_json(ctx)
+
+    assert len(result) == 1
+    assert result[0]["instance_id"] == "inst_0"
 
 # --------------------
 # test explain_local_df function
