@@ -1,6 +1,11 @@
 """
 Tests for the LLMReasoningAdapter
 
+Covers:
+
+- local and global JSON explanations
+- _reformat: restructures correctly for different input JSON formats
+- calculations for global explanations
 """
 
 
@@ -13,15 +18,19 @@ from xailens.exceptions import MissingDataError
 
 @pytest.fixture
 def adapter():
+    """Creates a LLMReasoningAdapter"""
     return LLMReasoningAdapter()
 
 def make_y_exp(*raw_dicts, id_column="instance_id"):
+    """Creates y explaination from raw_dicts"""
     return pd.DataFrame({
         id_column: [f"inst_{i}" for i in range(len(raw_dicts))],
         "explanation": [json.dumps(r) for r in raw_dicts],
     })
 
-# --- list-of-dicts format (contribution_key set) ---
+# -----------------
+# _reformat function - list format
+# --------------
 
 LIST_RAW = {
     "instance_id": "inst_0",
@@ -36,37 +45,42 @@ LIST_RAW = {
 
 LIST_SCHEMA = ResponseSchema(contributions_field="contributions", contribution_key="feature")
 
-
 def test_reformat_list_format_returns_llm_response(adapter):
+    """Tests _reformat to LLMResponse"""
     result = adapter._reformat(LIST_RAW, LIST_SCHEMA, 1)
     assert isinstance(result, LLMResponse)
 
 
 def test_reformat_list_format_top_level_fields(adapter):
+    """Tests copies reasoning, prediction and confidence from the raw response."""
     result = adapter._reformat(LIST_RAW, LIST_SCHEMA, 1)
     assert result.reasoning == LIST_RAW["reasoning"]
     assert result.prediction == LIST_RAW["prediction"]
     assert result.confidence == LIST_RAW["confidence"]
 
 
-def test_reformat_list_format_contributions_keyed_by_feature(adapter):
+def test_reformat_list_format_by_feature(adapter):
+    """Tests key contribution by the feature name given in contribution_key."""
     result = adapter._reformat(LIST_RAW, LIST_SCHEMA, 1)
     assert set(result.contributions.keys()) == {"age", "cholesterol"}
 
 
-def test_reformat_list_format_contrib_score_values(adapter):
+def test_reformat_list_format_score_values(adapter):
+    """Test maps each contribution to a ContribScore with score and reasoning."""
     result = adapter._reformat(LIST_RAW, LIST_SCHEMA, 1)
     assert result.contributions["age"] == ContribScore(score=2, reasoning="older age increases risk")
     assert result.contributions["cholesterol"] == ContribScore(score=1, reasoning="elevated levels noted")
 
 
 def test_reformat_list_format_raw_preserved(adapter):
+    """Tests retaining a reference to the unmodified raw response."""
     result = adapter._reformat(LIST_RAW, LIST_SCHEMA, 1)
     assert result.raw is LIST_RAW
 
 
-# --- dict-of-dicts format (contribution_key is None) ---
-
+# -----------------
+# _reformat function - dict format
+# --------------
 DICT_RAW = {
     "instance_id": "uuid_0",
     "reasoning": "exercise and chest pain are dominant",
@@ -82,30 +96,37 @@ DICT_SCHEMA = ResponseSchema(contributions_field="contributions", contribution_k
 
 
 def test_reformat_dict_format_contributions_keyed_by_feature(adapter):
+    """Tests using the existing dict keys as feature names when contribution_key is None."""
     result = adapter._reformat(DICT_RAW, DICT_SCHEMA, 0)
     assert set(result.contributions.keys()) == {"exercise_angina", "chest_pain"}
 
 
 def test_reformat_dict_format_contrib_score_values(adapter):
+    """Tests building ContribScore objects correctly from dict-format contributions."""
     result = adapter._reformat(DICT_RAW, DICT_SCHEMA,0)
     assert result.contributions["chest_pain"] == ContribScore(score=2, reasoning="atypical angina present")
 
 
-# --- edge cases ---
+# -----------------
+# _reformat function - edge cases
+# --------------
 
 def test_reformat_empty_contributions_list(adapter):
+    """Tests return empty contributions when the list is empty."""
     raw = {**LIST_RAW, "contributions": []}
     result = adapter._reformat(raw, LIST_SCHEMA,1)
     assert result.contributions == {}
 
 
 def test_reformat_empty_contributions_dict(adapter):
+    """Tests return empty contributions when the dict is empty."""
     raw = {**DICT_RAW, "contributions": {}}
     result = adapter._reformat(raw, DICT_SCHEMA, 0)
     assert result.contributions == {}
 
 
 def test_reformat_custom_contributions_field(adapter):
+    """Tests reading contributions from the field named in the schema, not a fixed key."""
     raw = {**LIST_RAW, "feature_scores": LIST_RAW["contributions"]}
     schema = ResponseSchema(contributions_field="feature_scores", contribution_key="feature")
     result = adapter._reformat(raw, schema, 1)
@@ -115,7 +136,8 @@ def test_reformat_custom_contributions_field(adapter):
 # test explain_global_json function
 # ----------------------
 
-def test_explain_global_json_importance_and_occurrence(adapter, model_context_factory, model_data_factory):
+def test_explain_global_json(adapter, model_context_factory, model_data_factory):
+    """Tests agregates scores into importance and occurrence for a feature present in every instance."""
     data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
     ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
 
@@ -128,6 +150,7 @@ def test_explain_global_json_importance_and_occurrence(adapter, model_context_fa
     assert age_row["n_instances"] == 2
 
 def test_explain_global_json_partial_feature_occurrence(adapter, model_context_factory, model_data_factory):
+    """Tests occurrence rate for a feature present in only some instances."""
     # cholesterol only appears in one of two rows
     raw_no_cholesterol = {**LIST_RAW, "contributions": [LIST_RAW["contributions"][0]]}
     data = model_data_factory(y_exp=make_y_exp(LIST_RAW, raw_no_cholesterol))
@@ -141,6 +164,7 @@ def test_explain_global_json_partial_feature_occurrence(adapter, model_context_f
     assert cholesterol_row["n_instances"] == 2
 
 def test_explain_global_json_dict_format(adapter, model_context_factory, model_data_factory):
+    """Tests aggregates correctly when contributions in dict format."""
     data = model_data_factory(y_exp=make_y_exp(DICT_RAW))
     ctx = model_context_factory(data=data, response_schema=DICT_SCHEMA)
 
@@ -149,6 +173,7 @@ def test_explain_global_json_dict_format(adapter, model_context_factory, model_d
     assert set(result["feature"]) == {"exercise_angina", "chest_pain"}
 
 def test_explain_global_json_raises_without_y_exp(adapter, model_context_factory, model_data_factory):
+    """Test raises MissingDataError when no explanations are available"""
     data = model_data_factory(y_exp=None)
     ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
 
@@ -156,6 +181,7 @@ def test_explain_global_json_raises_without_y_exp(adapter, model_context_factory
         adapter.explain_global_json(ctx)
 
 def test_explain_global_json_raises_without_response_schema(adapter, model_context_factory, model_data_factory):
+    """Test raises MissingDataError when no response schema is available"""
     data = model_data_factory(y_exp=make_y_exp(LIST_RAW))
     ctx = model_context_factory(data=data, response_schema=None)
 
@@ -167,6 +193,7 @@ def test_explain_global_json_raises_without_response_schema(adapter, model_conte
 # test explain_global_df function
 # ----------------------
 def test_explain_global_df_not_implemented(adapter, model_context_factory, model_data_factory):
+    """Tests raises NotImplementedError as LLM explanations are JSON-only."""
     data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
     ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
 
@@ -177,8 +204,8 @@ def test_explain_global_df_not_implemented(adapter, model_context_factory, model
 # test explain_local_json function
 # ----------------------
 
-
 def test_explain_local_json(adapter, model_context_factory, model_data_factory):
+    """Test returns one entry per instance with contributions in list format"""
     data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
     ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
 
@@ -190,7 +217,8 @@ def test_explain_local_json(adapter, model_context_factory, model_data_factory):
     assert set(first["contributions"]) == {"age", "cholesterol"}
     assert first["contributions"]["age"]["score"] == 2
 
-def test_explain_lcoal_json_raises_without_y_exp(adapter, model_context_factory, model_data_factory):
+def test_explain_local_json_raises_without_y_exp(adapter, model_context_factory, model_data_factory):
+    """Tests raises MissingDataError when no explanations are available."""
     data = model_data_factory(y_exp=None)
     ctx = model_context_factory(data=data, response_schema=None)
 
@@ -199,6 +227,7 @@ def test_explain_lcoal_json_raises_without_y_exp(adapter, model_context_factory,
 
 
 def test_explain_lcoal_json_raises_without_y_pred(adapter, model_context_factory, model_data_factory):
+    """Tests raises MissingDataError when no explanations are available."""
     data = model_data_factory(y_pred=None)
     ctx = model_context_factory(data=data, response_schema=None)
 
@@ -206,6 +235,7 @@ def test_explain_lcoal_json_raises_without_y_pred(adapter, model_context_factory
         adapter.explain_local_json(ctx)
 
 def test_explain_lcoal_json_raises_without_schema(adapter, model_context_factory, model_data_factory):
+    """Test raises MissingDataError when no response schema available."""
     data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
     ctx = model_context_factory(data=data, response_schema=None)
 
@@ -215,6 +245,7 @@ def test_explain_lcoal_json_raises_without_schema(adapter, model_context_factory
 
 def test_explain_local_json_skips_instance_missing_from_y_pred(
         adapter, model_context_factory, model_data_factory):
+    """Test skips instances with no matching prediction rather than failing """
     # y_exp has inst_0 and inst_1; y_pred only has inst_0
     y_pred = pd.DataFrame({
         "instance_id": ["inst_0"],
@@ -232,6 +263,7 @@ def test_explain_local_json_skips_instance_missing_from_y_pred(
 # test explain_local_df function
 # ----------------------
 def test_explain_local_df_not_implemented(adapter, model_context_factory, model_data_factory):
+    """Tests raises NotImplementedError as LLM explanations are JSON-only."""
     data = model_data_factory(y_exp=make_y_exp(LIST_RAW, LIST_RAW))
     ctx = model_context_factory(data=data, response_schema=LIST_SCHEMA)
 
@@ -243,6 +275,7 @@ def test_explain_local_df_not_implemented(adapter, model_context_factory, model_
 # test load_local_json function
 # ----------------------
 def test_load_local_explanation_correct(llm_model_factory):
+    """Tests normalises scores by maximum absolute value and returns overall reasoning and confidence."""
     model = llm_model_factory()
 
     result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
@@ -256,12 +289,14 @@ def test_load_local_explanation_correct(llm_model_factory):
     assert (result["overall_confidence"] == 0.75).all()
 
 def test_load_local_explanation_instance_not_found(llm_model_factory):
+    """Tests raises MissingDataError if the instance is missing"""
     model = llm_model_factory()
 
     with pytest.raises(MissingDataError, match="inst_999"):
         LLMReasoningAdapter.load_local_explanation(model, "inst_999")
 
 def test_load_local_explanation_zero_scores_fallback(llm_model_factory):
+    """Tests scores unchanged when all are zero, to avoid div by zero"""
     local_json = [{
         "instance_id": "inst_0",
         "reasoning": "no signal",
@@ -278,6 +313,7 @@ def test_load_local_explanation_zero_scores_fallback(llm_model_factory):
     assert (result["score_normalised_max"] == result["score"]).all()
 
 def test_load_local_explanation_single_contribution(llm_model_factory):
+    """Tests single explanation normalises to 1"""
     local_json = [{
         "instance_id": "inst_0",
         "reasoning": "only one feature",
@@ -293,7 +329,8 @@ def test_load_local_explanation_single_contribution(llm_model_factory):
     assert len(result) == 1
     assert result.iloc[0]["score_normalised_max"] == 1.0
 
-def test_load_local_explanation_string_scores_coerced_to_float(llm_model_factory):
+def test_load_local_explanation_string_scores_to_float(llm_model_factory):
+    """Tests string scores are treated as floats"""
     local_json = [{
         "instance_id": "inst_0",
         "reasoning": "mixed types",

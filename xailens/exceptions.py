@@ -19,9 +19,3 @@ class InvalidSelectionError(Exception):
     Exception raised for invalid selection, eg
     """
     pass
-
-class DataProcessingError(Exception):
-    """
-    Exception raised when data processing fails, eg with SHAP calculations
-    """
-    pass

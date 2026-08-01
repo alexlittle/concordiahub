@@ -20,11 +20,12 @@ from xailens import strings, config
 
 @pytest.fixture
 def adapter():
+    """Creates a BarChartVizAdapter"""
     return BarChartVizAdapter()
 
 
-# test returns single part that's a plotly figure
 def test_returns_reasoning_text_and_renamed_table(adapter, monkeypatch):
+    """test returns single part that's a plotly figure"""
     monkeypatch.setattr(config, "PLOT_MAX_FEATURES", 10)
 
     explanation = pd.DataFrame({
@@ -38,9 +39,10 @@ def test_returns_reasoning_text_and_renamed_table(adapter, monkeypatch):
 
     parts = adapter.render(explanation)
 
+    assert len(parts) == 1 # only 1 part
     fig = parts[0]
-    assert isinstance(fig, go.Figure)
+    assert isinstance(fig, go.Figure) # part is a plotly figure
     assert len(fig.data) == 1
     trace = fig.data[0]
-    assert list(trace.y) == ["sex", "chol", "age"] # should be in correct order
-    assert list(trace.x) == [-0.2, 0.1, 0.5]
+    assert list(trace.y) == ["sex", "chol", "age"] # should be in correct order, based on low to high value
+    assert list(trace.x) == [ -0.2, 0.1, 0.5] # should be in correct order, low to high

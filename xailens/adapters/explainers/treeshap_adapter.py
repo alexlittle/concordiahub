@@ -6,7 +6,7 @@ import shap
 import pandas as pd
 from typing import Any, Optional
 
-from xailens.exceptions import MissingDataError, DataProcessingError
+from xailens.exceptions import MissingDataError
 from xailens.entities.context import ModelContext
 from xailens.registry.xai_registry import register_xai
 from xailens.adapters.explainers.xaimethod_base import XAIMethodAdapter
@@ -75,7 +75,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
             result.columns = ['feature', 'importance']
             return result
 
-        elif shap_values.ndim == 3:
+        else:
             n_classes = shap_values.shape[2]
             dfs = []
             for i in range(n_classes):
@@ -85,8 +85,6 @@ class TreeSHAPAdapter(XAIMethodAdapter):
                 dfs.append(df)
             return pd.concat(dfs, ignore_index=True)
 
-        else:
-            raise DataProcessingError("The return values from SHAP don't match")
 
     def explain_local_df(self, ctx: ModelContext, model: Optional[TreeModel] = None) -> pd.DataFrame:
         """
@@ -124,7 +122,7 @@ class TreeSHAPAdapter(XAIMethodAdapter):
 
         # SHAP returns (n_instances, n_features, n_classes) for multiclass tree models
         # slice last axis per class to get (n_instances, n_features) per DataFrame
-        elif shap_values.ndim == 3:
+        else:
             n_classes = shap_values.shape[2]
             dfs = []
             keys = ctx.data.data_schema.class_names if ctx.data.data_schema.class_names is not None else range(
@@ -136,8 +134,6 @@ class TreeSHAPAdapter(XAIMethodAdapter):
                 dfs.append(df)
             result = pd.concat(dfs, ignore_index=True)
 
-        else:
-            raise DataProcessingError("The return values from SHAP don't match")
 
         # filter by abs value
         return result
