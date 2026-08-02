@@ -7,6 +7,7 @@ def mock_explorer_factory(lr_model_factory,
                           xgboost_model_factory,
                           llm_model_factory):
     def _factory(dataset_id="cleveland_heart_disease",
+                 datasets=None,
                  models=None,
                  valid=True):
         if models is None:
@@ -15,16 +16,16 @@ def mock_explorer_factory(lr_model_factory,
                 xgboost_model_factory(),
                 llm_model_factory(),
             ]
-        model_names = [m.metadata["model_display_name"] for m in models]
+        if datasets is None:
+            datasets = [dataset_id]
 
-        explorer = MagicMock()
+        explorer = MagicMock(name="ModelExplorer")
         explorer.is_valid_dataset.return_value = valid
+        explorer.get_datasets.return_value = datasets
         explorer.get_models_for_dataset.return_value = models
         explorer.get_selected_models_for_dataset.return_value = models
-        explorer.get_models_for_dataset.return_value = [
-            {"model_display_name": name} for name in model_names
-        ]
         return explorer
+
     return _factory
 
 

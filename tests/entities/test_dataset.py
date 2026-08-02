@@ -16,9 +16,6 @@ Covers:
 - _get_explanations (private helper)
 - _agreement (private helper)
 
-To cover:
-- get_instances_for_set
-- get_matrixset_data
 
 
 """

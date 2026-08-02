@@ -238,7 +238,6 @@ def render_matrixset_figure(dataset: Dataset,
             merged_params = dict(st.query_params)
             merged_params["matrix_set"] = set_key
             if navigate_on_click:
-                st.switch_page("pages/instances.py",
-                               query_params=merged_params)
+                st.switch_page("pages/instances.py", query_params=merged_params)
             else:
                 st.query_params["matrix_set"] = set_key

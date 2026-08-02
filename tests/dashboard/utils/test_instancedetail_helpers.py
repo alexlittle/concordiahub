@@ -19,6 +19,7 @@ MODULE = "xailens.dashboard.utils.instancedetail_helpers"
 
 @pytest.fixture
 def patched_registries():
+    """Patch the adapters/registries"""
     with patch(f"{MODULE}.get_xai_adapter") as get_xai, \
          patch(f"{MODULE}.get_viz_adapter") as get_viz:
         xai_class = MagicMock(name="XaiClass")
@@ -29,6 +30,7 @@ def patched_registries():
 
 @pytest.fixture
 def mock_st():
+    """ patch streamlit session state"""
     with patch(f"{MODULE}.st") as st:
         st.session_state = {}
         yield st
@@ -36,6 +38,7 @@ def mock_st():
 
 @pytest.fixture
 def panel_factory(lr_model):
+    """Create test model panels"""
     def _make(viz_names=("bar_chart",), viz_class=None, explanation="EXPL"):
         xai_instance = MagicMock()
         xai_instance.get_compatible_visualisations.return_value = list(viz_names)
@@ -48,6 +51,7 @@ def panel_factory(lr_model):
     return _make
 
 def test_build_uses_default_visualisation_when_not_in_params(lr_model, patched_registries):
+    """Test uses default viz"""
     get_xai, get_viz = patched_registries
 
     panel = build_model_panel(lr_model, "viz-key", {}, "inst_0")
@@ -60,6 +64,7 @@ def test_build_uses_default_visualisation_when_not_in_params(lr_model, patched_r
 
 
 def test_build_prefers_viz_params_over_default(lr_model, patched_registries):
+    """Test viz params override default viz"""
     _, get_viz = patched_registries
 
     panel = build_model_panel(lr_model, "viz-key", {"viz-key": "waterfall"}, "inst_0")
@@ -69,6 +74,7 @@ def test_build_prefers_viz_params_over_default(lr_model, patched_registries):
 
 
 def test_build_loads_explanation_for_instance(lr_model, patched_registries):
+    """Test loads explanation"""
     get_xai, _ = patched_registries
     xai_class = get_xai.return_value
 
@@ -82,6 +88,7 @@ def test_build_loads_explanation_for_instance(lr_model, patched_registries):
 def test_build_sets_viz_class_none_on_lookup_failure(lr_model,
                                                      patched_registries,
                                                      error):
+    """Test error raised when viz lookup fails"""
     _, get_viz = patched_registries
     get_viz.side_effect = error
 
@@ -90,25 +97,29 @@ def test_build_sets_viz_class_none_on_lookup_failure(lr_model,
     assert panel.viz_class is None
 
 
-def test_render_seeds_session_state_with_first_option(mock_st,
+def test_render_session_state_with_first_option(mock_st,
                                                       panel_factory):
+    """Tests the session state used"""
     panel = panel_factory(viz_names=("bar_chart", "waterfall"), viz_class=MagicMock())
     render_model_panel(panel, "plot-1")
     assert mock_st.session_state["viz-key"] == "bar_chart"
 
 
 def test_render_hides_radio(mock_st, panel_factory):
+    """Check no radio option shown when only 1 viz option"""
     render_model_panel(panel_factory(viz_class=MagicMock()), "plot-1")
     mock_st.radio.assert_not_called()
 
 
 def test_render_shows_radio(mock_st, panel_factory):
+    """Check radio chows when more than 1 option"""
     panel = panel_factory(viz_names=("bar_chart", "tabular"), viz_class=MagicMock())
     render_model_panel(panel, "plot-1")
     mock_st.radio.assert_called_once()
 
 
 def test_render_warns_and_returns_when_viz_unregistered(mock_st, panel_factory):
+    """Test warning shown if viz not registered"""
     panel = panel_factory(viz_class=None)
     render_model_panel(panel, "plot-1")
     mock_st.warning.assert_called_once()
@@ -116,13 +127,15 @@ def test_render_warns_and_returns_when_viz_unregistered(mock_st, panel_factory):
 
 
 def test_render_warns_when_viz_not_implemented(mock_st, panel_factory):
+    """Test warning shown if viz not implemented"""
     viz_class = MagicMock()
     viz_class.return_value.render.side_effect = NotImplementedError
     render_model_panel(panel_factory(viz_class=viz_class), "plot-1")
     mock_st.warning.assert_called_once()
 
 @patch(f"{MODULE}.apply_horizontal_bar_theme", side_effect=lambda fig: fig)
-def test_render_dispatches_figure_to_plotly_chart(themed, mock_st, panel_factory):
+def test_render_uses_plotly_chart(themed, mock_st, panel_factory):
+    """Test that plotly is called for chart viz"""
     fig = plotly.graph_objs.Figure()
     viz_class = MagicMock()
     viz_class.return_value.render.return_value = [fig]
@@ -135,7 +148,8 @@ def test_render_dispatches_figure_to_plotly_chart(themed, mock_st, panel_factory
 
 
 @patch(f"{MODULE}.dataframe_to_html_table", return_value="<table/>")
-def test_render_dispatches_dataframe_to_html(to_html, mock_st, panel_factory):
+def test_render_uses_dataframe_to_html(to_html, mock_st, panel_factory):
+    """Test that dataframe_to_html is called for tabular viz"""
     df = pd.DataFrame({"feature": ["age"], "importance": [0.5]})
     viz_class = MagicMock()
     viz_class.return_value.render.return_value = [df]
@@ -146,7 +160,8 @@ def test_render_dispatches_dataframe_to_html(to_html, mock_st, panel_factory):
     mock_st.html.assert_any_call("<table/>")
 
 
-def test_render_dispatches_raw_html(mock_st, panel_factory):
+def test_render_uses_raw_html(mock_st, panel_factory):
+    """ Test that raw_html is called for viz"""
     viz_class = MagicMock()
     viz_class.return_value.render.return_value = ["<b>x</b>"]
     render_model_panel(panel_factory(viz_class=viz_class), "plot-1")
