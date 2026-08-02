@@ -1,3 +1,12 @@
+"""
+Tests for xailens.storage.store_base.DataStore abstract class
+
+Covers:
+- can't be instantiated
+- partial concrete implementation can't be instantiated
+- correct abstract methods
+"""
+
 import pytest
 
 from xailens.storage.store_base import DataStore

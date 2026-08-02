@@ -1,11 +1,15 @@
+"""
+Reusable pytest fixtures for xailens.entities.model_explorer.ModelExplorer
+
+"""
+
 import pytest
 from unittest.mock import MagicMock
 
 
 @pytest.fixture
-def mock_explorer_factory(lr_model_factory,
-                          xgboost_model_factory,
-                          llm_model_factory):
+def mock_explorer_factory(lr_model_factory, xgboost_model_factory, llm_model_factory):
+    """Fixture for building a ModelExplorer factory"""
     def _factory(dataset_id="cleveland_heart_disease",
                  datasets=None,
                  models=None,

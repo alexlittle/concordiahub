@@ -12,6 +12,7 @@ from xailens.entities.context import ModelContext, ModelData, DataSchema
 
 @pytest.fixture
 def data_schema_factory():
+    """Fixture for building a DataSchema object"""
     def _factory(instance_id_column="instance_id", target_column="target",
                  prediction_column="prediction", feature_columns=None,
                  class_names=None):
@@ -29,6 +30,7 @@ def data_schema_factory():
 
 @pytest.fixture
 def model_data_factory(data_schema_factory):
+    """Fixture for building a ModelData object"""
     def _factory(n_instances=5, data_schema=None,
                  raw_instances=None, x_test=None, y_test=None,
                  y_pred=None, y_exp=None):
@@ -74,6 +76,7 @@ def model_data_factory(data_schema_factory):
 
 @pytest.fixture
 def model_context_factory(model_data_factory):
+    """Fixture for building a ModelContext object"""
     def _factory(model_type="logistic_regression", xai_methods=None,
                  dataset_id="cleveland_heart_disease", data=None,
                  model_display_name="Logistic Regression", model=None, response_schema=None):

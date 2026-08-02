@@ -4,7 +4,6 @@ Dataset Entity class - used to provide data for display on the dashboard
 
 import pandas as pd
 
-from xailens.exceptions import InvalidSelectionError
 from xailens.registry.xai_registry import get_xai_adapter
 from xailens.entities.model import Model
 from xailens import config
@@ -105,9 +104,6 @@ class Dataset:
             )
             keep_features.update(top_df["feature_name"].tolist())
             explanations[model_name] = top_df
-
-        if not keep_features:
-            raise InvalidSelectionError()
 
         result = pd.DataFrame({"feature_name": sorted(keep_features)})
         for df in explanations.values():
