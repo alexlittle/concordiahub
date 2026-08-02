@@ -251,7 +251,7 @@ def llm_model_factory():
 
     def _factory(path="fake/llm_model", n_instances=5,
                  feature_columns=None, class_names=None,
-                 model_display_name="LLM (CoT)", xai_methods=None,
+                 model_display_name="LLM", xai_methods=None,
                  y_test=None, y_pred=None, metrics=None, raw_instances=None, global_explanations=None, local_explanations_json=None, model_uuid=None):
         id_col, target_col, pred_col = "instance_id", "target", "prediction"
         feature_columns = feature_columns or [

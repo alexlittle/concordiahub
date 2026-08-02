@@ -9,11 +9,9 @@ visualisation types have been developed. However, the architecture allows new
 model types, XAI methods and visualisations to be added without large changes to
 the codebase.
 
-## Demo & Documentation
+## Demo
 
 Demo available at: https://xailens.alexlittle.net/
-
-Documentation available at: https://xailens-docs.alexlittle.net/ 
 
 ## Install
 

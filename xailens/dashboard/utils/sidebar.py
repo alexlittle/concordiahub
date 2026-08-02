@@ -42,8 +42,6 @@ def render_footer() -> str:
         <div class="sidebar-footer">
             XAI Lens v{__version__}<br/>
             <a href="https://github.com/alexlittle/xailens" title="Source code link">Source Code (GitHub)</a> 
-            &middot; 
-            <a href="https://xailens-docs.alexlittle.net" title="Documentation link">Documentation</a>
         </div>
     """
 

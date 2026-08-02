@@ -35,7 +35,7 @@ def test_dataset_page_loads_overview(monkeypatch, mock_explorer):
 
     at = AppTest.from_file(str(PAGE))
     at.query_params["dataset"] = "cleveland_heart_disease"
-    at.query_params["models"] = "Logistic Regression,XGBoost,LLM (CoT)"
+    at.query_params["models"] = "Logistic Regression,XGBoost,LLM"
     at.run()
 
     assert not at.exception
@@ -50,7 +50,7 @@ def test_dataset_page_loads_metrics(monkeypatch, mock_explorer):
 
     at = AppTest.from_file(str(PAGE))
     at.query_params["dataset"] = "cleveland_heart_disease"
-    at.query_params["models"] = "Logistic Regression,XGBoost,LLM (CoT)"
+    at.query_params["models"] = "Logistic Regression,XGBoost,LLM"
     at.query_params["ds_tab"] = strings.DATASET_TAB_MORE_METRICS
     at.run()
 

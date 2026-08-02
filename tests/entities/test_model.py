@@ -1,14 +1,24 @@
 """
-Tests for Model.load_targets.
+Tests for Model.
 
 Assumes tests/fixtures/model_fixtures.py fixtures (lr_model, xgboost_model,
 llm_model, lr_model_factory, etc.) are wired in via conftest.py.
+
+Covers:
+
+- get
+- load_targets
+- get_metrics
+
+- get_instance_prediction
+- _get_series
+- get_dataschema
 """
 import pandas as pd
 import pytest
-
-import xailens.config as config
-
+import dataclasses
+from xailens import config
+from xailens.entities.context import DataSchema
 
 # -----------------------
 # Test get function
@@ -155,3 +165,68 @@ def test_get_metrics_contains_expected_metric_names(lr_model):
 
     assert "accuracy" in metrics.index
     assert config.BEST_MODEL_METRIC in metrics.index
+
+# -----------------------
+# Test get_instance_prediction
+# -----------------------
+
+def test_get_instance_prediction(lr_model_factory):
+    """Test returns the model's prediction for the given instance."""
+    model = lr_model_factory()
+
+    assert model.get_instance_prediction("inst_0") == 1
+    assert model.get_instance_prediction("inst_1") == 0
+
+# -----------------------
+# Test _get_series
+# -----------------------
+def test_get_series_returns_target_and_prediction_series(lr_model_factory):
+    """Tests get_series returns target and prediction series"""
+    model = lr_model_factory(n_instances=5)
+
+    y_true, y_pred = model._get_series()
+
+    assert isinstance(y_true, pd.Series)
+    assert isinstance(y_pred, pd.Series)
+    assert y_true.name == "target"
+    assert y_pred.name == "prediction"
+    assert y_true.tolist() == [0, 1, 0, 1, 0]
+    assert y_pred.tolist() == [1, 0, 1, 0, 1]
+
+# -----------------------
+# Test get_dataschema
+# -----------------------
+
+def test_get_data_schema_from_metadata(lr_model_factory):
+    """Test building a dataschema object from metadata"""
+    model = lr_model_factory()
+
+    schema = model.get_data_schema()
+
+    assert isinstance(schema, DataSchema)
+    assert schema.instance_id_column == "instance_id"
+    assert schema.target_column == "target"
+    assert schema.prediction_column == "prediction"
+    assert "age" in schema.feature_columns
+    assert schema.class_names == ["no_disease", "disease"]
+
+
+def test_get_data_schema_uses_defaults(lr_model_factory):
+    """Tests uses defaults when not present in metadata"""
+    model = lr_model_factory()
+    del model.metadata["data_schema"]["feature_columns"]
+    del model.metadata["data_schema"]["class_names"]
+
+    schema = model.get_data_schema()
+
+    assert schema.feature_columns is None
+    assert schema.class_names is None
+
+def test_get_data_schema_with_missing_required_field(lr_model_factory):
+    """Tests dataschema with missing required field"""
+    model = lr_model_factory()
+    del model.metadata["data_schema"]["target_column"]
+
+    schema = model.get_data_schema()
+
+    assert schema.target_column is dataclasses.MISSING
