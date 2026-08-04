@@ -166,19 +166,17 @@ def apply_matrixset_theme(fig: go.Figure, show_title: bool = False) -> go.Figure
     # make the y-axis in top right bar chart have horizontal text
     fig.add_annotation(
         text="Instances<br>incorrect",
-        xref="paper", yref="paper",
-        x=0,
-        y=fig.layout.yaxis.domain[1],
-        xanchor="left", yanchor="bottom",
+        xref="x domain", yref="y domain",
+        x=-0.12, y=0.95,
+        xanchor="left", yanchor="top",
         showarrow=False,
-        xshift=150,
-        yshift=-100,
         align="left",
         font={
             "family": THEME["font_family"],
             "size": THEME["axis_title_font_size"],
             "color": THEME["axis_title_color"],
         },
+        row=1, col=2,
     )
 
     # Bottom-left: set size bar chart
