@@ -44,13 +44,13 @@ def build_model_panel(
 
     Args:
         model (Model): Model object
-        viz_param_key (str): key identifying the visualisation parameters
+        viz_param_key (str): key identifying the visualization parameters
         viz_params (MutableMapping[str, Any]): Streamlit session state (or
-            dict-like equivalent) containing visualisation parameters
-        instance_uuid (str): identifier for the instance being visualised
+            dict-like equivalent) containing visualization parameters
+        instance_uuid (str): identifier for the instance being visualized
 
     Returns:
-        ModelPanel: panel object built from the model and visualisation params
+        ModelPanel: panel object built from the model and visualization params
     """
 
     # get the model/XAI method and the default viz name
@@ -58,7 +58,7 @@ def build_model_panel(
     xai_class = get_xai_adapter(method)
     xai_instance = xai_class()
     viz_name = viz_params.get(viz_param_key,
-                              xai_instance.get_default_visualisation())
+                              xai_instance.get_default_visualization())
 
     # instantiate the viz adapter
     try:
@@ -99,12 +99,12 @@ def render_model_panel(panel: ModelPanel, plot_key: str) -> None:
             panel.xai_instance.display_notes)
         st.html(title)
 
-        # fix axis range - always normalised -1 to 1 for these, so a little
+        # fix axis range - always normalized -1 to 1 for these, so a little
         # extra for display
         axis_range = [-1.1, 1.1]
 
         # get the viz options for current model/XAI method combination
-        viz_options = panel.xai_instance.get_compatible_visualisations()
+        viz_options = panel.xai_instance.get_compatible_visualizations()
         viz_names = list(viz_options.keys()) if isinstance(viz_options, dict) else list(viz_options)
 
         # set session state for current panel display type
@@ -122,7 +122,7 @@ def render_model_panel(panel: ModelPanel, plot_key: str) -> None:
 
         # Check in case invalid viz is requested
         if panel.viz_class is None:
-            st.warning(f"{panel.viz_name} is not a registered visualisation")
+            st.warning(f"{panel.viz_name} is not a registered visualization")
             return
 
         # show the individual parts of the explanation. In most cases there is

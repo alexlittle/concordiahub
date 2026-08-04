@@ -23,8 +23,8 @@ class TreeSHAPAdapter(XAIMethodAdapter):
 
     display_name = strings.TREE_SHAP_DISPLAY_NAME
     display_notes = strings.TREE_SHAP_NOTES
-    default_visualisation = config.TREE_SHAP_DEFAULT_VIZ
-    compatible_visualisations = config.TREE_SHAP_COMPATIBLE_VIZ
+    default_visualization = config.TREE_SHAP_DEFAULT_VIZ
+    compatible_visualizations = config.TREE_SHAP_COMPATIBLE_VIZ
 
     # SHAP adds a "class" column, so this needs to be removed
     EXCLUDED_CONTRIBUTION_KEYS = {"class"}

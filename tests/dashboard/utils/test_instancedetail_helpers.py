@@ -23,7 +23,7 @@ def patched_registries():
     with patch(f"{MODULE}.get_xai_adapter") as get_xai, \
          patch(f"{MODULE}.get_viz_adapter") as get_viz:
         xai_class = MagicMock(name="XaiClass")
-        xai_class.return_value.get_default_visualisation.return_value = "bar_chart"
+        xai_class.return_value.get_default_visualization.return_value = "bar_chart"
         get_xai.return_value = xai_class
         yield get_xai, get_viz
 
@@ -41,7 +41,7 @@ def panel_factory(lr_model):
     """Create test model panels"""
     def _make(viz_names=("bar_chart",), viz_class=None, explanation="EXPL"):
         xai_instance = MagicMock()
-        xai_instance.get_compatible_visualisations.return_value = list(viz_names)
+        xai_instance.get_compatible_visualizations.return_value = list(viz_names)
         xai_instance.display_notes = "notes"
         return ModelPanel(
             model=lr_model, xai_class=MagicMock(), xai_instance=xai_instance,
@@ -50,7 +50,7 @@ def panel_factory(lr_model):
         )
     return _make
 
-def test_build_uses_default_visualisation_when_not_in_params(lr_model, patched_registries):
+def test_build_uses_default_visualization_when_not_in_params(lr_model, patched_registries):
     """Test uses default viz"""
     get_xai, get_viz = patched_registries
 

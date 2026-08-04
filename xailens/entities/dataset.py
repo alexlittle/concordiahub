@@ -94,13 +94,13 @@ class Dataset:
             df["feature_name"] = df["feature_name"].str.strip().str.lower()
 
             # make sure the values are properly numeric
-            df["score_normalised_max"] = pd.to_numeric(df["score_normalised_max"], errors="coerce")
+            df["score_normalized_max"] = pd.to_numeric(df["score_normalized_max"], errors="coerce")
 
             model_name = model.get("model_display_name")
             top_df = (
-                df[["feature_name", "score_normalised_max"]]
-                .nlargest(config.KEEP_NUM_FEATURES, "score_normalised_max")
-                .rename(columns={"score_normalised_max": model_name})
+                df[["feature_name", "score_normalized_max"]]
+                .nlargest(config.KEEP_NUM_FEATURES, "score_normalized_max")
+                .rename(columns={"score_normalized_max": model_name})
             )
             keep_features.update(top_df["feature_name"].tolist())
             explanations[model_name] = top_df

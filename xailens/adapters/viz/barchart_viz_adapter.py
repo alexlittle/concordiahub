@@ -39,10 +39,10 @@ class BarChartVizAdapter(VizAdapter):
         # filter to show only the largest contributors, not all
         explanation = self._top_features(explanation)
 
-        explanation = explanation.sort_values("score_normalised_max",
+        explanation = explanation.sort_values("score_normalized_max",
                                               ascending=True)
         colors = [config.PLOT_SECONDARY_COLOR if v < 0 else config.PLOT_PRIMARY_COLOR
-                  for v in explanation["score_normalised_max"]]
+                  for v in explanation["score_normalized_max"]]
 
         # use features names as y-axis labels
         feature_names = explanation["feature_name"].tolist()
@@ -53,7 +53,7 @@ class BarChartVizAdapter(VizAdapter):
         fig = go.Figure(go.Bar(
             orientation="h",
             y=feature_names,
-            x=explanation["score_normalised_max"].tolist(),
+            x=explanation["score_normalized_max"].tolist(),
             marker_color=colors,
         ))
         fig.update_layout(

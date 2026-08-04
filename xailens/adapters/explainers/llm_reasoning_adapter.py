@@ -66,8 +66,8 @@ class LLMReasoningAdapter(XAIMethodAdapter):
 
     display_name = strings.LLM_REASONING_DISPLAY_NAME
     display_notes = strings.LLM_REASONING_NOTES
-    default_visualisation = config.LLM_REASONING_DEFAULT_VIZ
-    compatible_visualisations = config.LLM_REASONING_COMPATIBLE_VIZ
+    default_visualization = config.LLM_REASONING_DEFAULT_VIZ
+    compatible_visualizations = config.LLM_REASONING_COMPATIBLE_VIZ
 
     # uses a json file for explanation storage
     explanation_file_type: str = "json"
@@ -82,7 +82,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
 
         Returns:
             pd.DataFrame: dataframe containing the global explanation, with the
-                following columns: feature_name, score, score_normalised_max
+                following columns: feature_name, score, score_normalized_max
         """
         df = model.store.load_dataframe(f"exp_global_{cls.key}")
         abs_importance = df["importance"].abs()
@@ -90,7 +90,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
         return pd.DataFrame({
             "feature_name": df["feature"],
             "score": df["importance"],
-            "score_normalised_max": abs_importance / abs_max if abs_max != 0 else abs_importance,
+            "score_normalized_max": abs_importance / abs_max if abs_max != 0 else abs_importance,
         })
 
     @classmethod
@@ -107,8 +107,8 @@ class LLMReasoningAdapter(XAIMethodAdapter):
 
         Returns:
             pd.DataFrame: dataframe containing the local explanation, with the
-                following columns: feature_name, score, score_normalised_sum,
-                score_normalised_max, reasoning, overall_reasoning,
+                following columns: feature_name, score, score_normalized_sum,
+                score_normalized_max, reasoning, overall_reasoning,
                 overall_confidence
 
         Raises:
@@ -137,7 +137,7 @@ class LLMReasoningAdapter(XAIMethodAdapter):
             {
                 "feature_name": feature,
                 "score": score,
-                "score_normalised_max": score / abs_max if abs_max != 0 else score,
+                "score_normalized_max": score / abs_max if abs_max != 0 else score,
                 "reasoning": data["reasoning"],
                 "overall_reasoning": overall_reasoning,
                 "overall_confidence": overall_confidence

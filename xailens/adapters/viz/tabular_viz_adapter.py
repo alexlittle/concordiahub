@@ -34,7 +34,7 @@ class TabularAdapter(VizAdapter):
         """
 
         explanation = self._top_features(explanation)
-        explanation = explanation.sort_values("score_normalised_max", ascending=True)
+        explanation = explanation.sort_values("score_normalized_max", ascending=True)
         parts = []
 
         # get the high level explanation if available
@@ -48,7 +48,7 @@ class TabularAdapter(VizAdapter):
             parts.append(overall_text)
 
             final_columns = {"feature_name": strings.TABULAR_FEATURE_TITLE,
-                     "score_normalised_max": strings.TABULAR_SCORE_TITLE,
+                     "score_normalized_max": strings.TABULAR_SCORE_TITLE,
                      "reasoning": "Reasoning"}
             # drop unnecessary columns
             explanation = explanation.drop(columns=["score",
@@ -56,7 +56,7 @@ class TabularAdapter(VizAdapter):
                                                     "overall_confidence"])
         else:
             final_columns = {"feature_name": strings.TABULAR_FEATURE_TITLE,
-                             "score_normalised_max": strings.TABULAR_SCORE_TITLE}
+                             "score_normalized_max": strings.TABULAR_SCORE_TITLE}
             # drop unnecessary columns
             explanation = explanation.drop(columns=["score", "reasoning"])
 

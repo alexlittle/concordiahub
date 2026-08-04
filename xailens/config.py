@@ -47,7 +47,7 @@ class VizOption:
     method: str | None = None
 
 #------------------------
-# XAI Method default visualisations & defaults
+# XAI Method default visualizations & defaults
 #------------------------
 COEFFS_DEFAULT_VIZ = "barchart"
 COEFFS_COMPATIBLE_VIZ = {
@@ -69,7 +69,7 @@ LLM_REASONING_COMPATIBLE_VIZ = {
     }
 
 #------------------------
-# Visualisation compatibility with XAI methods
+# Visualization compatibility with XAI methods
 #------------------------
 BARCHART_COMPATIBLE_XAI = ["tree_shap", "coefficients"]
 TABULAR_COMPATIBLE_XAI = ["llm_reasoning", "tree_shap", "coefficients"]

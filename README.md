@@ -5,8 +5,8 @@ Explainable AI methods and explanations between models, including scikit-learn
 models and LLMs.
 
 As this is a proof of concept framework, not all model, XAI method or 
-visualisation types have been developed. However, the architecture allows new 
-model types, XAI methods and visualisations to be added without large changes to
+visualization types have been developed. However, the architecture allows new 
+model types, XAI methods and visualizations to be added without large changes to
 the codebase.
 
 ## Demo
@@ -34,7 +34,7 @@ every directory/file is included here.
 │   ├── adapters                 # Adapters
 │   │   ├── explainers             # Adapters for XAI methods (eg TreeShap)
 │   │   ├── models                 # Adapters for model types (eg LLM, XGBoost)
-│   │   └── viz                    # Adapters for visualisations (eg bar chart)
+│   │   └── viz                    # Adapters for visualizations (eg bar chart)
 │   ├── dashboard                # Streamlit dashboard application
 │   │   ├── assets                 # CSS, logo/icons etc
 │   │   ├── pages                  # Streamlit pages
@@ -51,7 +51,7 @@ every directory/file is included here.
 │   ├── registry                 # Adapter registries
 │   │   ├── autodiscover.py        # Autodiscovers the adapters available
 │   │   ├── model_registry.py      # Registry for model adapters
-│   │   ├── viz_registry.py        # Registry for visualisation adapters
+│   │   ├── viz_registry.py        # Registry for visualization adapters
 │   │   └── xai_registry.py        # Registry for XAi method adapters
 │   ├── storage                  # Storage classes
 │   │   ├── filesystem_store.py    # Filesystem store class

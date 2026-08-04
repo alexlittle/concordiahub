@@ -1,5 +1,5 @@
 """
-Base abstract class for all Visualisation adapters
+Base abstract class for all Visualization adapters
 """
 
 import pandas as pd
@@ -12,7 +12,7 @@ from xailens import config
 
 class VizAdapter(ABC):
     """
-    Base abstract class for all Visualisation adapters
+    Base abstract class for all Visualization adapters
     """
 
     display_name: str | None = None
@@ -52,4 +52,4 @@ class VizAdapter(ABC):
             pd.DataFrame: dataframe containing the largest contributions
         """
         n = n if n is not None else config.PLOT_MAX_FEATURES
-        return explanation.reindex(explanation["score_normalised_max"].astype(float).abs().nlargest(n).index)
+        return explanation.reindex(explanation["score_normalized_max"].astype(float).abs().nlargest(n).index)

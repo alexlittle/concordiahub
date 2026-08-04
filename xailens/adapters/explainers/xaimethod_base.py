@@ -20,8 +20,8 @@ class XAIMethodAdapter(ABC):
     key: ClassVar[str] = None
 
     display_notes: str | None = None
-    default_visualisation: Optional[str]
-    compatible_visualisations: Optional[dict]
+    default_visualization: Optional[str]
+    compatible_visualizations: Optional[dict]
 
     # type of explanation storage - df or JSON, default to df
     explanation_file_type: str = "df"
@@ -45,7 +45,7 @@ class XAIMethodAdapter(ABC):
         return pd.DataFrame({
             "feature_name": explanation.index,
             "score": explanation.values,
-            "score_normalised_max": explanation_abs.values / abs_max if abs_max != 0 else explanation_abs.values,
+            "score_normalized_max": explanation_abs.values / abs_max if abs_max != 0 else explanation_abs.values,
         })
 
     @classmethod
@@ -74,27 +74,27 @@ class XAIMethodAdapter(ABC):
         return pd.DataFrame({
             "feature_name": explanation.index,
             "score": explanation.values,
-            "score_normalised_max": explanation.values / abs_max if abs_max != 0 else explanation.values,
+            "score_normalized_max": explanation.values / abs_max if abs_max != 0 else explanation.values,
             "reasoning": None
         })
 
-    def get_compatible_visualisations(self) -> dict:
+    def get_compatible_visualizations(self) -> dict:
         """
-        Gets the compatible visualisations for the instantiated class
+        Gets the compatible visualizations for the instantiated class
 
         Returns:
-            dict: compatible visualisations
+            dict: compatible visualizations
         """
-        return self.compatible_visualisations
+        return self.compatible_visualizations
 
-    def get_default_visualisation(self) -> str:
+    def get_default_visualization(self) -> str:
         """
-        Gets the default visualisation for the instantiated class
+        Gets the default visualization for the instantiated class
 
         Returns:
-            str: default visualisation
+            str: default visualization
         """
-        return self.default_visualisation
+        return self.default_visualization
 
     @abstractmethod
     def explain_global_df(self, ctx: ModelContext, model: Optional[TreeModel] = None) -> pd.DataFrame:

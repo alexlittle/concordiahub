@@ -275,7 +275,7 @@ def test_explain_local_df_not_implemented(adapter, model_context_factory, model_
 # test load_local_json function
 # ----------------------
 def test_load_local_explanation_correct(llm_model_factory):
-    """Tests normalises scores by maximum absolute value and returns overall reasoning and confidence."""
+    """Tests normalizes scores by maximum absolute value and returns overall reasoning and confidence."""
     model = llm_model_factory()
 
     result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
@@ -284,7 +284,7 @@ def test_load_local_explanation_correct(llm_model_factory):
     scores = result["score"].tolist()
     abs_max = max(abs(s) for s in scores)
     for _, row in result.iterrows():
-        assert row["score_normalised_max"] == pytest.approx(row["score"] / abs_max)
+        assert row["score_normalized_max"] == pytest.approx(row["score"] / abs_max)
     assert (result["overall_reasoning"] == "Fake reasoning for inst_0").all()
     assert (result["overall_confidence"] == 0.75).all()
 
@@ -310,10 +310,10 @@ def test_load_local_explanation_zero_scores_fallback(llm_model_factory):
 
     result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
 
-    assert (result["score_normalised_max"] == result["score"]).all()
+    assert (result["score_normalized_max"] == result["score"]).all()
 
 def test_load_local_explanation_single_contribution(llm_model_factory):
-    """Tests single explanation normalises to 1"""
+    """Tests single explanation normalizes to 1"""
     local_json = [{
         "instance_id": "inst_0",
         "reasoning": "only one feature",
@@ -327,7 +327,7 @@ def test_load_local_explanation_single_contribution(llm_model_factory):
     result = LLMReasoningAdapter.load_local_explanation(model, "inst_0")
 
     assert len(result) == 1
-    assert result.iloc[0]["score_normalised_max"] == 1.0
+    assert result.iloc[0]["score_normalized_max"] == 1.0
 
 def test_load_local_explanation_string_scores_to_float(llm_model_factory):
     """Tests string scores are treated as floats"""

@@ -34,7 +34,7 @@ def explanation():
         {
             "feature_name": ["age", "sex", "chol", "cp", "thalach", "oldpeak"],
             "score": [0.2, -0.9, 0.5, -0.1, 0.7, -0.3],
-            "score_normalised_max": [0.2, -0.9, 0.5, -0.1, 0.7, -0.3],
+            "score_normalized_max": [0.2, -0.9, 0.5, -0.1, 0.7, -0.3],
             "reasoning": [f"reason {i}" for i in range(6)],
         }
     )

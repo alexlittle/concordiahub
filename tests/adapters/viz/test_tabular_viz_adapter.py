@@ -31,7 +31,7 @@ def test_returns_reasoning_text_and_renamed_table(adapter, monkeypatch):
     explanation = pd.DataFrame({
         "feature_name": ["age", "sex", "chol"],
         "score": [0.5, -0.2, 0.1],
-        "score_normalised_max": [0.5, -0.2, 0.1],
+        "score_normalized_max": [0.5, -0.2, 0.1],
         "overall_reasoning": ["age matters"] * 3,
         "overall_confidence": ["high"] * 3,
         "reasoning": ["age reason", "sex reason", "chol reason"],
@@ -61,7 +61,7 @@ def test_top_n_feature_limit(adapter, monkeypatch):
     explanation = pd.DataFrame({
         "feature_name": ["age", "sex", "chol"],
         "score": [0.1, 0.2, 0.9],
-        "score_normalised_max": [0.1, -0.9, 0.5],
+        "score_normalized_max": [0.1, -0.9, 0.5],
         "overall_reasoning": ["x"] * 3,
         "overall_confidence": ["y"] * 3,
         "reasoning": ["a", "b", "c"],
@@ -81,7 +81,7 @@ def test_returns_single_table_with_reasoning_dropped(adapter, monkeypatch):
     explanation = pd.DataFrame({
         "feature_name": ["age", "sex", "chol"],
         "score": [0.5, -0.2, 0.1],
-        "score_normalised_max": [0.5, -0.2, 0.1],
+        "score_normalized_max": [0.5, -0.2, 0.1],
         "reasoning": ["age reason", "sex reason", "chol reason"],
     })
 

@@ -11,7 +11,7 @@ from xailens import strings
 
 def render_features_heatmap(df_exp: pd.DataFrame)-> plotly.graph_objects.Figure:
     """
-    Generates a heatmap visualisation
+    Generates a heatmap visualization
 
     Args:
         df_exp (pd.DataFrame): Dataframe to build the heatmap from

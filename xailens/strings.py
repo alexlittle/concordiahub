@@ -217,22 +217,18 @@ LOGISTIC_REGRESSION_DISPLAY_NAME = "Logistic Regression"
 XGBOOST_DISPLAY_NAME = "XGBoost"
 
 # ----------------
-# VISUALISATIONS
+# VISUALIZATIONS
 # ----------------
-# Bar Chart Visualisation
+# Bar Chart Visualization
 BARCHART_DISPLAY_NAME = "Bar Chart"
-BARCHART_TITLE = "Feature Contributions (normalised)"
-BARCHART_X_AXIS = "Normalised contribution"
+BARCHART_TITLE = "Feature Contributions (normalized)"
+BARCHART_X_AXIS = "Normalized contribution"
 
-# Waterfall Visualisation
-WATERFALL_DISPLAY_NAME = "Waterfall"
-WATERFALL_TITLE = "Feature Contributions"
-WATERFALL_X_AXIS = "Contribution"
 
-# Tabular Visualisation
+# Tabular Visualization
 TABULAR_DISPLAY_NAME = "Tabular (text)"
 TABULAR_FEATURE_TITLE = "Feature"
-TABULAR_SCORE_TITLE = "Normalised<br/>Score (1 to -1)"
+TABULAR_SCORE_TITLE = "Normalized<br/>Score (1 to -1)"
 TABULAR_OVERALL_REASON_TITLE = "Overall Reasoning"
 TABULAR_OVERALL_CONF_TITLE= "Overall confidence"
 
@@ -262,7 +258,7 @@ HELP_METRICS = {
 }
 
 HELP_GLOBAL_EXPLANATION = """
-    The normalised importance each model assigned to each feature in the dataset. Ordered by the average across all models in descending order.
+    The normalized importance each model assigned to each feature in the dataset. Ordered by the average across all models in descending order.
 """
 
 HELP_INSTANCES = """

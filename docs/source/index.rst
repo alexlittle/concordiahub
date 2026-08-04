@@ -11,8 +11,8 @@ Explainable AI methods and explanations between models, including scikit-learn
 models and LLMs.
 
 As this is a proof of concept framework, not all model, XAI method or
-visualisation types have been developed. However, the architecture allows new
-model types, XAI methods and visualisations to be added without large changes to
+visualization types have been developed. However, the architecture allows new
+model types, XAI methods and visualizations to be added without large changes to
 the codebase.
 
 Demo available at: https://xailens.alexlittle.net/
