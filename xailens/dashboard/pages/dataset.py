@@ -62,11 +62,11 @@ def main():
     metrics = dataset_obj.get_metrics()
     metrics = metrics.sort_values(by=['model'])
 
-
     # sort out the tabs with the view url param, so navigating preserves the tab
     TABS = strings.DATASET_TABS
 
     url_view = st.query_params.get("ds_tab", strings.DATASET_TAB_OVERVIEW)
+
     if st.session_state.get("_ds_tab_url") != url_view:
         st.session_state["_ds_tab_url"] = url_view
         st.session_state["ds_tab"] = url_view
