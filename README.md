@@ -22,11 +22,13 @@ Demo available at: https://xailens.alexlittle.net/
 ## Repository Structure
 
 An overview of this repository's directory and file structure. Note that not 
-every directory/file is included here.
+every directory/file is included here. All code required for model registration and dashboard display is in the 
+`xailens` directory, other top-level directories are supporting scripts, examples, tests and documentation.
 
 ```
 .
 ├── docs                     # Documentation in Sphinx RST format
+├── evaluation               # Scripts used to measure feature alignment
 ├── examples                 # Example models used in the demo              
 ├── tests                    # Tests - dir/file structure mirrors the xailens 
 │                            # core package structure
