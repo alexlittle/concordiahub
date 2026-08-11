@@ -4,7 +4,7 @@ Developed as part of my MSc project, XAI Lens allows model developers to compare
 Explainable AI methods and explanations between models, including scikit-learn 
 models and LLMs.
 
-As this is a proof of concept framework, not all model, XAI method or 
+As this is a proof-of-concept framework, not all model, XAI method or 
 visualization types have been developed. However, the architecture allows new 
 model types, XAI methods and visualizations to be added without large changes to
 the codebase.
@@ -27,7 +27,7 @@ every directory/file is included here. All code required for model registration 
 
 ```
 .
-├── docs                     # Documentation in Sphinx RST format
+├── docs                     # Placeholder for documentation in Sphinx RST format
 ├── evaluation               # Scripts used to measure feature alignment
 ├── examples                 # Example models used in the demo              
 ├── tests                    # Tests - dir/file structure mirrors the xailens 
