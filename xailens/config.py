@@ -48,6 +48,8 @@ class VizOption:
 
 #------------------------
 # XAI Method default visualizations & defaults
+# with current adapters all are compatible with each other, but will not always be the case with future XAI method and
+# visualization combinations
 #------------------------
 COEFFS_DEFAULT_VIZ = "barchart"
 COEFFS_COMPATIBLE_VIZ = {
@@ -70,8 +72,9 @@ LLM_REASONING_COMPATIBLE_VIZ = {
 
 #------------------------
 # Visualization compatibility with XAI methods
+# as with XAI method, currently identical
 #------------------------
-BARCHART_COMPATIBLE_XAI = ["tree_shap", "coefficients"]
+BARCHART_COMPATIBLE_XAI = ["tree_shap", "coefficients", "llm_reasoning"]
 TABULAR_COMPATIBLE_XAI = ["llm_reasoning", "tree_shap", "coefficients"]
 
 #------------------------

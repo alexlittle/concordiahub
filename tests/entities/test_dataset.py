@@ -9,7 +9,7 @@ Covers:
 - get_instance_data
 - get_global_explanations
 - get_local_explanations
-- get_instance_consensus_ids
+- get_instance_consensus_uuids
 - get_instance_consensus
 - get_all_instances
 - _get_common_predictions (private helper)
@@ -86,19 +86,19 @@ def test_get_instance_data_matches_to_first_model(heart_disease_dataset_factory,
 
 
 # ------------------------
-# get_instance_consensus_ids
+# get_instance_consensus_uuids
 # -----------------------
 
-def test_get_instance_consensus_ids_full_overlap(heart_disease_dataset):
+def test_get_instance_consensus_uuids_full_overlap(heart_disease_dataset):
     """Test when full overlap
     default fixtures all use the same 5 instance ids
     """
-    common_ids = heart_disease_dataset.get_instance_consensus_ids()
+    common_ids = heart_disease_dataset.get_instance_consensus_uuids()
 
     assert common_ids == {f"inst_{i}" for i in range(5)}
 
 
-def test_get_instance_consensus_ids_partial_overlap(heart_disease_dataset_factory):
+def test_get_instance_consensus_uuids_partial_overlap(heart_disease_dataset_factory):
     """Test partial overlap
     XGBoost only has predictions for a subset of the LR/LLM instance ids
     """
@@ -117,7 +117,7 @@ def test_get_instance_consensus_ids_partial_overlap(heart_disease_dataset_factor
         xgboost_kwargs={"y_test": xgboost_y_test, "y_pred": xgboost_y_pred},
     )
 
-    common_ids = dataset.get_instance_consensus_ids()
+    common_ids = dataset.get_instance_consensus_uuids()
 
     assert common_ids == {"inst_0", "inst_1"}
 

@@ -137,7 +137,7 @@ class Dataset:
         result[model_cols] = result[model_cols].abs()
         return result
 
-    def get_instance_consensus_ids(self) -> set:
+    def get_instance_consensus_uuids(self) -> set:
         """
         Returns instance IDs common to all models.
 
@@ -162,7 +162,7 @@ class Dataset:
         Returns:
             dict:
         """
-        common_ids = self.get_instance_consensus_ids()
+        common_ids = self.get_instance_consensus_uuids()
         pred_df, y_true_common = self._get_common_predictions(common_ids)
         correct_df = pred_df.eq(y_true_common, axis=0)
         total = len(common_ids)
@@ -189,7 +189,7 @@ class Dataset:
             pd.DataFrame:
         """
 
-        common_ids = self.get_instance_consensus_ids()
+        common_ids = self.get_instance_consensus_uuids()
         pred_df, y_true_common = self._get_common_predictions(common_ids)
         correct_df = pred_df.eq(y_true_common, axis=0)
         result = pd.DataFrame({"true_label": y_true_common})
