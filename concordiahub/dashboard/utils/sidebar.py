@@ -40,8 +40,8 @@ def render_footer() -> str:
 
     return f"""
         <div class="sidebar-footer">
-            XAI Lens v{__version__}<br/>
-            <a href="https://github.com/alexlittle/xailens" title="Source code link">Source Code (GitHub)</a> 
+            Concordia Hub v{__version__}<br/>
+            <a href="https://github.com/alexlittle/concordiahub" title="Source code link">Source Code (GitHub)</a> 
         </div>
     """
 
