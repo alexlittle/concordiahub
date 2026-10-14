@@ -1,5 +1,5 @@
 """
-pytest fixtures for xailens.entities.model.Model.
+pytest fixtures for concordiahub.entities.model.Model.
 
 """
 from unittest.mock import MagicMock, patch
@@ -7,7 +7,7 @@ from unittest.mock import MagicMock, patch
 import pandas as pd
 import pytest
 
-from xailens.entities.model import Model
+from concordiahub.entities.model import Model
 
 # --------------------
 #  helpers
@@ -72,7 +72,7 @@ def _build_mock_store(y_test, y_pred, metrics, raw_instances, extra_dataframes=N
 
 
 def _make_model(path, metadata, y_test, y_pred, metrics, raw_instances, extra_dataframes=None, extra_json=None):
-    with patch("xailens.entities.model.FilesystemStore"):
+    with patch("concordiahub.entities.model.FilesystemStore"):
         model = Model(path=path, metadata=metadata)
     model.store = _build_mock_store(y_test, y_pred, metrics, raw_instances, extra_dataframes, extra_json)
     return model

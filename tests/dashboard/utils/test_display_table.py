@@ -1,5 +1,5 @@
 """
-Test the functions in xailens.dashboard.utils.display_table
+Test the functions in concordiahub.dashboard.utils.display_table
 
 Covers:
 
@@ -13,7 +13,7 @@ Covers:
 import pytest
 import pandas as pd
 import numpy as np
-from xailens.dashboard.utils.display_table import (
+from concordiahub.dashboard.utils.display_table import (
     _format_cell, generate_table_rows_html, dataframe_to_html_table,
     series_to_html_table)
 

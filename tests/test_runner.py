@@ -13,10 +13,10 @@ import dataclasses
 
 from unittest.mock import patch
 
-from xailens import runner
-from xailens.exceptions import InvalidConfigurationError, MissingDataError
+from concordiahub import runner
+from concordiahub.exceptions import InvalidConfigurationError, MissingDataError
 
-MODULE_UNDER_TEST = "xailens.runner"
+MODULE_UNDER_TEST = "concordiahub.runner"
 
 
 # Test with no context provided

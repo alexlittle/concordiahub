@@ -9,8 +9,8 @@ Covers:
 import pytest
 from unittest.mock import MagicMock, patch
 
-from xailens.dashboard.utils.matrix_set import render_matrixset_figure
-MODULE = "xailens.dashboard.utils.matrix_set"
+from concordiahub.dashboard.utils.matrix_set import render_matrixset_figure
+MODULE = "concordiahub.dashboard.utils.matrix_set"
 
 @pytest.fixture
 def mock_st():

@@ -9,7 +9,7 @@ Covers:
 import pytest
 import pandas as pd
 
-from xailens.adapters.viz.viz_base import VizAdapter
+from concordiahub.adapters.viz.viz_base import VizAdapter
 
 
 class _FakeVizAdapter(VizAdapter):

@@ -13,8 +13,8 @@ Covers:
 import json
 import pytest
 
-from xailens import config
-from xailens.entities.model_explorer import ModelExplorer
+from concordiahub import config
+from concordiahub.entities.model_explorer import ModelExplorer
 
 @pytest.fixture
 def explorer_factory(tmp_path, monkeypatch):

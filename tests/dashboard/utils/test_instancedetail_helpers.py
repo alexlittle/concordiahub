@@ -10,10 +10,10 @@ import pytest
 import plotly
 import pandas as pd
 from unittest.mock import patch, MagicMock
-from xailens.dashboard.utils.instancedetail_helpers import build_model_panel, render_model_panel, ModelPanel
+from concordiahub.dashboard.utils.instancedetail_helpers import build_model_panel, render_model_panel, ModelPanel
 
-from xailens.exceptions import InvalidConfigurationError
-MODULE = "xailens.dashboard.utils.instancedetail_helpers"
+from concordiahub.exceptions import InvalidConfigurationError
+MODULE = "concordiahub.dashboard.utils.instancedetail_helpers"
 
 
 

@@ -15,14 +15,14 @@ import pytest
 import pandas as pd
 import numpy as np
 from unittest.mock import MagicMock
-from xailens.adapters.explainers.coefficients_adapter import CoefficientsAdapter
-from xailens.exceptions import MissingDataError
-from xailens.entities.context import ModelData, ModelContext
-from xailens import config
-from xailens.entities.context import DataSchema
+from concordiahub.adapters.explainers.coefficients_adapter import CoefficientsAdapter
+from concordiahub.exceptions import MissingDataError
+from concordiahub.entities.context import ModelData, ModelContext
+from concordiahub import config
+from concordiahub.entities.context import DataSchema
 
 
-MODULE_UNDER_TEST = "xailens.adapters.explainers.coefficients_adapter"
+MODULE_UNDER_TEST = "concordiahub.adapters.explainers.coefficients_adapter"
 
 
 @pytest.fixture

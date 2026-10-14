@@ -13,8 +13,8 @@ import pytest
 import json
 import pandas as pd
 
-from xailens.adapters.explainers.llm_reasoning_adapter import LLMReasoningAdapter, ResponseSchema, LLMResponse, ContribScore
-from xailens.exceptions import MissingDataError
+from concordiahub.adapters.explainers.llm_reasoning_adapter import LLMReasoningAdapter, ResponseSchema, LLMResponse, ContribScore
+from concordiahub.exceptions import MissingDataError
 
 @pytest.fixture
 def adapter():

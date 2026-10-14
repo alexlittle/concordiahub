@@ -9,9 +9,9 @@ covers:
 
 import pytest
 
-from xailens.exceptions import InvalidConfigurationError
+from concordiahub.exceptions import InvalidConfigurationError
 
-from xailens.registry.model_registry import (
+from concordiahub.registry.model_registry import (
     MODEL_REGISTRY,
     register_model,
     get_model_adapter,

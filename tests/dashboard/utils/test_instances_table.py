@@ -8,8 +8,8 @@ Covers:
 import pytest
 import pandas as pd
 
-from xailens import strings
-from xailens.dashboard.utils.instances_table import build_display_df
+from concordiahub import strings
+from concordiahub.dashboard.utils.instances_table import build_display_df
 
 @pytest.fixture
 def instances_df():

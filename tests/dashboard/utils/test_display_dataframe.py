@@ -10,10 +10,10 @@ Covers:
 import pandas as pd
 import pytest
 
-from xailens.dashboard.utils.display_dataframe import (
+from concordiahub.dashboard.utils.display_dataframe import (
     generate_instance_rows_html, render_dataframe)
-from xailens import strings
-from xailens.dashboard import settings
+from concordiahub import strings
+from concordiahub.dashboard import settings
 
 
 @pytest.fixture(autouse=True)

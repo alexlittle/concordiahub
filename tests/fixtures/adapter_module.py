@@ -10,7 +10,7 @@ from types import ModuleType
 import pytest
 
 # for autodiscover and the individual adapter registries
-MODULE_UNDER_TEST = "xailens.registry.autodiscover"
+MODULE_UNDER_TEST = "concordiahub.registry.autodiscover"
 
 def _ensure_clean_import():
     """
@@ -25,13 +25,13 @@ def fresh_module(monkeypatch):
     """
     Provides a new imported module for each test
     """
-    #  'xailens' package in sys.modules
-    if "xailens" not in sys.modules:
-        xailens = ModuleType("xailens")
-        sys.modules["xailens"] = xailens
+    #  'concordiahub' package in sys.modules
+    if "concordiahub" not in sys.modules:
+        concordiahub = ModuleType("concordiahub")
+        sys.modules["concordiahub"] = concordiahub
 
-    # xailens.adapters exists and has a __path__
-    adapters_pkg_name = "xailens.adapters"
+    # concordiahub.adapters exists and has a __path__
+    adapters_pkg_name = "concordiahub.adapters"
     adapters_pkg = ModuleType(adapters_pkg_name)
     adapters_pkg.__path__ = ["FAKE_PATH"]
     sys.modules[adapters_pkg_name] = adapters_pkg

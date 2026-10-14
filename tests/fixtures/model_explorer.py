@@ -1,5 +1,5 @@
 """
-Reusable pytest fixtures for xailens.entities.model_explorer.ModelExplorer
+Reusable pytest fixtures for concordiahub.entities.model_explorer.ModelExplorer
 
 """
 

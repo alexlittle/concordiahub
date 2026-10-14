@@ -11,10 +11,10 @@ Covers:
 import pytest
 import pandas as pd
 
-from xailens.dashboard.utils.common import (
+from concordiahub.dashboard.utils.common import (
     display_breadcrumbs, title_with_help_icon, display_bool_value,
     rename_model_prediction_columns)
-from xailens import strings
+from concordiahub import strings
 
 #-----------------
 # display_breadcrumbs

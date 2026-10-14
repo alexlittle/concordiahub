@@ -3,7 +3,7 @@ XGBoost model for the UCI Cleveland Heart Disease dataset
 """
 
 import pandas as pd
-import xailens
+import concordiahub
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
@@ -73,19 +73,19 @@ raw_instances = df.set_index(config.INSTANCE_UUID_COL).drop(columns=['target']).
 for col, mapping in HEART_COLUMN_MAPPINGS.items():
     raw_instances[col] = raw_instances[col].map(mapping)
 
-data_schema = xailens.DataSchema(
+data_schema = concordiahub.DataSchema(
     instance_id_column=config.INSTANCE_UUID_COL,
     target_column="target",
     prediction_column="y_pred")
 
-model_data = xailens.ModelData(
+model_data = concordiahub.ModelData(
     data_schema=data_schema,
     raw_instances=raw_instances,
     x_test=X_test,
     y_test=y_test_df,
     y_pred=y_pred)
 
-ctx = xailens.ModelContext(
+ctx = concordiahub.ModelContext(
     "xgboost",
     ["tree_shap"],
     "cleveland-heart-data",
@@ -94,4 +94,4 @@ ctx = xailens.ModelContext(
     model_dir_name="heart_xgboost",
     model_display_name="XGBoost")
 
-xailens.run(ctx)
+concordiahub.run(ctx)

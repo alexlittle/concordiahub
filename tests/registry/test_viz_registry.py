@@ -9,10 +9,10 @@ covers:
 
 import pytest
 
-from xailens.exceptions import InvalidConfigurationError
+from concordiahub.exceptions import InvalidConfigurationError
 
 
-from xailens.registry.viz_registry import (
+from concordiahub.registry.viz_registry import (
     VIZ_REGISTRY,
     register_viz,
     get_viz_adapter,

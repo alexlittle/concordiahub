@@ -1,5 +1,5 @@
 """
-Reusable pytest fixtures for xailens.runner.run(), built around
+Reusable pytest fixtures for concordiahub.runner.run(), built around
 ModelContext / ModelData / DataSchema.
 """
 from unittest.mock import MagicMock
@@ -7,7 +7,7 @@ from unittest.mock import MagicMock
 import pandas as pd
 import pytest
 
-from xailens.entities.context import ModelContext, ModelData, DataSchema
+from concordiahub.entities.context import ModelContext, ModelData, DataSchema
 
 
 @pytest.fixture

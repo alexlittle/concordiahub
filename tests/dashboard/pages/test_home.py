@@ -10,12 +10,12 @@ from pathlib import Path
 from streamlit.testing.v1 import AppTest
 
 
-PAGE = Path(__file__).parents[3] / "xailens" / "dashboard" / "pages" / "home.py"
+PAGE = Path(__file__).parents[3] / "concordiahub" / "dashboard" / "pages" / "home.py"
 
 def test_homepage_loads(monkeypatch, mock_explorer):
     """Test loads page with overview tab"""
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer",
+        "concordiahub.dashboard.explorer.get_explorer",
         lambda: mock_explorer
     )
 

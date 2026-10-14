@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report
 
-import xailens
+import concordiahub
 from examples.helpers import (HEART_COLUMN_MAPPINGS,
                               create_confusion_matrix,
                               save_class_report)
@@ -54,19 +54,19 @@ raw_instances = df.set_index(config.INSTANCE_UUID_COL).drop(columns=['target']).
 for col, mapping in HEART_COLUMN_MAPPINGS.items():
     raw_instances[col] = raw_instances[col].map(mapping)
 
-data_schema = xailens.DataSchema(
+data_schema = concordiahub.DataSchema(
     instance_id_column=config.INSTANCE_UUID_COL,
     target_column="target",
     prediction_column="y_pred")
 
-model_data = xailens.ModelData(
+model_data = concordiahub.ModelData(
     data_schema=data_schema,
     raw_instances=raw_instances,
     x_test=X_test,
     y_pred=y_pred,
     y_test=y_test)
 
-ctx = xailens.ModelContext(
+ctx = concordiahub.ModelContext(
     "logistic_regression",
     ["coefficients"],
     "cleveland-heart-data",
@@ -75,4 +75,4 @@ ctx = xailens.ModelContext(
     model_dir_name="heart_lr",
     model_display_name="Logistic Regression",)
 
-xailens.run(ctx)
+concordiahub.run(ctx)

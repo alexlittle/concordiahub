@@ -8,8 +8,8 @@ import pytest
 import pandas as pd
 import plotly.graph_objects as go
 
-from xailens.dashboard.utils.heatmap import render_features_heatmap
-from xailens import strings
+from concordiahub.dashboard.utils.heatmap import render_features_heatmap
+from concordiahub import strings
 
 @pytest.fixture
 def df_exp_factory():

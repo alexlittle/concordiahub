@@ -1,5 +1,5 @@
 """
-Tests for xailens.storage.store_base.DataStore abstract class
+Tests for concordiahub.storage.store_base.DataStore abstract class
 
 Covers:
 - can't be instantiated
@@ -9,8 +9,8 @@ Covers:
 
 import pytest
 
-from xailens.storage.store_base import DataStore
-from xailens.storage.filesystem_store import FilesystemStore
+from concordiahub.storage.store_base import DataStore
+from concordiahub.storage.filesystem_store import FilesystemStore
 
 
 def test_datastore_cannot_be_instantiated():

@@ -1,10 +1,10 @@
 """
-Reusable pytest fixtures for xailens.entities.dataset.Dataset.
+Reusable pytest fixtures for concordiahub.entities.dataset.Dataset.
 
 """
 import pytest
 
-from xailens.entities.dataset import Dataset
+from concordiahub.entities.dataset import Dataset
 
 
 @pytest.fixture

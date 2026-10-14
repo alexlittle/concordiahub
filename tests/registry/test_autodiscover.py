@@ -18,15 +18,15 @@ def test_autodiscover_imports_all_submodules(monkeypatch, fresh_module):
 
     # Simulate modules under each adapter type (subdirectories):
     discovered = [
-        ("finder", "xailens.adapters.models.alpha", False),
-        ("finder", "xailens.adapters.xai.bravo", False),
-        ("finder", "xailens.adapters.viz.charlie", False),
+        ("finder", "concordiahub.adapters.models.alpha", False),
+        ("finder", "concordiahub.adapters.xai.bravo", False),
+        ("finder", "concordiahub.adapters.viz.charlie", False),
     ]
     import_calls = []
 
     def fake_walk_packages(path, prefix):
         assert isinstance(path, (list, tuple))
-        assert prefix == "xailens.adapters."
+        assert prefix == "concordiahub.adapters."
         yield from discovered
 
     def fake_import_module(name):
@@ -46,14 +46,14 @@ def test_autodiscover_continues_on_import_error(monkeypatch, fresh_module, capsy
     autodiscover = fresh_module
 
     discovered = [
-        ("finder", "xailens.adapters.good1", False),
-        ("finder", "xailens.adapters.bad", False),
-        ("finder", "xailens.adapters.good2", False),
+        ("finder", "concordiahub.adapters.good1", False),
+        ("finder", "concordiahub.adapters.bad", False),
+        ("finder", "concordiahub.adapters.good2", False),
     ]
 
     def fake_walk_packages(path, prefix):
         assert isinstance(path, (list, tuple))
-        assert prefix == "xailens.adapters."
+        assert prefix == "concordiahub.adapters."
         for item in discovered:
             yield item
 
@@ -71,25 +71,25 @@ def test_autodiscover_continues_on_import_error(monkeypatch, fresh_module, capsy
 
     # check warning printed but not a crash
     out = capsys.readouterr().out
-    assert "[WARN] Failed importing xailens.adapters.bad: boom" in out
+    assert "[WARN] Failed importing concordiahub.adapters.bad: boom" in out
 
     # Good modules should still be imported
-    assert "xailens.adapters.good1" in sys.modules
-    assert "xailens.adapters.good2" in sys.modules
+    assert "concordiahub.adapters.good1" in sys.modules
+    assert "concordiahub.adapters.good2" in sys.modules
 
 
 def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     autodiscover = fresh_module
 
     discovered_once = [
-        ("finder", "xailens.adapters.once", False),
+        ("finder", "concordiahub.adapters.once", False),
     ]
 
     import_calls = []
 
     def fake_walk_packages(path, prefix):
         assert isinstance(path, (list, tuple))
-        assert prefix == "xailens.adapters."
+        assert prefix == "concordiahub.adapters."
         for item in discovered_once:
             yield item
 
@@ -107,7 +107,7 @@ def test_autodiscover_is_idempotent(monkeypatch, fresh_module):
     # call 2
     autodiscover.autodiscover_adapters()
 
-    assert import_calls.count("xailens.adapters.once") == 1
+    assert import_calls.count("concordiahub.adapters.once") == 1
 
 
 def test_autodiscover_thread_safety(monkeypatch, fresh_module):
@@ -117,14 +117,14 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
     autodiscover = fresh_module
 
     discovered = [
-        ("finder", "xailens.adapters.threaded", False),
+        ("finder", "concordiahub.adapters.threaded", False),
     ]
 
     import_calls = []
 
     def fake_walk_packages(path, prefix):
         assert isinstance(path, (list, tuple))
-        assert prefix == "xailens.adapters."
+        assert prefix == "concordiahub.adapters."
         for item in discovered:
             yield item
 
@@ -144,4 +144,4 @@ def test_autodiscover_thread_safety(monkeypatch, fresh_module):
         t.join()
 
     # Even with concurrent calls, the module only imported once
-    assert import_calls.count("xailens.adapters.threaded") == 1
+    assert import_calls.count("concordiahub.adapters.threaded") == 1

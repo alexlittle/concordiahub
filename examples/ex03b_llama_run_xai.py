@@ -3,7 +3,7 @@ File to register the LLM Llama model with the XAI Lens Framework, from
 pre-generated explanations
 """
 import pandas as pd
-import xailens
+import concordiahub
 
 from examples import config
 from examples.helpers import safe_dirname, create_confusion_matrix, save_class_report
@@ -28,17 +28,17 @@ create_confusion_matrix(y["target"],
                         "heart",
                         "llm_llama")
 
-schema = xailens.ResponseSchema(
+schema = concordiahub.ResponseSchema(
     contributions_field="feature_contributions",
     contribution_key=None,
 )
 
-data_schema = xailens.DataSchema(
+data_schema = concordiahub.DataSchema(
     instance_id_column=config.INSTANCE_UUID_COL,
     target_column="target",
     prediction_column="prediction")
 
-model_data = xailens.ModelData(
+model_data = concordiahub.ModelData(
     data_schema=data_schema,
     raw_instances=raw,
     x_test=X,
@@ -46,7 +46,7 @@ model_data = xailens.ModelData(
     y_pred=y_preds,
     y_exp=y_exp)
 
-ctx = xailens.ModelContext(
+ctx = concordiahub.ModelContext(
     "llm",
     ["llm_reasoning"],
     "cleveland-heart-data",
@@ -56,4 +56,4 @@ ctx = xailens.ModelContext(
     model_display_name="Llama 3.1",
     response_schema=schema)
 
-xailens.run(ctx)
+concordiahub.run(ctx)

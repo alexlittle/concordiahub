@@ -9,13 +9,13 @@ Tests:
 
 
 from unittest.mock import patch
-from xailens.cli import main
+from concordiahub.cli import main
 
-MODULE_UNDER_TEST = "xailens.cli"
+MODULE_UNDER_TEST = "concordiahub.cli"
 
 def test_main_runs_streamlit(tmp_path):
     """Test runs streamlit."""
-    with patch("subprocess.run") as mock_run, patch("sys.argv", ["xailens-dash"]):
+    with patch("subprocess.run") as mock_run, patch("sys.argv", ["concordiahub-dash"]):
         main()
         mock_run.assert_called_once()
         args = mock_run.call_args[0][0]
@@ -26,7 +26,7 @@ def test_main_runs_streamlit(tmp_path):
 
 def test_main_no_browser(tmp_path):
     """Test runs without launching browser."""
-    with patch("subprocess.run") as mock_run, patch("sys.argv", ["xailens-dash", "--no-browser"]):
+    with patch("subprocess.run") as mock_run, patch("sys.argv", ["concordiahub-dash", "--no-browser"]):
         main()
         args = mock_run.call_args[0][0]
         assert "--server.headless" in args
@@ -34,7 +34,7 @@ def test_main_no_browser(tmp_path):
 
 def test_main_browser_by_default(tmp_path):
     """Test runs with browser."""
-    with patch("subprocess.run") as mock_run, patch("sys.argv", ["xailens-dash"]):
+    with patch("subprocess.run") as mock_run, patch("sys.argv", ["concordiahub-dash"]):
         main()
         args = mock_run.call_args[0][0]
         assert "--server.headless" not in args

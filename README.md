@@ -1,6 +1,6 @@
-# XAI Lens
+# Concordia Hub
 
-Developed as part of my MSc project, XAI Lens allows model developers to compare
+Developed as part of my MSc project, Concordia Hub allows model developers to compare
 Explainable AI methods and explanations between models, including scikit-learn 
 models and LLMs.
 
@@ -11,28 +11,28 @@ the codebase.
 
 ## Demo
 
-Demo available at: https://xailens.alexlittle.net/
+Demo available at: https://concordiahub.alexlittle.net/
 
 ## Install
 
-* Install with `pip install xailens`
-* Launch the dashboard with `xailens-dash`
+* Install with `pip install concordiahub`
+* Launch the dashboard with `concordiahub-dash`
 
 
 ## Repository Structure
 
 An overview of this repository's directory and file structure. Note that not 
 every directory/file is included here. All code required for model registration and dashboard display is in the 
-`xailens` directory, other top-level directories are supporting scripts, examples, tests and documentation.
+`concordiahub` directory, other top-level directories are supporting scripts, examples, tests and documentation.
 
 ```
 .
 ├── docs                     # Placeholder for documentation in Sphinx RST format
 ├── evaluation               # Scripts used to measure feature alignment
 ├── examples                 # Example models used in the demo              
-├── tests                    # Tests - dir/file structure mirrors the xailens 
+├── tests                    # Tests - dir/file structure mirrors the concordiahub 
 │                            # core package structure
-├── xailens                    # Core XAI Lens code
+├── concordiahub               # Core Concordia Hub code
 │   ├── adapters                 # Adapters
 │   │   ├── explainers             # Adapters for XAI methods (eg TreeShap)
 │   │   ├── models                 # Adapters for model types (eg LLM, XGBoost)
@@ -54,13 +54,13 @@ every directory/file is included here. All code required for model registration 
 │   │   ├── autodiscover.py        # Autodiscovers the adapters available
 │   │   ├── model_registry.py      # Registry for model adapters
 │   │   ├── viz_registry.py        # Registry for visualization adapters
-│   │   └── xai_registry.py        # Registry for XAi method adapters
+│   │   └── xai_registry.py        # Registry for XAI method adapters
 │   ├── storage                  # Storage classes
 │   │   ├── filesystem_store.py    # Filesystem store class
 │   │   └── store_base.py          # Base (abstract) store class
 │   ├── artifacts.py             # Artifact store - manages models and storage
 │   ├── cli.py                   # Command line interface for launching dashboard
-│   ├── config.py                # XAI Lens configuration
+│   ├── config.py                # Concordia Hub configuration
 │   ├── exceptions.py            # Custom exceptions
 │   ├── runner.py                # Orchestrator/entry point for loading a model
 │   ├── strings.py               # Strings used throughout library
@@ -88,21 +88,21 @@ git lfs install
 
 ### Continuous Integration
 
-[![CI](https://github.com/alexlittle/xailens/actions/workflows/ci.yml/badge.svg)](https://github.com/alexlittle/xailens/actions)
+[![CI](https://github.com/alexlittle/concordiahub/actions/workflows/ci.yml/badge.svg)](https://github.com/alexlittle/concordiahub/actions)
 
 ### SonarCloud - Quality Overview
 
-[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_xailens&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xailens)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_xailens&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xaicompare)
+[![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xaicompare)
 
 ### Detailed Metrics
 
-[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_xailens&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xaicompare)
-[![Reliability](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_xailens&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xailens)
-[![Security](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_xailens&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xailens)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xaicompare)
+[![Reliability](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)
+[![Security](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)
 
 ### Issues Breakdown
 
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_xailens&metric=bugs)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xailens)
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_xailens&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xailens)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_xailens&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xailens)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=bugs)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)

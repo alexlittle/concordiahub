@@ -12,16 +12,16 @@ from unittest.mock import patch
 from pathlib import Path
 from streamlit.testing.v1 import AppTest
 
-from xailens import strings
-from xailens.dashboard.pages.instancedetail import _sync_tab
+from concordiahub import strings
+from concordiahub.dashboard.pages.instancedetail import _sync_tab
 
-PAGE = Path(__file__).parents[3] / "xailens" / "dashboard" / "pages" / "instancedetail.py"
+PAGE = Path(__file__).parents[3] / "concordiahub" / "dashboard" / "pages" / "instancedetail.py"
 
 
 
 @pytest.fixture
 def mock_st():
-    with patch("xailens.dashboard.pages.instancedetail.st") as st:
+    with patch("concordiahub.dashboard.pages.instancedetail.st") as st:
         st.session_state = {}
         st.query_params = {}
         yield st
@@ -30,7 +30,7 @@ def mock_st():
 def test_instancedetail_page_loads_default_tab(monkeypatch, mock_explorer):
     """Test loading default tab"""
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer",
+        "concordiahub.dashboard.explorer.get_explorer",
         lambda: mock_explorer
     )
 
@@ -46,7 +46,7 @@ def test_instancedetail_page_loads_default_tab(monkeypatch, mock_explorer):
 def test_instancedetail_page_with_models(monkeypatch, mock_explorer):
     """Test loading default tab but with specific models"""
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer",
+        "concordiahub.dashboard.explorer.get_explorer",
         lambda: mock_explorer
     )
 
@@ -64,7 +64,7 @@ def test_instancedetail_page_with_models(monkeypatch, mock_explorer):
 def test_instancedetail_page_loads_overview_tab(monkeypatch, mock_explorer):
     """Test loading overview tab"""
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer",
+        "concordiahub.dashboard.explorer.get_explorer",
         lambda: mock_explorer
     )
 
@@ -81,7 +81,7 @@ def test_instancedetail_page_loads_overview_tab(monkeypatch, mock_explorer):
 def test_instancedetail_page_loads_explanations_tab(monkeypatch, mock_explorer):
     """Test loading explanations tab"""
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer",
+        "concordiahub.dashboard.explorer.get_explorer",
         lambda: mock_explorer
     )
 

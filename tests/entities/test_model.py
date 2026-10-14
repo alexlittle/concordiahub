@@ -17,8 +17,8 @@ Covers:
 import pandas as pd
 import pytest
 import dataclasses
-from xailens import config
-from xailens.entities.context import DataSchema
+from concordiahub import config
+from concordiahub.entities.context import DataSchema
 
 # -----------------------
 # Test get function

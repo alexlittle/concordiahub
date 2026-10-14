@@ -12,9 +12,9 @@ import pandas as pd
 import pytest
 import plotly.graph_objs as go
 
-from xailens.adapters.viz.barchart_viz_adapter import BarChartVizAdapter
+from concordiahub.adapters.viz.barchart_viz_adapter import BarChartVizAdapter
 
-from xailens import strings, config
+from concordiahub import strings, config
 
 
 

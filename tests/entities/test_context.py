@@ -6,7 +6,7 @@ only the ordering of the params, so these tests only cover the ordering
 
 from unittest.mock import MagicMock
 
-from xailens.entities.context import ModelContext, DataSchema
+from concordiahub.entities.context import ModelContext, DataSchema
 
 
 def test_model_context_field_order():

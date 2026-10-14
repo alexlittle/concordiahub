@@ -22,13 +22,13 @@ import pandas as pd
 import pytest
 from unittest.mock import MagicMock, mock_open, patch
 
-from xailens.storage.filesystem_store import (
+from concordiahub.storage.filesystem_store import (
     FilesystemStore,
     _cached_load_csv,
     _cached_load_json,
 )
 
-MODULE = "xailens.storage.filesystem_store"
+MODULE = "concordiahub.storage.filesystem_store"
 
 
 @pytest.fixture(autouse=True)

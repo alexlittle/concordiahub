@@ -5,8 +5,8 @@ Covers:
 - render_datasets
 """
 
-from xailens.dashboard.utils.home_helpers import render_datasets
-from xailens import strings
+from concordiahub.dashboard.utils.home_helpers import render_datasets
+from concordiahub import strings
 
 def test_render_datasets(mock_explorer):
     """Checks that multiple dataset cards are created"""

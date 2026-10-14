@@ -11,9 +11,9 @@ Tests cover:
 import pandas as pd
 import pytest
 
-from xailens.adapters.viz.tabular_viz_adapter import TabularAdapter
+from concordiahub.adapters.viz.tabular_viz_adapter import TabularAdapter
 
-from xailens import strings, config
+from concordiahub import strings, config
 
 
 

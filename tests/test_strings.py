@@ -10,7 +10,7 @@ Covers functions/class:
 """
 import pytest
 
-from xailens import strings
+from concordiahub import strings
 
 # test recommended_title
 @pytest.mark.parametrize("count,expected", [

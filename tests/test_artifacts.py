@@ -20,10 +20,10 @@ import pandas as pd
 import uuid
 
 from unittest.mock import MagicMock
-from xailens.artifacts import ArtifactStore
-from xailens.entities.context import ModelContext, ModelData, DataSchema
+from concordiahub.artifacts import ArtifactStore
+from concordiahub.entities.context import ModelContext, ModelData, DataSchema
 
-MODULE_UNDER_TEST = "xailens.artifacts"
+MODULE_UNDER_TEST = "concordiahub.artifacts"
 
 @pytest.fixture
 def mock_store():

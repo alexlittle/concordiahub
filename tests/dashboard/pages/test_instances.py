@@ -12,9 +12,9 @@ import pandas as pd
 import pytest
 from streamlit.testing.v1 import AppTest
 
-from xailens import strings
+from concordiahub import strings
 
-PAGE = Path(__file__).parents[3] / "xailens" / "dashboard" / "pages" / "instances.py"
+PAGE = Path(__file__).parents[3] / "concordiahub" / "dashboard" / "pages" / "instances.py"
 
 
 # ---------------------------------
@@ -25,7 +25,7 @@ PAGE = Path(__file__).parents[3] / "xailens" / "dashboard" / "pages" / "instance
 def mock_render_matrixset_figure(monkeypatch):
     mock = MagicMock()
     monkeypatch.setattr(
-        "xailens.dashboard.utils.matrix_set.render_matrixset_figure", mock)
+        "concordiahub.dashboard.utils.matrix_set.render_matrixset_figure", mock)
     return mock
 
 
@@ -104,7 +104,7 @@ def test_matrix_set_shows_plot_and_table(
         mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer", lambda: mock_explorer
+        "concordiahub.dashboard.explorer.get_explorer", lambda: mock_explorer
     )
     at = AppTest.from_file(str(PAGE))
     at.query_params["dataset"] = "cleveland_heart_disease"
@@ -130,7 +130,7 @@ def test_instance_group_disagree_shows_table_only(
         mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer", lambda: mock_explorer
+        "concordiahub.dashboard.explorer.get_explorer", lambda: mock_explorer
     )
     at = AppTest.from_file(str(PAGE))
     at.query_params["dataset"] = "cleveland_heart_disease"
@@ -155,7 +155,7 @@ def test_instance_group_allcorrect_filters_table(
         mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer",
+        "concordiahub.dashboard.explorer.get_explorer",
         lambda: all_correct_dataset
     )
     at = AppTest.from_file(str(PAGE))
@@ -180,7 +180,7 @@ def test_instance_group_allincorrect_filters_table(
         mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer",
+        "concordiahub.dashboard.explorer.get_explorer",
         lambda: all_incorrect_dataset
     )
     at = AppTest.from_file(str(PAGE))
@@ -208,7 +208,7 @@ def test_instance_group_all_shows_unfiltered_table(
         mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer",
+        "concordiahub.dashboard.explorer.get_explorer",
         lambda: mock_explorer
     )
     at = AppTest.from_file(str(PAGE))
@@ -233,7 +233,7 @@ def test_no_params_shows_warning(
         mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer",
+        "concordiahub.dashboard.explorer.get_explorer",
         lambda: mock_explorer
     )
     at = AppTest.from_file(str(PAGE))
@@ -253,7 +253,7 @@ def test_both_params_shows_warning_no_plot(
         mock_render_matrixset_figure,
         mock_interactive_table):
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer",
+        "concordiahub.dashboard.explorer.get_explorer",
         lambda: mock_explorer
     )
     at = AppTest.from_file(str(PAGE))
@@ -277,7 +277,7 @@ def test_matrix_set_shows_plot_and_table(
         mock_interactive_table):
     """Test loading with specific models"""
     monkeypatch.setattr(
-        "xailens.dashboard.explorer.get_explorer", lambda: mock_explorer
+        "concordiahub.dashboard.explorer.get_explorer", lambda: mock_explorer
     )
     at = AppTest.from_file(str(PAGE))
     at.query_params["models"] = "XGBoost"

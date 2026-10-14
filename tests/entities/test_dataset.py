@@ -1,5 +1,5 @@
 """
-Tests for the Dataset class (xailens.entities.dataset)
+Tests for the Dataset class (concordiahub.entities.dataset)
 
 Uses the tests.fixtures.dataset and tests.fixtures.model fixtures
 
@@ -23,7 +23,7 @@ Covers:
 
 import pandas as pd
 
-MODULE_UNDER_TEST = "xailens.entities.dataset"
+MODULE_UNDER_TEST = "concordiahub.entities.dataset"
 
 # --------------------------------
 # get_metrics / get_recommended_models

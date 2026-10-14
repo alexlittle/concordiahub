@@ -8,7 +8,7 @@ Covers:
 
 from unittest.mock import MagicMock
 
-from xailens.adapters.models.model_base import ModelAdapter
+from concordiahub.adapters.models.model_base import ModelAdapter
 
 def test_init_stores_model():
     """Tests the __init__ method of the ModelAdapter"""

@@ -8,10 +8,10 @@ covers:
 from streamlit.testing.v1 import AppTest
 from pathlib import Path
 
-MODULE_UNDER_TEST = "xailens.dashboard.app"
+MODULE_UNDER_TEST = "concordiahub.dashboard.app"
 
 
-APP_PATH = Path(__file__).parent.parent.parent / "xailens" / "dashboard" / "app.py"
+APP_PATH = Path(__file__).parent.parent.parent / "concordiahub" / "dashboard" / "app.py"
 
 def test_app_main():
     """Test main function."""

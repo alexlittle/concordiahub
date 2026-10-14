@@ -13,7 +13,7 @@ import pytest
 import plotly.graph_objects as go
 from unittest.mock import patch
 
-from xailens.dashboard.utils.dataset_helpers import render_metric_barchart, generate_metric_card
+from concordiahub.dashboard.utils.dataset_helpers import render_metric_barchart, generate_metric_card
 
 @pytest.fixture
 def metrics_df(lr_model_factory):
@@ -39,10 +39,10 @@ def metrics_df(lr_model_factory):
 #-----------------------
 def test_returns_figure_with_correct_bar_data(metrics_df):
     """Check correct data appears in the figure"""
-    with patch("xailens.strings.METRICS_NAMES", {"accuracy": "Accuracy"}), \
-         patch("xailens.config.PLOT_PRIMARY_COLOR", "#1f77b4"), \
-         patch("xailens.dashboard.utils.plotly_theme.THEME", {"highlight_color": "#ff0000"}), \
-         patch("xailens.dashboard.utils.plotly_theme.apply_theme", side_effect=lambda fig, show_title: fig):
+    with patch("concordiahub.strings.METRICS_NAMES", {"accuracy": "Accuracy"}), \
+         patch("concordiahub.config.PLOT_PRIMARY_COLOR", "#1f77b4"), \
+         patch("concordiahub.dashboard.utils.plotly_theme.THEME", {"highlight_color": "#ff0000"}), \
+         patch("concordiahub.dashboard.utils.plotly_theme.apply_theme", side_effect=lambda fig, show_title: fig):
         fig = render_metric_barchart(metrics_df, "accuracy")
 
     assert isinstance(fig, go.Figure)
@@ -52,10 +52,10 @@ def test_returns_figure_with_correct_bar_data(metrics_df):
 
 def test_hline_marks_max_value(metrics_df):
     """Check hlines appear as max value in the plot"""
-    with patch("xailens.strings.METRICS_NAMES", {"accuracy": "Accuracy"}), \
-         patch("xailens.config.PLOT_PRIMARY_COLOR", "#1f77b4"), \
-         patch("xailens.dashboard.utils.plotly_theme.THEME", {"highlight_color": "#ff0000"}), \
-         patch("xailens.dashboard.utils.plotly_theme.apply_theme", side_effect=lambda fig, show_title: fig):
+    with patch("concordiahub.strings.METRICS_NAMES", {"accuracy": "Accuracy"}), \
+         patch("concordiahub.config.PLOT_PRIMARY_COLOR", "#1f77b4"), \
+         patch("concordiahub.dashboard.utils.plotly_theme.THEME", {"highlight_color": "#ff0000"}), \
+         patch("concordiahub.dashboard.utils.plotly_theme.apply_theme", side_effect=lambda fig, show_title: fig):
         fig = render_metric_barchart(metrics_df, "accuracy")
 
     max_val = metrics_df["accuracy"].max()
@@ -66,10 +66,10 @@ def test_hline_marks_max_value(metrics_df):
 
 def test_show_title_false_hides_title(metrics_df):
     """Checks title not shown in plot"""
-    with patch("xailens.strings.METRICS_NAMES", {"accuracy": "Accuracy"}), \
-         patch("xailens.config.PLOT_PRIMARY_COLOR", "#1f77b4"), \
-         patch("xailens.dashboard.utils.plotly_theme.THEME", {"highlight_color": "#ff0000"}), \
-         patch("xailens.dashboard.utils.plotly_theme.apply_theme", side_effect=lambda fig, show_title: fig):
+    with patch("concordiahub.strings.METRICS_NAMES", {"accuracy": "Accuracy"}), \
+         patch("concordiahub.config.PLOT_PRIMARY_COLOR", "#1f77b4"), \
+         patch("concordiahub.dashboard.utils.plotly_theme.THEME", {"highlight_color": "#ff0000"}), \
+         patch("concordiahub.dashboard.utils.plotly_theme.apply_theme", side_effect=lambda fig, show_title: fig):
         fig = render_metric_barchart(metrics_df, "accuracy", show_title=False)
 
     assert fig.layout.title.text is None

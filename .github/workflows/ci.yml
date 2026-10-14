@@ -64,11 +64,11 @@ jobs:
         run: pip install interrogate pydoclint
 
       - name: Docstring coverage report
-        run: interrogate -v xailens/
+        run: interrogate -v concordiahub/
         continue-on-error: true # so won't fail the action
 
       - name: Docstring/signature consistency report
-        run: pydoclint xailens/
+        run: pydoclint concordiahub/
         continue-on-error: true # so won't fail the action
 
       # -------------------------

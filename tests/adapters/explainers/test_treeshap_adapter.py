@@ -13,11 +13,11 @@ import pytest
 import numpy as np
 import pandas as pd
 from unittest.mock import MagicMock, patch
-from xailens.adapters.explainers.treeshap_adapter import TreeSHAPAdapter
-from xailens.entities.context import ModelData, DataSchema, ModelContext
-from xailens.exceptions import MissingDataError
+from concordiahub.adapters.explainers.treeshap_adapter import TreeSHAPAdapter
+from concordiahub.entities.context import ModelData, DataSchema, ModelContext
+from concordiahub.exceptions import MissingDataError
 
-MODULE_UNDER_TEST = "xailens.adapters.explainers.treeshap_adapter"
+MODULE_UNDER_TEST = "concordiahub.adapters.explainers.treeshap_adapter"
 
 @pytest.fixture
 def adapter():

@@ -5,7 +5,7 @@ pre-generated explanations
 
 
 import pandas as pd
-import xailens
+import concordiahub
 
 from examples import config
 from examples.helpers import safe_dirname
@@ -44,17 +44,17 @@ create_confusion_matrix(y["target"],
                         figsize=(10, 10),
                         class_names=class_names)
 
-schema = xailens.ResponseSchema(
+schema = concordiahub.ResponseSchema(
     contributions_field="key_factors",
     contribution_key="phrase",
 )
 
-data_schema = xailens.DataSchema(
+data_schema = concordiahub.DataSchema(
     instance_id_column=config.INSTANCE_UUID_COL,
     target_column="target",
     prediction_column="prediction")
 
-model_data = xailens.ModelData(
+model_data = concordiahub.ModelData(
     data_schema=data_schema,
     raw_instances=raw,
     x_test=X,
@@ -62,7 +62,7 @@ model_data = xailens.ModelData(
     y_pred=y_pred,
     y_exp=y_exp)
 
-ctx = xailens.ModelContext(
+ctx = concordiahub.ModelContext(
     "llm",
     ["llm_reasoning"],
     "medsynth",
@@ -72,4 +72,4 @@ ctx = xailens.ModelContext(
     model_display_name="Qwen 2.5",
     response_schema=schema)
 
-xailens.run(ctx)
+concordiahub.run(ctx)
