@@ -11,7 +11,7 @@ the codebase.
 
 ## Demo
 
-Demo available at: https://xailens.alexlittle.net/
+Demo available at: https://concordiahub.alexlittle.net/
 
 ## Install
 
