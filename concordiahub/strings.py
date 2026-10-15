@@ -7,7 +7,7 @@ to translate to alternative languages
 # ---------------------
 # Runner messages
 # ---------------------
-RUN_STARTING = "XAI Lens starting..."
+RUN_STARTING = "ConcordiaHub starting..."
 RUN_COMPUTING_METRICS = "Computing metrics"
 RUN_SAVING_METADATA = "Saving model metadata"
 RUN_SAVING_MODEL_DATA = "Saving model data"
@@ -15,14 +15,14 @@ RUN_RUNNING_XAI_METHODS = "Processing XAI methods"
 RUN_GLOBAL_EXPLANATIONS = "Processing global explanations for {xai_method}"
 RUN_LOCAL_EXPLANATIONS = "Processing local explanations for {xai_method}"
 RUN_COMPLETE = """
-XAI Lens run completed, all the data and explanations have now been stored.    
+ConcordiaHub run completed, all the data and explanations have now been stored.    
 You can now run the dashboard with `xailens-dash` to view the results.
 """
 
 # ----------------
 # App/page layout
 # ----------------
-APP_NAME = "XAI Lens"
+APP_NAME = "Concordia Hub"
 
 # sidebar
 #------------------------
