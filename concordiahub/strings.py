@@ -36,6 +36,7 @@ CLICK_TO_VIEW = "Click to view"
 # Page titles
 #-----------------
 HOMEPAGE_TITLE = "Select a dataset"
+HOMEPAGE_NO_DATASETS_TITLE = "No datasets are loaded yet"
 DATASET_TITLE = "Model Comparison for {dataset} Dataset"
 INSTANCE_TITLE = "Instance Comparison for {dataset} Dataset"
 INSTANCE_DETAIL_TITLE = "Instance Detail"
@@ -43,6 +44,8 @@ INSTANCE_DETAIL_TITLE = "Instance Detail"
 # Homepage elements
 #-------------------------------
 HOME_DATASET_NUM_MODELS = "{count} models"
+HOMEPAGE_NO_DATASETS_DESC = ("You don't have any datasets/models loaded yet."
+                             " You can load your own, or download our examples ")
 
 # Dataset page elements
 #-------------------------------

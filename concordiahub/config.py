@@ -1,5 +1,5 @@
 """
-Configuration file for XAI-Compare
+Configuration file for ConcordiaHub
 """
 
 import os
@@ -13,8 +13,28 @@ from xgboost import XGBClassifier, XGBRegressor
 from concordiahub import strings
 
 
+DATA_DIR_ENV_VAR: Final[str] = "CONCORDIAHUB_DATA_DIR"
+DEFAULT_DATA_DIR_NAME: Final[str] = "data_store"
+
+
+def resolve_data_dir() -> str:
+    """
+    Works out where model data is stored. Uses the CONCORDIAHUB_DATA_DIR
+    environment variable if set (the CLI sets this from --data-dir), otherwise
+    a data_store folder in the current working directory, so that it sits in
+    the root of the project where the package is being used.
+
+    Returns:
+        str: absolute path of the data directory
+    """
+    configured = os.environ.get(DATA_DIR_ENV_VAR)
+    if configured:
+        return str(Path(configured).expanduser().resolve())
+    return str(Path.cwd() / DEFAULT_DATA_DIR_NAME)
+
+
 # Constants for artifact filename/structure
-MODEL_DATA_DIR: Final[str] = os.path.join(Path(__file__).resolve().parents[1], "data_store")
+MODEL_DATA_DIR: Final[str] = resolve_data_dir()
 META_INFO_FILENAME: Final[str] = "meta"
 MODEL_FILENAME: Final[str] = "model"
 

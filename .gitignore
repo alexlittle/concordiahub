@@ -214,3 +214,4 @@ __marimo__/
 /examples/models/*.joblib
 /scratch.py
 /scratch/
+/data_store/

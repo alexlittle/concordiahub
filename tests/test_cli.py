@@ -38,3 +38,21 @@ def test_main_browser_by_default(tmp_path):
         main()
         args = mock_run.call_args[0][0]
         assert "--server.headless" not in args
+
+def test_main_data_dir_passed_via_env(tmp_path):
+    """Test --data-dir is passed to the app via environment and created."""
+    target = tmp_path / "my_data"
+    with patch("subprocess.run") as mock_run, patch("sys.argv", ["concordiahub-dash", "--data-dir", str(target)]):
+        main()
+        env = mock_run.call_args.kwargs["env"]
+        assert env["CONCORDIAHUB_DATA_DIR"] == str(target)
+        assert target.is_dir()
+
+
+def test_main_default_data_dir_created_in_cwd(tmp_path, monkeypatch):
+    """Test default data dir is ./data_store in the current directory."""
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("CONCORDIAHUB_DATA_DIR", raising=False)
+    with patch("subprocess.run"), patch("sys.argv", ["concordiahub-dash"]):
+        main()
+    assert (tmp_path / "data_store").is_dir()

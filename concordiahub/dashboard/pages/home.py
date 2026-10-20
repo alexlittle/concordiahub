@@ -16,9 +16,12 @@ def main():
     """
     explorer = get_explorer()
 
-    apply_layout(strings.HOMEPAGE_TITLE)
-
-    st.html(home_helpers.render_datasets(explorer))
+    if explorer.get_datasets():
+        apply_layout(strings.HOMEPAGE_TITLE)
+        st.html(home_helpers.render_datasets(explorer))
+    else:
+        apply_layout(strings.HOMEPAGE_NO_DATASETS_TITLE)
+        st.html(strings.HOMEPAGE_NO_DATASETS_DESC)
 
 if __name__ == "__main__":
     main()
