@@ -84,11 +84,11 @@ out of the core `dependencies`. `spacy` has since also been dropped from the
 - [x] **2.2** `streamlit_option_menu`, `setuptools` and `pyarrow` removed from
   core `dependencies` (done in `8eb2e6b`). `pyarrow` is still in `uv.lock`, but
   only as a dependency of `streamlit`.
-- [ ] **2.3** Remove the `examples` extra from `[project.optional-dependencies]`
+- [x] **2.3** Remove the `examples` extra from `[project.optional-dependencies]`
   once the examples repo exists (Phase 4).
-- [ ] **2.4** `docs/requirements.txt`: `sphinx_rtd_theme` is removed. Still to do:
+- [x] **2.4** `docs/requirements.txt`: `sphinx_rtd_theme` is removed. Still to do:
   pin `Sphinx` and `furo` to match the `dev` group.
-- [ ] **2.5** `uv lock`, then check `uv.lock` has no `spacy`/`thinc`. (It shrank
+- [x] **2.5** `uv lock`, then check `uv.lock` has no `spacy`/`thinc`. (It shrank
   by ~500 lines in the working tree, so this may already be the case; confirm
   and commit.)
 - [ ] **2.6** Update `.github/workflows/ci.yml` to `uv sync` (uses the lockfile

@@ -76,9 +76,6 @@ class Dataset:
 
         Returns:
             pd.DataFrame: explanations
-
-        Raises:
-            InvalidSelectionError:
         """
         explanations = {}
         keep_features = set()

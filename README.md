@@ -28,8 +28,7 @@ every directory/file is included here. All code required for model registration 
 ```
 .
 ├── docs                     # Placeholder for documentation in Sphinx RST format
-├── evaluation               # Scripts used to measure feature alignment
-├── examples                 # Example models used in the demo              
+├── evaluation               # Scripts used to measure feature alignment            
 ├── tests                    # Tests - dir/file structure mirrors the concordiahub 
 │                            # core package structure
 ├── concordiahub               # Core Concordia Hub code
@@ -68,19 +67,8 @@ every directory/file is included here. All code required for model registration 
 ├── LICENSE                    # GNU 3 open source license
 ├── pyproject.toml             # Project/pip install file
 ├── README.md                  # This readme file
-├── requirements-dev.txt       # Required packages if developing more features 
-├── requirements-examples.txt  # Required packages for running the example models
-├── requirements.txt           # Core required packages
 ├── setup.py                   # Project/pip install file
 └── sonar-project.properties   # SonarQube configuration file   
-```
-
-## Source code/Development
-
-This repo uses Git LFS for large files. Before cloning, install Git LFS:
-```bash
-sudo apt install git-lfs 
-git lfs install
 ```
 
 

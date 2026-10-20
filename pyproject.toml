@@ -60,10 +60,6 @@ exclude = "tests|docs"
 [tool.setuptools.dynamic]
 version = { attr = "concordiahub._version.__version__" }
 
-[tool.coverage.run]
-relative_files = true
-source = ["concordiahub"]
-
 [dependency-groups]
 dev = [
     "pytest==9.0.3",
