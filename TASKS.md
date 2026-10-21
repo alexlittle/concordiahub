@@ -137,13 +137,13 @@ out of the core `dependencies`. `spacy` has since also been dropped from the
 
 ## Phase 5: Clean the core repo tree (still no history rewrite)
 
-- [ ] **5.1** `git rm -r --cached` and delete `examples/`, `evaluation/`,
+- [x] **5.1** `git rm -r --cached` and delete `examples/`, `evaluation/`,
   `data_store1` and `scratch/` (check which are tracked with `git ls-files`).
   Keep anything you want in the core repo, for example a tiny demo dataset.
-- [ ] **5.2** Add `examples/`, `data_store1` and any other data directories to
+- [x] **5.2** Add `examples/`, `data_store1` and any other data directories to
   `.gitignore`.
-- [ ] **5.3** Remove the `examples` extra (2.3), then `uv lock`.
-- [ ] **5.4** Update `README.md`, `docs/source/examples/index.rst`,
+- [x] **5.3** Remove the `examples` extra (2.3), then `uv lock`.
+- [x] **5.4** Update `README.md`, `docs/source/examples/index.rst`,
   `docs/source/dev/index.rst` and `docs/source/index.rst` so they describe the
   two install paths and link to the examples repo. Check
   `docs/source/register-model.rst` for paths that referred to `examples/`.
