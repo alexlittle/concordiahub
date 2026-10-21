@@ -91,11 +91,11 @@ out of the core `dependencies`. `spacy` has since also been dropped from the
 - [x] **2.5** `uv lock`, then check `uv.lock` has no `spacy`/`thinc`. (It shrank
   by ~500 lines in the working tree, so this may already be the case; confirm
   and commit.)
-- [ ] **2.6** Update `.github/workflows/ci.yml` to `uv sync` (uses the lockfile
+- [x] **2.6** Update `.github/workflows/ci.yml` to `uv sync` (uses the lockfile
   and the `dev` group) instead of `pip install -e .`, unpinned
   `pip install pytest pytest-cov coverage` and
   `pip install interrogate pydoclint`.
-- [ ] **2.7** Run `pytest`, `interrogate -v concordiahub/` and
+- [x] **2.7** Run `pytest`, `interrogate -v concordiahub/` and
   `pydoclint concordiahub/` and confirm they pass.
 
 ## Phase 3: Package and host the data
@@ -113,7 +113,7 @@ out of the core `dependencies`. `spacy` has since also been dropped from the
 
 ## Phase 4: Create the examples repo
 
-- [ ] **4.1** Create `concordiahub-examples` on GitHub (empty).
+- [x] **4.1** Create `concordiahub-examples` on GitHub (empty).
 - [ ] **4.2** Copy in (fresh history, not `git filter-repo`): `examples/*.py`,
   `examples/prompt_templates/`, `examples/perf_results/`, `evaluation/`, and any
   small data files. Do not copy `examples/cache/`, `data_store1` or large CSVs.
