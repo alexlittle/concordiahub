@@ -13,6 +13,11 @@ the codebase.
 
 Demo available at: https://concordiahub.alexlittle.net/
 
+
+## Docs
+
+https://concordiahub.readthedocs.io/
+
 ## Install
 
 * Install with `pip install concordiahub`
