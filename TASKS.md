@@ -127,11 +127,11 @@ out of the core `dependencies`. `spacy` has since also been dropped from the
 - [x] **4.5** Write `fetch_data.py` that downloads, checksum-verifies and unpacks
   the data from 3.2, and skips files that already exist.
 - [x] **4.6** Add `.gitignore` entries for `cache/` and `data_store1`.
-- [ ] **4.7** Write the examples README: prerequisites (Python version, `uv`,
+- [x] **4.7** Write the examples README: prerequisites (Python version, `uv`,
   Ollama and the models needed for the LLM examples) and the quick start:
   `uv sync`, then `uv run python fetch_data.py`, then
   `uv run concordiahub-dash --data-dir data_store`.
-- [ ] **4.8** Test the quick start on a clean machine or fresh clone in an empty
+- [x] **4.8** Test the quick start on a clean machine or fresh clone in an empty
   directory. This includes running one example from end to end and opening the
   dashboard.
 
