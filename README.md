@@ -72,7 +72,6 @@ every directory/file is included here. All code required for model registration 
 ├── LICENSE                    # GNU 3 open source license
 ├── pyproject.toml             # Project/pip install file
 ├── README.md                  # This readme file
-├── setup.py                   # Project/pip install file
 └── sonar-project.properties   # SonarQube configuration file   
 ```
 
@@ -86,11 +85,11 @@ every directory/file is included here. All code required for model registration 
 ### SonarCloud - Quality Overview
 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xaicompare)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=coverage)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)
 
 ### Detailed Metrics
 
-[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_xaicompare)
+[![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)
 [![Reliability](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)
 [![Security](https://sonarcloud.io/api/project_badges/measure?project=alexlittle-github_concordiahub&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=alexlittle-github_concordiahub)
 

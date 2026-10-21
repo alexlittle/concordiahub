@@ -208,10 +208,7 @@ __marimo__/
 
 .idea/
 *.sqlite3
-/expai_lens_logs/
 
-/examples/data/*.csv
-/examples/models/*.joblib
-/scratch.py
-/scratch/
+/examples/
+/evaluation/
 /data_store/

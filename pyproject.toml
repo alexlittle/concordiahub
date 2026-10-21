@@ -66,8 +66,12 @@ dev = [
     "twine==7.0.0",
     "build==1.4.0",
     "pytest-cov==7.1.0",
+    "interrogate==1.7.0",
+    "pydoclint==0.9.1",
+    {include-group = "docs"}
+]
+
+docs = [
     "Sphinx==9.1.0",
     "furo==2025.12.19",
-    "interrogate==1.7.0",
-    "pydoclint==0.9.1"
 ]

@@ -362,6 +362,10 @@ dev = [
     { name = "sphinx" },
     { name = "twine" },
 ]
+docs = [
+    { name = "furo" },
+    { name = "sphinx" },
+]
 
 [package.metadata]
 requires-dist = [
@@ -387,6 +391,10 @@ dev = [
     { name = "pytest-cov", specifier = "==7.1.0" },
     { name = "sphinx", specifier = "==9.1.0" },
     { name = "twine", specifier = "==7.0.0" },
+]
+docs = [
+    { name = "furo", specifier = "==2025.12.19" },
+    { name = "sphinx", specifier = "==9.1.0" },
 ]
 
 [[package]]

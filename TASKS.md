@@ -147,7 +147,7 @@ out of the core `dependencies`. `spacy` has since also been dropped from the
   `docs/source/dev/index.rst` and `docs/source/index.rst` so they describe the
   two install paths and link to the examples repo. Check
   `docs/source/register-model.rst` for paths that referred to `examples/`.
-- [ ] **5.5** Check `sonar-project.properties`, `.coveragerc`,
+- [x] **5.5** Check `sonar-project.properties`, `.coveragerc`,
   `.readthedocs.yaml` and the CI workflow for references to removed
   directories.
 - [ ] **5.6** Run the full test suite, then build and inspect the wheel:
