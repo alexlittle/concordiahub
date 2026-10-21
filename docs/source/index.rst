@@ -25,4 +25,5 @@ Demo available at: https://concordiahub.alexlittle.net/
 
    register-model
    dev/index
+   releases
    examples/index
