@@ -114,19 +114,19 @@ out of the core `dependencies`. `spacy` has since also been dropped from the
 ## Phase 4: Create the examples repo
 
 - [x] **4.1** Create `concordiahub-examples` on GitHub (empty).
-- [ ] **4.2** Copy in (fresh history, not `git filter-repo`): `examples/*.py`,
+- [x] **4.2** Copy in (fresh history, not `git filter-repo`): `examples/*.py`,
   `examples/prompt_templates/`, `examples/perf_results/`, `evaluation/`, and any
   small data files. Do not copy `examples/cache/`, `data_store1` or large CSVs.
-- [ ] **4.3** Fix hard-coded paths: `examples/ex*_run_xai.py` read from
+- [x] **4.3** Fix hard-coded paths: `examples/ex*_run_xai.py` read from
   `./cache/...` and `evaluation/*.py` read from `../data_store/...`. Make them
   relative to one configurable data directory.
-- [ ] **4.4** Add a `pyproject.toml` depending on `concordiahub==<version>` plus
+- [x] **4.4** Add a `pyproject.toml` depending on `concordiahub==<version>` plus
   `ollama`, `jinja2`, `tqdm`, `spacy`, `matplotlib`, `seaborn` (and the
   `en_core_web_sm` model, either as a direct URL dependency or a documented
   step). Pin versions and commit `uv.lock`.
-- [ ] **4.5** Write `fetch_data.py` that downloads, checksum-verifies and unpacks
+- [x] **4.5** Write `fetch_data.py` that downloads, checksum-verifies and unpacks
   the data from 3.2, and skips files that already exist.
-- [ ] **4.6** Add `.gitignore` entries for `cache/` and `data_store1`.
+- [x] **4.6** Add `.gitignore` entries for `cache/` and `data_store1`.
 - [ ] **4.7** Write the examples README: prerequisites (Python version, `uv`,
   Ollama and the models needed for the LLM examples) and the quick start:
   `uv sync`, then `uv run python fetch_data.py`, then
