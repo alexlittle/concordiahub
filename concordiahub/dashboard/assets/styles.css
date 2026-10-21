@@ -1,0 +1,418 @@
+:root {
+    --color-sidebar-bg: #D4E4E477;
+    --color-link: #0d4f4f;
+    --sidebar-width: 300px;
+    --model-name-colour: #0d4f4f;
+    --color-metric-bg: #D4E4E4AA;
+    --text-color: rgb(49, 51, 63);
+    --border-color: #D4E4E4;
+    --highlight-border-color: #A8D5B5;
+    --highlight-bg-color: #E6F4EA;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.body {
+    line-height: 1 !important;
+}
+
+.block-container {
+    padding-top: 1rem;
+}
+
+.element-container {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+hr {
+    margin: 0.5rem 0 !important;
+}
+
+a, a:visited {
+    text-decoration: underline;
+    color: var(--color-link);
+}
+
+a:hover, a:active {
+    text-decoration: underline;
+    color: var(--color-link);
+}
+
+code {
+    font-size: 100% !important;
+}
+
+h1 {
+    padding-top: 0 !important;
+    margin-top: 10px !important;
+}
+
+h1.header {
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+h1.logo {
+    text-align: center;
+    color: var(--color-link);
+}
+
+h2 {
+    font-size: 1.6em !important;
+    font-weight: 500 !important;
+    padding: 0;
+    margin: 0;
+}
+
+h3 {
+    font-size: 1.3em !important;
+    font-weight: 500 !important;
+    padding: 0;
+    margin: 0;
+}
+
+p {
+    margin: 5px 0 !important;
+}
+/*
+    General re-used elements
+ */
+
+.button {
+    display: inline-block;
+    padding:0.4rem 0.8rem;
+    background-color: var(--color-sidebar-bg) !important;
+    border: 1px solid var(--color-link) !important;
+    color: var(--color-link) !important;
+    border-radius: 0.4rem;
+    text-decoration:none;
+}
+
+.breadcrumbs {
+    padding-bottom: 20px;
+}
+
+.st-key-page-nav-row {
+    display: flex;
+    align-items: center;
+    padding: 4px 0 4px 0;
+}
+
+.page-nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.card-header-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+}
+.card-header-row h3 {
+    margin: 0;
+}
+
+.help-icon-wrap img {
+    width: 25px !important;
+    height: 25px !important;
+    display: inline-block !important;
+    flex-shrink: 0;
+    opacity: 60%;
+}
+
+.help-icon-wrap {
+    cursor: help;
+    color: #9CA3AF;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.help-icon-wrap:hover {
+    color: #0F766E;
+}
+
+/*
+    Tab style
+ */
+div[data-testid="stButtonGroup"] button p {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--color-link);
+}
+div[data-testid="stButtonGroup"] button {
+    padding: 0.35rem 1rem;
+    min-height: 2.5rem;
+}
+
+div[data-testid="stButtonGroup"] button[aria-checked="true"] p {
+    color: inherit;
+}
+
+/*
+    Sidebar elements
+ */
+
+div[data-testid="stHeader"] {
+    display: none !important;
+}
+div[data-testid="stSidebarCollapseButton"] {
+    display: none !important;
+}
+
+section[data-testid="stSidebar"] {
+    top: 0 !important;
+    background-color: var(--color-sidebar-bg);
+}
+
+[data-testid="stSidebar"] .block-container,
+[data-testid="stSidebarContent"] {
+    padding-top: 0;
+}
+
+[data-testid="stSidebarHeader"] {
+    margin-bottom: 0;
+}
+
+[data-testid="stSidebar"] > div:first-child {
+    padding-top: 0;
+}
+
+div[data-testid="stRadio"] > label [data-testid="stMarkdownContainer"] p {
+    font-size: 1.3rem !important;
+    font-weight: 500 !important;
+    padding: 0;
+    margin: 0;
+}
+
+div[data-testid="stCheckbox"] {
+    margin-bottom: -0.8rem;
+}
+
+div[data-testid="stRadio"] label[data-testid="stWidgetLabel"] + div label {
+    align-items: center !important;
+}
+
+div[data-testid="stCheckbox"] label {
+    align-items: center !important;
+}
+
+/* so hide/show arrow always appears */
+[data-testid="stSidebarCollapseButton"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+.logo-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.logo-container img {
+    width: 100px;
+}
+
+.sidebar-footer {
+    position: fixed;
+    bottom: 10px;
+    width: var(--sidebar-width, 244px);
+    left: 0;
+    font-size: 14px;
+    color: #101010 !important;
+    text-align: center;
+    margin: 0 auto;
+}
+
+
+
+/*
+    Dataset card elements
+ */
+
+.dataset-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.dataset-card {
+    width: 200px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    text-decoration: none;
+    color: inherit;        /* kills the blue link colour on all children */
+    padding: 0.75rem;
+    box-sizing: border-box;
+    transition: box-shadow 0.15s ease;
+}
+.dataset-card-title {
+    font-size: 14pt;
+    font-weight: 500;
+    text-align: center;
+}
+.dataset-card-count {
+    font-size: 12pt;
+    font-weight: 400;
+}
+
+.dataset-card:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    background-color: var(--color-sidebar-bg);
+}
+
+
+
+/*
+    Dataset page elements
+ */
+
+.st-key-recommended-models {
+    background-color: var(--highlight-bg-color);
+    border: 1px solid var(--highlight-border-color);
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    padding-right: 40px;
+}
+
+.recommended-title {
+    font-weight: 500;
+}
+.recommended-model {
+    font-weight: 400;
+}
+
+.st-key-perf-metrics-expander summary p {
+    font-size: 1.3em !important;
+    font-weight: 500 !important;
+}
+
+.xl-metric-card {
+    border: 1px solid rgba(128,128,128,0.2);
+    background-color: var(--color-metric-bg);
+    border-radius: 8px;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+
+.xl-metric-card:hover {
+    border-color: rgba(128, 128, 128, 0.6);
+    background-color: rgba(128, 128, 128, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.xl-metric-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.xl-metric-label {
+    font-size: 1rem;
+    color: var(--model-name-colour);
+    margin-bottom: 4px;
+}
+
+.xl-metric-value {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--model-name-colour);
+    line-height: 1;
+}
+
+.xl-metric-value-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.xl-metric-icon {
+    width: 25px;
+    height: 25px;
+    color: var(--model-name-colour);
+    opacity: 0.6;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+
+.xl-metric-card:hover .xl-metric-icon {
+    opacity: 1;
+    transform: translate(2px, -2px);
+}
+
+
+
+
+.pred-correct  {
+    background-color: #d4edda;
+    color: #155724 !important;
+}
+.pred-incorrect {
+    background-color: #f8d7da;
+    color: #721c24 !important;
+}
+
+/*
+    Overview table elements
+ */
+.report-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 1rem;
+}
+
+.report-table th,
+.report-table td {
+    padding: 10px 16px;
+    border: 1px solid #e0e0e0;
+    color: #333;
+    vertical-align: top;
+}
+
+.report-table th {
+    font-weight: 600;
+    color: #555;
+    text-align: center;
+}
+
+.report-table-align {
+    text-align: center;
+}
+
+
+.report-table a:hover {
+    text-decoration: underline;
+}
+
+/*
+    Model panel elements
+ */
+
+div[data-testid="stVerticalBlock"]:has(> div[data-testid="stElementContainer"] > div[data-testid="stHtml"] > span.model-panel-marker) {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+

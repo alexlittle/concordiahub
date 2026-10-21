@@ -1,0 +1,10 @@
+[coverage:run]
+source = concordiahub
+omit =
+    */tests/*
+    */conftest.py
+
+[coverage:report]
+exclude_lines =
+    ^\s*pass\s*$
+    raise NotImplementedError

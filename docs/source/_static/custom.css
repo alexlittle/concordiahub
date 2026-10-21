@@ -1,0 +1,17 @@
+/* _static/custom.css */
+
+:root {
+    --color-brand-primary: #0d4f4f;
+    --color-brand-content: #0d4f4f;
+
+}
+
+a:hover, a:visited {
+    color: #0d4f4f;
+}
+
+/* Logo sizing (adjust to taste) */
+.sidebar-logo {
+    max-width: 130px;
+    margin: 1rem auto;
+}

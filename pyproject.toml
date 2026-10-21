@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "concordiahub"
+dynamic = ["version"]
+description = "ConcordiaHub dashboard and utilities"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    { name = "Alex Little", email = "alex@alexlittle.net" }
+]
+
+dependencies = [
+    "pandas==3.0.2",
+    "scikit-learn==1.8.0",
+    "numpy==2.4.4",
+    "shap==0.51.0",
+    "joblib==1.5.3",
+    "streamlit==1.58.0",
+    "plotly==7.1.0",
+    "markdown==3.10.2",
+    "xgboost==3.2.0",
+    "itables==2.8.1"
+]
+
+
+[project.scripts]
+concordiahub-dash = "concordiahub.cli:main"
+
+# Tell setuptools where to find code and how to determine the version
+[tool.setuptools]
+package-dir = {"" = "."}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["concordiahub*"]
+
+[tool.setuptools.package-data]
+concordiahub = ["dashboard/assets/*"]
+
+# Interrogate settings for checking existence of doc strings
+[tool.interrogate]
+ignore-init-method = true
+ignore-init-module = true
+ignore-magic = true
+ignore-semiprivate = false
+ignore-private = false
+ignore-property-decorators = false
+ignore-module = false
+fail-under = 80
+verbose = 2
+exclude = ["tests", "docs", "build"]
+
+# pydoclint settings for checking correctness and consistency of docstrings
+[tool.pydoclint]
+style = "google"
+exclude = "tests|docs"
+
+# Read version from concordiahub/_version.py
+[tool.setuptools.dynamic]
+version = { attr = "concordiahub._version.__version__" }
+
+[dependency-groups]
+dev = [
+    "pytest==9.0.3",
+    "twine==7.0.0",
+    "build==1.4.0",
+    "pytest-cov==7.1.0",
+    "interrogate==1.7.0",
+    "pydoclint==0.9.1",
+    {include-group = "docs"}
+]
+
+docs = [
+    "Sphinx==9.1.0",
+    "furo==2025.12.19",
+]

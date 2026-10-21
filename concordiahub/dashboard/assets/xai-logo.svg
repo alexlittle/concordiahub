@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <circle cx="256" cy="256" r="248" fill="#f0e8db"/>
+  <circle cx="256" cy="256" r="248" fill="none" stroke="#7a5230" stroke-width="14"/>
+  <text
+    x="256"
+    y="256"
+    text-anchor="middle"
+    dominant-baseline="central"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="215"
+    font-weight="normal"
+    letter-spacing="6"
+    fill="#7a5230"
+  >XAI</text>
+</svg>
