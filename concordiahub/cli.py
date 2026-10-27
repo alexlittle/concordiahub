@@ -6,6 +6,7 @@ Command line interface for ConcordiaHub, launches the dashboard in a browser
 import os
 import subprocess
 import argparse
+from pathlib import Path
 
 from concordiahub import config
 
@@ -19,6 +20,34 @@ STREAMLIT_DEFAULTS = {
     "STREAMLIT_CLIENT_TOOLBAR_MODE": "minimal",
     "STREAMLIT_THEME_PRIMARY_COLOR": "#1A6B6B",
 }
+
+
+# System locations that should never be used to hold model data
+PROTECTED_DIRS = ("/bin", "/boot", "/dev", "/etc", "/lib", "/lib64", "/proc", "/sbin", "/sys", "/usr")
+
+
+def validate_data_dir(path: str) -> str:
+    """
+    Resolves the data directory to an absolute path and checks it is usable
+
+    Args:
+        path: the directory as given by the user (may be relative or start with ~)
+
+    Returns:
+        str: the resolved absolute path
+
+    Raises:
+        ValueError: if the path is not a directory, or is the filesystem root or a system location
+    """
+    resolved = Path(path).expanduser().resolve()
+    if resolved == Path(resolved.anchor):
+        raise ValueError(f"Data directory cannot be the filesystem root: {resolved}")
+    for protected in PROTECTED_DIRS:
+        if resolved.is_relative_to(protected):
+            raise ValueError(f"Data directory cannot be inside a system location ({protected}): {resolved}")
+    if resolved.exists() and not resolved.is_dir():
+        raise ValueError(f"Data directory is not a directory: {resolved}")
+    return str(resolved)
 
 
 def main()-> None:
@@ -42,9 +71,12 @@ def main()-> None:
     env = os.environ.copy()
     for key, value in STREAMLIT_DEFAULTS.items():
         env.setdefault(key, value)
-    if args.data_dir:
-        env[config.DATA_DIR_ENV_VAR] = os.path.abspath(os.path.expanduser(args.data_dir))
-    data_dir = env.get(config.DATA_DIR_ENV_VAR) or os.path.join(os.getcwd(), config.DEFAULT_DATA_DIR_NAME)
+    configured = args.data_dir or env.get(config.DATA_DIR_ENV_VAR) or config.DEFAULT_DATA_DIR_NAME
+    try:
+        data_dir = validate_data_dir(configured)
+    except ValueError as err:
+        parser.error(str(err))
+    env[config.DATA_DIR_ENV_VAR] = data_dir
     os.makedirs(data_dir, exist_ok=True)
     print(f"Using data directory: {data_dir}")
 
