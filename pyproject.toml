@@ -14,14 +14,14 @@ authors = [
 ]
 
 dependencies = [
-    "pandas==3.1.0",
+    "pandas==3.1.1",
     "scikit-learn==1.9.1",
     "numpy==2.5.4",
     "shap==0.54.1",
     "joblib==1.6.0",
-    "streamlit==1.66.1",
+    "streamlit==1.67.0",
     "plotly==7.1.0",
-    "markdown==3.11.2",
+    "markdown==3.11.3",
     "xgboost==3.4.1",
     "itables==2.9.1"
 ]
@@ -65,12 +65,12 @@ version = { attr = "concordiahub._version.__version__" }
 
 [dependency-groups]
 dev = [
-    "pytest==9.1.1",
+    "pytest==9.2.0",
     "twine==7.0.0",
     "build==1.6.1",
     "pytest-cov==7.1.0",
     "interrogate==1.7.0",
-    "pydoclint==0.11.1",
+    "pydoclint==0.12.0",
     {include-group = "docs"}
 ]
 
